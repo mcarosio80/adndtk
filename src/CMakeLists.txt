@@ -1,0 +1,1 @@
+add_library(adndtk STATIC adndtk.cpp)
