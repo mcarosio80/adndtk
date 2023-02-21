@@ -26,6 +26,7 @@ set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)
 set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
 set(PY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/py)
 set(GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Setup SQLite files
 set(DB_FILE ${DB_DIR}/adndtk.db)
@@ -96,4 +97,4 @@ else()
 endif()
 
 
-configure_file(${GEN_DIR}/config.h.in ${GEN_DIR}/config.h)
+configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)
