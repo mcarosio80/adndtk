@@ -16,6 +16,11 @@ find_package(PythonInterp REQUIRED)
 find_path(SQLITE3_EXECUTABLE sqlite3)
 message("SQLite3 executable found in ${SQLITE3_EXECUTABLE}")
 
+find_package(Git REQUIRED)
+if(Git_FOUND)
+    message("Git found: ${GIT_EXECUTABLE}")
+endif()
+
 # Setup database subdirectories
 set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)
 set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
@@ -47,3 +52,48 @@ add_custom_command(
            --namespace adndtk:defs
            --version ${PROJECT_VERSION}
 )
+
+#Fetch some info to complete the library metadata
+string(TIMESTAMP CURRENT_TS "%Y-%m-%d %H:%M:%S")
+
+#execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 --reverse OUTPUT_VARIABLE FIRST_COMMIT_DATE)
+execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 OUTPUT_VARIABLE LAST_COMMIT_DATE)
+execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%an" OUTPUT_VARIABLE LAST_COMMIT_AUTHOR_NAME)
+execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%H" OUTPUT_VARIABLE LAST_COMMIT_HASH)
+
+#Setting database source
+set(ADNDTK_DATABASE_SOURCE "")
+if(NOT DATABASE_SOURCE)
+    message("DATABASE_SOURCE not set, using default value")
+    set(ADNDTK_DATABASE_SOURCE DatabaseSource::memory)
+else()
+    string(TOLOWER "${DATABASE_SOURCE}" DATABASE_SOURCE_LOWERCASE)
+
+    if(DATABASE_SOURCE_LOWERCASE STREQUAL "memory")
+        set(ADNDTK_DATABASE_SOURCE DatabaseSource::memory)
+    elseif(DATABASE_SOURCE_LOWERCASE STREQUAL "file")
+        set(ADNDTK_DATABASE_SOURCE DatabaseSource::file)
+    else()
+        message("DATABASE_SOURCE: unknown value (${DATABASE_SOURCE_LOWERCASE}), using default value")
+        set(ADNDTK_DATABASE_SOURCE DatabaseSource::memory)
+    endif()
+    message("ADNDTK_DATABASE_SOURCE = " ${ADNDTK_DATABASE_SOURCE})
+endif()
+
+
+
+#Setting database path
+set(ADNDTK_DATABASE_PATH "")
+if(NOT DATABASE_PATH)
+    message("DATABASE_PATH not set, using default value")
+    set(ADNDTK_DATABASE_PATH ${DB_FILE})
+elseif(ADNDTK_DATABASE_SOURCE STREQUAL DatabaseSource::file)
+    set(ADNDTK_DATABASE_PATH ${DB_FILE})
+    message("ADNDTK_DATABASE_PATH = " ${ADNDTK_DATABASE_PATH})
+else()
+    set(ADNDTK_DATABASE_PATH "file:${DB_FILE}?mode=memory&cache=shared")
+    message("ADNDTK_DATABASE_PATH = " ${ADNDTK_DATABASE_PATH})
+endif()
+
+
+configure_file(${GEN_DIR}/config.h.in ${GEN_DIR}/config.h)
