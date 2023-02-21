@@ -119,5 +119,4 @@ else()
     message("ADNDTK_ERROR_HANDLER = " ${ADNDTK_ERROR_HANDLER})
 endif()
 
-
 configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)

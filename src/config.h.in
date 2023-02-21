@@ -7,6 +7,7 @@
 
 #include <exception>
 #include <iostream>
+#include <string>
 
 namespace Adndtk
 {
@@ -69,10 +70,24 @@ namespace Adndtk
 
         void error(const char *mesg)
         {
-            std::cout << mesg << "\n";
+            if (Settings::error_handler == Adndtk::ErrorHandler::standard_output)
+            {
+                std::cout << mesg << "\n";
+            }
+            else if (Settings::error_handler == Adndtk::ErrorHandler::last_error)
+            {
+                _lastError = mesg;
+            }
+            else if (Settings::error_handler == Adndtk::ErrorHandler::standard_output)
+            {
+                throw std::exception(mesg);
+            }
         }
+        const std::string& last_error() { return _lastError; }
 
     private:
         ErrorManager() {}
+
+        std::string     _lastError;
     };
 }
