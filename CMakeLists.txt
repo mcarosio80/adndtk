@@ -97,4 +97,27 @@ else()
 endif()
 
 
+
+#Setting database path
+set(ADNDTK_ERROR_HANDLER "")
+if(NOT ERROR_HANDLER)
+    message("ERROR_HANDLER not set, using default value")
+    set(ADNDTK_ERROR_HANDLER "exception")
+else()
+    string(TOLOWER "${ERROR_HANDLER}" ERROR_HANDLER_LOWERCASE)
+
+    if(ERROR_HANDLER_LOWERCASE STREQUAL standard_output)
+        set(ADNDTK_ERROR_HANDLER ${ERROR_HANDLER_LOWERCASE})
+    elseif(ERROR_HANDLER_LOWERCASE STREQUAL last_message)
+        set(ADNDTK_ERROR_HANDLER ${ERROR_HANDLER_LOWERCASE})
+    elseif(ERROR_HANDLER_LOWERCASE STREQUAL exception)
+        set(ADNDTK_ERROR_HANDLER ${ERROR_HANDLER_LOWERCASE})
+    else()
+        set(ADNDTK_ERROR_HANDLER "exception")
+    endif()
+    
+    message("ADNDTK_ERROR_HANDLER = " ${ADNDTK_ERROR_HANDLER})
+endif()
+
+
 configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)

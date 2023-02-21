@@ -25,10 +25,18 @@ namespace Adndtk
         memory
     };
 
+    enum class ErrorHandler
+    {
+        standard_output,
+        last_error,
+        exception
+    };
+
     namespace Settings
     {
         static const char *database_path = "@ADNDTK_DATABASE_PATH@";
         static DatabaseSource database_source = @ADNDTK_DATABASE_SOURCE@;
+        static ErrorHandler error_handler = ErrorHandler::@ADNDTK_ERROR_HANDLER@;
     }
 
     class Config
