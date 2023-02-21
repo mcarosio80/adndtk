@@ -1,0 +1,287 @@
+[
+    {
+        "table" : "CHARACTER_CLASS_TYPE",
+        "key" : "description",
+        "value" : "id"
+    },
+    {
+        "table" : "CHARACTER_CLASS",
+        "key" : "long_name",
+        "value": "id"
+    },
+    {
+        "table" : "RACE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "SKILL",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "SEX",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "BODY_SLOT",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "AGEING_EFFECTS",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "SAVING_THROW",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "SCHOOL_OF_MAGIC",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "SPHERES_OF_INFLUENCE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "SPHERE_OF_INFLUENCE_ACCESS_LEVEL",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "SPHERE_OF_INFLUENCE_MODE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "THIEF_ABILITY",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "TURNABLE",
+        "key" : "name",
+        "value": "score"
+    },
+    {
+        "table" : "TURN_EFFECT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "ELEMENT_TYPE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "ELEMENT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "COIN",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "HAND_SLOT_TYPE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "ITEM_HAND_REQUIRED",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "ITEM_CLASS",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "EQUIPMENT_TYPE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "EQUIPMENT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "WEAPON_TYPE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "WEAPON_SIZE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "TARGET_SIZE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "ATTACK_TYPE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "WEAPON_GROUP",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "ARMOUR_PROTECTION_SIDE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "MORAL_ORDER",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MORAL_VIEW",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MORAL_ALIGNMENT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "DEITY_RANK",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "PLANE_RANK",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "PLANE_GROUP",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "PLANE_NATURE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "PLANE_OF_EXISTENCE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "REALM",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "DEITY",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "AREA_OF_CONTROL",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "WIZARD_SPELL",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "PRIEST_SPELL",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "TREASURE_NATURE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "TREASURE_LOCATION",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "TREASURE_CLASS",
+        "key" : "acronym",
+        "value": "id"
+    },
+    {
+        "table" : "TREASURE_COMPONENT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "GEM_TYPE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "GEMS",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MAGICAL_ITEM_NATURE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MAGICAL_ITEM_TYPE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MAGICAL_ITEM_UNIDENTIFIED_NAME",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MAGICAL_ITEM",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MONSTER_FREQUENCY",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "MONSTER_INTELLIGENCE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "MONSTER_MORALE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "MONSTER",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "MONSTER_DRAGON_TYPE",
+        "key" : "name",
+        "value": "id"
+    }
+]

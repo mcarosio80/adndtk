@@ -10,12 +10,17 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#Find packages
+find_package(PythonInterp REQUIRED)
+
 find_path(SQLITE3_EXECUTABLE sqlite3)
 message("SQLite3 executable found in ${SQLITE3_EXECUTABLE}")
 
 # Setup database subdirectories
 set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)
 set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
+set(PY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/py)
+set(GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 
 # Setup SQLite files
 set(DB_FILE ${DB_DIR}/adndtk.db)
@@ -26,7 +31,7 @@ set(DB_IDX_FILE ${SQL_DIR}/indexes.sql)
 #Prepare SQLite DB
 file(REMOVE ${DB_FILE})
 
-#add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
+add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
 
 message("Generating database ${DB_FILE}")
 add_custom_command(
@@ -35,4 +40,10 @@ add_custom_command(
     COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE}
     COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_DATA_FILE}"
     COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
+    COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
+           --database ${DB_FILE}
+           --json ${PY_DIR}/defs_h.json
+           --output ${GEN_DIR}/defs.h
+           --namespace adndtk:defs
+           --version ${PROJECT_VERSION}
 )
