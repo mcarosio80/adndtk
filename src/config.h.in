@@ -72,7 +72,7 @@ namespace Adndtk
         {
             if (Settings::error_handler == Adndtk::ErrorHandler::standard_output)
             {
-                std::cout << mesg << "\n";
+                std::cout << mesg << std::endl;
             }
             else if (Settings::error_handler == Adndtk::ErrorHandler::last_error)
             {
@@ -80,7 +80,7 @@ namespace Adndtk
             }
             else if (Settings::error_handler == Adndtk::ErrorHandler::standard_output)
             {
-                throw std::exception(mesg);
+                throw std::runtime_error(mesg);
             }
         }
         const std::string& last_error() { return _lastError; }
