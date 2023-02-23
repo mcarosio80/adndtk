@@ -1,5 +1,7 @@
 #include "adndtk.h"
 
+#include <sstream>
+
 bool Adndtk::Cyclopedia::_initialised = false;
 
 Adndtk::Cyclopedia& Adndtk::Cyclopedia::get_instance()
@@ -16,14 +18,8 @@ Adndtk::Cyclopedia& Adndtk::Cyclopedia::get_instance()
 bool Adndtk::Cyclopedia::init()
 {
     int ret = sqlite3_open_v2(Settings::database_path, &_dbConn, SQLITE_OPEN_READWRITE | SQLITE_OPEN_URI, NULL);
-    if (ret != SQLITE_OK)
-	{
-        const char *msg = sqlite3_errstr(ret);
-		ErrorManager::get_instance().error(msg);
-		return false;
-	}
     
-    return true;
+    return check_state(ret);
 }
 
 Adndtk::Cyclopedia::Cyclopedia()
@@ -34,9 +30,18 @@ Adndtk::Cyclopedia::Cyclopedia()
 Adndtk::Cyclopedia::~Cyclopedia()
 {
     int ret = sqlite3_close_v2(_dbConn);
-    if (ret != SQLITE_OK)
+    check_state(ret);
+}
+
+bool Adndtk::Cyclopedia::check_state(int return_code)
+{
+    if (errno != SQLITE_OK)
 	{
-        const char *msg = sqlite3_errstr(ret);
-		ErrorManager::get_instance().error(msg);
-	}
+        std::stringstream ss;
+        ss << sqlite3_errstr(return_code) << ": " << sqlite3_errmsg(_dbConn);
+        sqlite3_close_v2(_dbConn);
+        ErrorManager::get_instance().error(ss.str().c_str());
+        return false;
+    }
+    return true;
 }

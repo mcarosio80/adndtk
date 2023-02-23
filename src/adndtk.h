@@ -18,6 +18,7 @@ namespace Adndtk
         ~Cyclopedia();
 
         bool init();
+        bool check_state(int return_code);
 
 		static bool     _initialised;
         sqlite3         *_dbConn;
