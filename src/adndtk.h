@@ -15,6 +15,7 @@ namespace Adndtk
 
     private:
         Cyclopedia();
+        ~Cyclopedia();
 
         bool init();
 

@@ -30,3 +30,13 @@ Adndtk::Cyclopedia::Cyclopedia()
     : _dbConn(nullptr)
 {
 }
+
+Adndtk::Cyclopedia::~Cyclopedia()
+{
+    int ret = sqlite3_close_v2(_dbConn);
+    if (ret != SQLITE_OK)
+	{
+        const char *msg = sqlite3_errstr(ret);
+		ErrorManager::get_instance().error(msg);
+	}
+}
