@@ -113,6 +113,7 @@ else()
     elseif(ERROR_HANDLER_LOWERCASE STREQUAL exception)
         set(ADNDTK_ERROR_HANDLER ${ERROR_HANDLER_LOWERCASE})
     else()
+        message("ERROR_HANDLER: unknown value (${ERROR_HANDLER_LOWERCASE}), using default value")
         set(ADNDTK_ERROR_HANDLER "exception")
     endif()
     
@@ -120,3 +121,5 @@ else()
 endif()
 
 configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)
+
+add_subdirectory(src)
