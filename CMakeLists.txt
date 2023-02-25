@@ -11,7 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #Find packages
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterp 3 REQUIRED)
 
 find_path(SQLITE3_EXECUTABLE sqlite3)
 message("SQLite3 executable found in ${SQLITE3_EXECUTABLE}")
@@ -38,6 +38,8 @@ set(DB_IDX_FILE ${SQL_DIR}/indexes.sql)
 file(REMOVE ${DB_FILE})
 
 add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
+add_custom_target(defs_h ALL DEPENDS ${GEN_DIR}/defs.h SOURCES ${DB_FILE})
+add_custom_target(tables_h ALL DEPENDS ${GEN_DIR}/tables.h SOURCES ${DB_FILE})
 
 message("Generating database ${DB_FILE}")
 add_custom_command(
@@ -46,12 +48,31 @@ add_custom_command(
     COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE}
     COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_DATA_FILE}"
     COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
+)
+
+message("Generating library header ${GEN_DIR}/defs.h")
+add_custom_command(
+    OUTPUT ${GEN_DIR}/defs.h
+    DEPENDS ${DB_FILE}
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
            --json ${PY_DIR}/defs_h.json
            --output ${GEN_DIR}/defs.h
-           --namespace adndtk:defs
+           --namespace Adndtk:Defs
            --version ${PROJECT_VERSION}
+           --target enum
+)
+
+message("Generating library header ${GEN_DIR}/tables.h")
+add_custom_command(
+    OUTPUT ${GEN_DIR}/tables.h
+    DEPENDS ${DB_FILE}
+    COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
+           --database ${DB_FILE}
+           --output ${GEN_DIR}/tables.h
+           --namespace Adndtk:Tables
+           --version ${PROJECT_VERSION}
+           --target struct
 )
 
 #Fetch some info to complete the library metadata
