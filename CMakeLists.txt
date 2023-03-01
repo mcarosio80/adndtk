@@ -13,8 +13,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #Find packages
 find_package(PythonInterp 3 REQUIRED)
 
-find_path(SQLITE3_EXECUTABLE sqlite3)
-message("SQLite3 executable found in ${SQLITE3_EXECUTABLE}")
+find_package (SQLite3 REQUIRED)
+if(SQLite3_FOUND)
+    message("SQLite3 " ${SQLite3_VERSION} " executable found in ${SQLITE3_EXECUTABLE}")
+    message("SQLite3_INCLUDE_DIRS; " ${SQLite3_INCLUDE_DIRS})
+    message("SQLite3_LIBRARIES: " ${SQLite3_LIBRARIES})
+
+    #include_directories(${SQLite3_INCLUDE_DIRS})
+    #target_link_libraries (adndtk ${SQLITE3_LIBRARIES})
+endif()
 
 find_package(Git REQUIRED)
 if(Git_FOUND)
