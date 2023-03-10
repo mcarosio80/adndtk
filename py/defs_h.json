@@ -1,5 +1,20 @@
 [
     {
+        "table" : "CAMPAIGN_SETTINGS",
+        "key" : "description",
+        "value" : "id"
+    },
+    {
+        "table" : "EDITION",
+        "key" : "acronym",
+        "value" : "id"
+    },
+    {
+        "table" : "DIE",
+        "key" : "acronym",
+        "value" : "id"
+    },
+    {
         "table" : "CHARACTER_CLASS_TYPE",
         "key" : "description",
         "value" : "id"

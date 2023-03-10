@@ -19,6 +19,20 @@ COMMIT TRANSACTION;
 
 BEGIN TRANSACTION;
 
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (4, 'd4', 'Four-faced dice');
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (6, 'd6', 'Six-faced dice');
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (8, 'd8', 'Eight-faced dice');
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (10, 'd10', 'Ten-faced dice');
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (12, 'd12', 'Twelve-faced dice');
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (20, 'd20', 'Twenty-faced dice');
+INSERT INTO [DIE] ([ID], [ACRONYM], [DESCRIPTION]) VALUES (100, 'd100', 'One hundred-faced dice');
+
+COMMIT TRANSACTION;
+
+-------------------------------------------------------------------------------------------------------------
+
+BEGIN TRANSACTION;
+
 INSERT INTO CHARACTER_CLASS_TYPE ([ID], [DESCRIPTION], [TITLE_LEVEL], [TITLE], [HIT_DICE], [HP_AFTER_TITLE]) VALUES (1,		'Warrior',		9,		'Lord',	10,		3);
 INSERT INTO CHARACTER_CLASS_TYPE ([ID], [DESCRIPTION], [TITLE_LEVEL], [TITLE], [HIT_DICE], [HP_AFTER_TITLE]) VALUES (2,		'Wizard',	    10,		'',		4,		1);
 INSERT INTO CHARACTER_CLASS_TYPE ([ID], [DESCRIPTION], [TITLE_LEVEL], [TITLE], [HIT_DICE], [HP_AFTER_TITLE]) VALUES (4,		'Priest',	    9,		'',		8,		2);
