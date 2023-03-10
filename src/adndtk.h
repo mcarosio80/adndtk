@@ -1,7 +1,9 @@
-#pragma once
+#ifndef ADNDTK_H
+#define ADNDTK_H
 
 #include "../generated/defs.h"
 #include "../generated/config.h"
+
 #include <sqlite3.h>
 #include <map>
 #include <functional>
@@ -93,3 +95,5 @@ namespace Adndtk
         std::map<Query, sqlite3_stmt*>      _statements;
     };
 }
+
+#endif // ADNDTK_H
