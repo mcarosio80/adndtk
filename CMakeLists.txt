@@ -148,6 +148,26 @@ else()
     message("ADNDTK_ERROR_HANDLER = " ${ADNDTK_ERROR_HANDLER})
 endif()
 
+
+
+#Configuring Cyclopedia query output type
+set(ADNDTK_KB_QUERY_OUTPUT "")
+if(NOT KB_QUERY_OUTPUT)
+    message("KB_QUERY_OUTPUT not set, using default value")
+    set(ADNDTK_KB_QUERY_OUTPUT "json")
+elseif(KB_QUERY_OUTPUT STREQUAL "json")
+    set(ADNDTK_KB_QUERY_OUTPUT "json")
+    message("ADNDTK_KB_QUERY_OUTPUT = " ${ADNDTK_KB_QUERY_OUTPUT})
+elseif(KB_QUERY_OUTPUT STREQUAL "plain")
+    set(ADNDTK_KB_QUERY_OUTPUT "plain")
+    message("ADNDTK_KB_QUERY_OUTPUT = " ${ADNDTK_KB_QUERY_OUTPUT})
+else()
+    set(ADNDTK_DATABASE_PATH "json")
+    message("ADNDTK_KB_QUERY_OUTPUT = " ${ADNDTK_KB_QUERY_OUTPUT})
+endif()
+
+
+
 configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)
 
 add_subdirectory(src)

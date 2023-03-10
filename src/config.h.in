@@ -31,12 +31,19 @@ namespace Adndtk
         last_error,
         exception
     };
+    
+    enum class QueryType
+    {
+        json,
+        plain
+    };
 
     namespace Settings
     {
         static const char *database_path = "@ADNDTK_DATABASE_PATH@";
         static DatabaseSource database_source = @ADNDTK_DATABASE_SOURCE@;
         static ErrorHandler error_handler = ErrorHandler::@ADNDTK_ERROR_HANDLER@;
+        static QueryType query_type = QueryType::@ADNDTK_KB_QUERY_OUTPUT@;
     }
 
     class Config
@@ -77,7 +84,7 @@ namespace Adndtk
             {
                 _lastError = mesg;
             }
-            else if (Settings::error_handler == Adndtk::ErrorHandler::standard_output)
+            else if (Settings::error_handler == Adndtk::ErrorHandler::exception)
             {
                 throw std::runtime_error(mesg);
             }
