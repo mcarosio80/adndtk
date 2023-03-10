@@ -13,9 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #Find packages
 find_package(PythonInterp 3 REQUIRED)
 
-find_package (SQLite3 REQUIRED)
+find_package(SQLite3 REQUIRED)
 if(SQLite3_FOUND)
-    message("SQLite3 " ${SQLite3_VERSION} " executable found in ${SQLITE3_EXECUTABLE}")
+    message("SQLite3 " ${SQLite3_VERSION} " executable found in " ${SQLite3_EXECUTABLE})
     message("SQLite3_INCLUDE_DIRS; " ${SQLite3_INCLUDE_DIRS})
     message("SQLite3_LIBRARIES: " ${SQLite3_LIBRARIES})
 
@@ -52,9 +52,9 @@ message("Generating database ${DB_FILE}")
 add_custom_command(
     OUTPUT ${DB_FILE}
     DEPENDS ${DB_SCHEMA_FILE} ${DB_DATA_FILE} ${DB_IDX_FILE}
-    COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE}
-    COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_DATA_FILE}"
-    COMMAND ${SQLITE3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
+    COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE}
+    COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_DATA_FILE}"
+    COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
 )
 
 message("Generating library header ${GEN_DIR}/defs.h")
@@ -126,7 +126,7 @@ endif()
 
 
 
-#Setting database path
+#Configuring error handling method
 set(ADNDTK_ERROR_HANDLER "")
 if(NOT ERROR_HANDLER)
     message("ERROR_HANDLER not set, using default value")
