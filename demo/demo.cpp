@@ -2,6 +2,7 @@
 #include <adndtk.h>
 
 void demo_cyclopedia();
+void demo_dice();
 
 int main(int argc, char **argv)
 {
@@ -13,6 +14,7 @@ int main(int argc, char **argv)
     std::cout << "\nDESCRIPTION:\n" << Adndtk::Metadata::desc << "\n\n";
 
     demo_cyclopedia();
+    demo_dice();
 
     return 0;
 }
@@ -36,4 +38,29 @@ void demo_cyclopedia()
         onResult,
         static_cast<int>(Adndtk::Defs::coin::gold_piece)
     );
+}
+
+void demo_dice()
+{
+    Adndtk::Die d{Adndtk::Defs::die::d8};
+    int numRoll = 3;
+
+    for (int i=0; i<6; ++i)
+    {
+        int result = d.roll(numRoll);
+        std::cout << "Result" << "[" << i+1 << "] of " << numRoll << d << ": " << result << "\n";
+    }
+
+    std::string expr{"4d4+1"};
+    for (int i=0; i<6; ++i)
+    {
+        int result = Adndtk::Die::roll(expr.c_str());
+        std::cout << "Result[" << i+1 << "] of " << expr << ": " << result << "\n";
+    }
+
+    Adndtk::Die d6;
+    for (int i=0; i<6; ++i)
+    {
+        std::cout << "Result" << "[" << i+1 << "] of 1" << d6 << ": " << static_cast<int>(d6) << "\n";
+    }
 }

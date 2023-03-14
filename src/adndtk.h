@@ -8,6 +8,8 @@
 #include <map>
 #include <functional>
 
+#include <dice.h>
+
 namespace Adndtk
 {
     class Cyclopedia

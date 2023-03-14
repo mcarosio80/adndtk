@@ -1,4 +1,4 @@
-#include "adndtk.h"
+#include <adndtk.h>
 
 #include <sstream>
 #include <cstring>
