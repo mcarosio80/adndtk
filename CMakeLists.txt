@@ -172,3 +172,4 @@ configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)
 
 add_subdirectory(src)
 add_subdirectory(demo)
+add_subdirectory(test)
