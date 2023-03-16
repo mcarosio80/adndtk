@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(ExternalProject)
+
 #Find packages
 find_package(PythonInterp 3 REQUIRED)
 
@@ -27,6 +29,10 @@ find_package(Git REQUIRED)
 if(Git_FOUND)
     message("Git found: ${GIT_EXECUTABLE}")
 endif()
+
+#Include RapidJSON module
+include("${CMAKE_SOURCE_DIR}/vendor/rapidjson.cmake")
+include_directories(${RAPIDJSON_INCLUDE_DIR})
 
 # Setup database subdirectories
 set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)

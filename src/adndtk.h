@@ -5,6 +5,8 @@
 #include "../generated/config.h"
 
 #include <sqlite3.h>
+#include "rapidjson/document.h"
+
 #include <map>
 #include <functional>
 
