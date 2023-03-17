@@ -38,6 +38,13 @@ void demo_cyclopedia()
         onResult,
         static_cast<int>(Adndtk::Defs::coin::gold_piece)
     );
+
+    Adndtk::Defs::character_class_type type;
+    auto onExecResult = [&type] (int row, int col, const char *columnName, const unsigned char *cellValue) -> void
+    {
+        std::string jsonValue{reinterpret_cast<const char*>(cellValue)};
+    };
+    Adndtk::Cyclopedia::get_instance().exec("select class_type_id from character_class where id = 9", onExecResult);
 }
 
 void demo_dice()
