@@ -6,8 +6,12 @@
 
 #include <sqlite3.h>
 #include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/allocators.h"
 
 #include <map>
+#include <vector>
 #include <functional>
 
 #include <dice.h>
@@ -52,6 +56,49 @@ namespace Adndtk
                     auto colValue = sqlite3_column_text(stmt, col);
                     cbkOnResult(rowCount, col, colType, colValue);
                 }
+            }
+        }
+
+        static int cbk(void *data, int argc, char **argv, char **columnName)
+        {
+            rapidjson::Document jsonDoc;
+            jsonDoc.SetObject();
+            rapidjson::Document::AllocatorType& allocator = jsonDoc.GetAllocator();
+
+            for (int i=0; i<argc; ++i)
+            {
+                rapidjson::Value key{rapidjson::kStringType};
+                rapidjson::Value val{rapidjson::kStringType};
+                key.SetString(columnName[i], static_cast<rapidjson::SizeType>(std::strlen(columnName[i])), allocator);
+                val.SetString(argv[i], static_cast<rapidjson::SizeType>(std::strlen(argv[i])), allocator);
+
+                jsonDoc.AddMember(key, val, allocator);
+            }
+
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            jsonDoc.Accept(writer);
+
+            OnQueryResult* queryCbk = (OnQueryResult*)data;
+            if (queryCbk)
+            {
+                std::string s(buffer.GetString(), buffer.GetSize());
+                auto jsonText = reinterpret_cast<const unsigned char*>(buffer.GetString()); 
+                (*queryCbk)(0, 0, "JSON", jsonText);
+            }
+            return 0;
+        }
+
+        void exec(const char* stmt, const OnQueryResult& cbkOnResult)
+		{
+            char *error = nullptr;
+            auto rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::cbk, (void*)&cbkOnResult, &error);
+
+            if (rc != SQLITE_OK)
+            {
+                std::string msg{error};
+                sqlite3_free(error);
+                throw std::runtime_error(msg);
             }
         }
 
