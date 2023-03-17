@@ -70,4 +70,15 @@ void demo_dice()
     {
         std::cout << "Result" << "[" << i+1 << "] of 1" << d6 << ": " << static_cast<int>(d6) << "\n";
     }
+
+    std::string malformedExpr{"-3d4-"};
+    try
+    {
+        int res = Adndtk::Die::roll(malformedExpr.c_str());
+        std::cout << "Result of " << malformedExpr << ": " << res << "\n";
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
