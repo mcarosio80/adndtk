@@ -81,4 +81,8 @@ void demo_dice()
     {
         std::cerr << e.what() << '\n';
     }
+
+    std::string expr2{"3d5"};
+    int res = Adndtk::Die::roll(expr2.c_str());
+    std::cout << "Result of " << expr2 << ": " << res << "\n";
 }
