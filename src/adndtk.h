@@ -15,6 +15,8 @@
 #include <functional>
 
 #include <dice.h>
+#include <skills.h>
+#include <skill_creator.h>
 
 namespace Adndtk
 {
@@ -24,83 +26,83 @@ namespace Adndtk
 
         enum class Query
         {
-            select_coin
+            select_coin,
+            select_skill_boundaries_default,
+            select_skill_boundaries_class_type,
+            select_skill_boundaries_class,
+            select_skill_boundaries_race
         };
 
-        using OnQueryResult = std::function<void (int, int, const char *, const unsigned char *)>;
+        class QueryResult
+        {
+        public:
+            QueryResult();
+
+            const std::optional<std::string>& operator[](const std::string& key) const
+            {
+                if (_values.find(key) == _values.end())
+                {
+                    ErrorManager::get_instance().error("Invalid key specified");
+                }
+                return _values.at(key);
+            }
+
+            friend std::ostream& operator<< (std::ostream& out, const QueryResult& res)
+            {
+                out << "{\n";
+                for (auto& t : res._values)
+                {
+                    out << "\t" << t.first << ": " << (t.second.has_value() ? t.second.value() : "(null)") << "\n";
+                }
+                out << "}";
+                return out;
+            }
+
+            bool exists(const std::string& key) const;
+            void add(const char *jsonKey, const rapidjson::Value& jsonValue);
+            void add(const std::string& key, const std::string& value);
+            void add(const std::string& key);
+
+        private:
+            std::map<std::string, std::optional<std::string>>  _values;
+        };
 
         static Cyclopedia& get_instance();
         Cyclopedia(Cyclopedia const&) = delete;
         void operator=(Cyclopedia const&) = delete;
 
+        static std::vector<QueryResult> from_json(const char *jsonText);
+
 		template<class... _T>
-        void exec_prepared_statement(const Query& queryId, const OnQueryResult& cbkOnResult, _T... values)
+        std::vector<QueryResult> exec_prepared_statement(const Query& queryId, _T... values)
 		{
+            std::vector<QueryResult> resultSet;
             if (_statements.find(queryId) == _statements.end())
             {
                 ErrorManager::get_instance().error("Unable to find prepared statement for query ID");
-                return;
+                return resultSet;
             }
+            auto stmt = _statements[queryId];
             
             auto params = std::make_tuple<_T...>(std::move(values...));
             ParamsBinder<decltype(params), sizeof...(_T)>::bind_values(*this, queryId, params);
 
-            int rowCount = 0;
-            auto stmt = _statements[queryId];
-            int columnCount = sqlite3_column_count(stmt);
-            while (sqlite3_step(stmt) == SQLITE_ROW)
+            if (Settings::query_type == QueryType::json)
             {
-                for (int col = 0; col<columnCount; ++col)
-                {
-                    auto colType = sqlite3_column_decltype(stmt, col);
-                    auto colValue = sqlite3_column_text(stmt, col);
-                    cbkOnResult(rowCount, col, colType, colValue);
-                }
+                resultSet = parse_json_result(stmt);
             }
+            else if (Settings::query_type == QueryType::plain)
+            {
+                resultSet = parse_tabular_result(stmt);
+            }
+            
+            sqlite3_finalize(stmt);
+
+            return resultSet;
         }
 
-        static int cbk(void *data, int argc, char **argv, char **columnName)
-        {
-            rapidjson::Document jsonDoc;
-            jsonDoc.SetObject();
-            rapidjson::Document::AllocatorType& allocator = jsonDoc.GetAllocator();
-
-            for (int i=0; i<argc; ++i)
-            {
-                rapidjson::Value key{rapidjson::kStringType};
-                rapidjson::Value val{rapidjson::kStringType};
-                key.SetString(columnName[i], static_cast<rapidjson::SizeType>(std::strlen(columnName[i])), allocator);
-                val.SetString(argv[i], static_cast<rapidjson::SizeType>(std::strlen(argv[i])), allocator);
-
-                jsonDoc.AddMember(key, val, allocator);
-            }
-
-            rapidjson::StringBuffer buffer;
-            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-            jsonDoc.Accept(writer);
-
-            OnQueryResult* queryCbk = (OnQueryResult*)data;
-            if (queryCbk)
-            {
-                std::string s(buffer.GetString(), buffer.GetSize());
-                auto jsonText = reinterpret_cast<const unsigned char*>(buffer.GetString()); 
-                (*queryCbk)(0, 0, "JSON", jsonText);
-            }
-            return 0;
-        }
-
-        void exec(const char* stmt, const OnQueryResult& cbkOnResult)
-		{
-            char *error = nullptr;
-            auto rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::cbk, (void*)&cbkOnResult, &error);
-
-            if (rc != SQLITE_OK)
-            {
-                std::string msg{error};
-                sqlite3_free(error);
-                throw std::runtime_error(msg);
-            }
-        }
+        static int onSqliteDataRetrieved(void *data, int argc, char **argv, char **columnName);
+        std::vector<QueryResult> exec(const char* stmt);
 
     private:
         Cyclopedia();
@@ -140,6 +142,9 @@ namespace Adndtk
                 cp.bind(queryId, 1, std::get<0>(t));
             }
 		};
+
+        std::vector<QueryResult> parse_json_result(sqlite3_stmt* stmt);
+        std::vector<QueryResult> parse_tabular_result(sqlite3_stmt* stmt);
 
 		static bool     _initialised;
         sqlite3         *_dbConn;
