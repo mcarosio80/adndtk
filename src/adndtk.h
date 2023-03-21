@@ -103,7 +103,7 @@ namespace Adndtk
         }
 
         template <Defs::character_class probeClass>
-        bool is_classof(const Defs::character_class& cls)
+        bool is_class_of(const Defs::character_class& cls)
         {
             bool found = false;
             auto classes = split<Defs::character_class>(cls);
