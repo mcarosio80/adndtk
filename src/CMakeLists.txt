@@ -1,4 +1,4 @@
-add_library(adndtk STATIC adndtk.cpp dice.cpp skills.cpp)
+add_library(adndtk STATIC adndtk.cpp dice.cpp skills.cpp query_result.cpp)
 
 add_dependencies(adndtk rapidjson)
 

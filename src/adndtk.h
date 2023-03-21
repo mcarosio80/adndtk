@@ -17,66 +17,23 @@
 #include <dice.h>
 #include <skills.h>
 #include <skill_creator.h>
+#include <query_result.h>
 
 namespace Adndtk
 {
     class Cyclopedia
     {
     public:
-
-        enum class Query
-        {
-            select_coin,
-            select_skill_boundaries_default,
-            select_skill_boundaries_class_type,
-            select_skill_boundaries_class,
-            select_skill_boundaries_race
-        };
-
-        class QueryResult
-        {
-        public:
-            QueryResult();
-
-            const std::optional<std::string>& operator[](const std::string& key) const
-            {
-                if (_values.find(key) == _values.end())
-                {
-                    ErrorManager::get_instance().error("Invalid key specified");
-                }
-                return _values.at(key);
-            }
-
-            friend std::ostream& operator<< (std::ostream& out, const QueryResult& res)
-            {
-                out << "{\n";
-                for (auto& t : res._values)
-                {
-                    out << "\t" << t.first << ": " << (t.second.has_value() ? t.second.value() : "(null)") << "\n";
-                }
-                out << "}";
-                return out;
-            }
-
-            bool exists(const std::string& key) const;
-            void add(const char *jsonKey, const rapidjson::Value& jsonValue);
-            void add(const std::string& key, const std::string& value);
-            void add(const std::string& key);
-
-        private:
-            std::map<std::string, std::optional<std::string>>  _values;
-        };
-
         static Cyclopedia& get_instance();
         Cyclopedia(Cyclopedia const&) = delete;
         void operator=(Cyclopedia const&) = delete;
 
-        static std::vector<QueryResult> from_json(const char *jsonText);
+        static QueryResultSet from_json(const char *jsonText);
 
 		template<class... _T>
-        std::vector<QueryResult> exec_prepared_statement(const Query& queryId, _T... values)
+        QueryResultSet exec_prepared_statement(const Query& queryId, _T... values)
 		{
-            std::vector<QueryResult> resultSet;
+            QueryResultSet resultSet;
             if (_statements.find(queryId) == _statements.end())
             {
                 ErrorManager::get_instance().error("Unable to find prepared statement for query ID");
@@ -84,7 +41,7 @@ namespace Adndtk
             }
             auto stmt = _statements[queryId];
             
-            auto params = std::make_tuple<_T...>(std::move(values...));
+            std::tuple<_T...> params{values...};
             ParamsBinder<decltype(params), sizeof...(_T)>::bind_values(*this, queryId, params);
 
             if (Settings::query_type == QueryType::json)
@@ -102,7 +59,61 @@ namespace Adndtk
         }
 
         static int onSqliteDataRetrieved(void *data, int argc, char **argv, char **columnName);
-        std::vector<QueryResult> exec(const char* stmt);
+        QueryResultSet exec(const char* stmt);
+
+        template <typename _T>
+        std::vector<_T> split(const _T& cls)
+        {
+            std::vector<_T> result;
+            int classId = static_cast<int>(cls);
+            int mask = 1;
+            while (mask != 0)
+            {
+                if (classId & mask)
+                {
+                    auto c = static_cast<_T>(mask);
+                    result.push_back(c);
+                }
+            }
+            return result;
+        }
+
+        template <Defs::character_class_type probeType>
+        bool is_type_of(const Defs::character_class_type& clsType)
+        {
+            bool found = false;
+            auto types = split<Defs::character_class_type>(clsType);
+            for (auto& t : types)
+            {
+                if (t == probeType)
+                    found = true;
+            }
+            return found;
+        }
+
+        template <Defs::character_class_type probeType>
+        bool is_type_of(const Defs::character_class& cls)
+        {
+            Adndtk::Query query = Adndtk::Query::select_character_class;
+            int clsId = static_cast<int>(cls);
+            auto classInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+            Defs::character_class_type clsType = static_cast<Defs::character_class_type>(classInfo[0].as<int>("class_type_id"));
+
+            return is_type_of<probeType>(clsType);
+        }
+
+        template <Defs::character_class probeClass>
+        bool is_classof(const Defs::character_class& cls)
+        {
+            bool found = false;
+            auto classes = split<Defs::character_class>(cls);
+            for (auto& c : classes)
+            {
+                if (c == probeClass)
+                    found = true;
+            }
+            return found;
+        }
 
     private:
         Cyclopedia();
@@ -129,7 +140,7 @@ namespace Adndtk
 		{
 			static void bind_values(Cyclopedia& cp, const Query& queryId, const ParamTuple& t)
 			{
-				ParamsBinder<ParamTuple, PackSize - 1>::bind_values(queryId, t);
+				ParamsBinder<ParamTuple, PackSize - 1>::bind_values(cp, queryId, t);
                 cp.bind(queryId, PackSize, std::get<PackSize - 1>(t));
 			}
 		};
@@ -143,8 +154,8 @@ namespace Adndtk
             }
 		};
 
-        std::vector<QueryResult> parse_json_result(sqlite3_stmt* stmt);
-        std::vector<QueryResult> parse_tabular_result(sqlite3_stmt* stmt);
+        QueryResultSet parse_json_result(sqlite3_stmt* stmt);
+        QueryResultSet parse_tabular_result(sqlite3_stmt* stmt);
 
 		static bool     _initialised;
         sqlite3         *_dbConn;
