@@ -1,0 +1,156 @@
+#include <skill_creator.h>
+#include <dice.h>
+#include <adndtk.h>
+
+Adndtk::SkillCreator::SkillCreator()
+    : _class{std::nullopt}, _race{std::nullopt}
+{
+}
+
+Adndtk::SkillCreator::SkillCreator(const std::optional<Adndtk::Defs::character_class>& characterClass,
+                                    const std::optional<Adndtk::Defs::race>& characterRace)
+    : _class{characterClass}, _race{characterRace}
+{
+}
+
+void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, const int& skillType, const std::optional<int>& object, int& minValue, int& maxValue)
+{
+    Adndtk::QueryResultSet result;
+    
+    if (object.has_value())
+    {
+        int obj = object.value();
+        result = Cyclopedia::get_instance().exec_prepared_statement<int, int>(queryId, skillType, obj);
+    }
+    else
+    {
+        result = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, skillType);
+    }
+
+    if (result[0]["min"].has_value())
+    {
+        auto v = std::stoi(result[0]["min"].value());
+        if (v > minValue) minValue = v;
+    }
+    if (result[0]["max"].has_value())
+    {
+        auto v = std::stoi(result[0]["max"].value());
+        if (v < maxValue) maxValue = v;
+    }
+}
+
+Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skillType, const Adndtk::SkillCreator::Method& method/*= Adndtk::SkillCreator::Method::standard*/)
+{
+    int sklValue = static_cast<int>(skillType);
+    int minValue{0};
+    int maxValue{0};
+
+    // Check default constraints
+    Adndtk::Query query = Adndtk::Query::select_skill_boundaries_default;
+    get_skill_constraints(query, sklValue, std::nullopt, minValue, maxValue);
+
+    Defs::character_class_type clsType;
+
+    if (_class.has_value())
+    {
+        int clsId = static_cast<int>(_class.value());
+
+        query = Adndtk::Query::select_character_class;
+        auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+        clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
+
+        auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
+        query = Adndtk::Query::select_skill_boundaries_class_type;
+        for (auto& t : clsTypes)
+        {
+            get_skill_constraints(query, sklValue, static_cast<int>(t), minValue, maxValue);
+        }
+
+        // check class boundaries
+        query = Adndtk::Query::select_skill_boundaries_class;
+        get_skill_constraints(query, sklValue, clsId, minValue, maxValue);
+    }
+
+    short raceSkillModifier = 0;
+    if (_race.has_value())
+    {
+        // check race boundaries
+        query = Adndtk::Query::select_skill_boundaries_race;
+        int raceId = static_cast<int>(_race.value());
+        get_skill_constraints(query, sklValue, raceId, minValue, maxValue);
+
+        // get race modifier
+        query = Query::select_skill_modifier;
+        auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, raceId, sklValue);
+
+        if (raceModifier[0]["value"].has_value())
+        {
+            raceSkillModifier = std::stoi(raceModifier[0]["value"].value());
+        }
+    }
+
+    // generate exceptional strength
+    std::optional<short> excValue = std::nullopt;
+    
+    short val = minValue;
+    do
+    {
+        val = generate_value(method);
+    }
+    while (val >= minValue && val <= maxValue);
+
+    if (val == 18
+        && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(clsType)
+        && _race != Defs::race::halfling
+        )
+    {
+        Adndtk::Die d{Defs::die::d100};
+        excValue = d.roll();
+    }
+
+    SkillValue skillValue{skillType, val + raceSkillModifier, excValue};
+    return skillValue;
+}
+
+short Adndtk::SkillCreator::generate_value(const Adndtk::SkillCreator::Method& method/* = Method::standard*/)
+{
+    Die d{Defs::die::d6};
+    short skillValue = 0;
+
+    switch (method)
+    {
+    case Method::standard:
+    {
+        skillValue = d.roll(3);
+        break;
+    }
+    case Method::best_of_each:
+    {
+        short r1 = d.roll(3);
+        short r2 = d.roll(3);
+        skillValue = std::max<short>(r1, r2);
+        break;
+    }
+    case Method::best_of_four:
+    {
+        int tmpValue = 0;
+        int minValue = 0;
+        for (int i=0; i<4; ++i)
+        {
+            auto v = d.roll(3);
+            if (v < minValue)
+            {
+                minValue = v;
+            }
+            tmpValue += v;
+        }
+        skillValue = tmpValue - minValue;
+        break;
+    }
+    
+    default:
+        break;
+    }
+
+    return skillValue;
+}
