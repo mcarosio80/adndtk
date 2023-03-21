@@ -3,6 +3,7 @@
 
 void demo_cyclopedia();
 void demo_dice();
+void demo_skills();
 
 int main(int argc, char **argv)
 {
@@ -15,36 +16,21 @@ int main(int argc, char **argv)
 
     demo_cyclopedia();
     demo_dice();
+    demo_skills();
 
     return 0;
 }
 
 void demo_cyclopedia()
 {
-    auto onResult = [] (int row, int col, const char *cellType, const unsigned char *cellValue) -> void
-    {
-        if (Adndtk::Settings::query_type == Adndtk::QueryType::json)
-        {
-            std::cout << "Result[" << row << ", " << col << "] = " << cellValue << "\n";
-        }
-        else
-        {
-            std::cout << "Result[" << row << ", " << col << "] = " << cellType << ": " << cellValue << "\n";
-        }
-    };
+    Adndtk::Query queryId = Adndtk::Query::select_coin;
+    int param = static_cast<int>(Adndtk::Defs::coin::gold_piece);
 
-    Adndtk::Cyclopedia::get_instance().exec_prepared_statement<int>(
-        Adndtk::Cyclopedia::Query::select_coin,
-        onResult,
-        static_cast<int>(Adndtk::Defs::coin::gold_piece)
-    );
-
-    Adndtk::Defs::character_class_type type;
-    auto onExecResult = [&type] (int row, int col, const char *columnName, const unsigned char *cellValue) -> void
+    auto res = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, param);
+    for (auto& r : res)
     {
-        std::string jsonValue{reinterpret_cast<const char*>(cellValue)};
-    };
-    Adndtk::Cyclopedia::get_instance().exec("select class_type_id from character_class where id = 9", onExecResult);
+        std::cout << r << "\n";
+    }
 }
 
 void demo_dice()
@@ -89,4 +75,10 @@ void demo_dice()
     std::string expr3{"4  -  10"};
     int res3 = Adndtk::Die::roll(expr3.c_str());
     std::cout << "Result of " << expr3 << ": " << res3 << "\n";
+}
+
+void demo_skills()
+{
+    Adndtk::SkillCreator sc{Adndtk::Defs::character_class::ranger, Adndtk::Defs::race::elf};
+    auto skl = sc.create(Adndtk::Defs::skill::dexterity);
 }
