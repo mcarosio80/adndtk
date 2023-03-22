@@ -24,10 +24,12 @@ namespace Adndtk
         SkillCreator();
         SkillCreator(const std::optional<Defs::character_class> &characterClass, const std::optional<Defs::race> &characterRace);
         SkillValue create(const Defs::skill &skillType, const Method &method = Method::standard);
+        static SkillValue create(const Defs::skill &skillType, const std::optional<Defs::character_class>& cls,
+                                const std::optional<Defs::race>& race, const Method &method = Method::standard);
 
     private:
-        short generate_value(const Method &method = Method::standard);
-        void get_skill_constraints(const Query &queryId, const int &skillType, const std::optional<int> &object, int &minValue, int &maxValue);
+        static short generate_value(const Method &method = Method::standard);
+        static void get_skill_constraints(const Query &queryId, const int &skillType, const std::optional<int> &object, int &minValue, int &maxValue);
 
         std::optional<Defs::character_class> _class;
         std::optional<Defs::race> _race;

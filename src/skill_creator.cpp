@@ -27,6 +27,9 @@ void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, c
         result = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, skillType);
     }
 
+    if (result.size() == 0)
+        return;
+
     if (result[0]["min"].has_value())
     {
         auto v = std::stoi(result[0]["min"].value());
@@ -39,11 +42,12 @@ void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, c
     }
 }
 
-Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skillType, const Adndtk::SkillCreator::Method& method/*= Adndtk::SkillCreator::Method::standard*/)
+Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, const std::optional<Defs::character_class>& cls,
+                                const std::optional<Defs::race>& race, const Method &method/* = Method::standard*/)
 {
     int sklValue = static_cast<int>(skillType);
     int minValue{0};
-    int maxValue{0};
+    int maxValue{20};
 
     // Check default constraints
     Adndtk::Query query = Adndtk::Query::select_skill_boundaries_default;
@@ -51,9 +55,9 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skill
 
     Defs::character_class_type clsType;
 
-    if (_class.has_value())
+    if (cls.has_value())
     {
-        int clsId = static_cast<int>(_class.value());
+        int clsId = static_cast<int>(cls.value());
 
         query = Adndtk::Query::select_character_class;
         auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
@@ -72,18 +76,18 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skill
     }
 
     short raceSkillModifier = 0;
-    if (_race.has_value())
+    if (race.has_value())
     {
         // check race boundaries
         query = Adndtk::Query::select_skill_boundaries_race;
-        int raceId = static_cast<int>(_race.value());
+        int raceId = static_cast<int>(race.value());
         get_skill_constraints(query, sklValue, raceId, minValue, maxValue);
 
         // get race modifier
         query = Query::select_skill_modifier;
         auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, raceId, sklValue);
 
-        if (raceModifier[0]["value"].has_value())
+        if (raceModifier.size() > 0 && raceModifier[0]["value"].has_value())
         {
             raceSkillModifier = std::stoi(raceModifier[0]["value"].value());
         }
@@ -97,19 +101,25 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skill
     {
         val = generate_value(method);
     }
-    while (val >= minValue && val <= maxValue);
+    while (val < minValue || val > maxValue);
+    val += raceSkillModifier;
 
     if (val == 18
         && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(clsType)
-        && _race != Defs::race::halfling
+        && race != Defs::race::halfling
         )
     {
         Adndtk::Die d{Defs::die::d100};
         excValue = d.roll();
     }
 
-    SkillValue skillValue{skillType, val + raceSkillModifier, excValue};
+    SkillValue skillValue{skillType, val, excValue};
     return skillValue;
+}
+
+Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skillType, const Adndtk::SkillCreator::Method& method/*= Adndtk::SkillCreator::Method::standard*/)
+{
+    return create(skillType, _class, _race, method);
 }
 
 short Adndtk::SkillCreator::generate_value(const Adndtk::SkillCreator::Method& method/* = Method::standard*/)
