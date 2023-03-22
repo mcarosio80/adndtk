@@ -58,27 +58,15 @@ Adndtk::SkillValue& Adndtk::SkillValue::operator+=(const short& val)
     return (*this);
 }
 
-Adndtk::SkillValue& Adndtk::SkillValue::operator+=(const Adndtk::SkillValue& val)
-{
-    (*this) += val._skillValue;
-    return (*this);
-}
-
 Adndtk::SkillValue& Adndtk::SkillValue::operator-=(const short& val)
 {
     (*this) += -val;
     return (*this);
 }
 
-Adndtk::SkillValue& Adndtk::SkillValue::operator-=(const Adndtk::SkillValue& val)
-{
-    (*this) += -val._skillValue;
-    return (*this);
-}
-
 bool Adndtk::SkillValue::operator==(const Adndtk::SkillValue& val) const
 {
-    if (_skillValue != val._skillValue) // Comparison is impossible
+    if (_skillType != val._skillType) // Comparison is impossible
         return false;
     if (_skillType != Defs::skill::strength)
         return _skillValue == val._skillValue;
@@ -90,7 +78,7 @@ bool Adndtk::SkillValue::operator==(const Adndtk::SkillValue& val) const
 
 bool Adndtk::SkillValue::operator<(const Adndtk::SkillValue& val) const
 {
-    if (_skillValue != val._skillValue)
+    if (_skillType != val._skillType)
         throw std::runtime_error("Unable to compare different skills");
 
     if (_skillType == Defs::skill::strength && _skillValue == 18)
