@@ -37,6 +37,7 @@ log/
 generated/
 
 .vscode/settings.json
+.vscode/launch.json
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
