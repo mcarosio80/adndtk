@@ -47,13 +47,7 @@ int Adndtk::Die::match_range_expression(const std::smatch& matches)
     int rangeFrom = std::stoi(matches[1]);
     int rangeTo = std::stoi(matches[2]);
     
-    std::random_device rd;
-    std::mt19937 generator(rd());	//mersenne_twister_engine
-    std::uniform_int_distribution<int> distribution(1, static_cast<int>(rangeTo - rangeFrom + 1));
-
-    int roll = distribution(generator) + (rangeFrom - 1);
-
-    return roll;
+    return Die::roll(rangeFrom, rangeTo);
 }
 
 int Adndtk::Die::roll(const char *diceExpression)
@@ -87,4 +81,15 @@ int Adndtk::Die::roll(int numDice, int numFaces, int addendum)
     Defs::die dieType = static_cast<Defs::die>(numFaces);
     Die d{dieType};
     return d.roll(numDice) + addendum;
+}
+
+int Adndtk::Die::roll(int minValue, int maxValue)
+{
+    std::random_device rd;
+    std::mt19937 generator(rd());	//mersenne_twister_engine
+    std::uniform_int_distribution<int> distribution(1, static_cast<int>(maxValue - minValue + 1));
+
+    int roll = distribution(generator) + (minValue - 1);
+
+    return roll;
 }

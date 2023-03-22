@@ -34,6 +34,7 @@ namespace Adndtk
         }
         static int roll(const char *diceExpression);
         static int roll(int numDice, int numFaces, int addendum);
+        static int roll(int minValue, int maxValue);
 
     private:
         static int match_dice_expression(const std::smatch& matches);
