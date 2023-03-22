@@ -34,10 +34,10 @@ namespace Adndtk
             return _skillValue;
         }
 
+        SkillValue& operator=(const SkillValue& val);
         SkillValue& operator=(const short& val);
         SkillValue& operator+=(const short& val);
         SkillValue& operator-=(const short& val);
-        SkillValue& operator-=(const SkillValue& val);
         bool operator==(const SkillValue& val) const;
         bool operator<(const SkillValue& val) const;
 
