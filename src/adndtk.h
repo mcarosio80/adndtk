@@ -74,6 +74,7 @@ namespace Adndtk
                     auto c = static_cast<_T>(mask);
                     result.push_back(c);
                 }
+                mask <<= 1;
             }
             return result;
         }
