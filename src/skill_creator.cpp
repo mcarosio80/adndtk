@@ -61,7 +61,11 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
 
         query = Adndtk::Query::select_character_class;
         auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
-        clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
+
+        if (result.size() > 0 && result[0]["class_type_id"].has_value())
+        {
+            clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
+        }
 
         auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
         query = Adndtk::Query::select_skill_boundaries_class_type;
@@ -105,6 +109,7 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
     val += raceSkillModifier;
 
     if (val == 18
+        && skillType == Defs::skill::strength
         && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(clsType)
         && race != Defs::race::halfling
         )
