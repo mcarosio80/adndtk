@@ -77,6 +77,15 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
         // check class boundaries
         query = Adndtk::Query::select_skill_boundaries_class;
         get_skill_constraints(query, sklValue, clsId, minValue, maxValue);
+
+        // check school of magic requisites
+        query = Adndtk::Query::select_school_of_magic_skill_requisite;
+        auto somRequisite = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, sklValue, clsId);
+        if (somRequisite.size() > 0 && somRequisite[0]["skill_value_required"].has_value())
+        {
+            auto somReqVal = somRequisite[0].as<int>("skill_value_required");
+            minValue = std::max(minValue, somReqVal);
+        }
     }
 
     short raceSkillModifier = 0;

@@ -69,6 +69,7 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class where id = ?", Query::select_character_class);
         prepare_statement("select 'race_id', race_id, 'skill_id', skill_id, 'value', value from skill_modifier where race_id = ? and skill_id = ?", Query::select_skill_modifier);
+        prepare_statement("select 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where skill_id = ? and class_id = ?", Query::select_school_of_magic_skill_requisite);
     }
     return ok;
 }
