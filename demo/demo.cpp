@@ -81,12 +81,7 @@ void demo_dice()
 
 void demo_skills()
 {
-    Defs::skill skl = Defs::skill::strength;
-    SkillCreator sklFactory{Defs::character_class::fighter, Defs::race::human};
-
-    SkillValue sklValue = sklFactory.create(skl);
-
-    Defs::character_class cls = Defs::character_class::fighter;
+    Defs::character_class cls = Defs::character_class::paladin;
     Defs::race race = Defs::race::human;
 
     SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
