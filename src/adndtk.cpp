@@ -187,9 +187,14 @@ Adndtk::QueryResultSet Adndtk::Cyclopedia::exec(const char* stmt)
 {
     Adndtk::QueryResultSet set;
     char *error = nullptr;
-    auto rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::onSqliteDataRetrieved, (void*)&set, &error);
+    int rc = SQLITE_OK;
+    
+    while (rc == SQLITE_OK)
+    {
+        rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::onSqliteDataRetrieved, (void*)&set, &error);
+    }
 
-    if (rc != SQLITE_OK)
+    if (rc != SQLITE_DONE)
     {
         std::string msg{error};
         sqlite3_free(error);

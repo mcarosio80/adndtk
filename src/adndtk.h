@@ -53,7 +53,8 @@ namespace Adndtk
                 resultSet = parse_tabular_result(stmt);
             }
             
-            sqlite3_finalize(stmt);
+            sqlite3_reset(stmt);
+            //sqlite3_finalize(stmt);
 
             return resultSet;
         }
@@ -126,13 +127,13 @@ namespace Adndtk
 
         void bind(const Query& queryId, int position, int value)
         {
-            auto& stmt = _statements[queryId];
+            sqlite3_stmt* stmt = _statements[queryId];
             sqlite3_bind_int(stmt, position, value);
         }
 
         void bind(const Query& queryId, int position, double value)
         {
-            auto& stmt = _statements[queryId];
+            sqlite3_stmt* stmt = _statements[queryId];
             sqlite3_bind_double(stmt, position, value);
         }
 
