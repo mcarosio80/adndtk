@@ -675,3 +675,1278 @@ TEST_CASE("[TC-SKIL.028] Skills creation for human transmuter (standard method) 
     REQUIRE(cha >= 3);
     REQUIRE(cha <= 18);
 }
+
+TEST_CASE("[TC-SKIL.029] Skills creation for elf fighter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 7);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 8);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.030] Skills creation for elf ranger (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::ranger;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 13);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 14);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 13);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 8);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 14);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.031] Skills creation for elf ranger (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::mage;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 7);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.032] Skills creation for elf fighter_mage (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 7);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.033] Skills creation for elf cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 7);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 8);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.034] Skills creation for elf thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::thief;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 10);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 8);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.035] Skills creation for elf fighter_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_thief;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 10);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 8);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.036] Skills creation for elf mage_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::mage_thief;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 10);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 8);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.037] Skills creation for elf fighter_mage_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_thief;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 10);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.037] Skills creation for elf diviner (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::diviner;
+    Defs::race race = Defs::race::elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 7);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 17);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 16);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 8);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.038] Skills creation for dwarf fighter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter;
+    Defs::race race = Defs::race::dwarf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 3);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 12);
+    REQUIRE(con <= 19);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 3);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 2);
+    REQUIRE(cha <= 17);
+}
+
+TEST_CASE("[TC-SKIL.039] Skills creation for dwarf cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+    Defs::race race = Defs::race::dwarf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 8);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 3);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 12);
+    REQUIRE(con <= 19);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 3);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 2);
+    REQUIRE(cha <= 17);
+}
+
+TEST_CASE("[TC-SKIL.040] Skills creation for dwarf thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::thief;
+    Defs::race race = Defs::race::dwarf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 8);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 12);
+    REQUIRE(con <= 19);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 3);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 2);
+    REQUIRE(cha <= 17);
+}
+
+TEST_CASE("[TC-SKIL.041] Skills creation for dwarf fighter_cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_cleric;
+    Defs::race race = Defs::race::dwarf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 3);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 12);
+    REQUIRE(con <= 19);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 3);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 2);
+    REQUIRE(cha <= 17);
+}
+
+TEST_CASE("[TC-SKIL.042] Skills creation for dwarf fighter_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_thief;
+    Defs::race race = Defs::race::dwarf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 12);
+    REQUIRE(con <= 19);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 3);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 2);
+    REQUIRE(cha <= 17);
+}
+
+TEST_CASE("[TC-SKIL.043] Skills creation for gnome fighter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 3);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 7);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 2);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.044] Skills creation for gnome fighter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::illusionist;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 16);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 10);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 2);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.045] Skills creation for gnome cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 3);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 7);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 8);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.046] Skills creation for gnome thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::thief;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 7);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 2);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.047] Skills creation for gnome fighter_illusionist (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_illusionist;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 16);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 2);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.048] Skills creation for gnome fighter_cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_cleric;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 3);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 6);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 8);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.049] Skills creation for gnome cleric_illusionist (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric_illusionist;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 16);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 8);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.050] Skills creation for gnome fighter_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_thief;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 7);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 2);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.051] Skills creation for gnome illusionist_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::illusionist_thief;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 16);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 7);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 2);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.052] Skills creation for gnome cleric_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric_thief;
+    Defs::race race = Defs::race::gnome;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 8);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 7);
+    REQUIRE(inl <= 19);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 8);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.053] Skills creation for half_elf fighter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.054] Skills creation for half_elf ranger (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::ranger;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 13);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 13);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 14);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 14);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.055] Skills creation for half_elf mage (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::mage;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.056] Skills creation for half_elf fighter_mage (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.057] Skills creation for half_elf conjurer (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::conjurer;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 15);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.058] Skills creation for half_elf diviner (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::diviner;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 16);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.059] Skills creation for half_elf enchanter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::enchanter;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 16);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.060] Skills creation for half_elf transmuter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::transmuter;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 15);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.061] Skills creation for half_elf cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.062] Skills creation for half_elf fighter_cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_cleric;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.063] Skills creation for half_elf cleric_ranger (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric_ranger;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 13);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 13);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 14);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 14);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.064] Skills creation for half_elf mage_cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::mage_cleric;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.065] Skills creation for half_elf fighter_mage_cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_cleric;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.066] Skills creation for half_elf druid (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::druid;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 12);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 15);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.067] Skills creation for half_elf fighter_druid (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_druid;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 12);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 15);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.068] Skills creation for half_elf mage_druid (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::mage_druid;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 12);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 15);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.069] Skills creation for half_elf fighter_mage_druid (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_druid;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 6);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 12);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 15);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.070] Skills creation for half_elf thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::thief;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.071] Skills creation for half_elf fighter_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_thief;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 4);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.072] Skills creation for half_elf mage_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::mage_thief;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 3);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.073] Skills creation for half_elf fighter_mage_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_thief;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 9);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 9);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.074] Skills creation for half_elf bard (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::bard;
+    Defs::race race = Defs::race::half_elf;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 9);
+    REQUIRE(str <= 18);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 12);
+    REQUIRE(dex <= 18);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 6);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 13);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 18);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 15);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.075] Skills creation for halfling fighter (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter;
+    Defs::race race = Defs::race::halfling;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 8);
+    REQUIRE(str <= 17);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 8);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 10);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 6);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.076] Skills creation for halfling cleric (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+    Defs::race race = Defs::race::halfling;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 17);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 8);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 10);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 6);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 9);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.077] Skills creation for halfling thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::thief;
+    Defs::race race = Defs::race::halfling;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 6);
+    REQUIRE(str <= 17);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 10);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 10);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 6);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
+
+TEST_CASE("[TC-SKIL.078] Skills creation for halfling fighter_thief (standard method) respects the class/race boundaries", "[skills][creation]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_thief;
+    Defs::race race = Defs::race::halfling;
+
+    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+    REQUIRE(str >= 8);
+    REQUIRE(str <= 17);
+    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+    REQUIRE(dex >= 10);
+    REQUIRE(dex <= 19);
+    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+    REQUIRE(con >= 10);
+    REQUIRE(con <= 18);
+    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+    REQUIRE(inl >= 6);
+    REQUIRE(inl <= 18);
+    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+    REQUIRE(wis >= 3);
+    REQUIRE(wis <= 17);
+    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+    REQUIRE(cha >= 3);
+    REQUIRE(cha <= 18);
+}
