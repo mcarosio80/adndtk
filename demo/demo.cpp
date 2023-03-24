@@ -81,19 +81,40 @@ void demo_dice()
 
 void demo_skills()
 {
-    Defs::character_class cls = Defs::character_class::paladin;
-    Defs::race race = Defs::race::human;
+    {
+        Defs::character_class cls = Defs::character_class::bard;
+        Defs::race race = Defs::race::half_elf;
 
-    SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
-    std::cout << str << std::endl;
-    SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
-    std::cout << dex << std::endl;
-    SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
-    std::cout << con << std::endl;
-    SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
-    std::cout << inl << std::endl;
-    SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
-    std::cout << wis << std::endl;
-    SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
-    std::cout << cha << std::endl;
+        SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+        SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+        SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+        SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+        SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+        SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+        std::cout << str << ", " << dex << ", " << con << ", " << inl << ", " << wis << ", " << cha << std::endl;
+    }
+    {
+        Defs::character_class cls = Defs::character_class::mage;
+        Defs::race race = Defs::race::elf;
+
+        SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+        SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+        SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+        SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+        SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+        SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+        std::cout << str << ", " << dex << ", " << con << ", " << inl << ", " << wis << ", " << cha << std::endl;
+    }
+    {
+        Defs::character_class cls = Defs::character_class::fighter_mage;
+        Defs::race race = Defs::race::elf;
+
+        SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
+        SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
+        SkillValue con = SkillCreator::create(Defs::skill::constitution, cls, race);
+        SkillValue inl = SkillCreator::create(Defs::skill::intelligence, cls, race);
+        SkillValue wis = SkillCreator::create(Defs::skill::wisdom, cls, race);
+        SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
+        std::cout << str << ", " << dex << ", " << con << ", " << inl << ", " << wis << ", " << cha << std::endl;
+    }
 }
