@@ -57,34 +57,38 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
 
     if (cls.has_value())
     {
-        int clsId = static_cast<int>(cls.value());
-
-        query = Adndtk::Query::select_character_class;
-        auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
-
-        if (result.size() > 0 && result[0]["class_type_id"].has_value())
+        auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls.value());
+        for (auto& c : classes)
         {
-            clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
-        }
+            int clsId = static_cast<int>(c);
 
-        auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
-        query = Adndtk::Query::select_skill_boundaries_class_type;
-        for (auto& t : clsTypes)
-        {
-            get_skill_constraints(query, sklValue, static_cast<int>(t), minValue, maxValue);
-        }
+            query = Adndtk::Query::select_character_class;
+            auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
 
-        // check class boundaries
-        query = Adndtk::Query::select_skill_boundaries_class;
-        get_skill_constraints(query, sklValue, clsId, minValue, maxValue);
+            if (result.size() > 0 && result[0]["class_type_id"].has_value())
+            {
+                clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
+            }
 
-        // check school of magic requisites
-        query = Adndtk::Query::select_school_of_magic_skill_requisite;
-        auto somRequisite = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, sklValue, clsId);
-        if (somRequisite.size() > 0 && somRequisite[0]["skill_value_required"].has_value())
-        {
-            auto somReqVal = somRequisite[0].as<int>("skill_value_required");
-            minValue = std::max(minValue, somReqVal);
+            auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
+            query = Adndtk::Query::select_skill_boundaries_class_type;
+            for (auto& t : clsTypes)
+            {
+                get_skill_constraints(query, sklValue, static_cast<int>(t), minValue, maxValue);
+            }
+
+            // check class boundaries
+            query = Adndtk::Query::select_skill_boundaries_class;
+            get_skill_constraints(query, sklValue, clsId, minValue, maxValue);
+
+            // // check school of magic requisites
+            // query = Adndtk::Query::select_school_of_magic_skill_requisite;
+            // auto somRequisite = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, sklValue, clsId);
+            // if (somRequisite.size() > 0 && somRequisite[0]["skill_value_required"].has_value())
+            // {
+            //     auto somReqVal = somRequisite[0].as<int>("skill_value_required");
+            //     minValue = std::max(minValue, somReqVal);
+            // }
         }
     }
 
