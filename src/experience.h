@@ -18,8 +18,6 @@ namespace Adndtk
 
         Experience& operator+= (AdvancementTable::xp points);
         Experience& operator-= (AdvancementTable::xp points);
-        Experience& add(const Defs::character_class& cls, const AdvancementTable::xp& xp);
-        Experience& subtract(const Defs::character_class& cls, const AdvancementTable::xp& xp);
         const AdvancementTable::xp& xp(const Defs::character_class& cls) const;
         const AdvancementTable::level& level(const Defs::character_class& cls) const;
         const AdvancementTable::xp& xp() const;
@@ -44,6 +42,8 @@ namespace Adndtk
         Defs::character_class                                       _cls;
         std::map<Defs::character_class, AdvancementTable::xp>       _xps;
         std::map<Defs::character_class, AdvancementTable::level>    _levels;
+
+        Experience& set_xp(const Defs::character_class& cls, const AdvancementTable::xp& xp);
     };
 }
 

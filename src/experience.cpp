@@ -20,23 +20,25 @@ Adndtk::Experience::Experience(const Adndtk::Defs::character_class& cls)
 
 Adndtk::Experience& Adndtk::Experience::operator+= (AdvancementTable::xp points)
 {
+    auto ptx = points / _xps.size();
     for (auto& x : _xps)
     {
-        this->add(x.first, points / _xps.size());
+        this->set_xp(x.first, ptx);
     }
     return (*this);
 }
 
 Adndtk::Experience& Adndtk::Experience::operator-= (AdvancementTable::xp points)
 {
+    auto ptx = -points / _xps.size();
     for (auto& x : _xps)
     {
-        this->subtract(x.first, points / _xps.size());
+        this->set_xp(x.first, ptx);
     }
     return (*this);
 }
 
-Adndtk::Experience& Adndtk::Experience::add(const Adndtk::Defs::character_class& cls, const AdvancementTable::xp& xp)
+Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_class& cls, const AdvancementTable::xp& xp)
 {
     if (_xps.find(cls) == _xps.end())
     {
@@ -44,29 +46,21 @@ Adndtk::Experience& Adndtk::Experience::add(const Adndtk::Defs::character_class&
         return *this;
     }
 
-    auto advTable = Cyclopedia::get_instance().advancement_table();
-    AdvancementTable::level currentLevel = advTable.get_level(cls, _xps[cls]);
-    AdvancementTable::xp newXP = _xps[cls] + xp;
-    AdvancementTable::level newLevel = advTable.get_level(cls, newXP);
-
-    _xps[cls] = newXP;
-    if (currentLevel != newLevel)
+    if (xp == 0)
     {
-        _levels[cls] = newLevel;
+        return *this;
     }
-    return (*this);
-}
 
-Adndtk::Experience& Adndtk::Experience::subtract(const Adndtk::Defs::character_class& cls, const AdvancementTable::xp& xp)
-{
-    if (_xps.find(cls) == _xps.end())
+    if (xp < 0 && _xps[cls] < std::llabs(xp))
     {
-        ErrorManager::get_instance().error("Invalid class specified");
+        _xps[cls] = 0;
+        _levels[cls] = 0;
         return *this;
     }
 
     auto advTable = Cyclopedia::get_instance().advancement_table();
     AdvancementTable::level currentLevel = advTable.get_level(cls, _xps[cls]);
+
     AdvancementTable::xp newXP = _xps[cls] + xp;
     AdvancementTable::level newLevel = advTable.get_level(cls, newXP);
 
