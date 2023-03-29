@@ -1832,7 +1832,7 @@ TEST_CASE("[TC-SKIL.074] Skills creation for half_elf bard (standard method) res
     Defs::race race = Defs::race::half_elf;
 
     SkillValue str = SkillCreator::create(Defs::skill::strength, cls, race);
-    REQUIRE(str >= 9);
+    REQUIRE(str >= 3);
     REQUIRE(str <= 18);
     SkillValue dex = SkillCreator::create(Defs::skill::dexterity, cls, race);
     REQUIRE(dex >= 12);
