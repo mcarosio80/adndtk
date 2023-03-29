@@ -12,7 +12,7 @@ namespace Adndtk
     {
     public:
         using level = short;
-        using xp = uint64_t;
+        using xp = int64_t;
         
         AdvancementTable();
 
