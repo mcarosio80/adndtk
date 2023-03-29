@@ -5,7 +5,9 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <sstream>
 
+#include "../generated/defs.h"
 #include "../generated/config.h"
 
 #include "rapidjson/document.h"
@@ -24,7 +26,9 @@ namespace Adndtk
         select_skill_boundaries_race,
         select_character_class,
         select_skill_modifier,
-        select_school_of_magic_skill_requisite
+        select_school_of_magic_skill_requisite,
+        select_level_advancement,
+        select_level_advancement_factor
     };
 
     class QueryResult
@@ -62,7 +66,6 @@ namespace Adndtk
         {
             std::string v = (*this)[key].value();
             std::stringstream ss{v};
-            //ss << v;
             _T res{};
             ss >> res;
             return res;
