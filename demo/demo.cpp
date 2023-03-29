@@ -194,4 +194,27 @@ void demo_experience()
     points = 6000000;
     lvl = advTable.get_level(cls, points);
     std::cout << points << " -> " << lvl << "\n";
+
+
+    cls = Defs::character_class::paladin;
+
+    Experience exp{cls};
+    exp += 1000;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp += 1000;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp += 250;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp += 2250;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp += 4499;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp += 1;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
 }
