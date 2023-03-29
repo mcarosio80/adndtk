@@ -2308,3 +2308,33 @@ TEST_CASE("[TC-ADVT.010] Level lookup for thief/bard yields expected value", "[a
         REQUIRE(advTable.get_level(cls, 2420000) == 21);
     }
 }
+
+TEST_CASE("[TC-EXPE.001] Experience gain/loss changes level accordingly for paladin", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::paladin;
+
+    Experience exp{cls};
+    exp += 1000;
+    REQUIRE(exp.xp() == 1000);
+    REQUIRE(exp.level() == 1);
+
+    exp += 1000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 1);
+
+    exp += 250;
+    REQUIRE(exp.xp() == 2250);
+    REQUIRE(exp.level() == 2);
+
+    exp += 2250;
+    REQUIRE(exp.xp() == 4500);
+    REQUIRE(exp.level() == 3);
+
+    exp += 4499;
+    REQUIRE(exp.xp() == 8999);
+    REQUIRE(exp.level() == 3);
+
+    exp += 1;
+    REQUIRE(exp.xp() == 9000);
+    REQUIRE(exp.level() == 4);
+}
