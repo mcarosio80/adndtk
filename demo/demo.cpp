@@ -6,6 +6,7 @@ using namespace Adndtk;
 void demo_cyclopedia();
 void demo_dice();
 void demo_skills();
+void demo_experience();
 
 int main(int argc, char **argv)
 {
@@ -16,9 +17,10 @@ int main(int argc, char **argv)
     
     std::cout << "\nDESCRIPTION:\n" << Metadata::desc << "\n\n";
 
-    demo_cyclopedia();
-    demo_dice();
-    demo_skills();
+    //demo_cyclopedia();
+    //demo_dice();
+    //demo_skills();
+    demo_experience();
 
     return 0;
 }
@@ -117,4 +119,79 @@ void demo_skills()
         SkillValue cha = SkillCreator::create(Defs::skill::charisma, cls, race);
         std::cout << str << ", " << dex << ", " << con << ", " << inl << ", " << wis << ", " << cha << std::endl;
     }
+}
+
+void demo_experience()
+{
+    const AdvancementTable& advTable = Cyclopedia::get_instance().advancement_table();
+
+    Defs::character_class cls = Defs::character_class::druid;
+    for (AdvancementTable::level lvl = 1; lvl<=25; ++lvl)
+    {
+        auto points = advTable.get_xp_for_level(cls, lvl);
+        std::cout << "ADV[" << lvl << "] -> " << points << "\n";
+    }
+
+    AdvancementTable::level lvl{};
+    AdvancementTable::xp points{0};
+
+    points = 0;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 1000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 2000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 2250;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 3000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 4000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 9000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 32400;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 1000000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 2000000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 3000000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 4000000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 5000000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 5500000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
+
+    points = 6000000;
+    lvl = advTable.get_level(cls, points);
+    std::cout << points << " -> " << lvl << "\n";
 }
