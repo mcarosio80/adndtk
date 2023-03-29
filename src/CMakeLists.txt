@@ -4,6 +4,7 @@ add_library(adndtk STATIC adndtk.cpp adndtk.h
                         query_result.cpp query_result.h
                         skill_creator.cpp skill_creator.h
                         advancement_table.cpp advancement_table.h
+                        experience.cpp experience.h
 )
 
 add_dependencies(adndtk rapidjson)

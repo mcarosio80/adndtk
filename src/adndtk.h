@@ -19,6 +19,7 @@
 #include <skill_creator.h>
 #include <query_result.h>
 #include <advancement_table.h>
+#include <experience.h>
 
 namespace Adndtk
 {
