@@ -18,6 +18,7 @@
 #include <skills.h>
 #include <skill_creator.h>
 #include <query_result.h>
+#include <advancement_table.h>
 
 namespace Adndtk
 {
@@ -54,7 +55,6 @@ namespace Adndtk
             }
             
             sqlite3_reset(stmt);
-            //sqlite3_finalize(stmt);
 
             return resultSet;
         }
@@ -117,6 +117,8 @@ namespace Adndtk
             return found;
         }
 
+        const AdvancementTable& advancement_table() { return _advTable; }
+
     private:
         Cyclopedia();
         ~Cyclopedia();
@@ -156,12 +158,23 @@ namespace Adndtk
             }
 		};
 
+		template<class ParamTuple>
+		struct ParamsBinder<ParamTuple, 0>
+		{
+			static void bind_values(Cyclopedia& cp, const Query& queryId, const ParamTuple& t)
+            {
+            }
+		};
+
         QueryResultSet parse_json_result(sqlite3_stmt* stmt);
         QueryResultSet parse_tabular_result(sqlite3_stmt* stmt);
 
 		static bool     _initialised;
         sqlite3         *_dbConn;
         std::map<Query, sqlite3_stmt*>      _statements;
+        AdvancementTable        _advTable;
+
+        void load_advancement_table();
     };
 }
 

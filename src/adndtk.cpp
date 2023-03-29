@@ -70,6 +70,11 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class where id = ?", Query::select_character_class);
         prepare_statement("select 'race_id', race_id, 'skill_id', skill_id, 'value', value from skill_modifier where race_id = ? and skill_id = ?", Query::select_skill_modifier);
         prepare_statement("select 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where skill_id = ? and class_id = ?", Query::select_school_of_magic_skill_requisite);
+
+        prepare_statement("select 'class_id', class_id, 'level', level, 'score', score from LEVEL_ADVANCEMENT order by class_id, level", Query::select_level_advancement);
+        prepare_statement("select 'class_id', class_id, 'score', score from LEVEL_ADVANCEMENT_FACTOR", Query::select_level_advancement_factor);
+
+        load_advancement_table();
     }
     return ok;
 }
@@ -202,4 +207,26 @@ Adndtk::QueryResultSet Adndtk::Cyclopedia::exec(const char* stmt)
         ErrorManager::get_instance().error(msg.c_str());
     }
     return set;
+}
+
+void Adndtk::Cyclopedia::load_advancement_table()
+{
+    auto advTable = exec_prepared_statement<>(Query::select_level_advancement);
+    for (auto& r : advTable)
+    {
+        auto cls = static_cast<Defs::character_class>(r.as<int>("class_id"));
+        auto lvl = static_cast<AdvancementTable::level>(r.as<int>("level"));
+        auto score = static_cast<AdvancementTable::xp>(r.as<int>("score"));
+
+        _advTable.add_level(cls, lvl, score);
+    }
+
+    auto advFactors = exec_prepared_statement<>(Query::select_level_advancement_factor);
+    for (auto& r : advFactors)
+    {
+        auto cls = static_cast<Defs::character_class>(r.as<int>("class_id"));
+        auto score = static_cast<AdvancementTable::xp>(r.as<int>("score"));
+
+        _advTable.set_advancement_factor(cls, score);
+    }
 }
