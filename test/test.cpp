@@ -2337,4 +2337,16 @@ TEST_CASE("[TC-EXPE.001] Experience gain/loss changes level accordingly for pala
     exp += 1;
     REQUIRE(exp.xp() == 9000);
     REQUIRE(exp.level() == 4);
+
+    exp -= 1;
+    REQUIRE(exp.xp() == 8999);
+    REQUIRE(exp.level() == 3);
+
+    exp += 1;
+    REQUIRE(exp.xp() == 9000);
+    REQUIRE(exp.level() == 4);
+
+    exp -= 6000;
+    REQUIRE(exp.xp() == 3000);
+    REQUIRE(exp.level() == 2);
 }
