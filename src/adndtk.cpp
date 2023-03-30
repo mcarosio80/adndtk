@@ -215,8 +215,8 @@ void Adndtk::Cyclopedia::load_advancement_table()
     for (auto& r : advTable)
     {
         auto cls = static_cast<Defs::character_class>(r.as<int>("class_id"));
-        auto lvl = static_cast<AdvancementTable::level>(r.as<int>("level"));
-        auto score = static_cast<AdvancementTable::xp>(r.as<int>("score"));
+        auto lvl = static_cast<ExperienceLevel>(r.as<int>("level"));
+        auto score = static_cast<XP>(r.as<int>("score"));
 
         _advTable.add_level(cls, lvl, score);
     }
@@ -225,7 +225,7 @@ void Adndtk::Cyclopedia::load_advancement_table()
     for (auto& r : advFactors)
     {
         auto cls = static_cast<Defs::character_class>(r.as<int>("class_id"));
-        auto score = static_cast<AdvancementTable::xp>(r.as<int>("score"));
+        auto score = static_cast<XP>(r.as<int>("score"));
 
         _advTable.set_advancement_factor(cls, score);
     }

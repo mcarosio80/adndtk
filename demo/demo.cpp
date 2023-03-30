@@ -126,14 +126,14 @@ void demo_experience()
     const AdvancementTable& advTable = Cyclopedia::get_instance().advancement_table();
 
     Defs::character_class cls = Defs::character_class::druid;
-    for (AdvancementTable::level lvl = 1; lvl<=25; ++lvl)
+    for (ExperienceLevel lvl = 1; lvl<=25; ++lvl)
     {
         auto points = advTable.get_xp_for_level(cls, lvl);
         std::cout << "ADV[" << lvl << "] -> " << points << "\n";
     }
 
-    AdvancementTable::level lvl{};
-    AdvancementTable::xp points{0};
+    ExperienceLevel lvl{};
+    XP points{0};
 
     points = 0;
     lvl = advTable.get_level(cls, points);
@@ -195,10 +195,34 @@ void demo_experience()
     lvl = advTable.get_level(cls, points);
     std::cout << points << " -> " << lvl << "\n";
 
+ 
+    auto cbk = [&](const Defs::character_class& cls, const XPChangeType& chgType,
+                            const XP& prevXP, const ExperienceLevel& prevLvl,
+                            const XP& newXP, const ExperienceLevel& newLvl) -> void
+    {
+        std::string evtType{};
+        switch (chgType)
+        {
+            case XPChangeType::level_down:
+                evtType = "Level down"; 
+                break;
+            case XPChangeType::level_up:
+                evtType = "Level up"; 
+                break;
+            case XPChangeType::level_zero:
+                evtType = "Level zero"; 
+                break;
+            case XPChangeType::death:
+                evtType = "Death"; 
+                break;
+        };
+        std::cout << evtType << ": from level " << prevLvl << " (" << prevXP << ") to " << newLvl << " (" << newXP << ")\n"; 
+    };
+
 
     cls = Defs::character_class::paladin;
-
     Experience exp{cls};
+    exp += cbk;
     exp += 1000;
     std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
 
@@ -215,6 +239,15 @@ void demo_experience()
     std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
 
     exp += 1;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp -= 1;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp += 1;
+    std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
+
+    exp -= 6000;
     std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
 
 }

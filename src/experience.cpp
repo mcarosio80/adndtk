@@ -18,7 +18,13 @@ Adndtk::Experience::Experience(const Adndtk::Defs::character_class& cls)
     }
 }
 
-Adndtk::Experience& Adndtk::Experience::operator+= (AdvancementTable::xp points)
+Adndtk::Experience& Adndtk::Experience::operator+= (const Adndtk::OnXPChange& cbk)
+{
+    _cbks.push_back(cbk);
+    return (*this);
+}
+
+Adndtk::Experience& Adndtk::Experience::operator+= (XP points)
 {
     auto ptx = points / _xps.size();
     for (auto& x : _xps)
@@ -28,7 +34,7 @@ Adndtk::Experience& Adndtk::Experience::operator+= (AdvancementTable::xp points)
     return (*this);
 }
 
-Adndtk::Experience& Adndtk::Experience::operator-= (AdvancementTable::xp points)
+Adndtk::Experience& Adndtk::Experience::operator-= (XP points)
 {
     auto ptx = -points / _xps.size();
     for (auto& x : _xps)
@@ -38,7 +44,16 @@ Adndtk::Experience& Adndtk::Experience::operator-= (AdvancementTable::xp points)
     return (*this);
 }
 
-Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_class& cls, const AdvancementTable::xp& xp)
+void Adndtk::Experience::notify_all(const Adndtk::XP& prevXP, const Adndtk::ExperienceLevel& prevLvl,
+                                            const Adndtk::Defs::character_class& cls, const Adndtk::XPChangeType& chgType)
+{
+    for (auto& cbk : _cbks)
+    {
+        cbk(cls, chgType, prevXP, prevLvl, _xps[cls], _levels[cls]);
+    }
+}
+
+Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_class& cls, const XP& xp)
 {
     if (_xps.find(cls) == _xps.end())
     {
@@ -51,28 +66,43 @@ Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_cla
         return *this;
     }
 
+    auto precXP = _xps[cls];
+    auto precLvl = _levels[cls];
+
+    if (precLvl == 0 && xp < 0)
+    {
+        notify_all(precXP, precLvl, cls, XPChangeType::death);
+    }
+
     if (xp < 0 && _xps[cls] < std::llabs(xp))
     {
         _xps[cls] = 0;
         _levels[cls] = 0;
+        notify_all(precXP, precLvl, cls, XPChangeType::level_zero);
         return *this;
     }
 
     auto advTable = Cyclopedia::get_instance().advancement_table();
-    AdvancementTable::level currentLevel = advTable.get_level(cls, _xps[cls]);
+    ExperienceLevel currentLevel = advTable.get_level(cls, _xps[cls]);
 
-    AdvancementTable::xp newXP = _xps[cls] + xp;
-    AdvancementTable::level newLevel = advTable.get_level(cls, newXP);
+    XP newXP = _xps[cls] + xp;
+    ExperienceLevel newLevel = advTable.get_level(cls, newXP);
 
     _xps[cls] = newXP;
-    if (currentLevel != newLevel)
+    _levels[cls] = newLevel;
+
+    if (currentLevel < newLevel)
     {
-        _levels[cls] = newLevel;
+        notify_all(precXP, precLvl, cls, XPChangeType::level_up);
+    }
+    else if (currentLevel > newLevel)
+    {
+        notify_all(precXP, precLvl, cls, XPChangeType::level_down);
     }
     return (*this);
 }
 
-const Adndtk::AdvancementTable::xp& Adndtk::Experience::xp(const Adndtk::Defs::character_class& cls) const
+const Adndtk::XP& Adndtk::Experience::xp(const Adndtk::Defs::character_class& cls) const
 {
     if (_xps.find(cls) == _xps.end())
     {
@@ -81,7 +111,7 @@ const Adndtk::AdvancementTable::xp& Adndtk::Experience::xp(const Adndtk::Defs::c
     return _xps.at(cls);
 }
 
-const Adndtk::AdvancementTable::level& Adndtk::Experience::level(const Adndtk::Defs::character_class& cls) const
+const Adndtk::ExperienceLevel& Adndtk::Experience::level(const Adndtk::Defs::character_class& cls) const
 {
     if (_xps.find(cls) == _xps.end())
     {
@@ -90,12 +120,12 @@ const Adndtk::AdvancementTable::level& Adndtk::Experience::level(const Adndtk::D
     return _levels.at(cls);
 }
 
-const Adndtk::AdvancementTable::xp& Adndtk::Experience::xp() const
+const Adndtk::XP& Adndtk::Experience::xp() const
 {
     return xp(_cls);
 }
 
-const Adndtk::AdvancementTable::level& Adndtk::Experience::level() const
+const Adndtk::ExperienceLevel& Adndtk::Experience::level() const
 {
     return level(_cls);
 }

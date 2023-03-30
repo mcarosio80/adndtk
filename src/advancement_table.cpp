@@ -6,9 +6,9 @@ Adndtk::AdvancementTable::AdvancementTable()
 {
 }
 
-Adndtk::AdvancementTable::level Adndtk::AdvancementTable::get_level(const Adndtk::Defs::character_class& cls, const AdvancementTable::xp& points) const
+Adndtk::ExperienceLevel Adndtk::AdvancementTable::get_level(const Adndtk::Defs::character_class& cls, const XP& points) const
 {
-    level lvl{0};
+    ExperienceLevel lvl{0};
     auto& table = _xpTable.at(cls);
 
     auto topXP = table.rbegin()->first;
@@ -34,9 +34,9 @@ Adndtk::AdvancementTable::level Adndtk::AdvancementTable::get_level(const Adndtk
     return lvl;
 }
 
-Adndtk::AdvancementTable::xp Adndtk::AdvancementTable::get_xp_for_level(const Adndtk::Defs::character_class& cls, const AdvancementTable::level& lvl) const
+Adndtk::XP Adndtk::AdvancementTable::get_xp_for_level(const Adndtk::Defs::character_class& cls, const ExperienceLevel& lvl) const
 {
-    AdvancementTable::xp pts{0};
+    XP pts{0};
     auto& table = _lvlTable.at(cls);
 
     if (lvl <= 1)
@@ -56,7 +56,7 @@ Adndtk::AdvancementTable::xp Adndtk::AdvancementTable::get_xp_for_level(const Ad
 }
 
 
-void Adndtk::AdvancementTable::set_advancement_factor(const Defs::character_class& cls, const Adndtk::AdvancementTable::xp& points)
+void Adndtk::AdvancementTable::set_advancement_factor(const Defs::character_class& cls, const Adndtk::XP& points)
 {
     _advancementFactor[cls] = points;
 
@@ -64,7 +64,7 @@ void Adndtk::AdvancementTable::set_advancement_factor(const Defs::character_clas
     // _titleLevel[cls] = titLvl;
 }
 
-void Adndtk::AdvancementTable::add_level(const Defs::character_class& cls, const Adndtk::AdvancementTable::level& lvl, const Adndtk::AdvancementTable::xp& points)
+void Adndtk::AdvancementTable::add_level(const Defs::character_class& cls, const Adndtk::ExperienceLevel& lvl, const Adndtk::XP& points)
 {
     _xpTable[cls][points] = lvl;
     _lvlTable[cls][lvl] = points;

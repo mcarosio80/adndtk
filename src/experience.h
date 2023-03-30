@@ -2,6 +2,7 @@
 #define EXPERIENCE_H
 
 #include <map>
+#include <functional>
 
 #include "../generated/defs.h"
 #include "../generated/config.h"
@@ -10,23 +11,38 @@
 
 namespace Adndtk
 {
+    enum class XPChangeType
+    {
+        none,
+        level_up,
+        level_down,
+        level_zero,
+        death
+    };
+
+    using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
+                                          const XP &prevXP, const ExperienceLevel &prevLvl,
+                                          const XP &newXP, const ExperienceLevel &newLvl)>;
+
     class Experience
     {
     public:
         Experience();
-        Experience(const Defs::character_class& cls);
+        Experience(const Defs::character_class &cls);
 
-        Experience& operator+= (AdvancementTable::xp points);
-        Experience& operator-= (AdvancementTable::xp points);
-        const AdvancementTable::xp& xp(const Defs::character_class& cls) const;
-        const AdvancementTable::level& level(const Defs::character_class& cls) const;
-        const AdvancementTable::xp& xp() const;
-        const AdvancementTable::level& level() const;
-        
-        friend std::ostream& operator<< (std::ostream& out, const Experience& exp)
+        Experience &operator+=(const OnXPChange &cbk);
+
+        Experience &operator+=(XP points);
+        Experience &operator-=(XP points);
+        const XP &xp(const Defs::character_class &cls) const;
+        const ExperienceLevel &level(const Defs::character_class &cls) const;
+        const XP &xp() const;
+        const ExperienceLevel &level() const;
+
+        friend std::ostream &operator<<(std::ostream &out, const Experience &exp)
         {
             size_t count = 0;
-            for (auto& x : exp._xps)
+            for (auto &x : exp._xps)
             {
                 count++;
                 if (count > 1)
@@ -39,11 +55,14 @@ namespace Adndtk
         }
 
     private:
-        Defs::character_class                                       _cls;
-        std::map<Defs::character_class, AdvancementTable::xp>       _xps;
-        std::map<Defs::character_class, AdvancementTable::level>    _levels;
+        Defs::character_class _cls;
+        std::map<Defs::character_class, XP> _xps;
+        std::map<Defs::character_class, ExperienceLevel> _levels;
+        std::vector<OnXPChange> _cbks;
 
-        Experience& set_xp(const Defs::character_class& cls, const AdvancementTable::xp& xp);
+        Experience &set_xp(const Defs::character_class &cls, const XP &xp);
+        void notify_all(const XP &prevXP, const ExperienceLevel &prevLvl,
+                        const Defs::character_class &cls, const XPChangeType &chgType);
     };
 }
 

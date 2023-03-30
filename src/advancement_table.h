@@ -8,27 +8,27 @@
 
 namespace Adndtk
 {
+    using ExperienceLevel = short;
+    using XP = int64_t;
+
     class AdvancementTable
     {
     public:
-        using level = short;
-        using xp = int64_t;
-        
         AdvancementTable();
 
-        level get_level(const Defs::character_class& cls, const xp& points) const;
-        xp get_xp_for_level(const Defs::character_class& cls, const level& lvl) const;
+        ExperienceLevel get_level(const Defs::character_class& cls, const XP& points) const;
+        XP get_xp_for_level(const Defs::character_class& cls, const ExperienceLevel& lvl) const;
 
-        void set_advancement_factor(const Defs::character_class& cls, const xp& points);
-        void add_level(const Defs::character_class& cls, const level& lvl, const xp& points);
+        void set_advancement_factor(const Defs::character_class& cls, const XP& points);
+        void add_level(const Defs::character_class& cls, const ExperienceLevel& lvl, const XP& points);
 
     private:
-        std::map<Defs::character_class, std::map<xp, level>>
-                                                    _xpTable;
-        std::map<Defs::character_class, std::map<level, xp>>
-                                                    _lvlTable;
-        std::map<Defs::character_class, xp>         _advancementFactor;
-        std::map<Defs::character_class, level>      _titleLevel;
+        std::map<Defs::character_class, std::map<XP, ExperienceLevel>>
+                                                            _xpTable;
+        std::map<Defs::character_class, std::map<ExperienceLevel, XP>>
+                                                            _lvlTable;
+        std::map<Defs::character_class, XP>                 _advancementFactor;
+        std::map<Defs::character_class, ExperienceLevel>    _titleLevel;
     };
 }
 
