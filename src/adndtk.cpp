@@ -68,6 +68,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'min', min, 'max', max from skill_requisite_values where requisite_id = 3 and skill_id = ? and object = ?", Query::select_skill_boundaries_race);
 
         prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class where id = ?", Query::select_character_class);
+        prepare_statement("select 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type where id = ?", Query::select_character_class_type);
+
         prepare_statement("select 'race_id', race_id, 'skill_id', skill_id, 'value', value from skill_modifier where race_id = ? and skill_id = ?", Query::select_skill_modifier);
         prepare_statement("select 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where skill_id = ? and class_id = ?", Query::select_school_of_magic_skill_requisite);
 
