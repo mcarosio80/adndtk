@@ -2434,3 +2434,33 @@ TEST_CASE("[TC-EXPE.003] Experience gain/loss changes level accordingly for figh
     REQUIRE(exp.xp() == 59000);
     REQUIRE(exp.level() == 6);
 }
+
+TEST_CASE("[TC-EXPE.004] Experience gain/loss changes level accordingly for mage", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::mage;
+
+    Experience exp{cls};
+    exp += 2000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 1);
+
+    exp += 500;
+    REQUIRE(exp.xp() == 2500);
+    REQUIRE(exp.level() == 2);
+
+    exp += 5000;
+    REQUIRE(exp.xp() == 7500);
+    REQUIRE(exp.level() == 3);
+
+    exp += 60000;
+    REQUIRE(exp.xp() == 67500);
+    REQUIRE(exp.level() == 7);
+
+    exp += 1500000;
+    REQUIRE(exp.xp() == 1567500);
+    REQUIRE(exp.level() == 14);
+
+    exp -= 1000000;
+    REQUIRE(exp.xp() == 567500);
+    REQUIRE(exp.level() == 11);
+}
