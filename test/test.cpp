@@ -2350,3 +2350,87 @@ TEST_CASE("[TC-EXPE.001] Experience gain/loss changes level accordingly for pala
     REQUIRE(exp.xp() == 3000);
     REQUIRE(exp.level() == 2);
 }
+
+TEST_CASE("[TC-EXPE.002] Experience gain/loss changes level accordingly for ranger", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::ranger;
+
+    Experience exp{cls};
+    exp += 1000;
+    REQUIRE(exp.xp() == 1000);
+    REQUIRE(exp.level() == 1);
+
+    exp += 1000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 1);
+
+    exp += 250;
+    REQUIRE(exp.xp() == 2250);
+    REQUIRE(exp.level() == 2);
+
+    exp += 2250;
+    REQUIRE(exp.xp() == 4500);
+    REQUIRE(exp.level() == 3);
+
+    exp += 4499;
+    REQUIRE(exp.xp() == 8999);
+    REQUIRE(exp.level() == 3);
+
+    exp += 1;
+    REQUIRE(exp.xp() == 9000);
+    REQUIRE(exp.level() == 4);
+
+    exp -= 1;
+    REQUIRE(exp.xp() == 8999);
+    REQUIRE(exp.level() == 3);
+
+    exp += 1;
+    REQUIRE(exp.xp() == 9000);
+    REQUIRE(exp.level() == 4);
+
+    exp -= 6000;
+    REQUIRE(exp.xp() == 3000);
+    REQUIRE(exp.level() == 2);
+
+    exp += 2000000;
+    REQUIRE(exp.xp() == 2003000);
+    REQUIRE(exp.level() == 14);
+}
+
+TEST_CASE("[TC-EXPE.003] Experience gain/loss changes level accordingly for fighter", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter;
+
+    Experience exp{cls};
+    exp += 1000;
+    REQUIRE(exp.xp() == 1000);
+    REQUIRE(exp.level() == 1);
+
+    exp += 1000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 2);
+
+    exp += 250;
+    REQUIRE(exp.xp() == 2250);
+    REQUIRE(exp.level() == 2);
+
+    exp += 2250;
+    REQUIRE(exp.xp() == 4500);
+    REQUIRE(exp.level() == 3);
+
+    exp += 4400;
+    REQUIRE(exp.xp() == 8900);
+    REQUIRE(exp.level() == 4);
+
+    exp += 100;
+    REQUIRE(exp.xp() == 9000);
+    REQUIRE(exp.level() == 4);
+
+    exp += 250000;
+    REQUIRE(exp.xp() == 259000);
+    REQUIRE(exp.level() == 9);
+
+    exp -= 200000;
+    REQUIRE(exp.xp() == 59000);
+    REQUIRE(exp.level() == 6);
+}

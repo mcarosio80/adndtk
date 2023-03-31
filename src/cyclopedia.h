@@ -8,7 +8,6 @@
 
 #include <map>
 #include <vector>
-#include <functional>
 
 #include <common_types.h>
 #include <dice.h>
