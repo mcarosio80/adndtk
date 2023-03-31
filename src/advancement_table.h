@@ -4,13 +4,11 @@
 
 #include "../generated/defs.h"
 #include <map>
-#include <cstdint>
+
+#include <common_types.h>
 
 namespace Adndtk
 {
-    using ExperienceLevel = short;
-    using XP = int64_t;
-
     class AdvancementTable
     {
     public:
@@ -32,4 +30,4 @@ namespace Adndtk
     };
 }
 
-#endif // EXPERIENCE_H
+#endif // ADVANCEMENT_TABLE_H

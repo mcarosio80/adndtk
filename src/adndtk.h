@@ -14,6 +14,7 @@
 #include <vector>
 #include <functional>
 
+#include <common_types.h>
 #include <dice.h>
 #include <skills.h>
 #include <skill_creator.h>
@@ -171,10 +172,10 @@ namespace Adndtk
         QueryResultSet parse_json_result(sqlite3_stmt* stmt);
         QueryResultSet parse_tabular_result(sqlite3_stmt* stmt);
 
-		static bool     _initialised;
-        sqlite3         *_dbConn;
+		static bool                         _initialised;
+        sqlite3                             *_dbConn;
         std::map<Query, sqlite3_stmt*>      _statements;
-        AdvancementTable        _advTable;
+        AdvancementTable                    _advTable;
 
         void load_advancement_table();
     };

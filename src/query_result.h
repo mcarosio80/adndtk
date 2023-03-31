@@ -17,21 +17,6 @@
 
 namespace Adndtk
 {
-    enum class Query
-    {
-        select_coin,
-        select_skill_boundaries_default,
-        select_skill_boundaries_class_type,
-        select_skill_boundaries_class,
-        select_skill_boundaries_race,
-        select_character_class,
-        select_character_class_type,
-        select_skill_modifier,
-        select_school_of_magic_skill_requisite,
-        select_level_advancement,
-        select_level_advancement_factor
-    };
-
     class QueryResult
     {
     public:

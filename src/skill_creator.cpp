@@ -1,5 +1,6 @@
 #include <skill_creator.h>
 #include <dice.h>
+#include <query_result.h>
 #include <adndtk.h>
 
 Adndtk::SkillCreator::SkillCreator()
@@ -43,7 +44,7 @@ void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, c
 }
 
 Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, const std::optional<Defs::character_class>& cls,
-                                const std::optional<Defs::race>& race, const Method &method/* = Method::standard*/)
+                                const std::optional<Defs::race>& race, const SkillGenerationMethod &method/* = SkillGenerationMethod::standard*/)
 {
     int sklValue = static_cast<int>(skillType);
     int minValue{0};
@@ -135,31 +136,31 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
     return skillValue;
 }
 
-Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skillType, const Adndtk::SkillCreator::Method& method/*= Adndtk::SkillCreator::Method::standard*/)
+Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skillType, const Adndtk::SkillGenerationMethod& method/*= Adndtk::SkillGenerationMethod::standard*/)
 {
     return create(skillType, _class, _race, method);
 }
 
-short Adndtk::SkillCreator::generate_value(const Adndtk::SkillCreator::Method& method/* = Method::standard*/)
+short Adndtk::SkillCreator::generate_value(const Adndtk::SkillGenerationMethod& method/* = SkillGenerationMethod::standard*/)
 {
     Die d{Defs::die::d6};
     short skillValue = 0;
 
     switch (method)
     {
-    case Method::standard:
+    case SkillGenerationMethod::standard:
     {
         skillValue = d.roll(3);
         break;
     }
-    case Method::best_of_each:
+    case SkillGenerationMethod::best_of_each:
     {
         short r1 = d.roll(3);
         short r2 = d.roll(3);
         skillValue = std::max<short>(r1, r2);
         break;
     }
-    case Method::best_of_four:
+    case SkillGenerationMethod::best_of_four:
     {
         int tmpValue = 0;
         int minValue = 0;

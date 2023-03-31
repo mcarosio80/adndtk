@@ -2,28 +2,14 @@
 #define EXPERIENCE_H
 
 #include <map>
-#include <functional>
 
 #include "../generated/defs.h"
 #include "../generated/config.h"
 
-#include "advancement_table.h"
+#include <common_types.h>
 
 namespace Adndtk
 {
-    enum class XPChangeType
-    {
-        none,
-        level_up,
-        level_down,
-        level_zero,
-        death
-    };
-
-    using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
-                                          const XP &prevXP, const ExperienceLevel &prevLvl,
-                                          const XP &newXP, const ExperienceLevel &newLvl)>;
-
     class Experience
     {
     public:

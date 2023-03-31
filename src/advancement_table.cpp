@@ -1,5 +1,4 @@
 #include <advancement_table.h>
-#include "../generated/config.h"
 
 
 Adndtk::AdvancementTable::AdvancementTable()

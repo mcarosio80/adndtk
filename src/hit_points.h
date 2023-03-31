@@ -8,12 +8,10 @@
 
 #include "../generated/defs.h"
 
-#include <advancement_table.h>
+#include <common_types.h>
 
 namespace Adndtk
 {
-    using HP = int;
-
     class HitPoints
     {
     public:
