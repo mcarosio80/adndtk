@@ -1,5 +1,5 @@
 #include <hit_points.h>
-#include <adndtk.h>
+#include <cyclopedia.h>
 
 Adndtk::HitPoints::HitPoints()
     : _cls{}

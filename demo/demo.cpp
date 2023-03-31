@@ -1,5 +1,5 @@
 #include <iostream>
-#include <adndtk.h>
+#include <cyclopedia.h>
 
 using namespace Adndtk;
 

@@ -1984,7 +1984,7 @@ TEST_CASE("[TC-ADVT.002] Advancement table for ranger/paladin contains expected 
         Defs::character_class::ranger,
         Defs::character_class::paladin
     };
-    auto advTable = Cyclopedia::get_instance().advancement_table();
+    auto advTable = Adndtk::Cyclopedia::get_instance().advancement_table();
 
     for (auto& cls : classes)
     {

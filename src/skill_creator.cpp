@@ -1,7 +1,7 @@
 #include <skill_creator.h>
 #include <dice.h>
 #include <query_result.h>
-#include <adndtk.h>
+#include <cyclopedia.h>
 
 Adndtk::SkillCreator::SkillCreator()
     : _class{std::nullopt}, _race{std::nullopt}
