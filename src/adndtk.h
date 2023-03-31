@@ -5,6 +5,7 @@
 #include "../generated/config.h"
 
 #include <common_types.h>
+#include <options.h>
 #include <cyclopedia.h>
 #include <dice.h>
 #include <skills.h>

@@ -1,6 +1,7 @@
 add_library(adndtk STATIC adndtk.cpp adndtk.h
                         cyclopedia.cpp cyclopedia.h
                         common_types.h
+                        options.cpp options.h
                         dice.cpp dice.h
                         skills.cpp skills.h
                         query_result.cpp query_result.h
