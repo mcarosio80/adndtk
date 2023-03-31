@@ -7,6 +7,7 @@ void demo_cyclopedia();
 void demo_dice();
 void demo_skills();
 void demo_experience();
+void demo_hp();
 
 int main(int argc, char **argv)
 {
@@ -20,7 +21,8 @@ int main(int argc, char **argv)
     //demo_cyclopedia();
     //demo_dice();
     //demo_skills();
-    demo_experience();
+    //demo_experience();
+    demo_hp();
 
     return 0;
 }
@@ -250,4 +252,36 @@ void demo_experience()
     exp -= 6000;
     std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";
 
+}
+
+void demo_hp()
+{
+    HitPoints hp{Defs::character_class::fighter_mage_thief};
+
+    std::cout << "Length: " << hp.length() << "("
+            << hp.length(Defs::character_class::fighter)
+            << ", " << hp.length(Defs::character_class::fighter)
+            << ", " << hp.length(Defs::character_class::fighter)
+            << ")" << std::endl;
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::mage);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::thief);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    hp.shrink(Defs::character_class::mage);
+    std::cout << hp << std::endl;
+
+    hp.shrink(Defs::character_class::thief);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::mage);
+    std::cout << hp << std::endl;
 }

@@ -20,6 +20,7 @@
 #include <query_result.h>
 #include <advancement_table.h>
 #include <experience.h>
+#include <hit_points.h>
 
 namespace Adndtk
 {
