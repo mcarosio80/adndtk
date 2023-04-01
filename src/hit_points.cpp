@@ -1,5 +1,6 @@
 #include <hit_points.h>
 #include <cyclopedia.h>
+#include <options.h>
 
 Adndtk::HitPoints::HitPoints()
     : _cls{}
@@ -144,6 +145,10 @@ Adndtk::ExperienceLevel Adndtk::HitPoints::length(const Defs::character_class& c
 
 Adndtk::HP Adndtk::HitPoints::generate_hp(const Adndtk::Defs::character_class& cls)
 {
+    if (OptionalRules::get_instance().option<bool>(Option::max_score_for_hd))
+    {
+        return static_cast<HP>(_hitDice[cls]);
+    }
     Die d{_hitDice[cls]};
     return d;
 }
