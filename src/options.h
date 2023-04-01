@@ -10,7 +10,7 @@ namespace Adndtk
 {
     enum class Option
     {
-        max_score_for_hp
+        max_score_for_hd
     };
 
     class OptionalRules
@@ -20,21 +20,20 @@ namespace Adndtk
         OptionalRules(OptionalRules const&) = delete;
         void operator=(OptionalRules const&) = delete;
 
-        std::optional<std::variant<int, double, bool, std::string>>& option(const Option& opt)
+        template<typename _T>
+        _T& option(const Option& opt)
         {
-            if (_options.find(opt) == _options.end())
-            {
-                _options[opt] = std::nullopt;
-            }
-            return _options[opt];
+            return std::get<_T>(_options[opt]);
         }
 
     private:
         OptionalRules();
         ~OptionalRules();
 
-		static bool                                                                     _initialised;
-        std::map<Option, std::optional<std::variant<int, double, bool, std::string>>>   _options;
+        void set_default_options_values();
+
+		static bool                                                     _initialised;
+        std::map<Option, std::variant<int, double, bool, std::string>>  _options;
     };
 }
 
