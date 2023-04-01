@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cyclopedia.h>
+#include <options.h>
 
 using namespace Adndtk;
 
@@ -8,6 +9,7 @@ void demo_dice();
 void demo_skills();
 void demo_experience();
 void demo_hp();
+void demo_options();
 
 int main(int argc, char **argv)
 {
@@ -22,7 +24,8 @@ int main(int argc, char **argv)
     //demo_dice();
     //demo_skills();
     //demo_experience();
-    demo_hp();
+    //demo_hp();
+    demo_options();
 
     return 0;
 }
@@ -283,5 +286,33 @@ void demo_hp()
     std::cout << hp << std::endl;
 
     hp.increase(Defs::character_class::mage);
+    std::cout << hp << std::endl;
+}
+
+void demo_options()
+{
+    std::cout << "Max score for HD = true" << std::endl;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    HitPoints hp{Defs::character_class::fighter};
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    std::cout << "Max score for HD = false" << std::endl;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = false;
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::fighter);
+    std::cout << hp << std::endl;
+
+    hp.increase(Defs::character_class::fighter);
     std::cout << hp << std::endl;
 }
