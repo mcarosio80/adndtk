@@ -2464,3 +2464,63 @@ TEST_CASE("[TC-EXPE.004] Experience gain/loss changes level accordingly for mage
     REQUIRE(exp.xp() == 567500);
     REQUIRE(exp.level() == 11);
 }
+
+TEST_CASE("[TC-EXPE.005] Experience gain/loss changes level accordingly for cleric", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+
+    Experience exp{cls};
+    exp += 2000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 2);
+
+    exp += 500;
+    REQUIRE(exp.xp() == 2500);
+    REQUIRE(exp.level() == 2);
+
+    exp += 5000;
+    REQUIRE(exp.xp() == 7500);
+    REQUIRE(exp.level() == 4);
+
+    exp += 60000;
+    REQUIRE(exp.xp() == 67500);
+    REQUIRE(exp.level() == 7);
+
+    exp += 1500000;
+    REQUIRE(exp.xp() == 1567500);
+    REQUIRE(exp.level() == 14);
+
+    exp -= 1000000;
+    REQUIRE(exp.xp() == 567500);
+    REQUIRE(exp.level() == 10);
+}
+
+TEST_CASE("[TC-EXPE.006] Experience gain/loss changes level accordingly for druid", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::druid;
+
+    Experience exp{cls};
+    exp += 2000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 2);
+
+    exp += 500;
+    REQUIRE(exp.xp() == 2500);
+    REQUIRE(exp.level() == 2);
+
+    exp += 5000;
+    REQUIRE(exp.xp() == 7500);
+    REQUIRE(exp.level() == 4);
+
+    exp += 60000;
+    REQUIRE(exp.xp() == 67500);
+    REQUIRE(exp.level() == 8);
+
+    exp += 1500000;
+    REQUIRE(exp.xp() == 1567500);
+    REQUIRE(exp.level() == 14);
+
+    exp -= 1000000;
+    REQUIRE(exp.xp() == 567500);
+    REQUIRE(exp.level() == 12);
+}
