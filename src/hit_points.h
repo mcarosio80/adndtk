@@ -4,7 +4,6 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <numeric>
 
 #include "../generated/defs.h"
 
@@ -30,15 +29,15 @@ namespace Adndtk
             HP total{0};
             for (auto& x : _hps)
             {
-                auto t = std::accumulate(x.second.begin(), x.second.begin() + _levels.at(x.first), 0);
-                total += std::max(1, static_cast<int>(t / _hps.size()));
+                for (int i=0; i<_levels.at(x.first); ++i)
+                {
+                    total += std::max(1, static_cast<int>(x.second[i] / _hps.size()));
+                }
             }
             return total;
         }
 
-        //HitPoints& shrink(const ExperienceLevel& count = 1);
         HitPoints& shrink(const Defs::character_class& cls, const ExperienceLevel& count = 1);
-        //HitPoints& increase(const ExperienceLevel& count = 1);
         HitPoints& increase(const Defs::character_class& cls, const ExperienceLevel& count = 1);
 
         ExperienceLevel length();
@@ -51,8 +50,6 @@ namespace Adndtk
         std::map<Defs::character_class, Defs::die>          _hitDice;
 
         HP generate_hp(const Defs::character_class& cls);
-        //Defs::character_class min_level();
-        //Defs::character_class max_level();
     };
 }
 
