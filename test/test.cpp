@@ -2584,3 +2584,109 @@ TEST_CASE("[TC-EXPE.008] Experience gain/loss changes level accordingly for bard
     REQUIRE(exp.xp() == 567500);
     REQUIRE(exp.level() == 12);
 }
+
+TEST_CASE("[TC-HITP.001] Increasing length of HP sequences generates new HD values", "[HP]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_thief;
+    Defs::character_class clsF = Defs::character_class::fighter;
+    Defs::character_class clsM = Defs::character_class::mage;
+    Defs::character_class clsT = Defs::character_class::thief;
+
+    HP previousTotal{0};
+    HP currentTotal{0};
+    HitPoints hp{cls};
+
+    REQUIRE(hp.length(clsF) == 1);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 1);
+    REQUIRE(hp > previousTotal);
+    previousTotal = hp;
+
+    hp.increase(clsF);
+
+    REQUIRE(hp.length(clsF) == 2);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 1);
+    REQUIRE(hp > previousTotal);
+    previousTotal = hp;
+
+    hp.increase(clsF);
+
+    REQUIRE(hp.length(clsF) == 3);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 1);
+    REQUIRE(hp > previousTotal);
+    previousTotal = hp;
+
+    hp.increase(clsT);
+
+    REQUIRE(hp.length(clsF) == 3);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 2);
+    REQUIRE(hp > previousTotal);
+    previousTotal = hp;
+}
+
+TEST_CASE("[TC-HITP.002] Shrink of HP sequences reduces HP values", "[HP]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_thief;
+    Defs::character_class clsF = Defs::character_class::fighter;
+    Defs::character_class clsM = Defs::character_class::mage;
+    Defs::character_class clsT = Defs::character_class::thief;
+
+    HP previousTotal{0};
+    HP currentTotal{0};
+    HitPoints hp{cls};
+
+    hp.increase(clsF);
+    hp.increase(clsF);
+    hp.increase(clsT);
+
+    REQUIRE(hp.length(clsF) == 3);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 2);
+    REQUIRE(hp > previousTotal);
+    previousTotal = hp;
+
+    hp.shrink(clsF);
+    REQUIRE(hp < previousTotal);
+    previousTotal = hp;
+
+    REQUIRE(hp.length(clsF) == 2);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 2);
+}
+
+TEST_CASE("[TC-HITP.003] Shrink and increase of HP sequence keeps the prevoous HD generated value", "[HP]" )
+{
+    Defs::character_class cls = Defs::character_class::fighter_mage_thief;
+    Defs::character_class clsF = Defs::character_class::fighter;
+    Defs::character_class clsM = Defs::character_class::mage;
+    Defs::character_class clsT = Defs::character_class::thief;
+
+    HP previousTotal{0};
+    HP currentTotal{0};
+    HitPoints hp{cls};
+
+    hp.increase(clsF);
+    hp.increase(clsF);
+    hp.increase(clsF);
+
+    REQUIRE(hp.length(clsF) == 4);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 1);
+    previousTotal = hp;
+
+    hp.shrink(clsF);
+
+    REQUIRE(hp.length(clsF) == 3);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 1);
+    REQUIRE(hp < previousTotal);
+
+    hp.increase(clsF);
+    REQUIRE(hp.length(clsF) == 4);
+    REQUIRE(hp.length(clsM) == 1);
+    REQUIRE(hp.length(clsT) == 1);
+    REQUIRE(hp == previousTotal);
+}
