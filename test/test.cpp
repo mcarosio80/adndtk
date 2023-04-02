@@ -2524,3 +2524,63 @@ TEST_CASE("[TC-EXPE.006] Experience gain/loss changes level accordingly for drui
     REQUIRE(exp.xp() == 567500);
     REQUIRE(exp.level() == 12);
 }
+
+TEST_CASE("[TC-EXPE.007] Experience gain/loss changes level accordingly for thief", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::thief;
+
+    Experience exp{cls};
+    exp += 2000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 2);
+
+    exp += 500;
+    REQUIRE(exp.xp() == 2500);
+    REQUIRE(exp.level() == 3);
+
+    exp += 5000;
+    REQUIRE(exp.xp() == 7500);
+    REQUIRE(exp.level() == 4);
+
+    exp += 60000;
+    REQUIRE(exp.xp() == 67500);
+    REQUIRE(exp.level() == 7);
+
+    exp += 1500000;
+    REQUIRE(exp.xp() == 1567500);
+    REQUIRE(exp.level() == 17);
+
+    exp -= 1000000;
+    REQUIRE(exp.xp() == 567500);
+    REQUIRE(exp.level() == 12);
+}
+
+TEST_CASE("[TC-EXPE.008] Experience gain/loss changes level accordingly for bard", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::bard;
+
+    Experience exp{cls};
+    exp += 2000;
+    REQUIRE(exp.xp() == 2000);
+    REQUIRE(exp.level() == 2);
+
+    exp += 500;
+    REQUIRE(exp.xp() == 2500);
+    REQUIRE(exp.level() == 3);
+
+    exp += 5000;
+    REQUIRE(exp.xp() == 7500);
+    REQUIRE(exp.level() == 4);
+
+    exp += 60000;
+    REQUIRE(exp.xp() == 67500);
+    REQUIRE(exp.level() == 7);
+
+    exp += 1500000;
+    REQUIRE(exp.xp() == 1567500);
+    REQUIRE(exp.level() == 17);
+
+    exp -= 1000000;
+    REQUIRE(exp.xp() == 567500);
+    REQUIRE(exp.level() == 12);
+}
