@@ -2596,35 +2596,35 @@ TEST_CASE("[TC-HITP.001] Increasing length of HP sequences generates new HD valu
     HP currentTotal{0};
     HitPoints hp{cls};
 
-    REQUIRE(hp.length(clsF) == 1);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 1);
-    REQUIRE(hp > previousTotal);
-    previousTotal = hp;
+    REQUIRE(hp.level(clsF) == 1);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 1);
+    REQUIRE(hp.total() > previousTotal);
+    previousTotal = hp.total();
 
     hp.increase(clsF);
 
-    REQUIRE(hp.length(clsF) == 2);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 1);
-    REQUIRE(hp > previousTotal);
-    previousTotal = hp;
+    REQUIRE(hp.level(clsF) == 2);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 1);
+    REQUIRE(hp.total() > previousTotal);
+    previousTotal = hp.total();
 
     hp.increase(clsF);
 
-    REQUIRE(hp.length(clsF) == 3);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 1);
-    REQUIRE(hp > previousTotal);
-    previousTotal = hp;
+    REQUIRE(hp.level(clsF) == 3);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 1);
+    REQUIRE(hp.total() > previousTotal);
+    previousTotal = hp.total();
 
     hp.increase(clsT);
 
-    REQUIRE(hp.length(clsF) == 3);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 2);
-    REQUIRE(hp > previousTotal);
-    previousTotal = hp;
+    REQUIRE(hp.level(clsF) == 3);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 2);
+    REQUIRE(hp.total() > previousTotal);
+    previousTotal = hp.total();
 }
 
 TEST_CASE("[TC-HITP.002] Shrink of HP sequences reduces HP values", "[HP]" )
@@ -2642,22 +2642,22 @@ TEST_CASE("[TC-HITP.002] Shrink of HP sequences reduces HP values", "[HP]" )
     hp.increase(clsF);
     hp.increase(clsT);
 
-    REQUIRE(hp.length(clsF) == 3);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 2);
-    REQUIRE(hp > previousTotal);
-    previousTotal = hp;
+    REQUIRE(hp.level(clsF) == 3);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 2);
+    REQUIRE(hp.total() > previousTotal);
+    previousTotal = hp.total();
 
     hp.shrink(clsF);
-    REQUIRE(hp < previousTotal);
-    previousTotal = hp;
+    REQUIRE(hp.total() < previousTotal);
+    previousTotal = hp.total();
 
-    REQUIRE(hp.length(clsF) == 2);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 2);
+    REQUIRE(hp.level(clsF) == 2);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 2);
 }
 
-TEST_CASE("[TC-HITP.003] Shrink and increase of HP sequence keeps the prevoous HD generated value", "[HP]" )
+TEST_CASE("[TC-HITP.003] Shrink and increase of HP sequence keep the previous HD generated value", "[HP]" )
 {
     Defs::character_class cls = Defs::character_class::fighter_mage_thief;
     Defs::character_class clsF = Defs::character_class::fighter;
@@ -2672,21 +2672,21 @@ TEST_CASE("[TC-HITP.003] Shrink and increase of HP sequence keeps the prevoous H
     hp.increase(clsF);
     hp.increase(clsF);
 
-    REQUIRE(hp.length(clsF) == 4);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 1);
-    previousTotal = hp;
+    REQUIRE(hp.level(clsF) == 4);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 1);
+    previousTotal = hp.total();
 
     hp.shrink(clsF);
 
-    REQUIRE(hp.length(clsF) == 3);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 1);
-    REQUIRE(hp < previousTotal);
+    REQUIRE(hp.level(clsF) == 3);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 1);
+    REQUIRE(hp.total() < previousTotal);
 
     hp.increase(clsF);
-    REQUIRE(hp.length(clsF) == 4);
-    REQUIRE(hp.length(clsM) == 1);
-    REQUIRE(hp.length(clsT) == 1);
-    REQUIRE(hp == previousTotal);
+    REQUIRE(hp.level(clsF) == 4);
+    REQUIRE(hp.level(clsM) == 1);
+    REQUIRE(hp.level(clsT) == 1);
+    REQUIRE(hp.total() == previousTotal);
 }
