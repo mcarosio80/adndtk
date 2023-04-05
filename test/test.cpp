@@ -2313,7 +2313,7 @@ TEST_CASE("[TC-EXPE.001] Experience gain/loss changes level accordingly for pala
 {
     Defs::character_class cls = Defs::character_class::paladin;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 1000;
     REQUIRE(exp.xp() == 1000);
     REQUIRE(exp.level() == 1);
@@ -2355,7 +2355,7 @@ TEST_CASE("[TC-EXPE.002] Experience gain/loss changes level accordingly for rang
 {
     Defs::character_class cls = Defs::character_class::ranger;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 1000;
     REQUIRE(exp.xp() == 1000);
     REQUIRE(exp.level() == 1);
@@ -2401,7 +2401,7 @@ TEST_CASE("[TC-EXPE.003] Experience gain/loss changes level accordingly for figh
 {
     Defs::character_class cls = Defs::character_class::fighter;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 1000;
     REQUIRE(exp.xp() == 1000);
     REQUIRE(exp.level() == 1);
@@ -2439,7 +2439,7 @@ TEST_CASE("[TC-EXPE.004] Experience gain/loss changes level accordingly for mage
 {
     Defs::character_class cls = Defs::character_class::mage;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 2000;
     REQUIRE(exp.xp() == 2000);
     REQUIRE(exp.level() == 1);
@@ -2469,7 +2469,7 @@ TEST_CASE("[TC-EXPE.005] Experience gain/loss changes level accordingly for cler
 {
     Defs::character_class cls = Defs::character_class::cleric;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 2000;
     REQUIRE(exp.xp() == 2000);
     REQUIRE(exp.level() == 2);
@@ -2499,7 +2499,7 @@ TEST_CASE("[TC-EXPE.006] Experience gain/loss changes level accordingly for drui
 {
     Defs::character_class cls = Defs::character_class::druid;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 2000;
     REQUIRE(exp.xp() == 2000);
     REQUIRE(exp.level() == 2);
@@ -2529,7 +2529,7 @@ TEST_CASE("[TC-EXPE.007] Experience gain/loss changes level accordingly for thie
 {
     Defs::character_class cls = Defs::character_class::thief;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 2000;
     REQUIRE(exp.xp() == 2000);
     REQUIRE(exp.level() == 2);
@@ -2559,7 +2559,7 @@ TEST_CASE("[TC-EXPE.008] Experience gain/loss changes level accordingly for bard
 {
     Defs::character_class cls = Defs::character_class::bard;
 
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += 2000;
     REQUIRE(exp.xp() == 2000);
     REQUIRE(exp.level() == 2);
@@ -2583,6 +2583,17 @@ TEST_CASE("[TC-EXPE.008] Experience gain/loss changes level accordingly for bard
     exp -= 1000000;
     REQUIRE(exp.xp() == 567500);
     REQUIRE(exp.level() == 12);
+}
+
+TEST_CASE("[TC-EXPE.009] Experience gain for demihumans (halfling) cannot exceed the limits", "[experience]" )
+{
+    Defs::character_class cls = Defs::character_class::cleric;
+
+    Experience exp{cls, Defs::race::halfling};
+
+    exp += 500000;
+    REQUIRE(exp.xp() == 500000);
+    REQUIRE(exp.level() == 8);
 }
 
 TEST_CASE("[TC-HITP.001] Increasing length of HP sequences generates new HD values", "[HP]" )

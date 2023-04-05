@@ -14,7 +14,7 @@ namespace Adndtk
     {
     public:
         Experience();
-        Experience(const Defs::character_class &cls);
+        Experience(const Defs::character_class &cls, const Defs::race& race);
 
         Experience &operator+=(const OnXPChange &cbk);
 
@@ -24,6 +24,8 @@ namespace Adndtk
         const ExperienceLevel &level(const Defs::character_class &cls) const;
         const XP &xp() const;
         const ExperienceLevel &level() const;
+
+        ExperienceLevel& limit(const Defs::character_class& cls);
 
         friend std::ostream &operator<<(std::ostream &out, const Experience &exp)
         {
@@ -41,9 +43,11 @@ namespace Adndtk
         }
 
     private:
-        Defs::character_class _cls;
+        Defs::character_class   _cls;
+        Defs::race              _race;
         std::map<Defs::character_class, XP> _xps;
         std::map<Defs::character_class, ExperienceLevel> _levels;
+        std::map<Defs::character_class, ExperienceLevel> _limits;
         std::vector<OnXPChange> _cbks;
 
         Experience &set_xp(const Defs::character_class &cls, const XP &xp);

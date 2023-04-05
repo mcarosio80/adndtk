@@ -226,7 +226,7 @@ void demo_experience()
 
 
     cls = Defs::character_class::paladin;
-    Experience exp{cls};
+    Experience exp{cls, Defs::race::human};
     exp += cbk;
     exp += 1000;
     std::cout << "XP: " << exp.xp() << ", level " << exp.level() << "\n";

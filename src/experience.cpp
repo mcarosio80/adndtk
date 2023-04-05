@@ -3,18 +3,28 @@
 
 
 Adndtk::Experience::Experience()
-    : _cls{}
+    : _cls{}, _race{}
 {
 }
 
-Adndtk::Experience::Experience(const Adndtk::Defs::character_class& cls)
-    : _cls{cls}
+Adndtk::Experience::Experience(const Adndtk::Defs::character_class& cls, const Defs::race& race)
+    : _cls{cls}, _race{race}
 {
     auto classes = Cyclopedia::get_instance().split(cls);
     for (auto& c : classes)
     {
         _xps[c] = 0;
         _levels[c] = 1;
+    }
+
+    int clsId = static_cast<int>(cls);
+    int raceId = static_cast<int>(race);
+    auto limits = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_class_limits, clsId, raceId);
+    for (auto& l : limits)
+    {
+        auto classId = static_cast<Defs::character_class>(l.as<int>("class_id"));
+        auto lvlLimit = static_cast<ExperienceLevel>(l.as<int>("level_limit"));
+        _limits[classId] = lvlLimit;
     }
 }
 
@@ -87,6 +97,10 @@ Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_cla
 
     XP newXP = _xps[cls] + xp;
     ExperienceLevel newLevel = advTable.get_level(cls, newXP);
+    if (_limits.find(cls) != _limits.end() && newLevel > _limits[cls])
+    {
+        newLevel = _limits[cls];
+    }
 
     _xps[cls] = newXP;
     _levels[cls] = newLevel;
@@ -128,4 +142,9 @@ const Adndtk::XP& Adndtk::Experience::xp() const
 const Adndtk::ExperienceLevel& Adndtk::Experience::level() const
 {
     return level(_cls);
+}
+
+Adndtk::ExperienceLevel& Adndtk::Experience::limit(const Adndtk::Defs::character_class& cls)
+{
+    return _limits[cls];
 }

@@ -81,6 +81,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'class_id', class_id, 'level', level, 'score', score from LEVEL_ADVANCEMENT order by class_id, level", Query::select_level_advancement);
         prepare_statement("select 'class_id', class_id, 'score', score from LEVEL_ADVANCEMENT_FACTOR", Query::select_level_advancement_factor);
 
+        prepare_statement("select 'class_id', class_id, 'level_limit', level_limit from CLASS_AVAILABILITY where LEVEL_LIMIT is not null and CLASS_ID & ? and race_id = ?", Query::select_class_limits);
+
         load_advancement_table();
     }
     return ok;

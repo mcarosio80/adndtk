@@ -29,7 +29,8 @@ namespace Adndtk
         select_skill_modifier,
         select_school_of_magic_skill_requisite,
         select_level_advancement,
-        select_level_advancement_factor
+        select_level_advancement_factor,
+        select_class_limits
     };
 
     enum class XPChangeType
