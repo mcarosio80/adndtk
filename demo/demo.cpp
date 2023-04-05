@@ -24,8 +24,8 @@ int main(int argc, char **argv)
     //demo_dice();
     //demo_skills();
     //demo_experience();
-    //demo_hp();
-    demo_options();
+    demo_hp();
+    //demo_options();
 
     return 0;
 }
@@ -259,34 +259,36 @@ void demo_experience()
 
 void demo_hp()
 {
-    HitPoints hp{Defs::character_class::fighter_mage_thief};
+    Defs::character_class cls = Defs::character_class::fighter_mage_thief;
+    Defs::character_class clsF = Defs::character_class::fighter;
+    Defs::character_class clsM = Defs::character_class::mage;
+    Defs::character_class clsT = Defs::character_class::thief;
 
-    std::cout << "Length: " << hp.length() << "("
-            << hp.length(Defs::character_class::fighter)
-            << ", " << hp.length(Defs::character_class::fighter)
-            << ", " << hp.length(Defs::character_class::fighter)
-            << ")" << std::endl;
+    HitPoints hp{cls};
+    hp.increase(clsF);
+    hp.increase(clsF);
+    hp.increase(clsF);
 
-    hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.total() << std::endl;
+    std::cout << hp.current() << std::endl;
 
-    hp.increase(Defs::character_class::mage);
-    std::cout << hp << std::endl;
+    hp.shrink(clsF);
 
-    hp.increase(Defs::character_class::thief);
-    std::cout << hp << std::endl;
+    std::cout << hp.total() << std::endl;
+    std::cout << hp.current() << std::endl;
 
-    hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    HP wounds = 1;
+    hp -= wounds;
+    std::cout << hp.total() << std::endl;
+    std::cout << hp.current() << std::endl;
 
-    hp.shrink(Defs::character_class::mage);
-    std::cout << hp << std::endl;
+    hp.shrink(clsF);
+    std::cout << hp.total() << std::endl;
+    std::cout << hp.current() << std::endl;
 
-    hp.shrink(Defs::character_class::thief);
-    std::cout << hp << std::endl;
-
-    hp.increase(Defs::character_class::mage);
-    std::cout << hp << std::endl;
+    hp.increase(clsF);
+    std::cout << hp.total() << std::endl;
+    std::cout << hp.current() << std::endl;
 }
 
 void demo_options()
@@ -296,23 +298,23 @@ void demo_options()
     HitPoints hp{Defs::character_class::fighter};
 
     hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.current() << std::endl;
 
     hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.current() << std::endl;
 
     hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.current() << std::endl;
 
     std::cout << "Max score for HD = false" << std::endl;
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = false;
 
     hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.current() << std::endl;
 
     hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.current() << std::endl;
 
     hp.increase(Defs::character_class::fighter);
-    std::cout << hp << std::endl;
+    std::cout << hp.current() << std::endl;
 }
