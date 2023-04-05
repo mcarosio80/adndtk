@@ -41,9 +41,19 @@ namespace Adndtk
         death
     };
 
+    enum class HPChangeType
+    {
+        none,
+        wounded,
+        healed,
+        dead
+    };
+
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
                                           const XP &prevXP, const ExperienceLevel &prevLvl,
                                           const XP &newXP, const ExperienceLevel &newLvl)>;
+
+    using OnHPChange = std::function<void(const HPChangeType &chgType, const HP &prevHP, const XP &newHP)>;
 }
 
 #endif // COMMON_TYPES_H
