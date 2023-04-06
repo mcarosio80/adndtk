@@ -10,6 +10,7 @@ add_library(adndtk STATIC adndtk.cpp adndtk.h
                         experience.cpp experience.h
                         hit_points.cpp hit_points.h
                         saving_throws.cpp saving_throws.h
+                        thaco.cpp thaco.h
 )
 
 add_dependencies(adndtk rapidjson)

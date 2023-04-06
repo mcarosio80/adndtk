@@ -11,6 +11,7 @@ namespace Adndtk
     using XP = int64_t;
     using HP = int;
     using SavingScore = short;
+    using THAC0 = short;
 
     enum class SkillGenerationMethod
     {
@@ -33,7 +34,8 @@ namespace Adndtk
         select_level_advancement,
         select_level_advancement_factor,
         select_class_limits,
-        select_saving_throws
+        select_saving_throws,
+        select_thaco
     };
 
     enum class XPChangeType
