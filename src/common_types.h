@@ -3,12 +3,14 @@
 
 #include <cstdint>
 #include <functional>
+#include "../generated/defs.h"
 
 namespace Adndtk
 {
     using ExperienceLevel = short;
     using XP = int64_t;
     using HP = int;
+    using SavingScore = short;
 
     enum class SkillGenerationMethod
     {
@@ -30,7 +32,8 @@ namespace Adndtk
         select_school_of_magic_skill_requisite,
         select_level_advancement,
         select_level_advancement_factor,
-        select_class_limits
+        select_class_limits,
+        select_saving_throws
     };
 
     enum class XPChangeType

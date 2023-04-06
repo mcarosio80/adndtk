@@ -83,6 +83,8 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'class_id', class_id, 'level_limit', level_limit from CLASS_AVAILABILITY where LEVEL_LIMIT is not null and CLASS_ID & ? and race_id = ?", Query::select_class_limits);
 
+        prepare_statement("select 'class_type_id', sts.class_type_id, 'level', sts.level, 'saving_throw_id', st.id, 'score', sts.score from SAVING_THROW_SCORES sts inner join SAVING_THROW st on st.score = sts.SAVING_THROW_ID", Query::select_saving_throws);
+
         load_advancement_table();
     }
     return ok;
