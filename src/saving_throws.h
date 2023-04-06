@@ -20,7 +20,7 @@ namespace Adndtk
         SavingThrows();
         ~SavingThrows();
 
-        bool init();
+        void init();
 		static bool                         _initialised;
         std::map<Defs::character_class_type,
             std::map<ExperienceLevel,

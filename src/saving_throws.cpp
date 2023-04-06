@@ -20,7 +20,7 @@ Adndtk::SavingThrows::~SavingThrows()
 {
 }
 
-bool Adndtk::SavingThrows::init()
+void Adndtk::SavingThrows::init()
 {
     auto result = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_saving_throws);
 
