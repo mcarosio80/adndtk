@@ -150,6 +150,11 @@
         "value": "id"
     },
     {
+        "table" : "ATTACK_RESULT",
+        "key" : "description",
+        "value": "id"
+    },
+    {
         "table" : "WEAPON_GROUP",
         "key" : "description",
         "value": "id"

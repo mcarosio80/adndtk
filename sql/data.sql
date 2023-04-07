@@ -3601,6 +3601,17 @@ INSERT INTO ATTACK_TYPE ([ID], [DESCRIPTION]) VALUES (5, 'Missile');
 
 COMMIT TRANSACTION;
 
+-----------------------------------------------------------------------------------------------------------
+
+BEGIN TRANSACTION;
+
+INSERT INTO ATTACK_RESULT ([ACRONYM], [DESCRIPTION]) VALUES ('M', 'Miss');
+INSERT INTO ATTACK_RESULT ([ACRONYM], [DESCRIPTION]) VALUES ('H', 'Hit');
+INSERT INTO ATTACK_RESULT ([ACRONYM], [DESCRIPTION]) VALUES ('CM', 'Critical miss');
+INSERT INTO ATTACK_RESULT ([ACRONYM], [DESCRIPTION]) VALUES ('CH', 'Critical hit');
+
+COMMIT TRANSACTION;
+
 -------------------------------------------------------------------------------------------------------------
 
 BEGIN TRANSACTION;
