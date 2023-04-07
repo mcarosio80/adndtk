@@ -16,6 +16,10 @@ Adndtk::SavingThrows& Adndtk::SavingThrows::get_instance()
     return _instance;
 }
 
+Adndtk::SavingThrows::SavingThrows()
+{
+}
+
 Adndtk::SavingThrows::~SavingThrows()
 {
 }
@@ -50,4 +54,13 @@ const Adndtk::SavingScore& Adndtk::SavingThrows::get_score(const Adndtk::Defs::c
     }
     
     return map.at(lvl).at(sav);
+}
+
+bool Adndtk::SavingThrows::roll(const Defs::character_class_type& type, const ExperienceLevel& lvl, const Defs::saving_throw& sav, const short& bonusMalus/*=0*/) const
+{
+    Die d20{Defs::die::d20};
+    auto roll = d20;
+    auto target = get_score(type, lvl, sav);
+
+    return roll + bonusMalus >= target;
 }

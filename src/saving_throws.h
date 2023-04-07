@@ -15,6 +15,7 @@ namespace Adndtk
         void operator=(SavingThrows const&) = delete;
 
         const SavingScore& get_score(const Defs::character_class_type& type, const ExperienceLevel& lvl, const Defs::saving_throw& sav) const;
+        bool roll(const Defs::character_class_type& type, const ExperienceLevel& lvl, const Defs::saving_throw& sav, const short& bonusMalus) const;
 
     private:
         SavingThrows();
