@@ -11,6 +11,7 @@ add_library(adndtk STATIC adndtk.cpp adndtk.h
                         hit_points.cpp hit_points.h
                         saving_throws.cpp saving_throws.h
                         thaco.cpp thaco.h
+                        turn_undead.cpp turn_undead.h
 )
 
 add_dependencies(adndtk rapidjson)

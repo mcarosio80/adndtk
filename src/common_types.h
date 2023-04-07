@@ -36,7 +36,8 @@ namespace Adndtk
         select_level_advancement_factor,
         select_class_limits,
         select_saving_throws,
-        select_thaco
+        select_thaco,
+        select_turn_undead
     };
 
     enum class XPChangeType

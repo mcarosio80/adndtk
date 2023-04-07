@@ -87,6 +87,8 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'score', score, 'factor', factor from THACO t where CLASS_TYPE_ID = ?", Query::select_thaco);
 
+        prepare_statement("select 'level', level, 'turnable_code', turnable_code, 'effect', effect, 'value', value from TURN_UNDEAD", Query::select_turn_undead);
+
         load_advancement_table();
     }
     return ok;
