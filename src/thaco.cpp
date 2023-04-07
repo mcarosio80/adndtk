@@ -19,7 +19,35 @@ Adndtk::Thaco::~Thaco()
 {
 }
 
-Adndtk::THAC0 Adndtk::Thaco::get(const Adndtk::ExperienceLevel& lvl)
+Adndtk::THAC0 Adndtk::Thaco::get(const Adndtk::ExperienceLevel& lvl) const
 {
     return 20 - (lvl - std::div(1, _thacoScore).quot) * _thacoFactor; 
+}
+
+Adndtk::Defs::attack_result Adndtk::Thaco::try_hit(const ExperienceLevel& lvl, const AC& ac, const short& bonusMalus/*=0*/) const
+{
+    Defs::attack_result res{Defs::attack_result::miss};
+
+    Die d20{Defs::die::d20};
+    auto roll = d20;
+    auto thaco = get(lvl) - ac;
+
+    if (roll == 1)
+    {
+        res = Defs::attack_result::critical_miss;
+    }
+    else if (roll == 20)
+    {
+        res = Defs::attack_result::critical_hit;
+    }
+    else if (roll + bonusMalus >= thaco)
+    {
+        res = Defs::attack_result::hit;
+    }
+    else
+    {
+        res = Defs::attack_result::miss;
+    }
+
+    return res;
 }
