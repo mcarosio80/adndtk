@@ -14,6 +14,8 @@
 #include <advancement_table.h>
 #include <experience.h>
 #include <hit_points.h>
+#include <saving_throws.h>
+#include <thaco.h>
 
 
 #endif // ADNDTK_H
