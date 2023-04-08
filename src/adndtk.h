@@ -16,6 +16,7 @@
 #include <hit_points.h>
 #include <saving_throws.h>
 #include <thaco.h>
+#include <turn_undead.h>
 
 
 #endif // ADNDTK_H
