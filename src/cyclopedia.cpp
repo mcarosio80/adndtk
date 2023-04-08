@@ -89,6 +89,8 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'level', level, 'turnable_code', turnable_code, 'effect', effect, 'value', value from TURN_UNDEAD", Query::select_turn_undead);
 
+        prepare_statement("select 'coin_from', coin_from, 'coin_to', coin_to, 'exchange_value', exchange_value from coin_exchange_values", Query::select_coin_exchange_rates);
+
         load_advancement_table();
     }
     return ok;
