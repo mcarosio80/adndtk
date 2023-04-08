@@ -21,7 +21,7 @@ Adndtk::Thaco::~Thaco()
 
 Adndtk::THAC0 Adndtk::Thaco::get(const Adndtk::ExperienceLevel& lvl) const
 {
-    return 20 - (lvl - std::div(1, _thacoScore).quot) * _thacoFactor; 
+    return 20 - (std::div(lvl-1, _thacoScore).quot) * _thacoFactor; 
 }
 
 Adndtk::Defs::attack_result Adndtk::Thaco::try_hit(const ExperienceLevel& lvl, const AC& ac, const short& bonusMalus/*=0*/) const
