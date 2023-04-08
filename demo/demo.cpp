@@ -1,6 +1,5 @@
 #include <iostream>
-#include <cyclopedia.h>
-#include <options.h>
+#include <adndtk.h>
 
 using namespace Adndtk;
 
@@ -10,6 +9,8 @@ void demo_skills();
 void demo_experience();
 void demo_hp();
 void demo_options();
+void demo_thaco();
+void demo_turn_undead();
 
 int main(int argc, char **argv)
 {
@@ -24,8 +25,10 @@ int main(int argc, char **argv)
     //demo_dice();
     //demo_skills();
     //demo_experience();
-    demo_hp();
+    //demo_hp();
     //demo_options();
+    //demo_thaco();
+    demo_turn_undead();
 
     return 0;
 }
@@ -317,4 +320,20 @@ void demo_options()
 
     hp.increase(Defs::character_class::fighter);
     std::cout << hp.current() << std::endl;
+}
+
+void demo_thaco()
+{
+    Defs::character_class_type typ = Defs::character_class_type::wizard;
+    Thaco t{typ};
+
+    std::cout << "THAC0[W/1] = " << t.get(1) << std::endl;
+}
+
+void demo_turn_undead()
+{
+    std::pair<Defs::turn_effect, std::optional<short>> res = TurnUndead::get_instance().get(15, Defs::turnable::skeleton);
+    std::cout << "Result: " << static_cast<int>(res.first) << std::endl;
+    //std::cout << "Result: " << res.second.value() << std::endl;
+    std::cout << "Result: " << std::boolalpha << res.second.has_value() << std::endl;
 }
