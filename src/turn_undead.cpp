@@ -17,6 +17,10 @@ Adndtk::TurnUndead& Adndtk::TurnUndead::get_instance()
     return _instance;
 }
 
+Adndtk::TurnUndead::TurnUndead()
+{
+}
+
 Adndtk::TurnUndead::~TurnUndead()
 {
 }
@@ -50,7 +54,10 @@ std::pair<Adndtk::Defs::turn_effect, std::optional<short>> Adndtk::TurnUndead::g
         auto l = _turnScores.lower_bound(lvl)->first;
         p = _turnScores.at(l).at(t);
     }
-    p = _turnScores.at(lvl).at(t);
+    else
+    {
+        p = _turnScores.at(lvl).at(t);
+    }
 
     return p;
 }
