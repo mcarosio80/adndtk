@@ -38,3 +38,8 @@ void Adndtk::CoinExchange::init()
         _exchangeRates[coinFrom][coinTo] = fx;
     }
 }
+
+double Adndtk::CoinExchange::get_conversion_ratio(const Defs::coin& from, const Defs::coin& to) const
+{
+    return _exchangeRates.at(from).at(to);
+}

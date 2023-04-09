@@ -13,6 +13,8 @@ namespace Adndtk
         CoinExchange(CoinExchange const&) = delete;
         void operator=(CoinExchange const&) = delete;
 
+        double get_conversion_ratio(const Defs::coin& from, const Defs::coin& to) const;
+
     private:
         CoinExchange();
         ~CoinExchange();
