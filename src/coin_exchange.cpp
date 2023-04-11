@@ -1,11 +1,8 @@
 #include <coin_exchange.h>
-#include <coin.h>
 #include <cyclopedia.h>
 #include <common_types.h>
 
 #include "../generated/config.h"
-
-#include <cmath>
 
 bool Adndtk::CoinExchange::_initialised = false;
 
@@ -47,44 +44,4 @@ void Adndtk::CoinExchange::init()
 double Adndtk::CoinExchange::get_conversion_ratio(const Defs::coin& from, const Defs::coin& to) const
 {
     return _exchangeRates.at(from).at(to);
-}
-
-std::map<Adndtk::Defs::coin, uint32_t> Adndtk::CoinExchange::split(const Defs::coin& currency, const double& value)
-{
-	double currencyValue = value;
-	std::map<Defs::coin, uint32_t> result;
-
-	if (currencyValue >= 1.0)
-	{
-		double intPart = 0.0;
-		double fracPart = modf(currencyValue, &intPart);
-
-		Coin amt{currency, static_cast<uint32_t>(intPart)};
-		result.emplace(currency, amt);
-		currencyValue = fracPart;
-	}
-
-	for (auto cny : {Defs::coin::platinum_piece, Defs::coin::gold_piece, Defs::coin::electrum_piece, Defs::coin::silver_piece, Defs::coin::copper_piece})
-	{
-		if (static_cast<short>(cny) < static_cast<short>(currency) && currencyValue > 0.0)
-		{
-			currencyValue *= CoinExchange::get_instance().get_conversion_ratio(currency, cny);
-
-			double intPart = 0.0;
-			double fracPart = std::modf(currencyValue, &intPart);
-			if (intPart > 0)
-			{
-				Coin amt{cny, static_cast<uint32_t>(intPart)};
-				result.emplace(cny, amt);
-			}
-			currencyValue = fracPart;
-		}
-	}
-
-	if (currencyValue > 0.0)
-	{
-        ErrorManager::get_instance().error("Split failed");
-	}
-
-	return result;
 }
