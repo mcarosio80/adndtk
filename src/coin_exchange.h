@@ -4,6 +4,8 @@
 #include "../generated/defs.h"
 #include <map>
 
+#include <cstdint>
+
 namespace Adndtk
 {
     class CoinExchange
@@ -14,6 +16,7 @@ namespace Adndtk
         void operator=(CoinExchange const&) = delete;
 
         double get_conversion_ratio(const Defs::coin& from, const Defs::coin& to) const;
+        static std::map<Defs::coin, uint32_t> split(const Defs::coin& currency, const double& value);
 
     private:
         CoinExchange();
