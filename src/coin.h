@@ -44,7 +44,7 @@ namespace Adndtk
         }
         uint32_t value() const;
         template<Defs::coin t>
-        Coin convert(const Coin& c) const
+        static Coin convert(const Coin& c) const
         {
             double ratio = CoinExchange::get_instance().get_conversion_ratio(c.currency(), t);
             return Coin(t, ratio * c.value());
