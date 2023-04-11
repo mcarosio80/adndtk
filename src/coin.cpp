@@ -2,8 +2,8 @@
 
 #include "../generated/config.h"
 
-// #include <cstdlib>
-// #include <math.h>
+#include <cmath>
+#include <vector>
 
 
 Adndtk::Coin::Coin()
@@ -198,4 +198,89 @@ uint32_t Adndtk::Coin::value() const
 const Adndtk::Defs::coin& Adndtk::Coin::currency() const
 {
 	return _currency;
+}
+
+std::map<Adndtk::Defs::coin, uint32_t> Adndtk::Coin::split(const Defs::coin& currency, const double& value)
+{
+	double currencyValue = value;
+	std::map<Defs::coin, uint32_t> result;
+
+	if (currencyValue >= 1.0)
+	{
+		double intPart = 0.0;
+		double fracPart = std::modf(currencyValue, &intPart);
+
+		Coin amt{currency, static_cast<uint32_t>(intPart)};
+		result.emplace(currency, amt);
+		currencyValue = fracPart;
+	}
+
+	for (auto cny : {Defs::coin::platinum_piece, Defs::coin::gold_piece, Defs::coin::electrum_piece, Defs::coin::silver_piece, Defs::coin::copper_piece})
+	{
+		if (static_cast<short>(cny) < static_cast<short>(currency) && currencyValue > 0.0)
+		{
+			currencyValue *= CoinExchange::get_instance().get_conversion_ratio(currency, cny);
+
+			double intPart = 0.0;
+			double fracPart = std::modf(currencyValue, &intPart);
+			if (intPart > 0)
+			{
+				Coin amt{cny, static_cast<uint32_t>(intPart)};
+				result.emplace(cny, amt);
+			}
+			currencyValue = fracPart;
+		}
+	}
+
+	if (currencyValue > 0.0)
+	{
+        ErrorManager::get_instance().error("Split failed");
+	}
+
+	return result;
+}
+
+
+// Normalise a fractional amount of money converting it into an integer amount of a lesser value currency
+// (i.e. 1.5 gold pieces become 3 electrum pieces)
+Adndtk::Coin Adndtk::Coin::normalise_fractional(const Defs::coin& currency, const double& value)
+{
+	for (auto cny : { Defs::coin::platinum_piece, Defs::coin::gold_piece, Defs::coin::electrum_piece, Defs::coin::silver_piece, Defs::coin::copper_piece })
+	{
+		if (static_cast<short>(cny) < static_cast<short>(currency))
+		{
+			double newValue = CoinExchange::get_instance().get_conversion_ratio(currency, cny) * value;
+			double intPart = 0.0;
+			if (std::modf(newValue, &intPart) == 0)
+			{
+				return Coin(cny, static_cast<uint32_t>(intPart));
+			}
+		}
+	}
+	ErrorManager::get_instance().error("Unable to normalise");
+}
+
+std::vector<Adndtk::Coin> Adndtk::Coin::normalise(const Defs::coin& currency, const uint32_t& value)
+{
+	std::vector<Adndtk::Coin> result;
+	uint32_t amt = value;
+
+	for (auto ccy : { Defs::coin::platinum_piece, Defs::coin::gold_piece, Defs::coin::electrum_piece, Defs::coin::silver_piece, Defs::coin::copper_piece })
+	{
+		double rate = CoinExchange::get_instance().get_conversion_ratio(currency, ccy);
+		if (rate < 1 && amt > 1/rate)
+		{
+			ldiv_t res = std::ldiv(amt, static_cast<long>(1/rate));
+			if (res.quot > 0)
+			{
+				result.push_back(Coin(ccy, res.quot));
+				amt = res.rem;
+			}
+		}
+	}
+	if (amt > 0)
+	{
+		result.push_back(Coin(currency, amt));
+	}
+	return result;
 }
