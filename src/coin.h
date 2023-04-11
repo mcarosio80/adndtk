@@ -43,14 +43,14 @@ namespace Adndtk
             return _amount;
         }
         uint32_t value() const;
-
-    private:
         template<Defs::coin t>
         Coin convert(const Coin& c) const
         {
             double ratio = CoinExchange::get_instance().get_conversion_ratio(c.currency(), t);
             return Coin(t, ratio * c.value());
         }
+
+    private:
         uint32_t	_amount;
         Defs::coin	_currency;
     };
