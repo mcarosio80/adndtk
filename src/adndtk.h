@@ -19,6 +19,7 @@
 #include <turn_undead.h>
 #include <coin_exchange.h>
 #include <coin.h>
+#include <money_bag.h>
 
 
 #endif // ADNDTK_H
