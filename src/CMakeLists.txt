@@ -13,6 +13,7 @@ add_library(adndtk STATIC adndtk.cpp adndtk.h
                         thaco.cpp thaco.h
                         turn_undead.cpp turn_undead.h
                         coin_exchange.cpp coin_exchange.h
+                        coin.cpp coin.h
 )
 
 add_dependencies(adndtk rapidjson)

@@ -18,6 +18,7 @@
 #include <thaco.h>
 #include <turn_undead.h>
 #include <coin_exchange.h>
+#include <coin.h>
 
 
 #endif // ADNDTK_H
