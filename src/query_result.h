@@ -21,6 +21,7 @@ namespace Adndtk
     {
     public:
         QueryResult();
+        ~QueryResult();
 
         const std::optional<std::string>& operator[](const std::string& key) const
         {
@@ -64,7 +65,8 @@ namespace Adndtk
     class QueryResultSet
     {
     public:
-        QueryResultSet() {}
+        QueryResultSet();
+        ~QueryResultSet();
 
         friend std::ostream& operator<< (std::ostream& out, const QueryResultSet& res)
         {

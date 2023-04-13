@@ -11,21 +11,6 @@
 bool Adndtk::Cyclopedia::_initialised = false;
 
 
-
-Adndtk::QueryResult::QueryResult()
-{
-}
-
-bool Adndtk::QueryResult::exists(const std::string& key) const
-{
-    auto value = (*this)[key];
-    return value.has_value();
-}
-
-
-
-
-
 Adndtk::Cyclopedia& Adndtk::Cyclopedia::get_instance()
 {
     static Cyclopedia _instance;

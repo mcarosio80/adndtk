@@ -7,6 +7,19 @@
 #include <sstream>
 
 
+Adndtk::QueryResult::QueryResult()
+{
+}
+
+Adndtk::QueryResult::~QueryResult()
+{
+}
+
+bool Adndtk::QueryResult::exists(const std::string& key) const
+{
+    return _values.find(key) != _values.end() && _values.at(key).has_value();
+}
+
 void Adndtk::QueryResult::add(const char *jsonKey, const rapidjson::Value& jsonValue)
 {
     auto valType = jsonValue.GetType();
@@ -68,4 +81,13 @@ void Adndtk::QueryResult::add(const std::string& key, const std::string& value)
 void Adndtk::QueryResult::add(const std::string& key)
 {
     _values[key] = std::nullopt;
+}
+
+
+Adndtk::QueryResultSet::QueryResultSet()
+{
+}
+
+Adndtk::QueryResultSet::~QueryResultSet()
+{
 }
