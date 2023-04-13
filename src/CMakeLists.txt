@@ -15,6 +15,7 @@ add_library(adndtk STATIC adndtk.cpp adndtk.h
                         coin_exchange.cpp coin_exchange.h
                         coin.cpp coin.h
                         money_bag.cpp money_bag.h
+                        inventory.cpp inventory.h
 )
 
 add_dependencies(adndtk rapidjson)

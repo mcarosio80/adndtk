@@ -20,6 +20,7 @@
 #include <coin_exchange.h>
 #include <coin.h>
 #include <money_bag.h>
+#include <inventory.h>
 
 
 #endif // ADNDTK_H
