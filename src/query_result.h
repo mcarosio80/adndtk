@@ -57,6 +57,20 @@ namespace Adndtk
             ss >> res;
             return res;
         }
+        
+        template <typename _T>
+        std::optional<_T> try_as(const std::string& key) const
+        {
+            std::optional<std::string> v = (*this)[key];
+            if (!v.has_value())
+            {
+                return std::nullopt;
+            }
+            std::stringstream ss{v.value()};
+            _T res{};
+            ss >> res;
+            return res;
+        }
 
     private:
         std::map<std::string, std::optional<std::string>>  _values;
