@@ -38,7 +38,8 @@ namespace Adndtk
         select_saving_throws,
         select_thaco,
         select_turn_undead,
-        select_coin_exchange_rates
+        select_coin_exchange_rates,
+        select_equipment
     };
 
     enum class XPChangeType
