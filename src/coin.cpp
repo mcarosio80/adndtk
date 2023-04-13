@@ -100,7 +100,7 @@ Adndtk::Coin& Adndtk::Coin::operator= (const Coin& amount)
 Adndtk::Coin& Adndtk::Coin::operator+= (const Coin& amount)
 {
 	if (_currency == amount.currency())
-		_amount += amount;
+		_amount += amount.value();
 	else
 	{
         double ratio = CoinExchange::get_instance().get_conversion_ratio(amount.currency(), _currency);
@@ -258,6 +258,7 @@ Adndtk::Coin Adndtk::Coin::normalise_fractional(const Defs::coin& currency, cons
 		}
 	}
 	ErrorManager::get_instance().error("Unable to normalise");
+	return Coin{currency, static_cast<uint32_t>(value)};
 }
 
 std::vector<Adndtk::Coin> Adndtk::Coin::normalise(const Defs::coin& currency, const uint32_t& value)
