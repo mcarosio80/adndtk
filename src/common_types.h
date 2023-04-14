@@ -39,7 +39,13 @@ namespace Adndtk
         select_thaco,
         select_turn_undead,
         select_coin_exchange_rates,
-        select_equipment
+        select_equipment,
+        select_strength_stats,
+        select_dexterity_stats,
+        select_constitution_stats,
+        select_intelligence_stats,
+        select_wisdom_stats,
+        select_charisma_stats
     };
 
     enum class XPChangeType

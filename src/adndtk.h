@@ -21,6 +21,7 @@
 #include <coin.h>
 #include <money_bag.h>
 #include <inventory.h>
+#include <skill_stats.h>
 
 
 #endif // ADNDTK_H
