@@ -70,7 +70,7 @@ add_custom_command(
     DEPENDS ${DB_FILE}
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
-           --json ${PY_DIR}/defs_h.json
+           --json ${PY_DIR}/tables_info.json
            --output ${SRC_DIR}/defs.h
            --namespace Adndtk:Defs
            --version ${PROJECT_VERSION}
