@@ -2,7 +2,7 @@
 #include <cyclopedia.h>
 #include <common_types.h>
 
-#include "../generated/config.h"
+#include <config.h>
 
 bool Adndtk::CoinExchange::_initialised = false;
 

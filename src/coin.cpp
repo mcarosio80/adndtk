@@ -1,6 +1,6 @@
 #include <coin.h>
 
-#include "../generated/config.h"
+#include <config.h>
 
 #include <cmath>
 #include <vector>

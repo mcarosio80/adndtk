@@ -1,7 +1,7 @@
 #ifndef COIN_H
 #define COIN_H
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <coin_exchange.h>
 
 #include <cstdint>

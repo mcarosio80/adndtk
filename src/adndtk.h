@@ -1,8 +1,8 @@
 #ifndef ADNDTK_H
 #define ADNDTK_H
 
-#include "../generated/defs.h"
-#include "../generated/config.h"
+#include <defs.h>
+#include <config.h>
 
 #include <common_types.h>
 #include <options.h>

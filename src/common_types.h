@@ -3,7 +3,7 @@
 
 #include <cstdint>
 #include <functional>
-#include "../generated/defs.h"
+#include <defs.h>
 
 namespace Adndtk
 {

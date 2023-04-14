@@ -1,8 +1,8 @@
 #ifndef SKILL_STATS_H
 #define SKILL_STATS_H
 
-#include "../generated/defs.h"
-#include "../generated/tables.h"
+#include <defs.h>
+#include <tables.h>
 #include <skills.h>
 #include <map>
 

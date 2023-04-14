@@ -1,8 +1,8 @@
 #include <sqlite3.h>
 #include "query_result.h"
 
-#include "../generated/defs.h"
-#include "../generated/config.h"
+#include <defs.h>
+#include <config.h>
 
 #include <sstream>
 

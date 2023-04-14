@@ -4,7 +4,7 @@
 #include <iostream>
 #include <optional>
 
-#include "../generated/defs.h"
+#include <defs.h>
 
 #include <skills.h>
 #include <common_types.h>

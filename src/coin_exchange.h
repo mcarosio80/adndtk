@@ -1,7 +1,7 @@
 #ifndef COIN_EXCHANGE_H
 #define COIN_EXCHANGE_H
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <map>
 #include <vector>
 

@@ -1,5 +1,5 @@
 #include <money_bag.h>
-#include "../generated/config.h"
+#include <config.h>
 #include <coin_exchange.h>
 
 #include <cstdint>

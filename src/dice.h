@@ -5,7 +5,7 @@
 #include <iostream>
 #include <regex>
 
-#include "../generated/defs.h"
+#include <defs.h>
 
 namespace Adndtk
 {

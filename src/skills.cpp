@@ -1,5 +1,5 @@
 #include <skills.h>
-#include "../generated/config.h"
+#include <config.h>
 
 Adndtk::SkillValue::SkillValue()
     : _skillType{Defs::skill::strength}, _skillValue{9}, _exceptionalValue{std::nullopt}

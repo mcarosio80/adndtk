@@ -2,7 +2,7 @@
 #define ADVANCEMENT_TABLE_H
 
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <map>
 
 #include <common_types.h>

@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <coin.h>
 
 namespace Adndtk

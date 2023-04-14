@@ -6,7 +6,7 @@
 #include <optional>
 #include <stdexcept>
 
-#include "../generated/defs.h"
+#include <defs.h>
 
 namespace Adndtk
 {

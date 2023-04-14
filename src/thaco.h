@@ -1,7 +1,7 @@
 #ifndef THACO_H
 #define THACO_H
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <common_types.h>
 
 namespace Adndtk

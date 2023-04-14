@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-#include "../generated/defs.h"
+#include <defs.h>
 
 #include <common_types.h>
 

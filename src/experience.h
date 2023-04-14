@@ -3,8 +3,8 @@
 
 #include <map>
 
-#include "../generated/defs.h"
-#include "../generated/config.h"
+#include <defs.h>
+#include <config.h>
 
 #include <common_types.h>
 

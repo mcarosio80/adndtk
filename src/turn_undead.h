@@ -1,7 +1,7 @@
 #ifndef TURN_UNDEAD_H
 #define TURN_UNDEAD_H
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <common_types.h>
 #include <map>
 

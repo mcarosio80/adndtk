@@ -38,8 +38,9 @@ include_directories(${RAPIDJSON_INCLUDE_DIR})
 set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)
 set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
 set(PY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/py)
-set(GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
+#set(GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
 
 # Setup SQLite files
 set(DB_FILE ${DB_DIR}/adndtk.db)
@@ -51,8 +52,8 @@ set(DB_IDX_FILE ${SQL_DIR}/indexes.sql)
 file(REMOVE ${DB_FILE})
 
 add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
-add_custom_target(defs_h ALL DEPENDS ${GEN_DIR}/defs.h SOURCES ${DB_FILE})
-add_custom_target(tables_h ALL DEPENDS ${GEN_DIR}/tables.h SOURCES ${DB_FILE})
+add_custom_target(defs_h ALL DEPENDS ${SRC_DIR}/defs.h SOURCES ${DB_FILE})
+add_custom_target(tables_h ALL DEPENDS ${SRC_DIR}/tables.h SOURCES ${DB_FILE})
 
 message("Generating database ${DB_FILE}")
 add_custom_command(
@@ -63,26 +64,26 @@ add_custom_command(
     COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
 )
 
-message("Generating library header ${GEN_DIR}/defs.h")
+message("Generating library header ${SRC_DIR}/defs.h")
 add_custom_command(
-    OUTPUT ${GEN_DIR}/defs.h
+    OUTPUT ${SRC_DIR}/defs.h
     DEPENDS ${DB_FILE}
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
            --json ${PY_DIR}/defs_h.json
-           --output ${GEN_DIR}/defs.h
+           --output ${SRC_DIR}/defs.h
            --namespace Adndtk:Defs
            --version ${PROJECT_VERSION}
            --target enum
 )
 
-message("Generating library header ${GEN_DIR}/tables.h")
+message("Generating library header ${SRC_DIR}/tables.h")
 add_custom_command(
-    OUTPUT ${GEN_DIR}/tables.h
+    OUTPUT ${SRC_DIR}/tables.h
     DEPENDS ${DB_FILE}
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
-           --output ${GEN_DIR}/tables.h
+           --output ${SRC_DIR}/tables.h
            --namespace Adndtk:Tables
            --version ${PROJECT_VERSION}
            --target struct
@@ -174,7 +175,7 @@ endif()
 
 
 
-configure_file(${SRC_DIR}/config.h.in ${GEN_DIR}/config.h)
+configure_file(${CFG_DIR}/config.h.in ${SRC_DIR}/config.h)
 
 add_subdirectory(src)
 add_subdirectory(demo)

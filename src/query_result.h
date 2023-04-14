@@ -7,8 +7,8 @@
 #include <vector>
 #include <sstream>
 
-#include "../generated/defs.h"
-#include "../generated/config.h"
+#include <defs.h>
+#include <config.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"

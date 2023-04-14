@@ -1,7 +1,7 @@
 #ifndef SAVING_THROWS_H
 #define SAVING_THROWS_H
 
-#include "../generated/defs.h"
+#include <defs.h>
 #include <common_types.h>
 #include <map>
 

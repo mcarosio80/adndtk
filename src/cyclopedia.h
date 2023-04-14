@@ -1,8 +1,8 @@
 #ifndef CYCLOPEDIA_H
 #define CYCLOPEDIA_H
 
-#include "../generated/defs.h"
-#include "../generated/config.h"
+#include <defs.h>
+#include <config.h>
 
 #include <sqlite3.h>
 
