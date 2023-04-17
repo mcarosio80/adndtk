@@ -1,4 +1,5 @@
 #include <cyclopedia.h>
+#include <common_types.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"

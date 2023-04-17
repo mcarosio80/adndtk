@@ -2,6 +2,7 @@
 #include <cyclopedia.h>
 #include <options.h>
 #include <common_types.h>
+#include <dice.h>
 
 Adndtk::HitPoints::HitPoints()
     : _cls{}, _currentHP{}

@@ -51,11 +51,7 @@ set(DB_IDX_FILE ${SQL_DIR}/indexes.sql)
 #Prepare SQLite DB
 file(REMOVE ${DB_FILE})
 
-add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
-add_custom_target(defs_h ALL DEPENDS ${SRC_DIR}/defs.h SOURCES ${DB_FILE})
-add_custom_target(tables_h ALL DEPENDS ${SRC_DIR}/tables.h SOURCES ${DB_FILE})
-
-message("Generating database ${DB_FILE}")
+message("Configuring database generation: ${DB_FILE}")
 add_custom_command(
     OUTPUT ${DB_FILE}
     DEPENDS ${DB_SCHEMA_FILE} ${DB_DATA_FILE} ${DB_IDX_FILE}
@@ -64,7 +60,7 @@ add_custom_command(
     COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
 )
 
-message("Generating library header ${SRC_DIR}/defs.h")
+message("Configuring library header generation: ${SRC_DIR}/defs.h")
 add_custom_command(
     OUTPUT ${SRC_DIR}/defs.h
     DEPENDS ${DB_FILE}
@@ -77,25 +73,36 @@ add_custom_command(
            --target enum
 )
 
-message("Generating library header ${SRC_DIR}/tables.h")
+message("Configuring library header generation: ${SRC_DIR}/tables.h")
 add_custom_command(
     OUTPUT ${SRC_DIR}/tables.h
     DEPENDS ${DB_FILE}
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
+           --json ${PY_DIR}/orm_mapping.json
            --output ${SRC_DIR}/tables.h
            --namespace Adndtk:Tables
            --version ${PROJECT_VERSION}
            --target struct
 )
 
+message("Configuring target for defs.h")
+add_custom_target(defs_h ALL DEPENDS ${SRC_DIR}/defs.h SOURCES ${DB_FILE})
+message("Configuring target for tables.h")
+add_custom_target(tables_h ALL DEPENDS ${SRC_DIR}/tables.h SOURCES ${DB_FILE})
+message("Configuring target for SQLite database")
+add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
+
 #Fetch some info to complete the library metadata
 string(TIMESTAMP CURRENT_TS "%Y-%m-%d %H:%M:%S")
 
 #execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 --reverse OUTPUT_VARIABLE FIRST_COMMIT_DATE)
 execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 OUTPUT_VARIABLE LAST_COMMIT_DATE)
+message("Last commit date: " ${LAST_COMMIT_DATE})
 execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%an" OUTPUT_VARIABLE LAST_COMMIT_AUTHOR_NAME)
+message("Commit author name: " ${LAST_COMMIT_AUTHOR_NAME})
 execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%H" OUTPUT_VARIABLE LAST_COMMIT_HASH)
+message("Last commit hash: " ${LAST_COMMIT_HASH})
 
 #Setting database source
 set(ADNDTK_DATABASE_SOURCE "")
@@ -177,6 +184,9 @@ endif()
 
 configure_file(${CFG_DIR}/config.h.in ${SRC_DIR}/config.h)
 
+message("Adding subdirectory src")
 add_subdirectory(src)
+message("Adding subdirectory demo")
 add_subdirectory(demo)
+message("Adding subdirectory test")
 add_subdirectory(test)

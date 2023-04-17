@@ -1,6 +1,6 @@
-add_library(adndtk STATIC adndtk.cpp adndtk.h
+add_library(adndtk STATIC defs.h common_types.h
+                        adndtk.cpp adndtk.h
                         cyclopedia.cpp cyclopedia.h
-                        common_types.h
                         options.cpp options.h
                         dice.cpp dice.h
                         skills.cpp skills.h

@@ -1,5 +1,6 @@
 #include <thaco.h>
 #include <cyclopedia.h>
+#include <dice.h>
 
 Adndtk::Thaco::Thaco()
     : _clsType{}, _thacoScore{}, _thacoFactor{}

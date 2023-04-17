@@ -1,5 +1,6 @@
 #include <turn_undead.h>
 #include <cyclopedia.h>
+#include <dice.h>
 #include <utility>
 
 bool Adndtk::TurnUndead::_initialised = false;

@@ -9,14 +9,8 @@
 #include <map>
 #include <vector>
 
-#include <common_types.h>
-#include <dice.h>
-#include <skills.h>
-#include <skill_creator.h>
 #include <query_result.h>
 #include <advancement_table.h>
-#include <experience.h>
-#include <hit_points.h>
 
 namespace Adndtk
 {

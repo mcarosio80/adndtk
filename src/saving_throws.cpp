@@ -1,5 +1,6 @@
 #include <saving_throws.h>
 #include <cyclopedia.h>
+#include <dice.h>
 
 bool Adndtk::SavingThrows::_initialised = false;
 
