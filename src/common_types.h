@@ -13,6 +13,7 @@ namespace Adndtk
     using SavingScore = short;
     using THAC0 = short;
     using AC = short;
+    using SpellLevel = short;
 
     enum class SkillGenerationMethod
     {
