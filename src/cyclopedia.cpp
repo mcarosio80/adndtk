@@ -86,6 +86,12 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'ability_score', ability_score, 'magical_defence_adjustment', magical_defence_adjustment, 'bonus_spell_level_1', bonus_spell_level_1, 'bonus_spell_level_2', bonus_spell_level_2, 'bonus_spell_level_3', bonus_spell_level_3, 'bonus_spell_level_4', bonus_spell_level_4, 'bonus_spell_level_5', bonus_spell_level_5, 'bonus_spell_level_6', bonus_spell_level_6, 'bonus_spell_level_7', bonus_spell_level_7, 'chance_of_spell_failure', chance_of_spell_failure, 'spell_immunity', spell_immunity from wisdom_stats", Query::select_wisdom_stats);
         prepare_statement("select 'ability_score', ability_score, 'maximum_number_of_henchmen', maximum_number_of_henchmen, 'loyalty_base', loyalty_base, 'reaction_adjustment', reaction_adjustment from charisma_stats", Query::select_charisma_stats);
 
+        prepare_statement("select 'thief_ability_id', thief_ability_id, 'score', score from thief_ability_scores where level = ?", Query::select_thief_ability_scores);
+        prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
+        prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id is null", Query::select_thieving_skill_no_armour_adjustments);
+        prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_dexterity_adjustments where dexterity = ?", Query::select_thieving_skill_dexterity_adjustments);
+        prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_racial_adjustments where race_id = ?", Query::select_thieving_skill_racial_adjustments);
+
         load_advancement_table();
     }
     return ok;
