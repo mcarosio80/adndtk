@@ -18,6 +18,7 @@ add_library(adndtk STATIC defs.h common_types.h
                         inventory.cpp inventory.h
                         skill_stats.cpp skill_stats.h
                         thief_ability.cpp thief_ability.h
+                        spell_book.cpp spell_book.h
 )
 
 add_dependencies(adndtk rapidjson)

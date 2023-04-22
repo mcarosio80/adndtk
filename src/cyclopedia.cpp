@@ -92,6 +92,11 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_dexterity_adjustments where dexterity = ?", Query::select_thieving_skill_dexterity_adjustments);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_racial_adjustments where race_id = ?", Query::select_thieving_skill_racial_adjustments);
 
+        prepare_statement("select 'name', name, 'level', level from wizard_spell where id = ?", Query::select_wizard_spell);
+        prepare_statement("select 'school_id', school_id from wizard_spell_school where spell_id = ?", Query::select_wizard_spell_school);
+        prepare_statement("select 'school_id', school_id from school_of_magic_access where class_id = ? and school_id = ?", Query::select_school_of_magic_access);
+        prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7, 'spell_level_8', spell_level_8, 'spell_level_9', spell_level_9 from wizard_spell_progression where level = ?", Query::select_wizard_spell_progression);
+
         load_advancement_table();
     }
     return ok;

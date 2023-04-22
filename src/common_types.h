@@ -52,7 +52,11 @@ namespace Adndtk
         select_thieving_skill_racial_adjustments,
         select_thieving_skill_dexterity_adjustments,
         select_thieving_skill_armour_adjustments,
-        select_thieving_skill_no_armour_adjustments
+        select_thieving_skill_no_armour_adjustments,
+        select_wizard_spell,
+        select_wizard_spell_school,
+        select_school_of_magic_access,
+        select_wizard_spell_progression
     };
 
     enum class XPChangeType
@@ -70,6 +74,17 @@ namespace Adndtk
         wounded,
         healed,
         dead
+    };
+
+    enum AddSpellResult
+    {
+        none,
+        success,
+        failure,
+        existing,
+        level_not_available,
+        school_not_allowed,
+        no_capacity
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
