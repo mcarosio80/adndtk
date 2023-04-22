@@ -26,9 +26,21 @@ Adndtk::SkillStats& Adndtk::SkillStats::get_instance()
     return _instance;
 }
 
+const Adndtk::Tables::strength_stats& Adndtk::SkillStats::get_strength_stats(const short& strengthValue, const short& exceptionalStrength) const
+{
+    SkillValue skl{Defs::skill::strength, strengthValue, exceptionalStrength};
+    return get_strength_stats(skl);
+}
+
 const Adndtk::Tables::strength_stats& Adndtk::SkillStats::get_strength_stats(const SkillValue& skillValue) const
 {
     return _strengthStats.upper_bound(skillValue)->second;
+}
+
+const Adndtk::Tables::dexterity_stats& Adndtk::SkillStats::get_dexterity_stats(const short& skillValue) const
+{
+    SkillValue skl{Defs::skill::dexterity, skillValue};
+    return get_dexterity_stats(skl);
 }
 
 const Adndtk::Tables::dexterity_stats& Adndtk::SkillStats::get_dexterity_stats(const SkillValue& skillValue) const
@@ -36,9 +48,21 @@ const Adndtk::Tables::dexterity_stats& Adndtk::SkillStats::get_dexterity_stats(c
     return _dexterityStats.at(skillValue);
 }
 
+const Adndtk::Tables::constitution_stats& Adndtk::SkillStats::get_constitution_stats(const short& skillValue) const
+{
+    SkillValue skl{Defs::skill::constitution, skillValue};
+    return get_constitution_stats(skl);
+}
+
 const Adndtk::Tables::constitution_stats& Adndtk::SkillStats::get_constitution_stats(const SkillValue& skillValue) const
 {
     return _constitutionStats.at(skillValue);
+}
+
+const Adndtk::Tables::intelligence_stats& Adndtk::SkillStats::get_intelligence_stats(const short& skillValue) const
+{
+    SkillValue skl{Defs::skill::intelligence, skillValue};
+    return get_intelligence_stats(skl);
 }
 
 const Adndtk::Tables::intelligence_stats& Adndtk::SkillStats::get_intelligence_stats(const SkillValue& skillValue) const
@@ -46,9 +70,21 @@ const Adndtk::Tables::intelligence_stats& Adndtk::SkillStats::get_intelligence_s
     return _intelligenceStats.at(skillValue);
 }
 
+const Adndtk::Tables::wisdom_stats& Adndtk::SkillStats::get_wisdom_stats(const short& skillValue) const
+{
+    SkillValue skl{Defs::skill::dexterity, skillValue};
+    return get_wisdom_stats(skl);
+}
+
 const Adndtk::Tables::wisdom_stats& Adndtk::SkillStats::get_wisdom_stats(const SkillValue& skillValue) const
 {
     return _wisdomStats.at(skillValue);
+}
+
+const Adndtk::Tables::charisma_stats& Adndtk::SkillStats::get_charisma_stats(const short& skillValue) const
+{
+    SkillValue skl{Defs::skill::charisma, skillValue};
+    return get_charisma_stats(skl);
 }
 
 const Adndtk::Tables::charisma_stats& Adndtk::SkillStats::get_charisma_stats(const SkillValue& skillValue) const

@@ -15,11 +15,17 @@ namespace Adndtk
         SkillStats(SkillStats const&) = delete;
         void operator=(SkillStats const&) = delete;
 
+        const Tables::strength_stats& get_strength_stats(const short& strengthValue, const short& exceptionalStrength) const;
         const Tables::strength_stats& get_strength_stats(const SkillValue& skillValue) const;
+        const Tables::dexterity_stats& get_dexterity_stats(const short& skillValue) const;
         const Tables::dexterity_stats& get_dexterity_stats(const SkillValue& skillValue) const;
+        const Tables::constitution_stats& get_constitution_stats(const short& skillValue) const;
         const Tables::constitution_stats& get_constitution_stats(const SkillValue& skillValue) const;
+        const Tables::intelligence_stats& get_intelligence_stats(const short& skillValue) const;
         const Tables::intelligence_stats& get_intelligence_stats(const SkillValue& skillValue) const;
+        const Tables::wisdom_stats& get_wisdom_stats(const short& skillValue) const;
         const Tables::wisdom_stats& get_wisdom_stats(const SkillValue& skillValue) const;
+        const Tables::charisma_stats& get_charisma_stats(const short& skillValue) const;
         const Tables::charisma_stats& get_charisma_stats(const SkillValue& skillValue) const;
 
     private:
