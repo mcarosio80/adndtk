@@ -97,6 +97,11 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'school_id', school_id from school_of_magic_access where class_id = ? and school_id = ?", Query::select_school_of_magic_access);
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7, 'spell_level_8', spell_level_8, 'spell_level_9', spell_level_9 from wizard_spell_progression where level = ?", Query::select_wizard_spell_progression);
 
+        prepare_statement("select 'name', name, 'level', level from priest_spell where id = ?", Query::select_priest_spell);
+        prepare_statement("select 'sphere_id', sphere_id from priest_spell_sphere where spell_id = ?", Query::select_priest_spell_sphere);
+        prepare_statement("select 'sphere_id', sphere_id , 'access_level', access_level , 'access_mode', access_mode from sphere_access_per_class where class_id = ? and sphere_id = ?", Query::select_sphere_access_per_class);
+        prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7 from wizard_spell_progression where level = ?", Query::select_priest_spell_progression);
+
         load_advancement_table();
     }
     return ok;

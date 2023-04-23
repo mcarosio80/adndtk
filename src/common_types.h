@@ -56,7 +56,11 @@ namespace Adndtk
         select_wizard_spell,
         select_wizard_spell_school,
         select_school_of_magic_access,
-        select_wizard_spell_progression
+        select_wizard_spell_progression,
+        select_priest_spell,
+        select_priest_spell_sphere,
+        select_sphere_access_per_class,
+        select_priest_spell_progression
     };
 
     enum class XPChangeType
