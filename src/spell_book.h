@@ -21,8 +21,8 @@ namespace Adndtk
         bool delete_from_book(const Defs::wizard_spell& spellId);
         
     private:
-        ExperienceLevel                                                 _wizardLevel;
-        Defs::character_class                                           _wizardClass;
+        ExperienceLevel                                                 _casterLevel;
+        Defs::character_class                                           _casterClass;
         short                                                           _intelligenceScore;
         std::map<SpellLevel, std::map<Defs::wizard_spell, short>>       _spells;
 
