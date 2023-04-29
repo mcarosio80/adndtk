@@ -24,6 +24,7 @@ foreach(T IN ITEMS advt cexc coin dice expe hitp savt skil thac tund)
 
     add_test(NAME test_${T} COMMAND ${T})
 
-add_custom_command(TARGET tests POST_BUILD
-  COMMAND ctest -C $<CONFIGURATION> --verbosity high --output-on-failure --
-)
+    add_custom_command(TARGET ${T} POST_BUILD
+        COMMAND ctest -C $<CONFIGURATION> --verbosity high --parallel 16 --output-on-failure --
+    )
+endforeach()
