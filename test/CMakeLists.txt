@@ -18,5 +18,5 @@ include(Catch)
 catch_discover_tests(tests)
 
 add_custom_command(TARGET tests POST_BUILD
-  COMMAND ctest -C $<CONFIGURATION> --verbosity high --output-on-failure --
+  COMMAND ctest -C $<CONFIGURATION> --verbosity high --progress --parallel 4 --output-on-failure --
 )

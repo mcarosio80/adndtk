@@ -87,7 +87,7 @@ bool Adndtk::Coin::operator!= (const uint32_t& amount) const
 Adndtk::Coin& Adndtk::Coin::operator= (const Coin& amount)
 {
 	if (_currency == amount.currency())
-		_amount = amount;
+		_amount = amount.value();
 	else
 	{
         double ratio = CoinExchange::get_instance().get_conversion_ratio(amount.currency(), _currency);
@@ -114,7 +114,7 @@ Adndtk::Coin& Adndtk::Coin::operator-= (const Coin& amount)
 {
 	uint32_t val{0};
 	if (_currency == amount.currency())
-		val = amount;
+		val = amount.value();
 	else
 	{
         double ratio = CoinExchange::get_instance().get_conversion_ratio(amount.currency(), _currency);
@@ -211,7 +211,7 @@ std::map<Adndtk::Defs::coin, uint32_t> Adndtk::Coin::split(const Defs::coin& cur
 		double fracPart = std::modf(currencyValue, &intPart);
 
 		Coin amt{currency, static_cast<uint32_t>(intPart)};
-		result.emplace(currency, amt);
+		result.emplace(currency, amt.value());
 		currencyValue = fracPart;
 	}
 
@@ -226,7 +226,7 @@ std::map<Adndtk::Defs::coin, uint32_t> Adndtk::Coin::split(const Defs::coin& cur
 			if (intPart > 0)
 			{
 				Coin amt{cny, static_cast<uint32_t>(intPart)};
-				result.emplace(cny, amt);
+				result.emplace(cny, amt.value());
 			}
 			currencyValue = fracPart;
 		}

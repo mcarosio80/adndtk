@@ -38,10 +38,10 @@ namespace Adndtk
         bool operator!= (const Coin& amount) const;
 
         const Defs::coin& currency() const;
-        operator uint32_t() const
-        {
-            return _amount;
-        }
+        // operator uint32_t() const
+        // {
+        //     return _amount;
+        // }
         uint32_t value() const;
 
         template<Defs::coin t>
