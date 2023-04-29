@@ -12,6 +12,7 @@ TEST_CASE("[TC-HITP.001] Increasing length of HP sequences generates new HD valu
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HP previousTotal{0};
     HP currentTotal{0};
@@ -54,6 +55,7 @@ TEST_CASE("[TC-HITP.002] Shrink of HP sequences reduces HP values", "[HP]" )
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HP previousTotal{0};
     HP currentTotal{0};
@@ -84,6 +86,7 @@ TEST_CASE("[TC-HITP.003] Shrink and increase of HP sequence keep the previous HD
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HP previousTotal{0};
     HP currentTotal{0};
@@ -118,6 +121,7 @@ TEST_CASE("[TC-HITP.004] Shrink and increase of HP sequence change the current H
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
     hp.increase(clsF);
@@ -138,10 +142,11 @@ TEST_CASE("[TC-HITP.004] Shrink and increase of HP sequence change the current H
     REQUIRE(hp.total() - wounds == hp.current());
 }
 
-TEST_CASE("[TC-HITP.005] Dice roll yield at leas 1 HP for multiclass", "[HP]" )
+TEST_CASE("[TC-HITP.005] Dice roll yield at least 1 HP for multiclass", "[HP]" )
 {
     Defs::character_class cls = Defs::character_class::fighter_mage_thief;
     Defs::character_class clsM = Defs::character_class::mage;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
 
@@ -160,6 +165,7 @@ TEST_CASE("[TC-HITP.006] Level zero characters cannot advance", "[HP]" )
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
 
@@ -198,6 +204,7 @@ TEST_CASE("[TC-HITP.007] Level adjustments receive callbacks", "[HP]" )
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
 
@@ -271,6 +278,7 @@ TEST_CASE("[TC-HITP.009] Level for multiclass is the highest level among the cla
     Defs::character_class clsF = Defs::character_class::fighter;
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
 
