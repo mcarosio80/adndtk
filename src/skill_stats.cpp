@@ -107,7 +107,7 @@ void Adndtk::SkillStats::init_stats_for_strength()
     auto stats = Tables::strength_stats::fetch_all();
     for (auto& s : stats)
     {
-        SkillValue skl{Defs::skill::strength, s.ability_score_to, s.excp_to};
+        SkillValue skl{Defs::skill::strength, static_cast<short>(s.ability_score_to), static_cast<std::optional<short>>(s.excp_to)};
         _strengthStats[skl] = s;
     }
 }
@@ -117,7 +117,7 @@ void Adndtk::SkillStats::init_stats_for_dexterity()
     auto stats = Tables::dexterity_stats::fetch_all();
     for (auto& s : stats)
     {
-        SkillValue skl{Defs::skill::dexterity, s.ability_score};
+        SkillValue skl{Defs::skill::dexterity, static_cast<short>(s.ability_score)};
         _dexterityStats[skl] = s;
     }
 }
@@ -127,7 +127,7 @@ void Adndtk::SkillStats::init_stats_for_constitution()
     auto stats = Tables::constitution_stats::fetch_all();
     for (auto& s : stats)
     {
-        SkillValue skl{Defs::skill::constitution, s.ability_score};
+        SkillValue skl{Defs::skill::constitution, static_cast<short>(s.ability_score)};
         _constitutionStats[skl] = s;
     }
 }
@@ -137,7 +137,7 @@ void Adndtk::SkillStats::init_stats_for_intelligence()
     auto stats = Tables::intelligence_stats::fetch_all();
     for (auto& s : stats)
     {
-        SkillValue skl{Defs::skill::intelligence, s.ability_score};
+        SkillValue skl{Defs::skill::intelligence, static_cast<short>(s.ability_score)};
         _intelligenceStats[skl] = s;
     }
 }
@@ -147,7 +147,7 @@ void Adndtk::SkillStats::init_stats_for_wisdom()
     auto stats = Tables::wisdom_stats::fetch_all();
     for (auto& s : stats)
     {
-        SkillValue skl{Defs::skill::wisdom, s.ability_score};
+        SkillValue skl{Defs::skill::wisdom, static_cast<short>(s.ability_score)};
         _wisdomStats[skl] = s;
     }
 }
@@ -157,7 +157,7 @@ void Adndtk::SkillStats::init_stats_for_charisma()
     auto stats = Tables::charisma_stats::fetch_all();
     for (auto& s : stats)
     {
-        SkillValue skl{Defs::skill::charisma, s.ability_score};
+        SkillValue skl{Defs::skill::charisma, static_cast<short>(s.ability_score)};
         _charismaStats[skl] = s;
     }
 }
