@@ -26,7 +26,7 @@ bool Adndtk::MoneyBag::check_availability(const Defs::coin& currency, const uint
 	uint32_t total = 0;
 	for (auto& m : _money)
     {
-		total += Coin::convert<Defs::coin::copper_piece>(m.first, m.second);
+		total += Coin::convert<Defs::coin::copper_piece>(m.first, m.second).value();
     }
 
 	return Coin::convert<Defs::coin::copper_piece>(currency, amount) <= total;
