@@ -8,15 +8,21 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(tests test.cpp)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain adndtk)
-target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR/src})
-
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)
-catch_discover_tests(tests)
 
-add_custom_command(TARGET tests POST_BUILD
-  COMMAND ctest -C $<CONFIGURATION> --verbosity high --output-on-failure --
-)
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+
+foreach(T IN ITEMS advt cexc coin dice expe hitp savt skil thac tund)
+    message("Adding unit-test: " ${T})
+
+    add_executable(${T} test_${T}.cpp)
+    target_link_libraries(${T} PRIVATE Catch2::Catch2WithMain adndtk)
+    target_include_directories(${T} PRIVATE ${CMAKE_SOURCE_DIR/src})
+
+    catch_discover_tests(${T})
+
+    add_custom_command(TARGET ${T} POST_BUILD
+        COMMAND ctest -C $<CONFIGURATION> --extra-verbose --progress --parallel 4 --output-on-failure --
+    )
+endforeach()

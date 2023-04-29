@@ -2885,6 +2885,8 @@ TEST_CASE("[TC-HITP.007] Level adjustments receive callbacks", "[HP]" )
     Defs::character_class clsM = Defs::character_class::mage;
     Defs::character_class clsT = Defs::character_class::thief;
 
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+
     HitPoints hp{cls};
 
     HPChangeType chgType{};
