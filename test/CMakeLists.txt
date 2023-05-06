@@ -13,19 +13,16 @@ include(Catch)
 
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
-foreach(T IN ITEMS advt cexc coin dice expe hitp savt skil thac tund)
-    message("Adding unit-test: " ${T})
+add_executable(tests test_advt.cpp test_cexc.cpp test_coin.cpp test_dice.cpp test_expe.cpp test_hitp.cpp test_savt.cpp test_skil.cpp test_thac.cpp test_tund.cpp)
 
-    add_executable(${T} test_${T}.cpp)
-    target_link_libraries(${T} PRIVATE Catch2::Catch2WithMain adndtk)
-    target_include_directories(${T} PRIVATE ${CMAKE_SOURCE_DIR/src})
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain adndtk)
+target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR/src})
 
-    catch_discover_tests(${T})
+catch_discover_tests(tests)
 
-    add_test(NAME test_${T} COMMAND ${T})
+add_test(NAME tests COMMAND tests)
 
-    add_custom_command(TARGET ${T} POST_BUILD
-        COMMAND ctest --config $<CONFIGURATION> --exe $<TARGET_FILE:${T}>
-                      --verbosity high --parallel 16 --output-on-failure --
-    )
-endforeach()
+add_custom_command(TARGET tests POST_BUILD
+    COMMAND ctest --config $<CONFIGURATION> #--exe $<TARGET_FILE:tests>
+                  --verbosity high --parallel 16 --output-on-failure --
+)

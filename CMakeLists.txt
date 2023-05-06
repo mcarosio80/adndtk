@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(RUN_UNIT_TESTS "Run unit tests after build" ON)
+
 include(ExternalProject)
 
 #Find packages
@@ -189,9 +191,12 @@ add_subdirectory(src)
 message("Adding subdirectory demo")
 add_subdirectory(demo)
 
-if(NOT RUN_TESTS)
-    message("Skip unit-tests (enable with -DRUN_UNIT_TESTS=ON)")
-else()
+if(RUN_UNIT_TESTS)
+    message("Executing unit tests after build (disable with -DRUN_UNIT_TESTS=OFF)")
     message("Adding subdirectory test")
     add_subdirectory(test)
-endif()
+else()
+    message("Skip unit-tests (enable with -DRUN_UNIT_TESTS=ON)")
+endif(RUN_UNIT_TESTS)
+
+unset(RUN_UNIT_TESTS CACHE)
