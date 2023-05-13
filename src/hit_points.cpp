@@ -1,7 +1,6 @@
 #include <hit_points.h>
 #include <cyclopedia.h>
 #include <options.h>
-#include <common_types.h>
 #include <dice.h>
 
 Adndtk::HitPoints::HitPoints()
@@ -94,16 +93,6 @@ const Adndtk::HP& Adndtk::HitPoints::current() const
     return _currentHP;
 }
 
-// Adndtk::HitPoints& Adndtk::HitPoints::shrink(const ExperienceLevel& count/*=1*/)
-// {
-//     for (ExperienceLevel lvl=0; lvl<count; ++lvl)
-//     {
-//         Defs::character_class cls = max_level();
-//         shrink(cls, 1);
-//     }
-//     return (*this);
-// }
-
 Adndtk::HitPoints& Adndtk::HitPoints::shrink(const Defs::character_class& cls, const ExperienceLevel& count/*=1*/)
 {
     if (_levels.find(cls) == _levels.end())
@@ -133,44 +122,6 @@ Adndtk::HitPoints& Adndtk::HitPoints::shrink(const Defs::character_class& cls, c
     notify_all_listeners(prevHP, _currentHP);
     return (*this);
 }
-
-// Adndtk::Defs::character_class Adndtk::HitPoints::min_level()
-// {
-//     auto selected = *_levels.begin();
-//     Defs::character_class cls{selected.first};
-//     for (auto& x : _levels)
-//     {
-//         if (x.second < selected.second)
-//         {
-//             cls = x.first;
-//         }
-//     }
-//     return cls;
-// }
-
-// Adndtk::Defs::character_class Adndtk::HitPoints::max_level()
-// {
-//     auto selected = *_levels.begin();
-//     Defs::character_class cls{selected.first};
-//     for (auto& x : _levels)
-//     {
-//         if (x.second > selected.second)
-//         {
-//             cls = x.first;
-//         }
-//     }
-//     return cls;
-// }
-
-// Adndtk::HitPoints& Adndtk::HitPoints::increase(const ExperienceLevel& count/*=1*/)
-// {
-//     for (ExperienceLevel lvl=0; lvl<count; ++lvl)
-//     {
-//         Defs::character_class cls = min_level();
-//         increase(cls, 1);
-//     }
-//     return (*this);
-// }
 
 Adndtk::HitPoints& Adndtk::HitPoints::increase(const Defs::character_class& cls, const ExperienceLevel& count/*=1*/)
 {
