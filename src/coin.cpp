@@ -269,7 +269,7 @@ std::vector<Adndtk::Coin> Adndtk::Coin::normalise(const Defs::coin& currency, co
 	for (auto ccy : { Defs::coin::platinum_piece, Defs::coin::gold_piece, Defs::coin::electrum_piece, Defs::coin::silver_piece, Defs::coin::copper_piece })
 	{
 		double rate = CoinExchange::get_instance().get_conversion_ratio(currency, ccy);
-		if (rate < 1 && amt > 1/rate)
+		if (rate < 1 && amt >= 1/rate)
 		{
 			ldiv_t res = std::ldiv(amt, static_cast<long>(1/rate));
 			if (res.quot > 0)
