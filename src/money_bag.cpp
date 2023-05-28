@@ -111,7 +111,7 @@ Adndtk::MoneyBag& Adndtk::MoneyBag::operator-= (const Adndtk::Coin& c)
 
 void Adndtk::MoneyBag::normalise()
 {
-	for (auto ccy : { Defs::coin::copper_piece, Defs::coin::silver_piece, Defs::coin::electrum_piece, Defs::coin::gold_piece, Defs::coin::platinum_piece })
+	for (auto ccy : { Defs::coin::copper_piece, Defs::coin::silver_piece, Defs::coin::electrum_piece, Defs::coin::gold_piece })
 	{
 		if (_money[ccy] == 0)
 			continue;
