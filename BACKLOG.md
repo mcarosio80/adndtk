@@ -10,7 +10,6 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 
 # Missing unit-test
 Adding unit test for the following items:
-* money_bag
 * inventory
 * skill_stats
 * thief_ability
