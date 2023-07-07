@@ -48,7 +48,7 @@ namespace Adndtk
         select_intelligence_stats,
         select_wisdom_stats,
         select_charisma_stats,
-        select_thief_ability_scores,
+        select_thief_ability_base_scores,
         select_thieving_skill_racial_adjustments,
         select_thieving_skill_dexterity_adjustments,
         select_thieving_skill_armour_adjustments,
