@@ -42,7 +42,7 @@ namespace Adndtk
         void set_race_abilities(const Defs::race& race);
         void set_armour_abilities(const std::optional<Defs::equipment>& armourId);
         void set_dexterity_abilities(const short& skillValue);
-        void set_base_abilities(const ExperienceLevel& lvl);
+        void set_base_abilities();
     };
 }
 

@@ -22,6 +22,7 @@
 #include <money_bag.h>
 #include <inventory.h>
 #include <skill_stats.h>
+#include <thief_ability.h>
 
 
 #endif // ADNDTK_H

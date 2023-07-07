@@ -6,10 +6,23 @@
 #include <algorithm>
 
 Adndtk::ThiefAbility::ThiefAbility(const Defs::race& r)
-    : _race{r}, _level{1}, _improvementsAvailable{0}, _armourInUse{}, _dexterityValue{}
+    : _race{r}, _level{1}, _improvementsAvailable{0}, _armourInUse{std::nullopt}, _dexterityValue{9}
 {
-    set_base_abilities(_level);
+    for (auto thSkl : { Defs::thief_ability::pick_pockets, Defs::thief_ability::open_locks,
+                        Defs::thief_ability::find_remove_traps, Defs::thief_ability::move_silently,
+                        Defs::thief_ability::hide_in_shadows, Defs::thief_ability::hear_noise,
+                        Defs::thief_ability::climb_walls, Defs::thief_ability::read_languages })
+    {
+        _baseAbilities[thSkl] = 0;
+        _raceModifiers[thSkl] = 0;
+        _experienceAdjustments[thSkl] = 0;
+        _armourModifiers[thSkl] = 0;
+        _dexterityModifiers[thSkl] = 0; 
+    }
+    set_base_abilities();
     set_race_abilities(_race);
+    set_dexterity_abilities(_dexterityValue);
+    set_armour_abilities(_armourInUse);
 }
 
 Adndtk::ThiefAbility::~ThiefAbility()
@@ -18,6 +31,9 @@ Adndtk::ThiefAbility::~ThiefAbility()
 
 Adndtk::ThievingScore Adndtk::ThiefAbility::operator[] (const Defs::thief_ability& abilityId) const
 {
+    if (_dexterityValue < 9)
+        return 0;
+
     return std::min(95, _baseAbilities.at(abilityId)
             + _experienceAdjustments.at(abilityId)
             + _raceModifiers.at(abilityId)
@@ -50,8 +66,7 @@ void Adndtk::ThiefAbility::set_race_abilities(const Defs::race& race)
     for (auto& r : res)
     {
         Defs::thief_ability thievingSkill = static_cast<Defs::thief_ability>(r.as<short>("thieving_skill"));
-        short modifier = static_cast<short>(r.as<short>("modifier"));
-
+        auto modifier = r.try_or<short>("modifier", 0);
         _raceModifiers[thievingSkill] = modifier;
     }
 }
@@ -72,7 +87,7 @@ void Adndtk::ThiefAbility::set_armour_abilities(const std::optional<Defs::equipm
     for (auto& r : res)
     {
         Defs::thief_ability thievingSkill = static_cast<Defs::thief_ability>(r.as<short>("thieving_skill"));
-        short modifier = static_cast<short>(r.as<short>("modifier"));
+        short modifier = r.try_or<short>("modifier", 0);
 
         _armourModifiers[thievingSkill] = modifier;
     }
@@ -84,20 +99,18 @@ void Adndtk::ThiefAbility::set_dexterity_abilities(const short& skillValue)
     for (auto& r : res)
     {
         Defs::thief_ability thievingSkill = static_cast<Defs::thief_ability>(r.as<short>("thieving_skill"));
-        short modifier = static_cast<short>(r.as<short>("modifier"));
-
+        short modifier = r.try_or<short>("modifier", 0);
         _dexterityModifiers[thievingSkill] = modifier;
     }
 }
 
-void Adndtk::ThiefAbility::set_base_abilities(const Adndtk::ExperienceLevel& lvl)
+void Adndtk::ThiefAbility::set_base_abilities()
 {
-    short l = static_cast<short>(lvl);
-    auto res = Cyclopedia::get_instance().exec_prepared_statement<short>(Query::select_thief_ability_scores, l);
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_thief_ability_base_scores);
     for (auto& r : res)
     {
-        Defs::thief_ability ability = static_cast<Defs::thief_ability>(r.as<short>("thief_ability"));
-        short score = static_cast<short>(r.as<short>("score"));
+        Defs::thief_ability ability = static_cast<Defs::thief_ability>(r.as<short>("id"));
+        short score = static_cast<short>(r.as<short>("base_score"));
 
         _baseAbilities[ability] = score;
     }
