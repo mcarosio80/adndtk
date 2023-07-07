@@ -24,7 +24,15 @@ catch_discover_tests(tests)
 
 add_test(NAME tests COMMAND tests)
 
-add_custom_command(TARGET tests POST_BUILD
+if(RUN_UNIT_TESTS)
+    message("Executing unit tests after build (disable with -DRUN_UNIT_TESTS=OFF)")
+    
+    add_custom_command(TARGET tests POST_BUILD
     COMMAND ctest --config $<CONFIGURATION> #--exe $<TARGET_FILE:tests>
                   --verbosity high --parallel 16 --output-on-failure --
 )
+else()
+    message("Skip unit-tests (enable with -DRUN_UNIT_TESTS=ON)")
+endif(RUN_UNIT_TESTS)
+
+unset(RUN_UNIT_TESTS CACHE)
