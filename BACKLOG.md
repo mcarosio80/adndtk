@@ -12,6 +12,5 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 Adding unit test for the following items:
 * inventory
 * skill_stats
-* thief_ability
 * spell_book
 * holy_symbol 
