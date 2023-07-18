@@ -6,7 +6,7 @@
 #include <algorithm>
 
 Adndtk::ThiefAbility::ThiefAbility(const Defs::race& r)
-    : _race{r}, _level{1}, _improvementsAvailable{0}, _armourInUse{std::nullopt}, _dexterityValue{9}
+    : _race{r}, _level{1}, _improvementsAvailable{1}, _armourInUse{std::nullopt}, _dexterityValue{9}
 {
     for (auto thSkl : { Defs::thief_ability::pick_pockets, Defs::thief_ability::open_locks,
                         Defs::thief_ability::find_remove_traps, Defs::thief_ability::move_silently,
@@ -15,7 +15,7 @@ Adndtk::ThiefAbility::ThiefAbility(const Defs::race& r)
     {
         _baseAbilities[thSkl] = 0;
         _raceModifiers[thSkl] = 0;
-        _experienceAdjustments[thSkl] = 0;
+        _experienceAdjustments[thSkl] = {};
         _armourModifiers[thSkl] = 0;
         _dexterityModifiers[thSkl] = 0; 
     }
@@ -29,16 +29,34 @@ Adndtk::ThiefAbility::~ThiefAbility()
 {
 }
 
+short Adndtk::ThiefAbility::available_ability_slots() const
+{
+    return std::max<short>(0, _level - _experienceAdjustments.at(Defs::thief_ability::pick_pockets).size());
+}
+
 Adndtk::ThievingScore Adndtk::ThiefAbility::operator[] (const Defs::thief_ability& abilityId) const
 {
     if (_dexterityValue < 9)
         return 0;
 
     return std::min(95, _baseAbilities.at(abilityId)
-            + _experienceAdjustments.at(abilityId)
+            + experience_adjustment(abilityId)
             + _raceModifiers.at(abilityId)
             + _armourModifiers.at(abilityId)
             + _dexterityModifiers.at(abilityId));
+}
+
+Adndtk::ThievingScore Adndtk::ThiefAbility::get(const Defs::thief_ability& abilityId, const short& bonusMalus) const
+{
+    if (_dexterityValue < 9)
+        return 0;
+
+    return std::min(95, _baseAbilities.at(abilityId)
+            + experience_adjustment(abilityId)
+            + _raceModifiers.at(abilityId)
+            + _armourModifiers.at(abilityId)
+            + _dexterityModifiers.at(abilityId)
+            + bonusMalus);
 }
 
 void Adndtk::ThiefAbility::armour_change(const std::optional<Defs::equipment>& armourId/*=std::nullopt*/)
@@ -57,6 +75,19 @@ void Adndtk::ThiefAbility::dexterity_change(const short& skillValue)
         _dexterityValue = skillValue;
         set_dexterity_abilities(skillValue);
     }
+}
+
+short Adndtk::ThiefAbility::level_change(const ExperienceLevel& newLevel)
+{
+    auto sklLen = _experienceAdjustments[Defs::thief_ability::pick_pockets].size();
+    _level = newLevel;
+    if (newLevel == sklLen)
+    {
+        return 0;
+    }
+    
+    _improvementsAvailable = newLevel - sklLen;
+    return std::max<short>(_level - sklLen, 0);
 }
 
 void Adndtk::ThiefAbility::set_race_abilities(const Defs::race& race)
@@ -121,8 +152,7 @@ void Adndtk::ThiefAbility::improve_abilities(const ThievingScore& pickPockets, c
                     const ThievingScore& hideInShadows, const ThievingScore& hearNoise,
                     const ThievingScore& climbWalls, const ThievingScore& readLanguages)
 {
-    std::vector<ThievingScore> scores;
-    scores.reserve(8);
+    std::vector<ThievingScore> scores(8);
     scores[static_cast<short>(Defs::thief_ability::pick_pockets)] = pickPockets;
     scores[static_cast<short>(Defs::thief_ability::open_locks)] = openLocks;
     scores[static_cast<short>(Defs::thief_ability::find_remove_traps)] = findRemoveTraps;
@@ -137,15 +167,33 @@ void Adndtk::ThiefAbility::improve_abilities(const ThievingScore& pickPockets, c
 
 void Adndtk::ThiefAbility::improve_abilities(const std::vector<ThievingScore>& scores)
 {
-    if (_improvementsAvailable == 0)
+    if (_improvementsAvailable <= 0)
     {
         ErrorManager::get_instance().error("Unable to improve skills");
         return;
     }
 
+    increase_abilities(scores);
+}
+
+Adndtk::ThievingScore Adndtk::ThiefAbility::experience_adjustment(const Defs::thief_ability& abilityId) const
+{
+    ThievingScore ts{0};
+    auto limit = std::min<short>(_experienceAdjustments.at(abilityId).size(), _level);
+    for (ExperienceLevel lvl = 0; lvl < limit; ++lvl)
+    {
+        ts += _experienceAdjustments.at(abilityId)[lvl];
+    }
+    return ts;
+}
+
+void Adndtk::ThiefAbility::increase_abilities(const std::vector<ThievingScore>& scores)
+{
     ThievingScore maxTotal{};
     ThievingScore maxSingle{};
-    if (_level = 1)
+
+    auto sklLevel = static_cast<short>(_experienceAdjustments[Defs::thief_ability::pick_pockets].size());
+    if (sklLevel == 0)
     {
         maxTotal = 60;
         maxSingle = 30;
@@ -174,6 +222,9 @@ void Adndtk::ThiefAbility::improve_abilities(const std::vector<ThievingScore>& s
     for (int s=0; s<scores.size(); ++s)
     {
         auto sklId = static_cast<Defs::thief_ability>(s);
-        _experienceAdjustments[sklId] = scores[s];
+        if (_experienceAdjustments[sklId].size() < _level)
+        {
+            _experienceAdjustments[sklId].push_back(scores[s]);
+        }
     }
 }

@@ -15,10 +15,18 @@ namespace Adndtk
         ThiefAbility(const Defs::race& r);
         ~ThiefAbility();
 
+        const Defs::race& race() const { return _race; }
+        const ExperienceLevel& level() const { return _level; }
+        const std::optional<Defs::equipment>& armour_in_use() const { return _armourInUse; }
+        const short& dexterity_value() const { return _dexterityValue; }
+        short available_ability_slots() const;
+
         ThievingScore operator[] (const Defs::thief_ability& abilityId) const;
+        ThievingScore get(const Defs::thief_ability& abilityId, const short& bonusMalus) const;
 
         void armour_change(const std::optional<Defs::equipment>& armourId = std::nullopt);
         void dexterity_change(const short& skillValue);
+        short level_change(const ExperienceLevel& newLevel);
 
         void improve_abilities(const std::vector<ThievingScore>& scores);
 
@@ -34,7 +42,8 @@ namespace Adndtk
         short                                   _dexterityValue;
 
         std::map<Defs::thief_ability, ThievingScore>    _baseAbilities;
-        std::map<Defs::thief_ability, ThievingScore>    _experienceAdjustments;
+        std::map<Defs::thief_ability, std::vector<ThievingScore>>
+                                                        _experienceAdjustments;
         std::map<Defs::thief_ability, ThievingScore>    _raceModifiers;
         std::map<Defs::thief_ability, ThievingScore>    _armourModifiers;
         std::map<Defs::thief_ability, ThievingScore>    _dexterityModifiers;
@@ -43,6 +52,9 @@ namespace Adndtk
         void set_armour_abilities(const std::optional<Defs::equipment>& armourId);
         void set_dexterity_abilities(const short& skillValue);
         void set_base_abilities();
+
+        ThievingScore experience_adjustment(const Defs::thief_ability& abilityId) const;
+        void increase_abilities(const std::vector<ThievingScore>& scores);
     };
 }
 
