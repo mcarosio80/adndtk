@@ -21,14 +21,22 @@ bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
     {
         bodySlot = static_cast<Defs::body_slot>(res.as<int>("body_slot"));
     }
-
-    if (bodySlot == Defs::body_slot::quiver && !has_item(Defs::equipment::quiver))
+    else
     {
-        ErrorManager::get_instance().error("Quiver required");
-        return false;
+       bodySlot = Defs::body_slot::backpack;
     }
 
-    if (bodySlot == Defs::body_slot::backpack && !has_item(Defs::equipment::backpack))
+    if (id != Defs::equipment::quiver && bodySlot == Defs::body_slot::quiver && !has_item(Defs::equipment::quiver) && !has_item(Defs::equipment::backpack))
+    {
+        ErrorManager::get_instance().error("Quiver or backpack required");
+        return false;
+    }
+    else if (id != Defs::equipment::quiver && bodySlot == Defs::body_slot::quiver && !has_item(Defs::equipment::quiver) && has_item(Defs::equipment::backpack))
+    {
+       bodySlot = Defs::body_slot::backpack;
+    }
+
+    if (id != Defs::equipment::backpack && bodySlot == Defs::body_slot::backpack && !has_item(Defs::equipment::backpack))
     {
         ErrorManager::get_instance().error("Backpack required");
         return false;
@@ -39,9 +47,9 @@ bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
         return false;
     }
     
-    _items.at(bodySlot.value()).at(id) = count_items(id) + count;
+    _items[bodySlot.value()][id] = count_items(id) + count;
 
-    auto weight = res.as<double>("weight");
+    auto weight = res.try_or<double>("weight", 0.0);
     _totalWeight += weight * count;
 
     return true;
@@ -49,15 +57,15 @@ bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
 
 bool Adndtk::Inventory::remove(const Defs::equipment& id, const short& count/*=1*/)
 {
+    std::optional<Defs::body_slot> bodySlot = find(id);
+    if (!bodySlot.has_value())
+    {
+        return false;
+    }
+
     int equipmentId = static_cast<int>(id);
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, equipmentId);
     const QueryResult& res = rs[0];
-
-    std::optional<Defs::body_slot> bodySlot = std::nullopt;
-    if (res.exists("body_slot"))
-    {
-        bodySlot = static_cast<Defs::body_slot>(res.as<int>("body_slot"));
-    }
 
     short num = _items[bodySlot.value()][id];
     if (num < count)
@@ -83,9 +91,51 @@ short Adndtk::Inventory::count_items(const Defs::equipment& id)
     return totalCount;
 }
 
+std::optional<Adndtk::Defs::body_slot> Adndtk::Inventory::find(const Defs::equipment& id)
+{
+    std::optional<Adndtk::Defs::body_slot> slot = std::nullopt;
+    for (auto& i : _items)
+    {
+        if (i.second.find(id) != i.second.end())
+        {
+            slot = i.first;
+            break;
+        }
+    }
+    return slot;
+}
+
+bool Adndtk::Inventory::move(const Defs::equipment& id, const Defs::body_slot& slot, short quantity/*=1*/)
+{
+    auto currentSlot = find(id);
+    if (!currentSlot.has_value())
+    {
+        return false;
+    }
+
+    if (slot == Defs::body_slot::quiver && !has_item(Defs::equipment::quiver))
+    {
+        return false;
+    }
+
+    if (slot == Defs::body_slot::backpack && !has_item(Defs::equipment::backpack))
+    {
+        return false;
+    }
+
+    _items[currentSlot.value()][id] -= quantity;
+    _items[slot][id] += quantity;
+    return true;
+}
+
 bool Adndtk::Inventory::has_item(const Defs::equipment& id)
 {
     return count_items(id) > 0;
+}
+
+double Adndtk::Inventory::total_weight()
+{
+    return _totalWeight;
 }
 
 bool Adndtk::Inventory::has_capacity(const Adndtk::QueryResult& res, const Defs::equipment& id, const short& count)
