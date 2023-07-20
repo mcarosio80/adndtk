@@ -15,7 +15,8 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
 add_executable(tests test_advt.cpp test_cexc.cpp test_coin.cpp test_dice.cpp
                     test_expe.cpp test_hitp.cpp test_savt.cpp test_skil.cpp
-                    test_thac.cpp test_tund.cpp test_monb.cpp test_tabi.cpp)
+                    test_thac.cpp test_tund.cpp test_monb.cpp test_tabi.cpp
+                    test_inve.cpp)
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain adndtk)
 target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR/src})
