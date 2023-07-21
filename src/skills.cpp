@@ -93,7 +93,7 @@ bool Adndtk::SkillValue::operator<(const Adndtk::SkillValue& val) const
     if (_skillType != val._skillType)
         ErrorManager::get_instance().error("Unable to compare different skills");
 
-    if (_skillType == Defs::skill::strength && _skillValue == 18)
+    if (_skillType == Defs::skill::strength && _skillValue == 18 && val == 18)
         return _skillValue == val._skillValue && _exceptionalValue < val._exceptionalValue;
     else
         return _skillValue < val._skillValue;
