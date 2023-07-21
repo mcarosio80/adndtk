@@ -1841,3 +1841,29 @@ TEST_CASE("[TC-SKIL.078] Skills creation for halfling fighter_thief (standard me
     REQUIRE(cha >= 3);
     REQUIRE(cha <= 18);
 }
+
+TEST_CASE("[TC-SKIL.079] Comparison between skills greater than 20 works as expected", "[skills]" )
+{
+    {
+        SkillValue sk1{Defs::skill::strength, 23};
+        SkillValue sk2{Defs::skill::strength, 25};
+
+        REQUIRE_FALSE(sk1 == sk2);
+        REQUIRE(sk1 != sk2);
+        REQUIRE(sk1 < sk2);
+        REQUIRE(sk1 <= sk2);
+        REQUIRE_FALSE(sk1 >= sk2);
+        REQUIRE_FALSE(sk1 > sk2); 
+    }
+    {
+        SkillValue sk1{Defs::skill::strength, 18, 100};
+        SkillValue sk2{Defs::skill::strength, 19};
+
+        REQUIRE_FALSE(sk1 == sk2);
+        REQUIRE(sk1 != sk2);
+        REQUIRE(sk1 < sk2);
+        REQUIRE(sk1 <= sk2);
+        REQUIRE_FALSE(sk1 >= sk2);
+        REQUIRE_FALSE(sk1 > sk2);
+    }
+}
