@@ -34,7 +34,7 @@ const Adndtk::Tables::strength_stats& Adndtk::SkillStats::get_strength_stats(con
 
 const Adndtk::Tables::strength_stats& Adndtk::SkillStats::get_strength_stats(const SkillValue& skillValue) const
 {
-    return _strengthStats.upper_bound(skillValue)->second;
+    return _strengthStats.lower_bound(skillValue)->second;
 }
 
 const Adndtk::Tables::dexterity_stats& Adndtk::SkillStats::get_dexterity_stats(const short& skillValue) const

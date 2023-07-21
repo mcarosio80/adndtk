@@ -5,6 +5,7 @@
 #include <tables.h>
 #include <skills.h>
 #include <map>
+#include <optional>
 
 namespace Adndtk
 {
