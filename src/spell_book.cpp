@@ -4,7 +4,7 @@
 #include <algorithm>
 
 Adndtk::SpellBook::SpellBook(const Defs::character_class& cls)
-    : _casterLevel{1}, _intelligenceScore{9}, _casterClass{cls}
+    : _casterLevel{1}, _intelligenceScore{Defs::skill::intelligence, 9}, _casterClass{cls}
 {
 }
 
