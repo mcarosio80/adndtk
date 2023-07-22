@@ -10,7 +10,5 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 
 # Missing unit-test
 Adding unit test for the following items:
-* inventory
-* skill_stats
 * spell_book
 * holy_symbol 
