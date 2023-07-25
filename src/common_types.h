@@ -91,6 +91,12 @@ namespace Adndtk
         no_capacity
     };
 
+    struct SpellLevelsLimit
+    {
+        static constexpr SpellLevel spell_book = 9;
+        static constexpr SpellLevel holy_symbol = 7;
+    };
+
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
                                           const XP &prevXP, const ExperienceLevel &prevLvl,
                                           const XP &newXP, const ExperienceLevel &newLvl)>;
