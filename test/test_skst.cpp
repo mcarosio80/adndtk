@@ -284,9 +284,10 @@ TEST_CASE("[TC-SKST.005] Wisdom statistics are retrieved according to the skill 
         auto sklStat = SkillStats::get_instance().get_wisdom_stats(skl);
 
         REQUIRE(sklStat.magical_defence_adjustment == 2);
-        REQUIRE_FALSE(sklStat.bonus_spell_level_1.has_value());
+        REQUIRE(sklStat.bonus_spell_level_1.has_value());
+        REQUIRE(sklStat.bonus_spell_level_1.value() == 2);
         REQUIRE(sklStat.bonus_spell_level_2.has_value());
-        REQUIRE(sklStat.bonus_spell_level_2.value() == 1);
+        REQUIRE(sklStat.bonus_spell_level_2.value() == 2);
         REQUIRE_FALSE(sklStat.bonus_spell_level_3.has_value());
         REQUIRE_FALSE(sklStat.bonus_spell_level_4.has_value());
         REQUIRE_FALSE(sklStat.bonus_spell_level_5.has_value());
@@ -300,12 +301,14 @@ TEST_CASE("[TC-SKST.005] Wisdom statistics are retrieved according to the skill 
         auto sklStat = SkillStats::get_instance().get_wisdom_stats(skl);
 
         REQUIRE(sklStat.magical_defence_adjustment == 4);
-        REQUIRE_FALSE(sklStat.bonus_spell_level_1.has_value());
+        REQUIRE(sklStat.bonus_spell_level_1.has_value());
+        REQUIRE(sklStat.bonus_spell_level_1.value() == 3);
         REQUIRE(sklStat.bonus_spell_level_2.has_value());
-        REQUIRE(sklStat.bonus_spell_level_2.value() == 1);
-        REQUIRE_FALSE(sklStat.bonus_spell_level_3.has_value());
+        REQUIRE(sklStat.bonus_spell_level_2.value() == 3);
+        REQUIRE(sklStat.bonus_spell_level_3.has_value());
+        REQUIRE(sklStat.bonus_spell_level_3.value() == 2);
         REQUIRE(sklStat.bonus_spell_level_4.has_value());
-        REQUIRE(sklStat.bonus_spell_level_4.value() == 1);
+        REQUIRE(sklStat.bonus_spell_level_4.value() == 2);
         REQUIRE_FALSE(sklStat.bonus_spell_level_5.has_value());
         REQUIRE_FALSE(sklStat.bonus_spell_level_6.has_value());
         REQUIRE_FALSE(sklStat.bonus_spell_level_7.has_value());
@@ -318,13 +321,18 @@ TEST_CASE("[TC-SKST.005] Wisdom statistics are retrieved according to the skill 
         auto sklStat = SkillStats::get_instance().get_wisdom_stats(skl);
 
         REQUIRE(sklStat.magical_defence_adjustment == 4);
-        REQUIRE_FALSE(sklStat.bonus_spell_level_1.has_value());
-        REQUIRE_FALSE(sklStat.bonus_spell_level_2.has_value());
-        REQUIRE_FALSE(sklStat.bonus_spell_level_3.has_value());
-        REQUIRE_FALSE(sklStat.bonus_spell_level_4.has_value());
-        REQUIRE_FALSE(sklStat.bonus_spell_level_5.has_value());
+        REQUIRE(sklStat.bonus_spell_level_1.has_value());
+        REQUIRE(sklStat.bonus_spell_level_1.value() == 4);
+        REQUIRE(sklStat.bonus_spell_level_2.has_value());
+        REQUIRE(sklStat.bonus_spell_level_2.value() == 3);
+        REQUIRE(sklStat.bonus_spell_level_3.has_value());
+        REQUIRE(sklStat.bonus_spell_level_3.value() == 3);
+        REQUIRE(sklStat.bonus_spell_level_4.has_value());
+        REQUIRE(sklStat.bonus_spell_level_4.value() == 3);
+        REQUIRE(sklStat.bonus_spell_level_5.has_value());
+        REQUIRE(sklStat.bonus_spell_level_5.value() == 3);
         REQUIRE(sklStat.bonus_spell_level_6.has_value());
-        REQUIRE(sklStat.bonus_spell_level_6.value() == 1);
+        REQUIRE(sklStat.bonus_spell_level_6.value() == 3);
         REQUIRE(sklStat.bonus_spell_level_7.has_value());
         REQUIRE(sklStat.bonus_spell_level_7.value() == 1);
         REQUIRE(sklStat.chance_of_spell_failure == 0);
