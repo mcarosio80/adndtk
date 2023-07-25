@@ -23,6 +23,7 @@
 #include <inventory.h>
 #include <skill_stats.h>
 #include <thief_ability.h>
+#include <spell_book.h>
 
 
 #endif // ADNDTK_H

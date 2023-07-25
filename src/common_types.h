@@ -56,6 +56,7 @@ namespace Adndtk
         select_wizard_spell,
         select_wizard_spell_school,
         select_school_of_magic_access,
+        select_school_of_magic_per_race,
         select_wizard_spell_progression,
         select_priest_spell,
         select_priest_spell_sphere,

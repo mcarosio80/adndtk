@@ -26,4 +26,5 @@ Adndtk::OptionalRules::~OptionalRules()
 void Adndtk::OptionalRules::set_default_options_values()
 {
     _options[Option::max_score_for_hd] = false;
+    _options[Option::scribe_scroll_always_succeeds] = false;
 }
