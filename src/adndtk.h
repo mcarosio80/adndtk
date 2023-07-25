@@ -24,6 +24,7 @@
 #include <skill_stats.h>
 #include <thief_ability.h>
 #include <spell_book.h>
+#include <holy_symbol.h>
 
 
 #endif // ADNDTK_H
