@@ -106,6 +106,12 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'sphere_id', sphere_id , 'access_level', access_level , 'access_mode', access_mode from sphere_access_per_class where class_id = ? and sphere_id = ?", Query::select_sphere_access_per_class);
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7 from priest_spell_progression where level = ?", Query::select_priest_spell_progression);
 
+        prepare_statement("select 'id', ps.id, 'access_level', c.access_level, 'access_mode', c.access_mode from sphere_access_per_class c "
+                            "inner join priest_spell_sphere s on s.sphere_id = c.sphere_id "
+                            "inner join priest_spell ps on ps.id = s.spell_id "
+                            "where c.class_id = ? and ps.level = ? "
+                            "group by ps.id, c.access_level, c.access_mode", Query::select_priest_spells_per_class_level);
+        
         load_advancement_table();
     }
     return ok;
