@@ -13,6 +13,7 @@ Adding unit test for the following items:
 * spell_book
 * holy_symbol 
 * spell_book for Bards
-* holy_symbol for Paladins
-* holy_symbol for Rangers
-* holy_symbol for Druids
+* spell_book: manage memorised spells when intelligence score decreases
+* spell_book: manage memorised spells when caster's level decreases
+* holy_symbol: manage memorised spells when wisdom score decreases
+* holy_symbol: manage memorised spells when caster's level decreases
