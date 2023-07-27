@@ -5,19 +5,20 @@
 #include <common_types.h>
 #include <skills.h>
 #include <map>
+#include <optional>
 
 namespace Adndtk
 {
     class HolySymbol
     {
     public:
-        HolySymbol(const Defs::character_class& cls);
+        HolySymbol(const Defs::character_class& cls, std::optional<Defs::deity> deityId = std::nullopt);
         ~HolySymbol();
 
         const short& operator[] (Defs::priest_spell spellId) const;
 
-        void set_priest_level(const ExperienceLevel& newLevel);
-        void set_priest_wisdom(const short& wisdomValue);
+        void set_caster_level(const ExperienceLevel& newLevel);
+        void set_caster_wisdom(const short& wisdomValue);
         bool pray_for_spell(const Defs::priest_spell& spellId);
         bool remove(const Defs::priest_spell& spellId);
 
@@ -31,9 +32,11 @@ namespace Adndtk
         
     private:
         ExperienceLevel                                                 _casterLevel;
+        ExperienceLevel                                                 _actualCasterLevel;
         Defs::character_class                                           _casterClass;
         SkillValue                                                      _wisdomScore;
         std::map<SpellLevel, std::map<Defs::priest_spell, short>>       _spells;
+        std::optional<Defs::deity>                                      _deityId;
 
         static Adndtk::SpellLevel get_spell_level(const Defs::priest_spell& spellId);
 
@@ -45,6 +48,8 @@ namespace Adndtk
 
         void fill_level(const SpellLevel& spellLevel);
         void erase_level(const SpellLevel& spellLevel);
+
+        Adndtk::Query get_spell_progression_query_id() const;
     };
 }
 

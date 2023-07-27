@@ -2,9 +2,11 @@
 #include <cyclopedia.h>
 #include <skill_stats.h>
 
-Adndtk::HolySymbol::HolySymbol(const Defs::character_class& cls)
-    : _casterLevel{1}, _wisdomScore{Defs::skill::wisdom, 9}, _casterClass{cls}
+Adndtk::HolySymbol::HolySymbol(const Defs::character_class& cls, std::optional<Defs::deity> deityId/*=std::nullptr*/)
+    : _casterLevel{1}, _wisdomScore{Defs::skill::wisdom, 9}, _casterClass{cls}, _deityId{deityId},
+        _actualCasterLevel{_casterLevel}
 {
+    enable_levels();
 }
 
 Adndtk::HolySymbol::~HolySymbol()
@@ -26,15 +28,44 @@ const short& Adndtk::HolySymbol::operator[] (Defs::priest_spell spellId) const
     return _spells.at(spellLevel).at(spellId);
 }
 
-void Adndtk::HolySymbol::set_priest_level(const ExperienceLevel& newLevel)
+void Adndtk::HolySymbol::set_caster_level(const ExperienceLevel& newLevel)
 {
     _casterLevel = newLevel;
     enable_levels();
 }
 
-void Adndtk::HolySymbol::set_priest_wisdom(const short& wisdomValue)
+void Adndtk::HolySymbol::set_caster_wisdom(const short& wisdomValue)
 {
+    // std::vector<short> bonusSpells(SpellLevelsLimit::holy_symbol, 0);
+    // bool bonusSpellsLost = wisdomValue < _wisdomScore && _wisdomScore >= 13 && wisdomValue >= 12;
+
+    // if (bonusSpellsLost)
+    // {
+    //     for (SpellLevel sl=1; sl<= SpellLevelsLimit::holy_symbol; ++sl)
+    //     {
+    //         bonusSpells[sl-1] = get_bonus_spells(sl);
+    //     }
+    // }
+
     _wisdomScore = wisdomValue;
+
+    // if (bonusSpellsLost)
+    // {
+    //     for (SpellLevel sl=1; sl<= SpellLevelsLimit::holy_symbol; ++sl)
+    //     {
+    //         auto slotDiff = std::max<short>(0, bonusSpells[sl-1] - get_bonus_spells(sl) - free_slots(sl));
+    //         auto it = _spells[sl].begin();
+    //         while (slotDiff > 0)
+    //         {
+    //             if (it->second > 0)
+    //             {
+    //                 it->second -= 1;
+    //                 --slotDiff;
+    //             }
+    //             ++it;
+    //         }
+    //     }
+    // }
 }
 
 bool Adndtk::HolySymbol::pray_for_spell(const Defs::priest_spell& spellId)
@@ -47,7 +78,8 @@ bool Adndtk::HolySymbol::pray_for_spell(const Defs::priest_spell& spellId)
     SpellLevel spellLevel = HolySymbol::get_spell_level(spellId);
     
     int lvl = std::min(static_cast<int>(_casterLevel), 20);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_priest_spell_progression, lvl);
+    Query queryId = get_spell_progression_query_id();
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
     auto& prog = rs[0];
 
     std::string label;
@@ -62,7 +94,7 @@ bool Adndtk::HolySymbol::pray_for_spell(const Defs::priest_spell& spellId)
     }
 
     auto count = used_slots(spellLevel);
-    if (spellPerLevel.value() <= count)
+    if (spellPerLevel.value() + get_bonus_spells(spellLevel) <= count)
     {
         return false;
     }
@@ -136,9 +168,13 @@ bool Adndtk::HolySymbol::exists(const Defs::priest_spell& spellId)
 
 void Adndtk::HolySymbol::enable_levels()
 {
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_priest_spell_progression, lvl);
+    auto lvl = std::min<short>(static_cast<short>(_casterLevel), 20);
+
+    Query queryId = get_spell_progression_query_id();
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<short>(queryId, lvl);
     auto& prog = rs[0];
+
+    _actualCasterLevel = prog.try_or<short>("casting_level", _casterLevel);
 
     for (SpellLevel sl=1; sl<=SpellLevelsLimit::holy_symbol; ++sl)
     {
@@ -177,6 +213,11 @@ short Adndtk::HolySymbol::used_slots(const SpellLevel& spellLevel) const
 
 short Adndtk::HolySymbol::get_bonus_spells(const SpellLevel& spellLevel) const
 {
+    if (_casterClass != Defs::character_class::cleric && _casterClass != Defs::character_class::preist_of_specific_mythos)
+    {
+        return 0;
+    }
+
     auto stats = SkillStats::get_instance().get_wisdom_stats(_wisdomScore);
     std::optional<short> bonus{0};
 
@@ -215,7 +256,8 @@ short Adndtk::HolySymbol::get_bonus_spells(const SpellLevel& spellLevel) const
 short Adndtk::HolySymbol::total_slots(const SpellLevel& spellLevel) const
 {
     int lvl = std::min(static_cast<int>(_casterLevel), 20);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_priest_spell_progression, lvl);
+    Query queryId = get_spell_progression_query_id();
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
     auto& prog = rs[0];
 
     std::stringstream ss;
@@ -233,17 +275,24 @@ short Adndtk::HolySymbol::total_slots(const SpellLevel& spellLevel) const
 
 void Adndtk::HolySymbol::fill_level(const SpellLevel& spellLevel)
 {
-    int cls = static_cast<int>(_casterClass);
-    int lvl = static_cast<int>(spellLevel);
-    auto spells = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_priest_spells_per_class_level, cls, lvl);
+    QueryResultSet spells;
+    if (_deityId.has_value())
+    {
+        auto deityId = static_cast<short>(_deityId.value());
+        auto lvl = static_cast<short>(spellLevel);
+        spells = Cyclopedia::get_instance().exec_prepared_statement<short, short>(Query::select_priest_spells_per_level_deity, lvl, deityId);
+    }
+    else
+    {
+        auto cls = static_cast<short>(_casterClass);
+        auto lvl = static_cast<short>(spellLevel);
+        spells = Cyclopedia::get_instance().exec_prepared_statement<short, short>(Query::select_priest_spells_per_class_level, cls, lvl);
+    }
 
     for (auto& s : spells)
     {
         auto spellId = static_cast<Defs::priest_spell>(s.as<short>("id"));
-        if (_spells.find(spellLevel) == _spells.end())
-        {
-            _spells[spellLevel][spellId] = 0;
-        }
+        _spells[spellLevel][spellId] = 0;
     }
 }
 
@@ -253,4 +302,18 @@ void Adndtk::HolySymbol::erase_level(const SpellLevel& spellLevel)
     {
         _spells.erase(spellLevel);
     }
+}
+
+Adndtk::Query Adndtk::HolySymbol::get_spell_progression_query_id() const
+{
+    Query queryId = Query::select_priest_spell_progression;
+    if (_casterClass == Defs::character_class::paladin)
+    {
+        queryId = Query::select_paladin_spell_progression;
+    }
+    else  if (_casterClass == Defs::character_class::ranger)
+    {
+        queryId = Query::select_ranger_spell_progression;
+    }
+    return queryId;
 }
