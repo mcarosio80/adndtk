@@ -431,11 +431,11 @@ TEST_CASE("[TC-SPLB.020] Gnomes can be Illusionists", "[spells, spell_book]" )
     REQUIRE_NOTHROW(SpellBook(cls, raceId));
 }
 
-TEST_CASE("[TC-SPLB.021] Half-elves can be Necromancers", "[spells, spell_book]" )
+TEST_CASE("[TC-SPLB.021] Half-elves cannot be Necromancers", "[spells, spell_book]" )
 {
     Defs::character_class cls = Defs::character_class::necromancer;
     auto raceId = Defs::race::half_elf;
-    REQUIRE_NOTHROW(SpellBook(cls, raceId));
+    REQUIRE_THROWS_AS(SpellBook(cls, raceId), std::runtime_error);
 }
 
 TEST_CASE("[TC-SPLB.022] Elves cannot be Invokers", "[spells, spell_book]" )
@@ -444,5 +444,3 @@ TEST_CASE("[TC-SPLB.022] Elves cannot be Invokers", "[spells, spell_book]" )
     auto raceId = Defs::race::elf;
     REQUIRE_THROWS_AS(SpellBook(cls, raceId), std::runtime_error);
 }
-
-// school access per race
