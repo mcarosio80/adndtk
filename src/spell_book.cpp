@@ -23,8 +23,6 @@ Adndtk::SpellBook::SpellBook(const Defs::character_class& cls, Defs::race raceId
     {
         ErrorManager::get_instance().error("Class not available for specified race");
     }
-
-    // check requisites for specialistic wizards
 }
 
 Adndtk::SpellBook::~SpellBook()
