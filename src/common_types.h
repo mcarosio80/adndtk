@@ -62,7 +62,10 @@ namespace Adndtk
         select_priest_spell_sphere,
         select_sphere_access_per_class,
         select_priest_spell_progression,
-        select_priest_spells_per_class_level
+        select_priest_spells_per_class_level,
+        select_priest_spells_per_level_deity,
+        select_paladin_spell_progression,
+        select_ranger_spell_progression
     };
 
     enum class XPChangeType

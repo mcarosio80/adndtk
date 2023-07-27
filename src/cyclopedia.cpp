@@ -95,10 +95,9 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'name', name, 'level', level from wizard_spell where id = ?", Query::select_wizard_spell);
         prepare_statement("select 'school_id', school_id from wizard_spell_school where spell_id = ?", Query::select_wizard_spell_school);
         prepare_statement("select 'school_id', school_id from school_of_magic_access where class_id = ? and school_id = ?", Query::select_school_of_magic_access);
-        prepare_statement("select 'race_id', r.race_id from SCHOOL_OF_MAGIC_ACCESS a "
-                            "inner join school_of_magic_per_races r on r.SCHOOL_ID = a.SCHOOL_ID "
-                            "where a.CLASS_ID = ? and r.race_id = ? "
-                            "group by r.race_id", Query::select_school_of_magic_per_race);
+        prepare_statement("select 'race_id', a.race_id from CHARACTER_CLASS c "
+                            "inner join CLASS_AVAILABILITY a on a.class_id = c.id "
+                            "where c.id = ? and a.race_id = ?", Query::select_school_of_magic_per_race);
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7, 'spell_level_8', spell_level_8, 'spell_level_9', spell_level_9 from wizard_spell_progression where level = ?", Query::select_wizard_spell_progression);
 
         prepare_statement("select 'name', name, 'level', level from priest_spell where id = ?", Query::select_priest_spell);
@@ -106,11 +105,18 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'sphere_id', sphere_id , 'access_level', access_level , 'access_mode', access_mode from sphere_access_per_class where class_id = ? and sphere_id = ?", Query::select_sphere_access_per_class);
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7 from priest_spell_progression where level = ?", Query::select_priest_spell_progression);
 
-        prepare_statement("select 'id', ps.id, 'access_level', c.access_level, 'access_mode', c.access_mode from sphere_access_per_class c "
+        prepare_statement("select distinct 'id', ps.id, 'access_level', c.access_level, 'access_mode', c.access_mode from sphere_access_per_class c "
                             "inner join priest_spell_sphere s on s.sphere_id = c.sphere_id "
                             "inner join priest_spell ps on ps.id = s.spell_id "
-                            "where c.class_id = ? and ps.level = ? "
-                            "group by ps.id, c.access_level, c.access_mode", Query::select_priest_spells_per_class_level);
+                            "where c.class_id = ? and ps.level = ?", Query::select_priest_spells_per_class_level);
+        
+        prepare_statement("select distinct 'id', ps.id from DEITY_SPHERE_OF_INFLUENCE dsi "
+                            "inner join PRIEST_SPELL_SPHERE pss on pss.SPHERE_ID = dsi.SPHERE_ID "
+                            "inner join PRIEST_SPELL ps on ps.ID = pss.SPELL_ID and ps.LEVEL = ? "
+                            "WHERE dsi.deity_id = ?", Query::select_priest_spells_per_level_deity);
+
+        prepare_statement("select 'level', level, 'casting_level', casting_level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4 from paladin_spell_progression where level = ?", Query::select_paladin_spell_progression);
+        prepare_statement("select 'level', level, 'casting_level', casting_level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3 from ranger_abilities where level = ?", Query::select_ranger_spell_progression);            
         
         load_advancement_table();
     }
