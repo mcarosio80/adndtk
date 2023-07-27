@@ -61,11 +61,13 @@ namespace Adndtk
         template <typename _T>
         std::optional<_T> try_as(const std::string& key) const
         {
-            std::optional<std::string> v = (*this)[key];
-            if (!v.has_value())
+            std::optional<std::string> v = std::nullopt;
+            if (_values.find(key) == _values.end() || !_values.at(key).has_value())
             {
                 return std::nullopt;
             }
+
+            v = (*this)[key];
             std::stringstream ss{v.value()};
             _T res{};
             ss >> res;
@@ -75,7 +77,13 @@ namespace Adndtk
         template <typename _T>
         _T try_or(const std::string& key, const _T& defaultValue) const
         {
-            std::optional<std::string> v = (*this)[key];
+            std::optional<std::string> v = std::nullopt;
+            if (_values.find(key) == _values.end() || !_values.at(key).has_value())
+            {
+                return defaultValue;
+            }
+
+            v = (*this)[key];
             if (!v.has_value())
             {
                 return defaultValue;
