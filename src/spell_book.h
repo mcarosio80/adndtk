@@ -45,6 +45,9 @@ namespace Adndtk
         bool is_level_available(const Defs::wizard_spell& spellId) const;
         bool exists(const Defs::wizard_spell& spellId) const;
         bool try_scribe(const Defs::wizard_spell& spellId);
+        void adjust_pages_availability();
+        Query get_spell_progression_query() const;
+        short get_spells_available(const SpellLevel& spellLvl) const;
     };
 }
 
