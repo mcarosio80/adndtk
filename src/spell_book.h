@@ -21,6 +21,8 @@ namespace Adndtk
         AddSpellResult scribe_scroll(const Defs::wizard_spell& spellId);
         short free_slots(const SpellLevel& spellLevel) const;
         short used_slots(const SpellLevel& spellLevel) const;
+        short total_slots(const SpellLevel& spellLevel) const;
+        short book_page_size() const;
         bool memorise(const Defs::wizard_spell& spellId);
         bool remove(const Defs::wizard_spell& spellId);
         bool delete_from_book(const Defs::wizard_spell& spellId);

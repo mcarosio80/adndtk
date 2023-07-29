@@ -444,3 +444,119 @@ TEST_CASE("[TC-SPLB.022] Elves cannot be Invokers", "[spells, spell_book]" )
     auto raceId = Defs::race::elf;
     REQUIRE_THROWS_AS(SpellBook(cls, raceId), std::runtime_error);
 }
+
+TEST_CASE("[TC-SPLB.023] When caster's intelligence score decreases, maximum number of spell/level is adjusted accordingly", "[spells, spell_book]" )
+{
+    SpellBook sb{Defs::character_class::mage, Defs::race::human};
+    sb.set_caster_intelligence(18);
+
+    REQUIRE(sb.book_page_size() == 18);
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::affect_normal_fires));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::alarm));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::armor));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::audible_glamer));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::burning_hands));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::cantrip));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::change_self));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::charm_person));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::chill_touch));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::color_spray));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::comprehend_languages));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::dancing_lights));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::detect_magic));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::detect_undead));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::enlarge));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::erase));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::feather_fall));
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::find_familiar));
+
+    sb.set_caster_intelligence(15);
+    REQUIRE(sb.book_page_size() == 11);
+}
+
+TEST_CASE("[TC-SPLB.024] When caster's intelligence score decreases, spell level is adjusted accordingly", "[spells, spell_book]" )
+{
+    SpellBook sb{Defs::character_class::mage, Defs::race::human};
+    sb.set_caster_intelligence(15);
+    sb.set_caster_level(12);
+
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 1);
+    REQUIRE(sb.total_slots(7) == 0);
+    REQUIRE(sb.total_slots(8) == 0);
+    REQUIRE(sb.total_slots(9) == 0);
+    REQUIRE(sb.free_slots(1) == 4);
+    REQUIRE(sb.free_slots(2) == 4);
+    REQUIRE(sb.free_slots(3) == 4);
+    REQUIRE(sb.free_slots(4) == 4);
+    REQUIRE(sb.free_slots(5) == 4);
+    REQUIRE(sb.free_slots(6) == 1);
+    REQUIRE(sb.free_slots(7) == 0);
+    REQUIRE(sb.free_slots(8) == 0);
+    REQUIRE(sb.free_slots(9) == 0);
+
+    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::disintegrate));
+
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 1);
+    REQUIRE(sb.total_slots(7) == 0);
+    REQUIRE(sb.total_slots(8) == 0);
+    REQUIRE(sb.total_slots(9) == 0);
+    REQUIRE(sb.free_slots(1) == 4);
+    REQUIRE(sb.free_slots(2) == 4);
+    REQUIRE(sb.free_slots(3) == 4);
+    REQUIRE(sb.free_slots(4) == 4);
+    REQUIRE(sb.free_slots(5) == 4);
+    REQUIRE(sb.free_slots(6) == 0);
+    REQUIRE(sb.free_slots(7) == 0);
+    REQUIRE(sb.free_slots(8) == 0);
+    REQUIRE(sb.free_slots(9) == 0);
+
+    sb.set_caster_intelligence(11);
+
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 0);
+    REQUIRE(sb.total_slots(7) == 0);
+    REQUIRE(sb.total_slots(8) == 0);
+    REQUIRE(sb.total_slots(9) == 0);
+    REQUIRE(sb.free_slots(1) == 4);
+    REQUIRE(sb.free_slots(2) == 4);
+    REQUIRE(sb.free_slots(3) == 4);
+    REQUIRE(sb.free_slots(4) == 4);
+    REQUIRE(sb.free_slots(5) == 4);
+    REQUIRE(sb.free_slots(6) == 0);
+    REQUIRE(sb.free_slots(7) == 0);
+    REQUIRE(sb.free_slots(8) == 0);
+    REQUIRE(sb.free_slots(9) == 0);
+}
+
+TEST_CASE("[TC-HOLS.025] When casters's level decreases unreachable spell levels are no longer accessible", "[spells, holy_symbol]" )
+{
+    HolySymbol hs{Defs::character_class::cleric};
+    hs.set_caster_level(9);
+
+    auto spellId = Defs::priest_spell::raise_dead;
+    REQUIRE(hs.pray_for_spell(spellId));
+    REQUIRE(hs[spellId] == 1);
+    REQUIRE(hs.total_slots(5) == 1);
+    REQUIRE(hs.free_slots(5) == 0);
+    REQUIRE(hs.used_slots(5) == 1);
+
+    hs.set_caster_level(8);
+    REQUIRE_THROWS_AS(hs[spellId], std::runtime_error);
+    REQUIRE(hs.total_slots(5) == 0);
+    REQUIRE(hs.free_slots(5) == 0);
+    REQUIRE(hs.used_slots(5) == 0);
+}

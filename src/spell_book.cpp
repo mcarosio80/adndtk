@@ -52,6 +52,18 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
 void Adndtk::SpellBook::set_caster_intelligence(const short& intelligenceValue)
 {
     _intelligenceScore = intelligenceValue;
+    auto pageSize = book_page_size();
+
+    for (auto page : _spells)
+    {
+        auto it = page.second.begin();
+        auto diff = std::max<short>(0, pageSize - page.second.size());
+        while (it != page.second.end() && diff > 0)
+        {
+            page.second.erase(page.second.begin());
+            --diff;
+        }
+    }
 }
 
 Adndtk::AddSpellResult Adndtk::SpellBook::scribe_scroll(const Defs::wizard_spell& spellId)
@@ -93,16 +105,7 @@ Adndtk::AddSpellResult Adndtk::SpellBook::scribe_scroll(const Defs::wizard_spell
 
 short Adndtk::SpellBook::free_slots(const SpellLevel& spellLevel) const
 {
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_wizard_spell_progression, lvl);
-    auto& spellProgression = rs[0];
-
-    std::string label;
-    std::stringstream ss;
-    ss << "spell_level_" << spellLevel;
-    auto spellPerLevel = spellProgression.try_or<short>(ss.str(), 0);
-
-    return spellPerLevel - used_slots(spellLevel);
+    return total_slots(spellLevel) - used_slots(spellLevel);
 }
 
 short Adndtk::SpellBook::used_slots(const SpellLevel& spellLevel) const
@@ -118,6 +121,33 @@ short Adndtk::SpellBook::used_slots(const SpellLevel& spellLevel) const
         used += s.second;
     }
     return used;
+}
+
+short Adndtk::SpellBook::total_slots(const SpellLevel& spellLevel) const
+{
+    auto stats = SkillStats::get_instance().get_intelligence_stats(_intelligenceScore);
+    if (spellLevel > stats.spell_level.value_or(0))
+    {
+        return 0;
+    }
+
+    int lvl = std::min(static_cast<int>(_casterLevel), 20);
+    Query queryId = Query::select_wizard_spell_progression;
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
+    auto& prog = rs[0];
+
+    std::stringstream ss;
+    ss << "spell_level_" << spellLevel;
+    std::string fieldName = ss.str();
+    auto spellCount = prog.try_or(fieldName, 0);
+
+    return spellCount;
+}
+
+short Adndtk::SpellBook::book_page_size() const
+{
+    auto stats = SkillStats::get_instance().get_intelligence_stats(_intelligenceScore);
+    return stats.max_number_of_spells_per_level.value_or(0);
 }
 
 bool Adndtk::SpellBook::memorise(const Defs::wizard_spell& spellId)
@@ -186,15 +216,13 @@ bool Adndtk::SpellBook::delete_from_book(const Defs::wizard_spell& spellId)
 
 bool Adndtk::SpellBook::has_capacity(const Defs::wizard_spell& spellId) const
 {
-    auto stats = SkillStats::get_instance().get_intelligence_stats(_intelligenceScore);
     SpellLevel spellLevel = SpellBook::get_spell_level(spellId);
-
-    short usedSlots{0};
+    short spellCount{0};
     if (_spells.find(spellLevel) != _spells.end())
     {
-        usedSlots = _spells.at(spellLevel).size();
+        spellCount = _spells.at(spellLevel).size();
     }
-    return stats.max_number_of_spells_per_level > usedSlots;
+    return book_page_size() > spellCount;
 }
 
 bool Adndtk::SpellBook::is_school_allowed(const Defs::wizard_spell& spellId) const
