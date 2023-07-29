@@ -36,36 +36,34 @@ void Adndtk::HolySymbol::set_caster_level(const ExperienceLevel& newLevel)
 
 void Adndtk::HolySymbol::set_caster_wisdom(const short& wisdomValue)
 {
-    // std::vector<short> bonusSpells(SpellLevelsLimit::holy_symbol, 0);
-    // bool bonusSpellsLost = wisdomValue < _wisdomScore && _wisdomScore >= 13 && wisdomValue >= 12;
-
-    // if (bonusSpellsLost)
-    // {
-    //     for (SpellLevel sl=1; sl<= SpellLevelsLimit::holy_symbol; ++sl)
-    //     {
-    //         bonusSpells[sl-1] = get_bonus_spells(sl);
-    //     }
-    // }
+    bool bonusSpellsLost = wisdomValue < _wisdomScore && _wisdomScore >= 13 && wisdomValue >= 12;
 
     _wisdomScore = wisdomValue;
 
-    // if (bonusSpellsLost)
-    // {
-    //     for (SpellLevel sl=1; sl<= SpellLevelsLimit::holy_symbol; ++sl)
-    //     {
-    //         auto slotDiff = std::max<short>(0, bonusSpells[sl-1] - get_bonus_spells(sl) - free_slots(sl));
-    //         auto it = _spells[sl].begin();
-    //         while (slotDiff > 0)
-    //         {
-    //             if (it->second > 0)
-    //             {
-    //                 it->second -= 1;
-    //                 --slotDiff;
-    //             }
-    //             ++it;
-    //         }
-    //     }
-    // }
+    if (bonusSpellsLost)
+    {
+        for (SpellLevel sl=1; sl<= SpellLevelsLimit::holy_symbol; ++sl)
+        {
+            auto currentSpellsCount = used_slots(sl);
+            auto maxSpellsCount = total_slots(sl);
+            if (currentSpellsCount > total_slots(sl))
+            {
+                auto it = _spells[sl].begin();
+                while (it != _spells[sl].end() && currentSpellsCount > maxSpellsCount)
+                {
+                    if (it->second > 0)
+                    {
+                        it->second -= 1;
+                        --currentSpellsCount;
+                    }
+                    else
+                    {
+                        ++it;
+                    }
+                }
+            }
+        }
+    }
 }
 
 bool Adndtk::HolySymbol::pray_for_spell(const Defs::priest_spell& spellId)
@@ -265,7 +263,6 @@ short Adndtk::HolySymbol::total_slots(const SpellLevel& spellLevel) const
     std::string fieldName = ss.str();
     auto spellCount = prog.try_or(fieldName, 0);
 
-    short bonus{0};
     if (spellCount > 0)
     {
         spellCount += get_bonus_spells(spellLevel);
