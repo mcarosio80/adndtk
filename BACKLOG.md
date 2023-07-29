@@ -10,10 +10,4 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 
 # Missing unit-test
 Adding unit test for the following items:
-* spell_book
-* holy_symbol 
-* spell_book for Bards
-* spell_book: manage memorised spells when intelligence score decreases
-* spell_book: manage memorised spells when caster's level decreases
-* holy_symbol: manage memorised spells when wisdom score decreases
-* holy_symbol: manage memorised spells when caster's level decreases
+* spell_book unit-tests for Bards
