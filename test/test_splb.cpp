@@ -450,6 +450,8 @@ TEST_CASE("[TC-SPLB.023] When caster's intelligence score decreases, maximum num
     SpellBook sb{Defs::character_class::mage, Defs::race::human};
     sb.set_caster_intelligence(18);
 
+    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+
     REQUIRE(sb.book_page_size() == 18);
     REQUIRE(sb.scribe_scroll(Defs::wizard_spell::affect_normal_fires));
     REQUIRE(sb.scribe_scroll(Defs::wizard_spell::alarm));
@@ -480,6 +482,8 @@ TEST_CASE("[TC-SPLB.024] When caster's intelligence score decreases, spell level
     sb.set_caster_intelligence(15);
     sb.set_caster_level(12);
 
+    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+
     REQUIRE(sb.total_slots(1) == 4);
     REQUIRE(sb.total_slots(2) == 4);
     REQUIRE(sb.total_slots(3) == 4);
@@ -499,7 +503,9 @@ TEST_CASE("[TC-SPLB.024] When caster's intelligence score decreases, spell level
     REQUIRE(sb.free_slots(8) == 0);
     REQUIRE(sb.free_slots(9) == 0);
 
-    REQUIRE(sb.scribe_scroll(Defs::wizard_spell::disintegrate));
+    auto spellId = Defs::wizard_spell::disintegrate;
+    REQUIRE(sb.scribe_scroll(spellId));
+    REQUIRE(sb.memorise(spellId));
 
     REQUIRE(sb.total_slots(1) == 4);
     REQUIRE(sb.total_slots(2) == 4);
@@ -542,21 +548,40 @@ TEST_CASE("[TC-SPLB.024] When caster's intelligence score decreases, spell level
     REQUIRE(sb.free_slots(9) == 0);
 }
 
-TEST_CASE("[TC-HOLS.025] When casters's level decreases unreachable spell levels are no longer accessible", "[spells, holy_symbol]" )
+TEST_CASE("[TC-SPLB.025] When casters's level decreases unreachable spell levels are no longer accessible", "[spells, holy_symbol]" )
 {
-    HolySymbol hs{Defs::character_class::cleric};
-    hs.set_caster_level(9);
+    SpellBook sb{Defs::character_class::mage, Defs::race::human};
+    sb.set_caster_level(9);
+    sb.set_caster_intelligence(13);
 
-    auto spellId = Defs::priest_spell::raise_dead;
-    REQUIRE(hs.pray_for_spell(spellId));
-    REQUIRE(hs[spellId] == 1);
-    REQUIRE(hs.total_slots(5) == 1);
-    REQUIRE(hs.free_slots(5) == 0);
-    REQUIRE(hs.used_slots(5) == 1);
+    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
 
-    hs.set_caster_level(8);
-    REQUIRE_THROWS_AS(hs[spellId], std::runtime_error);
-    REQUIRE(hs.total_slots(5) == 0);
-    REQUIRE(hs.free_slots(5) == 0);
-    REQUIRE(hs.used_slots(5) == 0);
+    auto spellId = Defs::wizard_spell::magic_jar;
+    REQUIRE(sb.scribe_scroll(spellId));
+    REQUIRE(sb.memorise(spellId));
+    REQUIRE(sb[spellId] == 1);
+    REQUIRE(sb.total_slots(5) == 1);
+    REQUIRE(sb.free_slots(5) == 0);
+    REQUIRE(sb.used_slots(5) == 1);
+
+    sb.set_caster_level(8);
+    REQUIRE_THROWS_AS(sb[spellId], std::runtime_error);
+    REQUIRE(sb.total_slots(5) == 0);
+    REQUIRE(sb.free_slots(5) == 0);
+    REQUIRE(sb.used_slots(5) == 0);
+}
+
+TEST_CASE("[TC-SPLB.026] Casters cannot scribe scrolls of higher levels (not accessible due tu low intelligence score)", "[spells, holy_symbol]" )
+{
+    SpellBook sb{Defs::character_class::mage, Defs::race::human};
+    sb.set_caster_level(9);
+
+    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+
+    auto spellId = Defs::wizard_spell::magic_jar;
+    REQUIRE(sb.scribe_scroll(spellId) == AddSpellResult::level_not_available);
+    REQUIRE_THROWS_AS(sb[spellId], std::runtime_error);
+    REQUIRE(sb.total_slots(5) == 0);
+    REQUIRE(sb.free_slots(5) == 0);
+    REQUIRE(sb.used_slots(5) == 0);
 }
