@@ -33,7 +33,7 @@ $ cmake --build build/
 </pre>
 After that, the test suit will be executed (it may take time). Tests can be skipped specifying the command line option -DRUN_TESTS=off as in the example
 <pre>
-$ cmake -S . -B build -DRUN_TESTS=off
+$ cmake -S . -B build -DRUN_UNIT_TESTS=off
 </pre>
 
 ## Dependencies
