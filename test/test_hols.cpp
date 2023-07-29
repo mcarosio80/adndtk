@@ -564,25 +564,67 @@ TEST_CASE("[TC-HOLS.018] Casters cannot pray for unaccessible spells", "[spells,
     REQUIRE_FALSE(hs.pray_for_spell(Defs::priest_spell::cure_critical_wounds));
 }
 
-// TEST_CASE("[TC-HOLS.019] When caster's wisdom score decreases bonus slots in excess are forcibly freed", "[spells, holy_symbol]" )
-// {
-//     HolySymbol hs{Defs::character_class::cleric};
-//     hs.set_caster_wisdom(13);
+TEST_CASE("[TC-HOLS.019] When caster's wisdom score decreases bonus slots in excess are forcibly freed", "[spells, holy_symbol]" )
+{
+    HolySymbol hs{Defs::character_class::cleric};
+    hs.set_caster_wisdom(21);
+    hs.set_caster_level(9);
 
-//     auto spellId = Defs::priest_spell::cure_light_wounds;
-//     REQUIRE(hs.pray_for_spell(spellId));
-//     REQUIRE(hs.pray_for_spell(spellId));
-//     REQUIRE(hs[spellId] == 2);
-//     REQUIRE(hs.total_slots(1) == 2);
-//     REQUIRE(hs.free_slots(1) == 0);
-//     REQUIRE(hs.used_slots(1) == 2);
+    REQUIRE(hs.total_slots(1) == 7);
+    REQUIRE(hs.total_slots(2) == 7);
+    REQUIRE(hs.total_slots(3) == 6);
+    REQUIRE(hs.total_slots(4) == 4);
+    REQUIRE(hs.total_slots(5) == 1);
+    REQUIRE(hs.total_slots(6) == 0);
+    REQUIRE(hs.total_slots(7) == 0);
 
-//     hs.set_caster_wisdom(12);
-//     REQUIRE(hs[spellId] == 1);
-//     REQUIRE(hs.total_slots(1) == 1);
-//     REQUIRE(hs.free_slots(1) == 0);
-//     REQUIRE(hs.used_slots(1) == 1);
-// }
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::create_water));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::cure_light_wounds));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::cure_light_wounds));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::cure_light_wounds));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::bless));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::bless));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::bless));
+
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::animate_dead));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::glyph_of_warding));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::negative_plane_protection));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::prayer));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::remove_curse));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::remove_paralysis));
+
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::cure_serious_wounds));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::hallucinatory_forest));
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::neutralize_poison));
+
+    REQUIRE(hs.pray_for_spell(Defs::priest_spell::cure_critical_wounds));
+    
+    REQUIRE(hs.used_slots(1) == 7);
+    REQUIRE(hs.used_slots(2) == 0);
+    REQUIRE(hs.used_slots(3) == 6);
+    REQUIRE(hs.used_slots(4) == 3);
+    REQUIRE(hs.used_slots(5) == 1);
+    REQUIRE(hs.used_slots(6) == 0);
+    REQUIRE(hs.used_slots(7) == 0);
+
+    hs.set_caster_wisdom(12);
+
+    REQUIRE(hs.total_slots(1) == 4);
+    REQUIRE(hs.total_slots(2) == 4);
+    REQUIRE(hs.total_slots(3) == 3);
+    REQUIRE(hs.total_slots(4) == 2);
+    REQUIRE(hs.total_slots(5) == 1);
+    REQUIRE(hs.total_slots(6) == 0);
+    REQUIRE(hs.total_slots(7) == 0);
+    
+    REQUIRE(hs.used_slots(1) == 4);
+    REQUIRE(hs.used_slots(2) == 0);
+    REQUIRE(hs.used_slots(3) == 3);
+    REQUIRE(hs.used_slots(4) == 2);
+    REQUIRE(hs.used_slots(5) == 1);
+    REQUIRE(hs.used_slots(6) == 0);
+    REQUIRE(hs.used_slots(7) == 0);
+}
 
 TEST_CASE("[TC-HOLS.020] When casters's level decreases unreachable spell levels are no longer accessible", "[spells, holy_symbol]" )
 {
@@ -602,5 +644,3 @@ TEST_CASE("[TC-HOLS.020] When casters's level decreases unreachable spell levels
     REQUIRE(hs.free_slots(5) == 0);
     REQUIRE(hs.used_slots(5) == 0);
 }
-
-// manage memorised spells when wisdom score decreases
