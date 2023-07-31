@@ -25,6 +25,7 @@
 #include <thief_ability.h>
 #include <spell_book.h>
 #include <holy_symbol.h>
+#include <encumbrance.h>
 
 
 #endif // ADNDTK_H

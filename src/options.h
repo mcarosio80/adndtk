@@ -11,7 +11,8 @@ namespace Adndtk
     enum class Option
     {
         max_score_for_hd,
-        scribe_scroll_always_succeeds
+        scribe_scroll_always_succeeds,
+        encumbrance
     };
 
     class OptionalRules

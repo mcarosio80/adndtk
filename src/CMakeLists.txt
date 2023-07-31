@@ -20,6 +20,7 @@ add_library(adndtk STATIC defs.h common_types.h
                         thief_ability.cpp thief_ability.h
                         spell_book.cpp spell_book.h
                         holy_symbol.cpp holy_symbol.h
+                        encumbrance.cpp encumbrance.h
 )
 
 add_dependencies(adndtk rapidjson)

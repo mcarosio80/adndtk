@@ -1,5 +1,6 @@
 #include <cyclopedia.h>
 #include <common_types.h>
+#include <skills.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -118,7 +119,10 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'level', level, 'casting_level', casting_level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4 from paladin_spell_progression where level = ?", Query::select_paladin_spell_progression);
         prepare_statement("select 'level', level, 'casting_level', casting_level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3 from ranger_abilities where level = ?", Query::select_ranger_spell_progression);            
         
-        load_advancement_table();
+        prepare_statement("select 'id', id, 'base_movement_rate', base_movement_rate from race", Query::select_race_base_movement);            
+        prepare_statement("select 'strength_to', strength_to, 'exc_strength_to', exc_strength_to, 'load', load, 'movement_rate_1', movement_rate_1, 'movement_rate_2', movement_rate_2 from modified_movement_rates", Query::select_modified_movement_rate);            
+        
+        load_advancement_table();   
     }
     return ok;
 }

@@ -65,7 +65,9 @@ namespace Adndtk
         select_priest_spells_per_class_level,
         select_priest_spells_per_level_deity,
         select_paladin_spell_progression,
-        select_ranger_spell_progression
+        select_ranger_spell_progression,
+        select_race_base_movement,
+        select_modified_movement_rate
     };
 
     enum class XPChangeType
