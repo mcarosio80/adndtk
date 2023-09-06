@@ -33,12 +33,12 @@ void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, c
 
     if (result[0]["min"].has_value())
     {
-        auto v = std::stoi(result[0]["min"].value());
+        auto v = result[0].as<int>("min");
         if (v > minValue) minValue = v;
     }
     if (result[0]["max"].has_value())
     {
-        auto v = std::stoi(result[0]["max"].value());
+        auto v = result[0].as<int>("max");
         if (v < maxValue) maxValue = v;
     }
 }
@@ -107,7 +107,7 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
 
         if (raceModifier.size() > 0 && raceModifier[0]["value"].has_value())
         {
-            raceSkillModifier = std::stoi(raceModifier[0]["value"].value());
+            raceSkillModifier = raceModifier[0].as<short>("value");
         }
     }
 
@@ -163,10 +163,10 @@ short Adndtk::SkillCreator::generate_value(const Adndtk::SkillGenerationMethod& 
     case SkillGenerationMethod::best_of_four:
     {
         int tmpValue = 0;
-        int minValue = 0;
+        int minValue = 19;
         for (int i=0; i<4; ++i)
         {
-            auto v = d.roll(3);
+            auto v = d.roll();
             if (v < minValue)
             {
                 minValue = v;

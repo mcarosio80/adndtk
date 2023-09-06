@@ -2,29 +2,35 @@
 #include <cyclopedia.h>
 #include <options.h>
 #include <dice.h>
+#include <skill_stats.h>
 
 Adndtk::HitPoints::HitPoints()
-    : _cls{}, _currentHP{}
+    : _cls{}, _currentHP{}, _constitutionAdjustment{std::nullopt}
 {
 }
 
 Adndtk::HitPoints::HitPoints(const Defs::character_class& cls)
-    : _cls{cls}, _currentHP{}
+    : _cls{cls}, _currentHP{}, _constitutionAdjustment{std::nullopt}
 {
     auto classes = Cyclopedia::get_instance().split(cls);
 
     for (auto& c : classes)
     {
         int clsId = static_cast<int>(c);
-        auto clsInfo= Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class, clsId);
-        int clsType = std::stoi(clsInfo[0]["class_type_id"].value());
+        auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class, clsId);
+        auto& clsInfo = rs[0];
+        auto clsType = clsInfo.as<int>("class_type_id");
 
         auto clsTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class_type, clsType);
-        int hdFaces = std::stoi(clsTypeInfo[0]["hit_dice"].value());
+        auto hdFaces = clsTypeInfo[0].as<int>("hit_dice");
+        auto titleLevel = clsTypeInfo[0].as<short>("title_level");
+        _titleLevel[c] = titleLevel;
+        auto hpAfterTitle = clsTypeInfo[0].as<short>("hp_after_title");
+        _hpAfterTitle[c] = hpAfterTitle;
 
         _hitDice[c] = static_cast<Defs::die>(hdFaces);
         
-        HP pts = generate_hp(c);
+        HP pts = generate_hp(c, 1);
         _hps[c].push_back(pts);
         _levels[c] = 1;
     }
@@ -40,9 +46,46 @@ Adndtk::HitPoints::HitPoints(const Defs::character_class& cls)
     _currentHP = std::div(_currentHP, _hps.size()).quot;
 }
 
+void Adndtk::HitPoints::update_constitution(const SkillValue& oldVal, const SkillValue& newVal)
+{
+    auto oldStats = SkillStats::get_instance().get_constitution_stats(oldVal);
+    auto newStats = SkillStats::get_instance().get_constitution_stats(newVal);
+    int oldHpAdj{0};
+    int newHpAdj{0};
+
+    if (Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(_cls))
+    {
+        oldHpAdj = oldStats.hit_point_adjustment_warriors.value_or(oldStats.hit_point_adjustment);
+        newHpAdj = newStats.hit_point_adjustment_warriors.value_or(newStats.hit_point_adjustment);
+    }
+    else
+    {
+        oldHpAdj = oldStats.hit_point_adjustment;
+        newHpAdj = newStats.hit_point_adjustment;
+    }
+
+    if (_constitutionAdjustment.has_value())
+    {
+        _constitutionAdjustment = _constitutionAdjustment.value() - oldHpAdj + newHpAdj;
+    }
+    else
+    {
+        _constitutionAdjustment = newHpAdj;
+    }
+}
+
 Adndtk::HitPoints::operator HP() const
 {
-    return _currentHP;
+    HP conBonus{_constitutionAdjustment.value_or(0)};
+    HP lvlBonus = constitution_bonus();
+    for (auto& c : _hps)
+    {
+        if (_levels.at(c.first) <= _titleLevel.at(c.first))
+        {
+            conBonus += lvlBonus * _hps.size()-1;
+        }
+    }
+    return _currentHP + conBonus;
 }
 
 Adndtk::HitPoints& Adndtk::HitPoints::operator+=(const Adndtk::HP& hp)
@@ -88,9 +131,16 @@ Adndtk::HP Adndtk::HitPoints::total() const
     return total;
 }
 
-const Adndtk::HP& Adndtk::HitPoints::current() const
+Adndtk::HP Adndtk::HitPoints::current() const
 {
-    return _currentHP;
+    HP conBonus{_constitutionAdjustment.value_or(0)};
+    HP lvlBonus = constitution_bonus();
+    for (auto& c : _hps)
+    {
+        auto conBonusCount = std::min<ExperienceLevel>(_levels.at(c.first), _titleLevel.at(c.first)) - 1;
+        conBonus += lvlBonus * conBonusCount;
+    }
+    return _currentHP + conBonus;
 }
 
 Adndtk::HitPoints& Adndtk::HitPoints::shrink(const Defs::character_class& cls, const ExperienceLevel& count/*=1*/)
@@ -147,10 +197,11 @@ Adndtk::HitPoints& Adndtk::HitPoints::increase(const Defs::character_class& cls,
         auto numLevels = newLevel - _hps[cls].size();
         for (ExperienceLevel s=0; s<numLevels; ++s)
         {
-            HP pts = generate_hp(cls);
+            //HP bonus = (newLevel <= _titleLevel[cls]) ? constitution_bonus() : 0;
+            HP pts = generate_hp(cls, newLevel);// + bonus;
             _hps[cls].push_back(pts);
         }
-        _levels[cls] += numLevels;
+        _levels[cls] = newLevel;
     }
 
     HP prevHP = _currentHP;
@@ -159,9 +210,9 @@ Adndtk::HitPoints& Adndtk::HitPoints::increase(const Defs::character_class& cls,
     return (*this);
 }
 
-Adndtk::ExperienceLevel Adndtk::HitPoints::level()
+Adndtk::ExperienceLevel Adndtk::HitPoints::level() const
 {
-    auto selected = *_levels.begin();
+    auto selected = *_levels.cbegin();
     ExperienceLevel exp{selected.second};
     for (auto& x : _levels)
     {
@@ -173,19 +224,34 @@ Adndtk::ExperienceLevel Adndtk::HitPoints::level()
     return exp;
 }
 
-Adndtk::ExperienceLevel Adndtk::HitPoints::level(const Defs::character_class& cls)
+Adndtk::ExperienceLevel Adndtk::HitPoints::level(const Defs::character_class& cls) const
 {
-    return _levels[cls];
+    return _levels.at(cls);
 }
 
-Adndtk::HP Adndtk::HitPoints::generate_hp(const Adndtk::Defs::character_class& cls)
+Adndtk::HP Adndtk::HitPoints::generate_hp(const Adndtk::Defs::character_class& cls, const ExperienceLevel& lvl)
 {
+    if (lvl > _titleLevel[cls])
+    {
+        return static_cast<HP>(_hpAfterTitle[cls]);
+    }
     if (OptionalRules::get_instance().option<bool>(Option::max_score_for_hd))
     {
         return static_cast<HP>(_hitDice[cls]);
     }
     Die d{_hitDice[cls]};
     return d;
+}
+
+Adndtk::HP Adndtk::HitPoints::constitution_bonus() const
+{
+    if (_hps.size() == 0)
+    {
+        return 0;
+    }
+
+    HP conMod = std::div(_constitutionAdjustment.value_or(0), _hps.size()).quot;
+    return conMod;
 }
 
 void Adndtk::HitPoints::notify_all_listeners(const HP& prevHP, const HP& newHP)

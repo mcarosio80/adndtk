@@ -1,4 +1,4 @@
-add_library(adndtk STATIC defs.h common_types.h
+add_library(adndtk STATIC defs.h common_types.cpp common_types.h
                         adndtk.cpp adndtk.h
                         cyclopedia.cpp cyclopedia.h
                         options.cpp options.h
@@ -21,6 +21,7 @@ add_library(adndtk STATIC defs.h common_types.h
                         spell_book.cpp spell_book.h
                         holy_symbol.cpp holy_symbol.h
                         encumbrance.cpp encumbrance.h
+                        character.cpp character.h
 )
 
 add_dependencies(adndtk rapidjson)

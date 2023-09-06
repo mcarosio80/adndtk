@@ -1,9 +1,12 @@
 #ifndef COMMON_TYPES_H
 #define COMMON_TYPES_H
 
+#include <map>
+
 #include <cstdint>
 #include <functional>
 #include <defs.h>
+#include <skills.h>
 
 namespace Adndtk
 {
@@ -67,7 +70,8 @@ namespace Adndtk
         select_paladin_spell_progression,
         select_ranger_spell_progression,
         select_race_base_movement,
-        select_modified_movement_rate
+        select_modified_movement_rate,
+        select_starting_money
     };
 
     enum class XPChangeType
@@ -109,6 +113,26 @@ namespace Adndtk
                                           const XP &newXP, const ExperienceLevel &newLvl)>;
 
     using OnHPChange = std::function<void(const HPChangeType &chgType, const HP &prevHP, const XP &newHP)>;
+
+    using OnSkillValueChange = std::function<void(const SkillValue& prevValue, const SkillValue& newValue)>;
+
+    class CharacterExperience
+    {
+        public:
+            CharacterExperience(const Defs::character_class& cls);
+
+            inline auto cbegin() const noexcept { return _xps.cbegin(); };
+            inline auto cend() const noexcept { return _xps.cend(); };
+            inline auto begin() noexcept { return _xps.begin(); };
+            inline auto end() noexcept { return _xps.end(); };
+
+            inline const ExperienceLevel& level(const Defs::character_class& cls) const { return _xps.at(cls).first; };
+            inline const XP& xp(const Defs::character_class& cls) const { return _xps.at(cls).second; };
+            void set(const Defs::character_class& cls, const ExperienceLevel& lvl, const XP& pts);
+
+        private:
+            std::map<Defs::character_class, std::pair<ExperienceLevel, XP>> _xps;
+    };
 }
 
 #endif // COMMON_TYPES_H

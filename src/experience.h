@@ -2,6 +2,7 @@
 #define EXPERIENCE_H
 
 #include <map>
+#include <optional>
 
 #include <defs.h>
 #include <config.h>
@@ -18,10 +19,17 @@ namespace Adndtk
 
         Experience &operator+=(const OnXPChange &cbk);
 
-        Experience &operator+=(XP points);
-        Experience &operator-=(XP points);
-        const XP &xp(const Defs::character_class &cls) const;
-        const ExperienceLevel &level(const Defs::character_class &cls) const;
+        Experience& operator+=(const XP& points);
+        Experience& operator-=(const XP& points);
+        Experience& operator+=(const CharacterExperience& points);
+        Experience& operator-=(const CharacterExperience& points);
+        Experience& add(const ExperienceLevel& lvl);
+        Experience& add(const Defs::character_class& cls, const ExperienceLevel& lvl);
+        Experience& subtract(const ExperienceLevel& lvl);
+        Experience& subtract(const Defs::character_class& cls, const ExperienceLevel& lvl);
+
+        XP &xp(const Defs::character_class &cls);
+        ExperienceLevel &level(const Defs::character_class &cls);
         const XP &xp() const;
         const ExperienceLevel &level() const;
 
@@ -49,10 +57,14 @@ namespace Adndtk
         std::map<Defs::character_class, ExperienceLevel> _levels;
         std::map<Defs::character_class, ExperienceLevel> _limits;
         std::vector<OnXPChange> _cbks;
+        std::map<Defs::character_class, double> _xpBonus;
 
         Experience &set_xp(const Defs::character_class &cls, const XP &xp);
+        Defs::character_class highest_level();
         void notify_all(const XP &prevXP, const ExperienceLevel &prevLvl,
                         const Defs::character_class &cls, const XPChangeType &chgType);
+
+        XP adjust_xp(const Defs::character_class &cls, const XP& pts) const;
     };
 }
 

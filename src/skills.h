@@ -18,6 +18,7 @@ namespace Adndtk
 
         bool hasExceptionalStrength() const;
         std::optional<short> exceptionalStrength() const;
+        inline const Defs::skill& type() const { return _skillType; };
 
         friend std::ostream& operator<< (std::ostream& out, const SkillValue& value)
         {

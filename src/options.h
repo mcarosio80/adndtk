@@ -12,7 +12,9 @@ namespace Adndtk
     {
         max_score_for_hd,
         scribe_scroll_always_succeeds,
-        encumbrance
+        encumbrance,
+        skills_generation_method,
+        max_starting_money
     };
 
     class OptionalRules

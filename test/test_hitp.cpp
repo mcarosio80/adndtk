@@ -17,6 +17,7 @@ TEST_CASE("[TC-HITP.001] Increasing length of HP sequences generates new HD valu
     HP previousTotal{0};
     HP currentTotal{0};
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     REQUIRE(hp.level(clsF) == 1);
     REQUIRE(hp.level(clsM) == 1);
@@ -60,6 +61,7 @@ TEST_CASE("[TC-HITP.002] Shrink of HP sequences reduces HP values", "[HP]" )
     HP previousTotal{0};
     HP currentTotal{0};
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     hp.increase(clsF);
     hp.increase(clsF);
@@ -91,6 +93,7 @@ TEST_CASE("[TC-HITP.003] Shrink and increase of HP sequence keep the previous HD
     HP previousTotal{0};
     HP currentTotal{0};
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     hp.increase(clsF);
     hp.increase(clsF);
@@ -124,6 +127,8 @@ TEST_CASE("[TC-HITP.004] Shrink and increase of HP sequence change the current H
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
+    hp.set_constitution(13);
+
     hp.increase(clsF);
     hp.increase(clsF);
     hp.increase(clsF);
@@ -168,6 +173,7 @@ TEST_CASE("[TC-HITP.006] Level zero characters cannot advance", "[HP]" )
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     REQUIRE(hp.level(clsF) == 1);
     REQUIRE(hp.level(clsM) == 1);
@@ -207,6 +213,7 @@ TEST_CASE("[TC-HITP.007] Level adjustments receive callbacks", "[HP]" )
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     HPChangeType chgType{};
     HP prevHP{};
@@ -263,6 +270,7 @@ TEST_CASE("[TC-HITP.008] Max score for HD ensures maximum HP score", "[HP]" )
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     REQUIRE(hp.total() == 10);
     hp.increase(cls, 3);
@@ -281,6 +289,7 @@ TEST_CASE("[TC-HITP.009] Level for multiclass is the highest level among the cla
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     HitPoints hp{cls};
+    hp.set_constitution(13);
 
     REQUIRE(hp.level(clsF) == 1);
     REQUIRE(hp.level(clsM) == 1);

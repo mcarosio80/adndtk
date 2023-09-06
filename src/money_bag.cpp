@@ -1,6 +1,9 @@
 #include <money_bag.h>
 #include <config.h>
 #include <coin_exchange.h>
+#include <cyclopedia.h>
+#include <dice.h>
+#include <options.h>
 
 #include <cstdint>
 
@@ -9,6 +12,32 @@ Adndtk::MoneyBag::MoneyBag()
 	for (auto c : { Defs::coin::copper_piece, Defs::coin::silver_piece, Defs::coin::electrum_piece, Defs::coin::gold_piece, Defs::coin::platinum_piece })
 	{
 		_money[c] = 0;
+	}
+}
+
+Adndtk::MoneyBag::MoneyBag(const Defs::character_class_type& clsType)
+{
+	for (auto c : { Defs::coin::copper_piece, Defs::coin::silver_piece, Defs::coin::electrum_piece, Defs::coin::gold_piece, Defs::coin::platinum_piece })
+	{
+		_money[c] = 0;
+	}
+	
+	int type = static_cast<int>(select_class_type_for_money(clsType));
+	auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_starting_money, type);
+	auto& startingMoney = rs[0];
+
+	auto number = startingMoney.as<int>("die_number");
+	auto faces = startingMoney.as<int>("die_faces");
+	auto base = startingMoney.as<int>("die_base");
+	auto mult = startingMoney.as<int>("multiplier");
+
+	if (OptionalRules::get_instance().option<bool>(Option::max_starting_money))
+	{
+		_money[Defs::coin::gold_piece] = Die::roll(number, faces, base) * mult;
+	}
+	else
+	{
+		_money[Defs::coin::gold_piece] = (number * faces + base) * mult;
 	}
 }
 
@@ -124,4 +153,30 @@ void Adndtk::MoneyBag::normalise()
 			_money[a.currency()] += a.value();
 		}
 	}
+}
+
+Adndtk::Defs::character_class_type Adndtk::MoneyBag::select_class_type_for_money(const Defs::character_class_type& clsType)
+{
+	auto types = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
+	Defs::character_class_type selectedType = types[0];
+	uint32_t maxAmount{0};
+	for (auto& t : types)
+	{
+		auto typeId = static_cast<int>(t);
+		auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_starting_money, typeId);
+		auto& startingMoney = rs[0];
+
+		auto number = startingMoney.as<int>("die_number");
+		auto faces = startingMoney.as<int>("die_faces");
+		auto base = startingMoney.as<int>("die_base");
+		auto mult = startingMoney.as<int>("multiplier");
+
+		uint32_t maxVal = (number * faces + base) * mult;
+		if (maxVal > maxAmount)
+		{
+			selectedType = t;
+			maxAmount = maxVal;
+		}
+	}
+	return selectedType;
 }

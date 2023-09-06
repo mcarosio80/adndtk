@@ -23,7 +23,7 @@ namespace Adndtk
     private:
         static short generate_value(const SkillGenerationMethod &method = SkillGenerationMethod::standard);
         static void get_skill_constraints(const Query &queryId, const int &skillType, const std::optional<int> &object, int &minValue, int &maxValue);
-
+        
         std::optional<Defs::character_class> _class;
         std::optional<Defs::race> _race;
         short _skillValue;

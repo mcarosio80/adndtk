@@ -122,6 +122,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'base_movement_rate', base_movement_rate from race", Query::select_race_base_movement);            
         prepare_statement("select 'strength_to', strength_to, 'exc_strength_to', exc_strength_to, 'load', load, 'movement_rate_1', movement_rate_1, 'movement_rate_2', movement_rate_2 from modified_movement_rates", Query::select_modified_movement_rate);            
         
+        prepare_statement("select 'die_number', die_number, 'die_faces', die_faces, 'die_base', die_base, 'multiplier', multiplier from starting_money where class_type_id = ?", Query::select_starting_money);
+
         load_advancement_table();   
     }
     return ok;
@@ -277,4 +279,12 @@ void Adndtk::Cyclopedia::load_advancement_table()
 
         _advTable.set_advancement_factor(cls, score);
     }
+}
+
+Adndtk::Defs::character_class_type Adndtk::Cyclopedia::get_class_type(const Defs::character_class& cls)
+{
+    int clsId = static_cast<int>(cls);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class, clsId);
+    auto& clsInfo = rs[0];
+    return static_cast<Defs::character_class_type>(clsInfo.as<int>("class_type_id"));
 }

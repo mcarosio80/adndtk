@@ -12,6 +12,7 @@ namespace Adndtk
     {
     public:
         MoneyBag();
+        MoneyBag(const Defs::character_class_type& clsType);
         ~MoneyBag();
 
         bool check_availability(const Coin& amt) const;
@@ -31,6 +32,8 @@ namespace Adndtk
 
     private:
         std::map<Defs::coin, uint32_t>       _money;
+
+        Defs::character_class_type select_class_type_for_money(const Defs::character_class_type& clsType);
     };
 }
 

@@ -26,6 +26,7 @@
 #include <spell_book.h>
 #include <holy_symbol.h>
 #include <encumbrance.h>
+#include <character.h>
 
 
 #endif // ADNDTK_H

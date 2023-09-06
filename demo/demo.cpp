@@ -11,6 +11,9 @@ void demo_hp();
 void demo_options();
 void demo_thaco();
 void demo_turn_undead();
+void demo_character();
+
+void print_character(const Character&);
 
 int main(int argc, char **argv)
 {
@@ -21,16 +24,81 @@ int main(int argc, char **argv)
     
     std::cout << "\nDESCRIPTION:\n" << Metadata::desc << "\n\n";
 
-    //demo_cyclopedia();
-    //demo_dice();
-    //demo_skills();
-    //demo_experience();
-    //demo_hp();
-    //demo_options();
-    //demo_thaco();
-    demo_turn_undead();
-
+    demo_character();
+    
     return 0;
+}
+
+void print_character(Character& chr)
+{
+    std::cout << "Character data sheet\n";
+    std::cout << "--------------------------------------\n\n";
+
+    std::cout << "Name:\t" << chr.name() << "\n";
+
+    auto strScore = chr.strength();
+    auto dexScore = chr.dexterity();
+    auto conScore = chr.constitution();
+    auto intScore = chr.intelligence();
+    auto wisScore = chr.wisdom();
+    auto chaScore = chr.charisma();
+    short totalScore = strScore + dexScore + conScore + intScore + wisScore + chaScore;
+
+    std::cout << "Str:\t" << strScore << "\n";
+    std::cout << "Dex:\t" << dexScore << "\n";
+    std::cout << "Con:\t" << conScore << "\n";
+    std::cout << "Int:\t" << intScore << "\n";
+    std::cout << "Wis:\t" << wisScore << "\n";
+    std::cout << "Cha:\t" << chaScore << "\n";
+    std::cout << "Total:\t" << totalScore << "\n";
+
+    auto xps = chr.experience();
+    std::cout << "XP: ";
+    for (auto& xp : xps)
+    {
+        std::cout << xps.level(xp.first) << "(" << xps.xp(xp.first) << ") ";
+    }
+    std::cout << "\n";
+
+    std::cout << "HP: " << chr.hp() << "/" << chr.total_hp() << "  (" << chr.health()*100.0 << "%)" << "\n";
+    std::cout << "Alive: " << ((chr.is_alive()) ? "yes" : "no") << "\n";
+}
+
+void demo_character()
+{
+    std::string chrName{"Fingolfin"};
+    Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    OptionalRules::get_instance().option<int>(Option::skills_generation_method) = static_cast<int>(SkillGenerationMethod::best_of_four);
+    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+
+    chr.gain_xp(1900);
+    print_character(chr);
+    chr.gain_xp(650, Defs::character_class::thief);
+    print_character(chr);
+    chr.lose_xp(300);
+    print_character(chr);
+    chr.lose_xp(300, Defs::character_class::fighter);
+    print_character(chr);
+
+    chr.gain_level(1);
+    print_character(chr);
+    chr.gain_level(1, Defs::character_class::mage);
+    print_character(chr);
+    chr.lose_level(1, Defs::character_class::mage);
+    print_character(chr);
+    chr.lose_level(1);
+    print_character(chr);
+
+    chr.wound(3);
+    print_character(chr);
+    chr.gain_level(1);
+    print_character(chr);
+    chr.lose_level(1);
+    print_character(chr);
 }
 
 void demo_cyclopedia()

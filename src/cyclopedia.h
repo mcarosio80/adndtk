@@ -110,6 +110,7 @@ namespace Adndtk
         }
 
         const AdvancementTable& advancement_table() { return _advTable; }
+        Defs::character_class_type get_class_type(const Defs::character_class& cls);
 
     private:
         Cyclopedia();

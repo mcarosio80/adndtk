@@ -1,4 +1,5 @@
 #include <options.h>
+#include <skill_creator.h>
 
 bool Adndtk::OptionalRules::_initialised = false;
 
@@ -28,4 +29,6 @@ void Adndtk::OptionalRules::set_default_options_values()
     _options[Option::max_score_for_hd] = false;
     _options[Option::scribe_scroll_always_succeeds] = false;
     _options[Option::encumbrance] = true;
+    _options[Option::skills_generation_method] = static_cast<int>(SkillGenerationMethod::standard);
+    _options[Option::max_starting_money] = false;
 }
