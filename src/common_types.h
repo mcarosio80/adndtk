@@ -71,7 +71,8 @@ namespace Adndtk
         select_ranger_spell_progression,
         select_race_base_movement,
         select_modified_movement_rate,
-        select_starting_money
+        select_starting_money,
+        select_primary_skills
     };
 
     enum class XPChangeType
@@ -102,10 +103,13 @@ namespace Adndtk
         no_capacity
     };
 
-    struct SpellLevelsLimit
+    struct Const
     {
-        static constexpr SpellLevel spell_book = 9;
-        static constexpr SpellLevel holy_symbol = 7;
+        static constexpr SpellLevel spell_book_limit = 9;
+        static constexpr SpellLevel holy_symbol_limit = 7;
+        static constexpr short high_value_for_prime_requisite = 16;
+        static constexpr double xp_bonus_10 = 0.1;
+        static constexpr double xp_bonus_none = 0.0;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,

@@ -31,4 +31,5 @@ void Adndtk::OptionalRules::set_default_options_values()
     _options[Option::encumbrance] = true;
     _options[Option::skills_generation_method] = static_cast<int>(SkillGenerationMethod::standard);
     _options[Option::max_starting_money] = false;
+    _options[Option::enable_bonus_xp_for_high_prime_requisites] = true;
 }

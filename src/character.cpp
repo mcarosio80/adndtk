@@ -3,6 +3,8 @@
 #include <skill_creator.h>
 #include <options.h>
 
+#include <algorithm>
+
 
 Adndtk::Character::Character(const std::string& name, const Defs::character_class& cls,
                 const Defs::race& raceId, const Defs::sex& sexId,
@@ -37,6 +39,17 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
         auto val = SkillCreator::create(skl, _cls, _race, sklGenMethod);
         _skills[skl] = val;
     }
+
+    for (auto& c : Cyclopedia::get_instance().split<Defs::character_class>(cls))
+    {
+        auto clsId = static_cast<int>(c);
+        auto resSet = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_primary_skills, clsId);
+        for (auto& r : resSet)
+        {
+            auto sklId = static_cast<Defs::skill>(r.as<int>("skill_id"));
+            _primeRequisites[c].emplace(sklId);
+        }
+    }
 }
 
 std::vector<Adndtk::Defs::character_class> Adndtk::Character::get_class() const
@@ -55,6 +68,24 @@ void Adndtk::Character::change_skill(const SkillValue& newValue)
     SkillValue oldValue{_skills[newValue.type()]};
     _skills[newValue.type()] = newValue;
     notify_all(oldValue, newValue);
+
+    if (!OptionalRules::get_instance().option<bool>(Option::enable_bonus_xp_for_high_prime_requisites))
+    {
+        return;
+    }
+
+    for (auto& clsReqs : _primeRequisites)
+    {
+        double xpBonus = Const::xp_bonus_10;
+        for (auto& skl : clsReqs.second)
+        {
+            if (_skills[skl] < Const::high_value_for_prime_requisite)
+            {
+                xpBonus = Const::xp_bonus_none;
+            }
+        }
+        _xp.set_xp_bonus(clsReqs.first, xpBonus);
+    }
 }
 
 void Adndtk::Character::gain_xp(const XP& xpValue, const std::optional<Defs::character_class>& cls/*=std::nullopt*/)

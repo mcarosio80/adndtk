@@ -28,6 +28,8 @@ namespace Adndtk
         Experience& subtract(const ExperienceLevel& lvl);
         Experience& subtract(const Defs::character_class& cls, const ExperienceLevel& lvl);
 
+        void set_xp_bonus(const Defs::character_class& cls, const double& xpBonus);
+
         XP &xp(const Defs::character_class &cls);
         ExperienceLevel &level(const Defs::character_class &cls);
         const XP &xp() const;

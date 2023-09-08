@@ -124,6 +124,8 @@ bool Adndtk::Cyclopedia::init()
         
         prepare_statement("select 'die_number', die_number, 'die_faces', die_faces, 'die_base', die_base, 'multiplier', multiplier from starting_money where class_type_id = ?", Query::select_starting_money);
 
+        prepare_statement("select 'skill_id', skill_id from primary_skill where class_id = ?", Query::select_primary_skills);
+
         load_advancement_table();   
     }
     return ok;

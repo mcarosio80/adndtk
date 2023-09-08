@@ -1,5 +1,6 @@
 #include <experience.h>
 #include <cyclopedia.h>
+#include <options.h>
 
 #include <cmath>
 
@@ -16,7 +17,7 @@ Adndtk::Experience::Experience(const Adndtk::Defs::character_class& cls, const D
     {
         _xps[c] = 0;
         _levels[c] = 1;
-        _xpBonus[c] = 0.0;
+        _xpBonus[c] = Const::xp_bonus_none;
     }
 
     int clsId = static_cast<int>(cls);
@@ -41,7 +42,8 @@ Adndtk::Experience& Adndtk::Experience::operator+= (const XP& points)
     auto ptx = points / _xps.size();
     for (auto& x : _xps)
     {
-        this->set_xp(x.first, ptx);
+        auto adjPoints = adjust_xp(x.first, ptx);
+        this->set_xp(x.first, adjPoints);
     }
     return (*this);
 }
@@ -60,7 +62,8 @@ Adndtk::Experience& Adndtk::Experience::operator+= (const CharacterExperience& p
 {
     for (auto pt = points.cbegin(); pt != points.cend(); ++pt)
     {
-        this->set_xp(pt->first, pt->second.second);
+        auto adjPoints = adjust_xp(pt->first, pt->second.second);
+        this->set_xp(pt->first, adjPoints);
     }
     return (*this);
 }
@@ -159,6 +162,11 @@ Adndtk::Experience& Adndtk::Experience::subtract(const Defs::character_class& cl
         }
     }
     return (*this);
+}
+
+void Adndtk::Experience::set_xp_bonus(const Defs::character_class& cls, const double& xpBonus)
+{
+    _xpBonus[cls] = xpBonus;
 }
 
 Adndtk::Defs::character_class Adndtk::Experience::highest_level()
@@ -272,5 +280,9 @@ Adndtk::ExperienceLevel& Adndtk::Experience::limit(const Adndtk::Defs::character
 
 Adndtk::XP Adndtk::Experience::adjust_xp(const Adndtk::Defs::character_class& cls, const XP& pts) const
 {
-    return pts + static_cast<XP>(std::lround(pts * _xpBonus.at(cls)));
+    if (OptionalRules::get_instance().option<bool>(Option::enable_bonus_xp_for_high_prime_requisites))
+    {
+        return pts + static_cast<XP>(std::lround(pts * _xpBonus.at(cls)));
+    }
+    return pts;
 }

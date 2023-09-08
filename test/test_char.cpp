@@ -70,6 +70,9 @@ TEST_CASE("[TC-CHAR.004] Multiclasses can gain XPs in a single class, no split h
     Defs::race chrRace{Defs::race::half_elf};
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
 
     chr.gain_xp(650, Defs::character_class::thief);
     REQUIRE(chr.experience().level(Defs::character_class::fighter) == 1);
@@ -87,6 +90,9 @@ TEST_CASE("[TC-CHAR.005] Lost XPs are broken down for multiclasses", "[character
     Defs::race chrRace{Defs::race::half_elf};
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
 
     chr.gain_xp(3900);
     REQUIRE(chr.experience().level(Defs::character_class::fighter) == 1);
@@ -114,9 +120,11 @@ TEST_CASE("[TC-CHAR.006] When levels are gained, HP are increment accordingly", 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
-
-    SkillValue con{Defs::skill::constitution, 13};
-    chr.change_skill(con);
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 13));
+    
     REQUIRE(chr.hp() == 6);
 
     chr.gain_xp(3900);
@@ -156,9 +164,11 @@ TEST_CASE("[TC-CHAR.007] When levels are lost, HPs are restored to the previous 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 13));
 
-    SkillValue con{Defs::skill::constitution, 13};
-    chr.change_skill(con);
     REQUIRE(chr.hp() == 6);
 
     chr.gain_xp(3900);
@@ -252,9 +262,11 @@ TEST_CASE("[TC-CHAR.008] When levels are lost, HPs are restored to the previous 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 15));
 
-    SkillValue con{Defs::skill::constitution, 15};
-    chr.change_skill(con);
     REQUIRE(chr.hp() == 7);
 
     chr.gain_xp(3900);
@@ -321,9 +333,11 @@ TEST_CASE("[TC-CHAR.009] When levels are lost, HPs are restored to the previous 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 16));
 
-    SkillValue con{Defs::skill::constitution, 16};
-    chr.change_skill(con);
     REQUIRE(chr.hp() == 8);
 
     chr.gain_xp(3900);
@@ -390,9 +404,11 @@ TEST_CASE("[TC-CHAR.010] When levels are lost, HPs are restored to the previous 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 17));
 
-    SkillValue con{Defs::skill::constitution, 17};
-    chr.change_skill(con);
     REQUIRE(chr.hp() == 9);
 
     chr.gain_xp(3900);
@@ -459,9 +475,11 @@ TEST_CASE("[TC-CHAR.011] When levels are lost, HPs are restored to the previous 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 18));
 
-    SkillValue con{Defs::skill::constitution, 18};
-    chr.change_skill(con);
     REQUIRE(chr.hp() == 10);
 
     chr.gain_xp(3900);
@@ -528,9 +546,11 @@ TEST_CASE("[TC-CHAR.012] When levels are lost, HPs are restored to the previous 
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
     Character chr{chrName, chrClass, chrRace, Defs::sex::male};
-
-    SkillValue con{Defs::skill::constitution, 19};
-    chr.change_skill(con);
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 12));
+    chr.change_skill(SkillValue(Defs::skill::dexterity, 12));
+    chr.change_skill(SkillValue(Defs::skill::constitution, 19));
+    
     REQUIRE(chr.hp() == 11);
 
     chr.gain_xp(3900);
@@ -616,4 +636,134 @@ TEST_CASE("[TC-CHAR.013] When levels exceed the title level, a fixed amount of H
 
     chr.change_skill(SkillValue(Defs::skill::constitution, 19));
     REQUIRE(chr.hp() == 144);
+}
+
+TEST_CASE("[TC-CHAR.014] Single-class characters with high prime requisites have 10% bonus on XPs", "[character]" )
+{
+    std::string chrName{"Palantir"};
+    Defs::character_class chrClass{Defs::character_class::paladin};
+    Defs::race chrRace{Defs::race::human};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 17));
+
+    XP pts = 2200;
+    XP adjPts = pts + pts * Const::xp_bonus_10;
+    chr.gain_xp(pts);
+    REQUIRE(chr.experience().level(Defs::character_class::paladin) == 2);
+    REQUIRE(chr.experience().xp(Defs::character_class::paladin) == adjPts);
+}
+
+TEST_CASE("[TC-CHAR.014] Multi-class characters with high prime requisites have 10% bonus on XPs for class with high requisite", "[character]" )
+{
+    std::string chrName{"Fingolfin"};
+    Defs::character_class chrClass{Defs::character_class::fighter_cleric};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 15));
+    chr.change_skill(SkillValue(Defs::skill::wisdom, 18));
+
+    XP pts = 3900;
+    chr.gain_xp(pts);
+
+    XP ptsFract = pts / 2;
+    XP adjPtsFighter = ptsFract + ptsFract * Const::xp_bonus_none;
+    XP adjPtsCleric = ptsFract + ptsFract * Const::xp_bonus_10;
+    REQUIRE(chr.experience().level(Defs::character_class::fighter) == 1);
+    REQUIRE(chr.experience().xp(Defs::character_class::fighter) == adjPtsFighter);
+    REQUIRE(chr.experience().level(Defs::character_class::cleric) == 2);
+    REQUIRE(chr.experience().xp(Defs::character_class::cleric) == adjPtsCleric);
+}
+
+TEST_CASE("[TC-CHAR.015] Multi-class characters with high prime requisites have 10% bonus on XPs for class with high requisite", "[character]" )
+{
+    std::string chrName{"Jaheira"};
+    Defs::character_class chrClass{Defs::character_class::fighter_druid};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 15));
+    chr.change_skill(SkillValue(Defs::skill::wisdom, 17));
+    chr.change_skill(SkillValue(Defs::skill::charisma, 16));
+
+    XP pts = 3900;
+    chr.gain_xp(pts);
+
+    XP ptsFract = pts / 2;
+    XP adjPtsFighter = ptsFract + ptsFract * Const::xp_bonus_none;
+    XP adjPtsDriud = ptsFract + ptsFract * Const::xp_bonus_10;
+    REQUIRE(chr.experience().level(Defs::character_class::fighter) == 1);
+    REQUIRE(chr.experience().xp(Defs::character_class::fighter) == adjPtsFighter);
+    REQUIRE(chr.experience().level(Defs::character_class::druid) == 2);
+    REQUIRE(chr.experience().xp(Defs::character_class::druid) == adjPtsDriud);
+}
+
+TEST_CASE("[TC-CHAR.016] Multi-class characters with high prime requisites have 10% bonus on XPs for class with high requisite", "[character]" )
+{
+    std::string chrName{"Jaheira"};
+    Defs::character_class chrClass{Defs::character_class::fighter_druid};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 15));
+    chr.change_skill(SkillValue(Defs::skill::wisdom, 17));
+    chr.change_skill(SkillValue(Defs::skill::charisma, 15));
+
+    XP pts = 3900;
+    chr.gain_xp(pts);
+
+    XP ptsFract = pts / 2;
+    XP adjPtsFighter = ptsFract + ptsFract * Const::xp_bonus_none;
+    XP adjPtsDriud = ptsFract + ptsFract * Const::xp_bonus_none;
+    REQUIRE(chr.experience().level(Defs::character_class::fighter) == 1);
+    REQUIRE(chr.experience().xp(Defs::character_class::fighter) == adjPtsFighter);
+    REQUIRE(chr.experience().level(Defs::character_class::druid) == 1);
+    REQUIRE(chr.experience().xp(Defs::character_class::druid) == adjPtsDriud);
+}
+
+TEST_CASE("[TC-CHAR.017] Multi-class characters with high prime requisites have 10% bonus on XPs for class with high requisite", "[character]" )
+{
+    std::string chrName{"Jaheira"};
+    Defs::character_class chrClass{Defs::character_class::fighter_druid};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 17));
+    chr.change_skill(SkillValue(Defs::skill::wisdom, 15));
+    chr.change_skill(SkillValue(Defs::skill::charisma, 17));
+
+    XP pts = 3900;
+    chr.gain_xp(pts);
+
+    XP ptsFract = pts / 2;
+    XP adjPtsFighter = ptsFract + ptsFract * Const::xp_bonus_10;
+    XP adjPtsDriud = ptsFract + ptsFract * Const::xp_bonus_none;
+    REQUIRE(chr.experience().level(Defs::character_class::fighter) == 2);
+    REQUIRE(chr.experience().xp(Defs::character_class::fighter) == adjPtsFighter);
+    REQUIRE(chr.experience().level(Defs::character_class::druid) == 1);
+    REQUIRE(chr.experience().xp(Defs::character_class::druid) == adjPtsDriud);
+}
+
+TEST_CASE("[TC-CHAR.018] Multi-class characters with high prime requisites have 10% bonus on XPs for class with high requisite", "[character]" )
+{
+    std::string chrName{"Jaheira"};
+    Defs::character_class chrClass{Defs::character_class::fighter_druid};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::strength, 18, 34));
+    chr.change_skill(SkillValue(Defs::skill::wisdom, 16));
+    chr.change_skill(SkillValue(Defs::skill::charisma, 17));
+
+    XP pts = 3900;
+    chr.gain_xp(pts);
+
+    XP ptsFract = pts / 2;
+    XP adjPtsFighter = ptsFract + ptsFract * Const::xp_bonus_10;
+    XP adjPtsDriud = ptsFract + ptsFract * Const::xp_bonus_10;
+    REQUIRE(chr.experience().level(Defs::character_class::fighter) == 2);
+    REQUIRE(chr.experience().xp(Defs::character_class::fighter) == adjPtsFighter);
+    REQUIRE(chr.experience().level(Defs::character_class::druid) == 2);
+    REQUIRE(chr.experience().xp(Defs::character_class::druid) == adjPtsDriud);
 }

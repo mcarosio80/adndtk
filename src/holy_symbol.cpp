@@ -42,7 +42,7 @@ void Adndtk::HolySymbol::set_caster_wisdom(const short& wisdomValue)
 
     if (bonusSpellsLost)
     {
-        for (SpellLevel sl=1; sl<= SpellLevelsLimit::holy_symbol; ++sl)
+        for (SpellLevel sl=1; sl<= Const::holy_symbol_limit; ++sl)
         {
             auto currentSpellsCount = used_slots(sl);
             auto maxSpellsCount = total_slots(sl);
@@ -164,7 +164,7 @@ bool Adndtk::HolySymbol::exists(const Defs::priest_spell& spellId)
             && _spells.at(spellLevel).find(spellId) != _spells.at(spellLevel).end();
 }
 
-void Adndtk::HolySymbol::enable_levels()
+void Adndtk::HolySymbol::enable_levels() 
 {
     auto lvl = std::min<short>(static_cast<short>(_casterLevel), 20);
 
@@ -174,7 +174,7 @@ void Adndtk::HolySymbol::enable_levels()
 
     _actualCasterLevel = prog.try_or<short>("casting_level", _casterLevel);
 
-    for (SpellLevel sl=1; sl<=SpellLevelsLimit::holy_symbol; ++sl)
+    for (SpellLevel sl=1; sl<=Const::holy_symbol_limit; ++sl)
     {
         std::stringstream ss;
         ss << "spell_level_" << sl;

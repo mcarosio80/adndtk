@@ -48,6 +48,11 @@ Adndtk::HitPoints::HitPoints(const Defs::character_class& cls)
 
 void Adndtk::HitPoints::update_constitution(const SkillValue& oldVal, const SkillValue& newVal)
 {
+    if (oldVal.type() != Defs::skill::constitution || newVal.type() != Defs::skill::constitution)
+    {
+        return;
+    }
+    
     auto oldStats = SkillStats::get_instance().get_constitution_stats(oldVal);
     auto newStats = SkillStats::get_instance().get_constitution_stats(newVal);
     int oldHpAdj{0};

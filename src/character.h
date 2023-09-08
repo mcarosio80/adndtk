@@ -6,6 +6,7 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include <set>
 
 #include <defs.h>
 #include <common_types.h>
@@ -69,6 +70,8 @@ namespace Adndtk
         MoneyBag                                _money;
         Inventory                               _inventory;
         std::vector<OnSkillValueChange>         _sklChgCbk;
+        std::map<Defs::character_class, std::set<Defs::skill>>
+                                                _primeRequisites;
 
         bool                                    _forwardEvent;
         void on_change_xp(const Defs::character_class &cls, const XPChangeType &chgType,

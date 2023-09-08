@@ -14,7 +14,8 @@ namespace Adndtk
         scribe_scroll_always_succeeds,
         encumbrance,
         skills_generation_method,
-        max_starting_money
+        max_starting_money,
+        enable_bonus_xp_for_high_prime_requisites
     };
 
     class OptionalRules
