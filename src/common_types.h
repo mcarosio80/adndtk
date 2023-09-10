@@ -72,7 +72,9 @@ namespace Adndtk
         select_race_base_movement,
         select_modified_movement_rate,
         select_starting_money,
-        select_primary_skills
+        select_primary_skills,
+        select_wizard_spells_by_level,
+        select_bard_spell_progression
     };
 
     enum class XPChangeType

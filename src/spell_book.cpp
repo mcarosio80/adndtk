@@ -46,6 +46,19 @@ const short& Adndtk::SpellBook::operator[] (Defs::wizard_spell spellId) const
 
 void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
 {
+    if (_casterClass == Defs::character_class::bard
+        && _casterLevel == 1 && newLevel == 2)
+    {
+        auto numSpells = Die::roll(1, 4);
+        auto rsSpells = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_wizard_spells_by_level, 1);
+        while (numSpells > 0)
+        {
+            auto id = Die::roll(0, rsSpells.size()) + 1000;
+            auto splId = static_cast<Defs::wizard_spell>(id);
+            scribe_scroll(splId);
+            --numSpells;
+        }
+    }
     _casterLevel = newLevel;
     
     Query queryId = get_spell_progression_query();
@@ -106,7 +119,7 @@ Adndtk::Query Adndtk::SpellBook::get_spell_progression_query() const
     Query queryId{Query::select_wizard_spell_progression};
     if (_casterClass == Defs::character_class::bard)
     {
-        //queryId = Query::select_bard_spell_progression;
+        queryId = Query::select_bard_spell_progression;
     }
     return queryId;
 }

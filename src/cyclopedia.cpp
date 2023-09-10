@@ -126,6 +126,10 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'skill_id', skill_id from primary_skill where class_id = ?", Query::select_primary_skills);
 
+        prepare_statement("select 'id', id from wizard_spell where level = ?", Query::select_wizard_spells_by_level);
+        
+        prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6 from bard_spell_progression where level = ?", Query::select_bard_spell_progression);
+        
         load_advancement_table();   
     }
     return ok;

@@ -585,3 +585,151 @@ TEST_CASE("[TC-SPLB.026] Casters cannot scribe scrolls of higher levels (not acc
     REQUIRE(sb.free_slots(5) == 0);
     REQUIRE(sb.used_slots(5) == 0);
 }
+
+TEST_CASE("[TC-SPLB.027] First level bards have no spells", "[spells, holy_symbol]" )
+{
+    SpellBook sb{Defs::character_class::bard, Defs::race::human};
+    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+
+    for (SpellLevel lvl=1; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+}
+
+TEST_CASE("[TC-SPLB.028] Second level bards have 1-4 free spells in first level", "[spells, holy_symbol]" )
+{
+    SpellBook sb{Defs::character_class::bard, Defs::race::human};
+
+    sb.set_caster_level(2);
+    REQUIRE(sb.total_slots(1) == 1);
+    for (SpellLevel lvl=2; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+}
+
+TEST_CASE("[TC-SPLB.029] Higher level bards gain spell slots according to PHB Table 32", "[spells, holy_symbol]" )
+{
+    SpellBook sb{Defs::character_class::bard, Defs::race::human};
+    sb.set_caster_intelligence(18);
+
+    sb.set_caster_level(2);
+    REQUIRE(sb.total_slots(1) == 1);
+    for (SpellLevel lvl=2; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(5);
+    REQUIRE(sb.total_slots(1) == 3);
+    REQUIRE(sb.total_slots(2) == 1);
+    for (SpellLevel lvl=3; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(2);
+    REQUIRE(sb.total_slots(1) == 1);
+    for (SpellLevel lvl=2; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(10);
+    REQUIRE(sb.total_slots(1) == 3);
+    REQUIRE(sb.total_slots(2) == 3);
+    REQUIRE(sb.total_slots(3) == 2);
+    REQUIRE(sb.total_slots(4) == 1);
+    for (SpellLevel lvl=5; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(15);
+    REQUIRE(sb.total_slots(1) == 3);
+    REQUIRE(sb.total_slots(2) == 3);
+    REQUIRE(sb.total_slots(3) == 3);
+    REQUIRE(sb.total_slots(4) == 3);
+    REQUIRE(sb.total_slots(5) == 2);
+    for (SpellLevel lvl=6; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(18);
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 3);
+    REQUIRE(sb.total_slots(5) == 3);
+    REQUIRE(sb.total_slots(6) == 2);
+    for (SpellLevel lvl=7; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(19);
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 3);
+    REQUIRE(sb.total_slots(6) == 2);
+    for (SpellLevel lvl=7; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(20);
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 3);
+    for (SpellLevel lvl=7; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_level(22);
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 3);
+    for (SpellLevel lvl=7; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+}
+
+TEST_CASE("[TC-SPLB.029] Bards intelligence determines the number of spells per page", "[spells, holy_symbol]" )
+{
+    SpellBook sb{Defs::character_class::bard, Defs::race::human};
+
+    sb.set_caster_intelligence(15);
+    REQUIRE(sb.book_page_size() == 11);
+    
+    sb.set_caster_intelligence(18);
+    REQUIRE(sb.book_page_size() == 18);
+}
+
+TEST_CASE("[TC-SPLB.030] Bards access spell book pages according to their intelligence score", "[spells, holy_symbol]" )
+{
+    SpellBook sb{Defs::character_class::bard, Defs::race::human};
+
+    sb.set_caster_intelligence(9);
+
+    sb.set_caster_level(20);
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    for (SpellLevel lvl=5; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+}
