@@ -17,6 +17,8 @@
 #include <thaco.h>
 #include <money_bag.h>
 #include <inventory.h>
+#include <spell_book.h>
+#include <holy_symbol.h>
 
 namespace Adndtk
 {
@@ -57,6 +59,21 @@ namespace Adndtk
         inline bool is_alive() const { return hp() > 0; };
         double health() const { return static_cast<double>(hp()) / _hp.total(); };
 
+        // Magic
+        const SpellBook& spell_book() const;
+        const HolySymbol& holy_symbol() const;
+        bool is_spell_caster() const;
+
+        bool cast_spell(const Defs::wizard_spell& spellId);
+        bool learn_spell(const Defs::wizard_spell& spellId);
+        bool memorise_spell(const Defs::wizard_spell& spellId);
+        bool remove_spell(const Defs::wizard_spell& spellId);
+        bool erase_spell(const Defs::wizard_spell& spellId);
+
+        bool cast_spell(const Defs::priest_spell& spellId);
+        bool memorise_spell(const Defs::priest_spell& spellId);
+        bool remove_spell(const Defs::priest_spell& spellId);
+
     private:
         std::string                             _name;
         Defs::character_class                   _cls;
@@ -72,6 +89,8 @@ namespace Adndtk
         std::vector<OnSkillValueChange>         _sklChgCbk;
         std::map<Defs::character_class, std::set<Defs::skill>>
                                                 _primeRequisites;
+        SpellBook                               _spellBook;
+        HolySymbol                              _holySymbol;
 
         bool                                    _forwardEvent;
         void on_change_xp(const Defs::character_class &cls, const XPChangeType &chgType,

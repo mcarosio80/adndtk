@@ -9,19 +9,22 @@
 Adndtk::SpellBook::SpellBook(const Defs::character_class& cls, Defs::race raceId)
     : _casterLevel{1}, _intelligenceScore{Defs::skill::intelligence, 9}, _casterClass{cls}, _casterRace{raceId}
 {
-    int c = static_cast<int>(_casterClass);
-    int r = static_cast<int>(_casterRace);
-    auto races = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_school_of_magic_per_race, c, r);
-    
-    bool raceEnabled{true};
-    for (auto& rc : races)
+    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(cls))
     {
-        auto availableRace = static_cast<Defs::race>(rc.as<short>("race_id"));
-        raceEnabled &= availableRace == raceId;
-    }
-    if (races.size() == 0 || !raceEnabled)
-    {
-        ErrorManager::get_instance().error("Class not available for specified race");
+        int c = static_cast<int>(_casterClass);
+        int r = static_cast<int>(_casterRace);
+        auto races = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_school_of_magic_per_race, c, r);
+        
+        bool raceEnabled{true};
+        for (auto& rc : races)
+        {
+            auto availableRace = static_cast<Defs::race>(rc.as<short>("race_id"));
+            raceEnabled &= availableRace == raceId;
+        }
+        if (races.size() == 0 || !raceEnabled)
+        {
+            ErrorManager::get_instance().error("Class not available for specified race");
+        }
     }
 }
 

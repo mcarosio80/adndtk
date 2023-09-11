@@ -767,3 +767,133 @@ TEST_CASE("[TC-CHAR.018] Multi-class characters with high prime requisites have 
     REQUIRE(chr.experience().level(Defs::character_class::druid) == 2);
     REQUIRE(chr.experience().xp(Defs::character_class::druid) == adjPtsDriud);
 }
+
+TEST_CASE("[TC-CHAR.019] Experience advencements are reflected on the spells availability", "[character]" )
+{
+    std::string chrName{"Salazar"};
+    Defs::character_class chrClass{Defs::character_class::mage_cleric};
+    Defs::race chrRace{Defs::race::half_elf};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    chr.change_skill(SkillValue(Defs::skill::intelligence, 13));
+    chr.change_skill(SkillValue(Defs::skill::wisdom, 12));
+
+    XP pts = 50000;
+    chr.gain_xp(pts);
+    
+    REQUIRE(chr.spell_book().total_slots(1) == 4);
+    REQUIRE(chr.spell_book().total_slots(2) == 2);
+    REQUIRE(chr.spell_book().total_slots(3) == 1);
+
+    REQUIRE(chr.holy_symbol().total_slots(1) == 3);
+    REQUIRE(chr.holy_symbol().total_slots(2) == 3);
+    REQUIRE(chr.holy_symbol().total_slots(3) == 1);
+}
+
+TEST_CASE("[TC-CHAR.020] Non-magic users do not have spell book", "[character]" )
+{
+    std::string chrName{"Jack the giant-killer"};
+    Defs::character_class chrClass{Defs::character_class::ranger};
+    Defs::race chrRace{Defs::race::human};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male}; 
+    REQUIRE_THROWS_AS(chr.spell_book(), std::runtime_error);
+}
+
+TEST_CASE("[TC-CHAR.021] Non-magic users do not have holy symbol", "[character]" )
+{
+    std::string chrName{"Etienne Javert de Montford"};
+    Defs::character_class chrClass{Defs::character_class::thief};
+    Defs::race chrRace{Defs::race::human};
+
+    Character chr{chrName, chrClass, chrRace, Defs::sex::male}; 
+    REQUIRE_THROWS_AS(chr.holy_symbol(), std::runtime_error);
+}
+
+TEST_CASE("[TC-CHAR.022] Characters can be queried for their ability to cast spells", "[character]" )
+{
+    Defs::race chrRace{Defs::race::human};
+
+    REQUIRE_FALSE(Character("F", Defs::character_class::fighter, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("P", Defs::character_class::paladin, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("R", Defs::character_class::ranger, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("M", Defs::character_class::mage, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("M", Defs::character_class::abjurer, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MA", Defs::character_class::conjurer, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MD", Defs::character_class::diviner, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("ME", Defs::character_class::enchanter, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MI", Defs::character_class::illusionist, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MK", Defs::character_class::invoker, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MN", Defs::character_class::necromancer, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MT", Defs::character_class::transmuter, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("C", Defs::character_class::cleric, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("D", Defs::character_class::druid, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("PSM", Defs::character_class::preist_of_specific_mythos, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE_FALSE(Character("T", Defs::character_class::thief, chrRace, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("B", Defs::character_class::bard, chrRace, Defs::sex::male).is_spell_caster());
+
+    REQUIRE(Character("FM", Defs::character_class::fighter_mage, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FI", Defs::character_class::fighter_illusionist, Defs::race::gnome, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FC", Defs::character_class::fighter_cleric, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("CR", Defs::character_class::cleric_ranger, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MC", Defs::character_class::mage_cleric, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FMC", Defs::character_class::fighter_mage_cleric, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("CI", Defs::character_class::cleric_illusionist, Defs::race::gnome, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FD", Defs::character_class::fighter_druid, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MD", Defs::character_class::mage_druid, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FMD", Defs::character_class::fighter_mage_druid, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE_FALSE(Character("FT", Defs::character_class::fighter_thief, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("MT", Defs::character_class::mage_thief, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FMT", Defs::character_class::fighter_mage_thief, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("IT", Defs::character_class::illusionist_thief, Defs::race::gnome, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("CT", Defs::character_class::cleric_thief, Defs::race::half_elf, Defs::sex::male).is_spell_caster());
+}
+
+TEST_CASE("[TC-CHAR.023] Only magic user characters can use the spell book", "[character]" )
+{
+    Defs::race chrRace{Defs::race::human};
+
+    Character elfRanger{"ER", Defs::character_class::ranger, Defs::race::elf, Defs::sex::male};
+    Character dwarfCleric{"DC", Defs::character_class::cleric, Defs::race::dwarf, Defs::sex::male};
+    Character halflingThief{"HT", Defs::character_class::thief, Defs::race::halfling, Defs::sex::male};
+    Character gnomeFighter{"GF", Defs::character_class::fighter, Defs::race::gnome, Defs::sex::male};
+    Character humanPaladin{"HP", Defs::character_class::paladin, Defs::race::human, Defs::sex::male};
+    Character halfElfFighterCleric{"HEFC", Defs::character_class::fighter_cleric, Defs::race::half_elf, Defs::sex::male};
+    Character halfElfDruid{"HED", Defs::character_class::druid, Defs::race::half_elf, Defs::sex::male};
+
+    std::vector<Character> chars { elfRanger, dwarfCleric, halflingThief, gnomeFighter, humanPaladin,
+                halfElfFighterCleric, halfElfDruid };
+    
+    auto spellId = Defs::wizard_spell::magic_missile;
+    for (auto& chr : chars)
+    {
+        REQUIRE_THROWS_AS(chr.learn_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.memorise_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.remove_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.erase_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.cast_spell(spellId), std::runtime_error);
+    }
+}
+
+TEST_CASE("[TC-CHAR.024] Only paladins, rangers, clerics and druids can use the holy symbol", "[character]" )
+{
+    Defs::race chrRace{Defs::race::human};
+
+    Character elfMage{"EM", Defs::character_class::mage, Defs::race::elf, Defs::sex::male};
+    Character dwarfFighterThief{"DFT", Defs::character_class::fighter_thief, Defs::race::dwarf, Defs::sex::male};
+    Character halflingThief{"HT", Defs::character_class::thief, Defs::race::halfling, Defs::sex::male};
+    Character gnomeIllusionist{"GI", Defs::character_class::fighter, Defs::race::gnome, Defs::sex::male};
+    Character humanNecromencer{"HN", Defs::character_class::necromancer, Defs::race::human, Defs::sex::male};
+    Character halfElfBard{"HEB", Defs::character_class::bard, Defs::race::half_elf, Defs::sex::male};
+
+    std::vector<Character> chars { elfMage, dwarfFighterThief, halflingThief, gnomeIllusionist, humanNecromencer,
+                    halfElfBard };
+    
+    auto spellId = Defs::priest_spell::cure_light_wounds;
+    for (auto& chr : chars)
+    {
+        REQUIRE_THROWS_AS(chr.memorise_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.remove_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.cast_spell(spellId), std::runtime_error);
+    }
+}

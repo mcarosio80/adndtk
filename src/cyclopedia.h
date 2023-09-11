@@ -109,6 +109,30 @@ namespace Adndtk
             return found;
         }
 
+        template <Defs::character_class_type probeType>
+        bool can_cast_as(const Defs::character_class& cls)
+        {
+            if (probeType == Defs::character_class_type::priest
+                && (is_class_of<Defs::character_class::paladin>(cls)
+                    || is_class_of<Defs::character_class::ranger>(cls)
+                    || is_class_of<Defs::character_class::druid>(cls)
+                    || is_class_of<Defs::character_class::cleric>(cls)
+                    || is_class_of<Defs::character_class::preist_of_specific_mythos>(cls))
+            )
+            {
+                return true;
+            }
+
+            if (probeType == Defs::character_class_type::wizard
+                && (is_type_of<Defs::character_class_type::wizard>(cls)
+                    || is_class_of<Defs::character_class::bard>(cls))
+            )
+            {
+                return true;
+            }
+            return false;
+        }
+
         const AdvancementTable& advancement_table() { return _advTable; }
         Defs::character_class_type get_class_type(const Defs::character_class& cls);
 

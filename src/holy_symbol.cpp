@@ -6,7 +6,10 @@ Adndtk::HolySymbol::HolySymbol(const Defs::character_class& cls, std::optional<D
     : _casterLevel{1}, _wisdomScore{Defs::skill::wisdom, 9}, _casterClass{cls}, _deityId{deityId},
         _actualCasterLevel{_casterLevel}
 {
-    enable_levels();
+    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(cls))
+    {
+        enable_levels();
+    }
 }
 
 Adndtk::HolySymbol::~HolySymbol()
