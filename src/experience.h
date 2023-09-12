@@ -30,12 +30,12 @@ namespace Adndtk
 
         void set_xp_bonus(const Defs::character_class& cls, const double& xpBonus);
 
-        XP &xp(const Defs::character_class &cls);
-        ExperienceLevel &level(const Defs::character_class &cls);
+        const XP &xp(const Defs::character_class &cls) const;
+        const ExperienceLevel &level(const Defs::character_class &cls) const;
         const XP &xp() const;
         const ExperienceLevel &level() const;
 
-        ExperienceLevel& limit(const Defs::character_class& cls);
+        const ExperienceLevel& limit(const Defs::character_class& cls) const;
 
         friend std::ostream &operator<<(std::ostream &out, const Experience &exp)
         {

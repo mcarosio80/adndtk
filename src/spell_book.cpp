@@ -56,7 +56,7 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
         auto rsSpells = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_wizard_spells_by_level, 1);
         while (numSpells > 0)
         {
-            auto id = Die::roll(0, rsSpells.size()) + 1000;
+            auto id = Die::roll(0, rsSpells.size()-1) + 1000;
             auto splId = static_cast<Defs::wizard_spell>(id);
             scribe_scroll(splId);
             --numSpells;

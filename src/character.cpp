@@ -52,7 +52,7 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
     }
 }
 
-std::vector<Adndtk::Defs::character_class> Adndtk::Character::get_class() const
+std::vector<Adndtk::Defs::character_class> Adndtk::Character::get_classes() const
 {
     return Cyclopedia::get_instance().split(_cls);
 }
@@ -155,7 +155,7 @@ void Adndtk::Character::lose_level(const ExperienceLevel& lvl, const std::option
     }
 }
 
-Adndtk::CharacterExperience Adndtk::Character::experience()
+Adndtk::CharacterExperience Adndtk::Character::experience() const
 {
     CharacterExperience xps{_cls};
 
@@ -365,4 +365,14 @@ bool Adndtk::Character::remove_spell(const Defs::priest_spell& spellId)
         throw std::runtime_error("The character is not a magic-user");
     }
     return false;
+}
+
+bool Adndtk::Character::save_roll(const Defs::saving_throw& savId, const short& bonusMalus/*=0*/) const
+{
+    return SavingThrows::get_instance().roll(_cls, experience(), savId, bonusMalus);
+}
+
+const Adndtk::SavingScore& Adndtk::Character::save_score(const Defs::saving_throw& savId) const
+{
+    return SavingThrows::get_instance().get_score(_cls, experience(), savId);
 }

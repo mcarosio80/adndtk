@@ -245,22 +245,22 @@ Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_cla
     return (*this);
 }
 
-Adndtk::XP& Adndtk::Experience::xp(const Adndtk::Defs::character_class& cls)
+const Adndtk::XP& Adndtk::Experience::xp(const Adndtk::Defs::character_class& cls) const
 {
     if (_xps.find(cls) == _xps.end())
     {
         ErrorManager::get_instance().error("Invalid class specified");
     }
-    return _xps[cls];
+    return _xps.at(cls);
 }
 
-Adndtk::ExperienceLevel& Adndtk::Experience::level(const Adndtk::Defs::character_class& cls)
+const Adndtk::ExperienceLevel& Adndtk::Experience::level(const Adndtk::Defs::character_class& cls) const
 {
     if (_xps.find(cls) == _xps.end())
     {
         ErrorManager::get_instance().error("Invalid class specified");
     }
-    return _levels[cls];
+    return _levels.at(cls);
 }
 
 const Adndtk::XP& Adndtk::Experience::xp() const
@@ -273,9 +273,9 @@ const Adndtk::ExperienceLevel& Adndtk::Experience::level() const
     return _levels.cbegin()->second;
 }
 
-Adndtk::ExperienceLevel& Adndtk::Experience::limit(const Adndtk::Defs::character_class& cls)
+const Adndtk::ExperienceLevel& Adndtk::Experience::limit(const Adndtk::Defs::character_class& cls) const
 {
-    return _limits[cls];
+    return _limits.at(cls);
 }
 
 Adndtk::XP Adndtk::Experience::adjust_xp(const Adndtk::Defs::character_class& cls, const XP& pts) const

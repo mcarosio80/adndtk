@@ -2,6 +2,7 @@
 #include <cyclopedia.h>
 #include <dice.h>
 
+
 bool Adndtk::SavingThrows::_initialised = false;
 
 
@@ -57,6 +58,12 @@ const Adndtk::SavingScore& Adndtk::SavingThrows::get_score(const Adndtk::Defs::c
     return map.at(lvl).at(sav);
 }
 
+const Adndtk::SavingScore& Adndtk::SavingThrows::get_score(const Defs::character_class& cls, const CharacterExperience& levels, const Defs::saving_throw& sav) const
+{
+    auto score = save_as(cls, levels, sav);
+    return get_score(score.first, score.second, sav);
+}
+        
 bool Adndtk::SavingThrows::roll(const Defs::character_class_type& type, const ExperienceLevel& lvl, const Defs::saving_throw& sav, const short& bonusMalus/*=0*/) const
 {
     Die d20{Defs::die::d20};
@@ -64,4 +71,33 @@ bool Adndtk::SavingThrows::roll(const Defs::character_class_type& type, const Ex
     auto target = get_score(type, lvl, sav);
 
     return roll + bonusMalus >= target;
+}
+
+bool Adndtk::SavingThrows::roll(const Defs::character_class& clsId, const CharacterExperience& levels, const Defs::saving_throw& sav, const short& bonusMalus) const
+{
+    auto saveScore = save_as(clsId, levels, sav);
+    return roll(saveScore.first, saveScore.second, sav, bonusMalus);
+}
+
+std::pair<Adndtk::Defs::character_class_type, Adndtk::ExperienceLevel> Adndtk::SavingThrows::save_as(const Defs::character_class& clsId, const CharacterExperience& levels, const Defs::saving_throw& sav) const
+{
+    auto classes =  Cyclopedia::get_instance().split<Defs::character_class>(clsId);
+    
+    SavingScore bestSave = Const::base_saving_throw;
+    Defs::character_class_type bestClsType = Defs::character_class_type::warrior;
+    ExperienceLevel bestLvl = 0;
+    for (auto cls : classes)
+    {
+        auto clsTyp = Cyclopedia::get_instance().get_class_type(cls);
+        auto clsLvl = levels.level(cls);
+        auto score = get_score(clsTyp, clsLvl, sav);
+        if (score < bestSave)
+        {
+            bestClsType = clsTyp;
+            bestLvl = clsLvl;
+            bestSave = score;
+        }
+    }
+    
+    return std::make_pair(bestClsType, bestLvl);
 }

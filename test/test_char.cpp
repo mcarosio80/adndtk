@@ -897,3 +897,46 @@ TEST_CASE("[TC-CHAR.024] Only paladins, rangers, clerics and druids can use the 
         REQUIRE_THROWS_AS(chr.cast_spell(spellId), std::runtime_error);
     }
 }
+
+TEST_CASE("[TC-CHAR.025] Characters' saving throws improve with experience", "[character]" )
+{
+    Defs::saving_throw savId = Defs::saving_throw::petrification;
+
+    Character anya{"Anya", Defs::character_class::fighter, Defs::race::human, Defs::sex::female};
+    REQUIRE(anya.save_score(savId) == 15);
+    REQUIRE(SavingThrows::get_instance().save_as(anya.get_class(), anya.experience(), savId).first == Defs::character_class_type::warrior);
+    REQUIRE(SavingThrows::get_instance().save_as(anya.get_class(), anya.experience(), savId).second == 1);
+
+    anya.gain_level(7);
+    REQUIRE(anya.save_score(savId) == 11);
+    REQUIRE(SavingThrows::get_instance().save_as(anya.get_class(), anya.experience(), savId).first == Defs::character_class_type::warrior);
+    REQUIRE(SavingThrows::get_instance().save_as(anya.get_class(), anya.experience(), savId).second == 8);
+}
+
+TEST_CASE("[TC-CHAR.026] Multiclass characters choose between the most favorable saving throw", "[character]" )
+{
+    Defs::saving_throw savId = Defs::saving_throw::petrification;
+
+    Character sanRaal{"San Raal", Defs::character_class::fighter_thief, Defs::race::elf, Defs::sex::male};
+
+    REQUIRE(sanRaal.save_score(savId) == 12);
+
+    REQUIRE(SavingThrows::get_instance().save_as(sanRaal.get_class(), sanRaal.experience(), savId).first == Defs::character_class_type::rogue);
+    REQUIRE(SavingThrows::get_instance().save_as(sanRaal.get_class(), sanRaal.experience(), savId).second == 1);
+
+    sanRaal.gain_xp(110000, Defs::character_class::thief);
+    REQUIRE(sanRaal.experience().level(Defs::character_class::fighter) == 1);
+    REQUIRE(sanRaal.experience().level(Defs::character_class::thief) == 9);
+
+    REQUIRE(sanRaal.save_score(savId) == 10);
+    REQUIRE(SavingThrows::get_instance().save_as(sanRaal.get_class(), sanRaal.experience(), savId).first == Defs::character_class_type::rogue);
+    REQUIRE(SavingThrows::get_instance().save_as(sanRaal.get_class(), sanRaal.experience(), savId).second == 9);
+
+    sanRaal.gain_xp(250000, Defs::character_class::fighter);
+    REQUIRE(sanRaal.experience().level(Defs::character_class::fighter) == 9);
+    REQUIRE(sanRaal.experience().level(Defs::character_class::thief) == 9);
+
+    REQUIRE(sanRaal.save_score(savId) == 9);
+    REQUIRE(SavingThrows::get_instance().save_as(sanRaal.get_class(), sanRaal.experience(), savId).first == Defs::character_class_type::warrior);
+    REQUIRE(SavingThrows::get_instance().save_as(sanRaal.get_class(), sanRaal.experience(), savId).second == 9);
+}

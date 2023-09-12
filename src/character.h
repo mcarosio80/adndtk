@@ -19,6 +19,7 @@
 #include <inventory.h>
 #include <spell_book.h>
 #include <holy_symbol.h>
+#include <saving_throws.h>
 
 namespace Adndtk
 {
@@ -29,7 +30,8 @@ namespace Adndtk
             const Defs::sex& sexId, const std::optional<Defs::deity>& deityId = std::nullopt);
 
         const std::string& name() const { return _name; };
-        std::vector<Defs::character_class> get_class() const;
+        inline const Defs::character_class& get_class() const { return _cls; };
+        std::vector<Defs::character_class> get_classes() const;
 
         Character& operator+=(const OnSkillValueChange& cbk);
 
@@ -47,7 +49,7 @@ namespace Adndtk
         void lose_xp(const XP& xpValue, const std::optional<Defs::character_class>& cls = std::nullopt);
         void gain_level(const ExperienceLevel& lvl, const std::optional<Defs::character_class>& cls = std::nullopt);
         void lose_level(const ExperienceLevel& lvl, const std::optional<Defs::character_class>& cls = std::nullopt);
-        CharacterExperience experience();
+        CharacterExperience experience() const;
 
         // Health
         HPChangeType wound(const HP& hps);
@@ -74,6 +76,10 @@ namespace Adndtk
         bool memorise_spell(const Defs::priest_spell& spellId);
         bool remove_spell(const Defs::priest_spell& spellId);
 
+        // Saving throws
+        bool save_roll(const Defs::saving_throw& savId, const short& bonusMalus = 0) const;
+        const SavingScore& save_score(const Defs::saving_throw& savId) const;
+
     private:
         std::string                             _name;
         Defs::character_class                   _cls;
@@ -91,8 +97,8 @@ namespace Adndtk
                                                 _primeRequisites;
         SpellBook                               _spellBook;
         HolySymbol                              _holySymbol;
-
         bool                                    _forwardEvent;
+
         void on_change_xp(const Defs::character_class &cls, const XPChangeType &chgType,
                                           const XP &prevXP, const ExperienceLevel &prevLvl,
                                           const XP &newXP, const ExperienceLevel &newLvl);

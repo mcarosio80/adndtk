@@ -112,6 +112,7 @@ namespace Adndtk
         static constexpr short high_value_for_prime_requisite = 16;
         static constexpr double xp_bonus_10 = 0.1;
         static constexpr double xp_bonus_none = 0.0;
+        static constexpr SavingScore base_saving_throw = 20;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
