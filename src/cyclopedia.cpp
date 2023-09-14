@@ -294,3 +294,9 @@ Adndtk::Defs::character_class_type Adndtk::Cyclopedia::get_class_type(const Defs
     auto& clsInfo = rs[0];
     return static_cast<Defs::character_class_type>(clsInfo.as<int>("class_type_id"));
 }
+
+std::vector<Adndtk::Defs::character_class_type> Adndtk::Cyclopedia::get_class_types(const Defs::character_class& cls)
+{
+    auto types = get_class_type(cls);
+    return split<Defs::character_class_type>(types);
+}

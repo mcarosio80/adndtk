@@ -10,7 +10,7 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
                 const Defs::race& raceId, const Defs::sex& sexId,
                 const std::optional<Defs::deity>& deityId/*=std::nullopt*/)
     : _name{name}, _cls{cls}, _race{raceId}, _sex{sexId}, _deity{deityId},
-    _xp{cls, raceId}, _hp{cls}, _thaco{},
+    _xp{cls, raceId}, _hp{cls}, _thaco{Cyclopedia::get_instance().get_class_type(cls)},
     _money{Cyclopedia::get_instance().get_class_type(cls)}, _inventory{},
     _forwardEvent{true}, _spellBook{cls, raceId}, _holySymbol{cls, deityId}
 {
@@ -375,4 +375,9 @@ bool Adndtk::Character::save_roll(const Defs::saving_throw& savId, const short& 
 const Adndtk::SavingScore& Adndtk::Character::save_score(const Defs::saving_throw& savId) const
 {
     return SavingThrows::get_instance().get_score(_cls, experience(), savId);
+}
+
+Adndtk::Defs::attack_result Adndtk::Character::try_hit(const AC& ac, const short& bonusMalus/*=0*/) const
+{
+    return _thaco.try_hit(experience(), ac, bonusMalus);
 }

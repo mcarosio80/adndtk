@@ -20,6 +20,7 @@
 #include <spell_book.h>
 #include <holy_symbol.h>
 #include <saving_throws.h>
+#include <thaco.h>
 
 namespace Adndtk
 {
@@ -79,6 +80,10 @@ namespace Adndtk
         // Saving throws
         bool save_roll(const Defs::saving_throw& savId, const short& bonusMalus = 0) const;
         const SavingScore& save_score(const Defs::saving_throw& savId) const;
+
+        // Combat
+        Defs::attack_result try_hit(const AC& ac, const short& bonusMalus = 0) const;
+
 
     private:
         std::string                             _name;

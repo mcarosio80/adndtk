@@ -113,3 +113,28 @@ TEST_CASE("[TC-THAC.004] THAC0 values for rogue improve according to the experie
     REQUIRE(t.get(19) == 11);
     REQUIRE(t.get(20) == 11);
 }
+
+TEST_CASE("[TC-THAC.005] Best THAC0 will be chosen for multiclass characters", "[THAC0]" )
+{
+    Defs::character_class cls{Defs::character_class::fighter_mage};
+    auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls);
+    CharacterExperience exp{cls};
+
+    auto type = Cyclopedia::get_instance().get_class_type(cls);
+    Thaco t{type};
+
+    for (auto& c : classes)
+    {
+        exp.set_xp(c, 4000);
+    }
+    auto attackLvl = t.attack_as(exp);
+    REQUIRE(attackLvl.first == Defs::character_class_type::warrior);
+    REQUIRE(attackLvl.second == 3);
+
+    exp.set_xp(Defs::character_class::fighter, 1000);
+    exp.set_xp(Defs::character_class::mage, 10000);
+
+    attackLvl = t.attack_as(exp);
+    REQUIRE(attackLvl.first == Defs::character_class_type::wizard);
+    REQUIRE(attackLvl.second == 4);
+}

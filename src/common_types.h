@@ -113,6 +113,9 @@ namespace Adndtk
         static constexpr double xp_bonus_10 = 0.1;
         static constexpr double xp_bonus_none = 0.0;
         static constexpr SavingScore base_saving_throw = 20;
+        static constexpr THAC0 base_thaco = 20;
+        static constexpr THAC0 critical_hit = 20;
+        static constexpr THAC0 critical_miss = 1;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
@@ -136,6 +139,8 @@ namespace Adndtk
             inline const ExperienceLevel& level(const Defs::character_class& cls) const { return _xps.at(cls).first; };
             inline const XP& xp(const Defs::character_class& cls) const { return _xps.at(cls).second; };
             void set(const Defs::character_class& cls, const ExperienceLevel& lvl, const XP& pts);
+            void set_xp(const Defs::character_class& cls, const XP& pts);
+            void set_level(const Defs::character_class& cls, const ExperienceLevel& lvl);
 
         private:
             std::map<Defs::character_class, std::pair<ExperienceLevel, XP>> _xps;

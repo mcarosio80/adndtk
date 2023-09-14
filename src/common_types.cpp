@@ -18,3 +18,25 @@ void Adndtk::CharacterExperience::set(const Defs::character_class& cls, const Ex
     }
     _xps[cls] = std::make_pair(lvl, pts);
 }
+
+void Adndtk::CharacterExperience::set_xp(const Defs::character_class& cls, const XP& pts)
+{
+    auto& advTable = Cyclopedia::get_instance().advancement_table();
+    auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls);
+    for (auto& c : classes)
+    {
+        auto lvl = advTable.get_level(c, pts);
+        set(c, lvl, pts);
+    }
+}
+
+void Adndtk::CharacterExperience::set_level(const Defs::character_class& cls, const ExperienceLevel& lvl)
+{
+    auto& advTable = Cyclopedia::get_instance().advancement_table();
+    auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls);
+    for (auto& c : classes)
+    {
+        auto pts = advTable.get_xp_for_level(c, lvl);
+        set(c, lvl, pts);
+    }
+}

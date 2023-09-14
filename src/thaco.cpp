@@ -3,41 +3,85 @@
 #include <dice.h>
 
 Adndtk::Thaco::Thaco()
-    : _clsType{}, _thacoScore{}, _thacoFactor{}
 {
 }
 
 Adndtk::Thaco::Thaco(const Defs::character_class_type& clsType)
-    : _clsType{clsType}, _thacoScore{}, _thacoFactor{}
 {
-    int typId = static_cast<int>(_clsType);
-    auto thacoInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_thaco, typId);
-    _thacoScore = thacoInfo[0].as<short>("score");
-    _thacoFactor = thacoInfo[0].as<short>("factor");
+    auto types = Cyclopedia::get_instance().split(clsType);
+
+    for (auto& t : types)
+    {
+        int typId = static_cast<int>(t);
+        auto thacoInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_thaco, typId);
+        auto thacoScore = thacoInfo[0].as<short>("score");
+        auto thacoFactor = thacoInfo[0].as<short>("factor");
+
+        _clsType.emplace(t);
+        _thacoScore[t] = thacoScore;
+        _thacoFactor[t] = thacoFactor;
+    }
 }
 
 Adndtk::Thaco::~Thaco()
 {
 }
 
-Adndtk::THAC0 Adndtk::Thaco::get(const Adndtk::ExperienceLevel& lvl) const
+Adndtk::THAC0 Adndtk::Thaco::get(const Defs::character_class_type& clsType, const Adndtk::ExperienceLevel& lvl) const
 {
-    return 20 - (std::div(lvl-1, _thacoScore).quot) * _thacoFactor; 
+    return Const::base_thaco - (std::div(lvl-1, _thacoScore.at(clsType)).quot) * _thacoFactor.at(clsType); 
 }
 
-Adndtk::Defs::attack_result Adndtk::Thaco::try_hit(const ExperienceLevel& lvl, const AC& ac, const short& bonusMalus/*=0*/) const
+Adndtk::THAC0 Adndtk::Thaco::get(const Adndtk::ExperienceLevel& lvl) const
+{
+    THAC0 bestThaco = Const::base_thaco;
+    for (auto& t : _clsType)
+    {
+        auto thaco = get(t, lvl);
+        if (thaco < bestThaco)
+        {
+            bestThaco = thaco;
+        }
+    }
+    return bestThaco;
+}
+
+std::pair<Adndtk::Defs::character_class_type, Adndtk::ExperienceLevel> Adndtk::Thaco::attack_as(const Adndtk::CharacterExperience& levels) const
+{
+    Defs::character_class selectedCls = levels.cbegin()->first;
+    Defs::character_class_type selectedType = Cyclopedia::get_instance().get_class_type(selectedCls);
+    ExperienceLevel selectedLevel = levels.level(selectedCls);
+
+    THAC0 bestThaco = Const::base_thaco;
+    for (auto it=levels.cbegin(); it!=levels.cend(); ++it)
+    {
+        auto type = Cyclopedia::get_instance().get_class_type(it->first);
+        auto thaco = get(type, it->second.first);
+        if (thaco < bestThaco)
+        {
+            bestThaco = thaco;
+            selectedType = type;
+            selectedLevel = levels.level(it->first);
+        }
+    }
+
+    return std::make_pair(selectedType, selectedLevel);
+}
+
+Adndtk::Defs::attack_result Adndtk::Thaco::try_hit(const Adndtk::CharacterExperience& levels, const AC& ac, const short& bonusMalus/*=0*/) const
 {
     Defs::attack_result res{Defs::attack_result::miss};
+    auto selectet = attack_as(levels);
 
     Die d20{Defs::die::d20};
     auto roll = d20;
-    auto thaco = get(lvl) - ac;
+    auto thaco = get(selectet.first, selectet.second) - ac;
 
-    if (roll == 1)
+    if (roll == Const::critical_miss)
     {
         res = Defs::attack_result::critical_miss;
     }
-    else if (roll == 20)
+    else if (roll == Const::critical_hit)
     {
         res = Defs::attack_result::critical_hit;
     }

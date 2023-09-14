@@ -4,6 +4,9 @@
 #include <defs.h>
 #include <common_types.h>
 
+#include <map>
+#include <set>
+
 namespace Adndtk
 {
     class Thaco
@@ -14,12 +17,15 @@ namespace Adndtk
         ~Thaco();
 
         THAC0 get(const ExperienceLevel& lvl) const;
-        Defs::attack_result try_hit(const Adndtk::ExperienceLevel& lvl, const AC& ac, const short& bonusMalus = 0) const;
-
+        Defs::attack_result try_hit(const Adndtk::CharacterExperience& levels, const AC& ac, const short& bonusMalus = 0) const;
+        std::pair<Defs::character_class_type, ExperienceLevel> attack_as(const CharacterExperience& levels) const;
+        
     private:
-        Defs::character_class_type  _clsType;
-        short                       _thacoScore;
-        short                       _thacoFactor;
+        std::set<Defs::character_class_type>                _clsType;
+        std::map<Defs::character_class_type, THAC0>         _thacoScore;
+        std::map<Defs::character_class_type, THAC0>         _thacoFactor;
+
+        THAC0 get(const Defs::character_class_type& clsType, const ExperienceLevel& lvl) const;
     };
 }
 
