@@ -732,4 +732,42 @@ TEST_CASE("[TC-SPLB.030] Bards access spell book pages according to their intell
     {
         REQUIRE(sb.total_slots(lvl) == 0);
     }
+
+    sb.set_caster_intelligence(11);
+
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    for (SpellLevel lvl=6; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_intelligence(13);
+
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 3);
+    for (SpellLevel lvl=7; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
+
+    sb.set_caster_intelligence(18);
+
+    REQUIRE(sb.total_slots(1) == 4);
+    REQUIRE(sb.total_slots(2) == 4);
+    REQUIRE(sb.total_slots(3) == 4);
+    REQUIRE(sb.total_slots(4) == 4);
+    REQUIRE(sb.total_slots(5) == 4);
+    REQUIRE(sb.total_slots(6) == 3);
+    for (SpellLevel lvl=7; lvl<=Const::spell_book_limit; ++lvl)
+    {
+        REQUIRE(sb.total_slots(lvl) == 0);
+    }
 }
