@@ -130,7 +130,17 @@ bool Adndtk::Cyclopedia::init()
         
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6 from bard_spell_progression where level = ?", Query::select_bard_spell_progression);
         
-        load_advancement_table();   
+        prepare_statement("select 'moral_alignment', moral_alignment, 'deity_id', deity_id from worshipper_alignment where moral_alignment = ?", Query::select_deities_by_moral_alignment);
+
+        prepare_statement("select 'class_id', class_id, 'alignment_id', alignment_id from moral_alignment_per_class where class_id = ?", Query::select_moral_alignments_by_class);
+        
+        prepare_statement("select 'moral_alignment', moral_alignment from worshipper_alignment where deity_id = ?", Query::select_worshipper_alignments);
+        
+        prepare_statement("select 'height_base_male', height_base_male, 'height_base_female', height_base_female, 'height_dice_number', height_dice_number, 'height_dice_faces', height_dice_faces, 'height_dice_number_2', height_dice_number_2, 'height_dice_faces_2', height_dice_faces_2, 'weight_base_male', weight_base_male, 'weight_base_female', weight_base_female, 'weight_dice_number', weight_dice_number, 'weight_dice_faces', weight_dice_faces, 'weight_dice_number_2', weight_dice_number_2, 'weight_dice_faces_2', weight_dice_faces_2, 'age_starting', age_starting, 'age_dice_number', age_dice_number, 'age_dice_faces', age_dice_faces, 'age_maximum', age_maximum, 'age_maximum_dice_number', age_maximum_dice_number, 'age_maximum_dice_faces', age_maximum_dice_faces, 'middle_age', middle_age, 'old_age', old_age, 'venerable_age', venerable_age from racial_stats where race_id = ?", Query::select_racial_stats);
+        
+        prepare_statement("select 'id', id, 'description', description, 'strength_modifier', strength_modifier, 'dexterity_modifier', dexterity_modifier, 'constitution_modifier', constitution_modifier, 'intelligence_modifier', intelligence_modifier, 'wisdom_modifier', wisdom_modifier, 'charisma_modifier', charisma_modifier from aging_effects", Query::select_aging_effects);
+        
+        load_advancement_table();
     }
     return ok;
 }
@@ -144,6 +154,11 @@ Adndtk::Cyclopedia::~Cyclopedia()
 {
     int ret = sqlite3_close_v2(_dbConn);
     check_state(ret);
+}
+
+bool Adndtk::Cyclopedia::is_multiclass(const Defs::character_class& cls)
+{
+    return split<Defs::character_class>(cls).size() > 1;
 }
 
 bool Adndtk::Cyclopedia::check_state(int return_code)
@@ -299,4 +314,107 @@ std::vector<Adndtk::Defs::character_class_type> Adndtk::Cyclopedia::get_class_ty
 {
     auto types = get_class_type(cls);
     return split<Defs::character_class_type>(types);
+}
+
+std::set<Adndtk::Defs::moral_alignment> Adndtk::Cyclopedia::available_moral_alignments_by_mythos(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId/*=std::nullopt*/) const
+{
+    if (cls != Defs::character_class::preist_of_specific_mythos || !deityId.has_value())
+    {
+        throw std::runtime_error("Unable to determine the available moral alignments");
+    }
+
+    auto deity = static_cast<int>(deityId.value());
+    auto rsWorshipperAligns = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_worshipper_alignments, deity);
+    
+    std::set<Adndtk::Defs::moral_alignment> psmAligns;
+    for (auto& a : rsWorshipperAligns)
+    {
+        auto alignId = static_cast<Defs::moral_alignment>(a.as<int>("moral_alignment"));
+        psmAligns.emplace(alignId);
+    }
+
+    return psmAligns;
+}
+
+std::set<Adndtk::Defs::moral_alignment> Adndtk::Cyclopedia::available_moral_alignments_by_single_class(const Defs::character_class& cls) const
+{
+    if (cls == Defs::character_class::preist_of_specific_mythos)
+    {
+        throw std::runtime_error("Unable to determine the available moral alignments");
+    }
+
+    std::set<Adndtk::Defs::moral_alignment> aligns;
+
+    auto clsId = static_cast<int>(cls);
+    auto rsAlign = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_moral_alignments_by_class, clsId);
+    for (auto& a : rsAlign)
+    {
+        auto alignId = static_cast<Defs::moral_alignment>(a.as<int>("alignment_id"));
+        aligns.emplace(alignId);
+    }
+    return aligns;
+}
+
+std::set<Adndtk::Defs::moral_alignment> Adndtk::Cyclopedia::available_moral_alignments(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId/*=std::nullopt*/) const
+{
+    if (cls == Defs::character_class::preist_of_specific_mythos)
+    {
+        return available_moral_alignments_by_mythos(cls, deityId);
+    }
+
+    if (!Cyclopedia::get_instance().is_multiclass(cls))
+    {
+        return available_moral_alignments_by_single_class(cls);
+    }
+
+    std::set<Adndtk::Defs::moral_alignment> alignments{
+        Defs::moral_alignment::lawful_good,
+        Defs::moral_alignment::lawful_neutral,
+        Defs::moral_alignment::lawful_evil,
+        Defs::moral_alignment::neutral_good,
+        Defs::moral_alignment::true_neutral,
+        Defs::moral_alignment::neutral_evil,
+        Defs::moral_alignment::chaotic_good,
+        Defs::moral_alignment::chaotic_neutral,
+        Defs::moral_alignment::chaotic_evil
+    };
+
+    auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls);
+    for (auto& c : classes)
+    {
+        auto availableAligns = available_moral_alignments_by_single_class(c);
+
+        for (auto alignId : {
+                        Defs::moral_alignment::lawful_good,
+                        Defs::moral_alignment::lawful_neutral,
+                        Defs::moral_alignment::lawful_evil,
+                        Defs::moral_alignment::neutral_good,
+                        Defs::moral_alignment::true_neutral,
+                        Defs::moral_alignment::neutral_evil,
+                        Defs::moral_alignment::chaotic_good,
+                        Defs::moral_alignment::chaotic_neutral,
+                        Defs::moral_alignment::chaotic_evil
+                    })
+        {
+            if (availableAligns.find(alignId) == availableAligns.end())
+            {
+                alignments.erase(alignId);
+            }
+        }
+    }
+    return alignments;
+}
+
+std::set<Adndtk::Defs::deity> Adndtk::Cyclopedia::available_deities(const Defs::moral_alignment& align) const
+{
+    std::set<Adndtk::Defs::deity> deities;
+    auto alignId = static_cast<int>(align);
+    auto rsDeities = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_deities_by_moral_alignment, alignId);
+    for (auto& d : rsDeities)
+    {
+        auto deityId = static_cast<Defs::deity>(d.as<int>("deity_id"));
+        deities.emplace(deityId);
+    }
+        
+    return deities;
 }

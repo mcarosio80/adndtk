@@ -73,7 +73,7 @@ void demo_character()
     OptionalRules::get_instance().option<int>(Option::skills_generation_method) = static_cast<int>(SkillGenerationMethod::best_of_four);
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
-    Character chr{chrName, chrClass, chrRace, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male};
 
     chr.gain_xp(1900);
     print_character(chr);

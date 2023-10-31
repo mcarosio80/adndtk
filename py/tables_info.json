@@ -45,7 +45,7 @@
         "value": "id"
     },
     {
-        "table" : "AGEING_EFFECTS",
+        "table" : "AGING_EFFECTS",
         "key" : "description",
         "value": "id"
     },

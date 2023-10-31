@@ -21,6 +21,7 @@ add_library(adndtk STATIC defs.h common_types.cpp common_types.h
                         spell_book.cpp spell_book.h
                         holy_symbol.cpp holy_symbol.h
                         encumbrance.cpp encumbrance.h
+                        racial_stats.cpp racial_stats.h
                         character.cpp character.h
 )
 

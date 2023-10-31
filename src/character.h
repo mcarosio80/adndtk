@@ -28,7 +28,8 @@ namespace Adndtk
     {
     public:
         Character(const std::string& name, const Defs::character_class& cls, const Defs::race& raceId,
-            const Defs::sex& sexId, const std::optional<Defs::deity>& deityId = std::nullopt);
+            const Defs::moral_alignment& align, const Defs::sex& sexId,
+            const std::optional<Defs::deity>& deityId = std::nullopt);
 
         const std::string& name() const { return _name; };
         inline const Defs::character_class& get_class() const { return _cls; };
@@ -90,6 +91,7 @@ namespace Adndtk
         Defs::character_class                   _cls;
         Defs::race                              _race;
         Defs::sex                               _sex;
+        Defs::moral_alignment                   _align;
         std::optional<Defs::deity>              _deity;
         std::map<Defs::skill, SkillValue>       _skills;
         Experience                              _xp;
@@ -110,6 +112,9 @@ namespace Adndtk
 
         void on_change_hp(const HPChangeType &chgType, const HP &prevHP, const XP &newHP);
         void notify_all(const SkillValue& precValue, const SkillValue& currValue);
+
+        bool verify_moral_alignment() const;
+        bool verify_worshipped_deity() const;
     };
 }
 

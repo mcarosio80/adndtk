@@ -74,7 +74,12 @@ namespace Adndtk
         select_starting_money,
         select_primary_skills,
         select_wizard_spells_by_level,
-        select_bard_spell_progression
+        select_bard_spell_progression,
+        select_deities_by_moral_alignment,
+        select_moral_alignments_by_class,
+        select_worshipper_alignments,
+        select_racial_stats,
+        select_aging_effects,
     };
 
     enum class XPChangeType
@@ -125,6 +130,7 @@ namespace Adndtk
     using OnHPChange = std::function<void(const HPChangeType &chgType, const HP &prevHP, const XP &newHP)>;
 
     using OnSkillValueChange = std::function<void(const SkillValue& prevValue, const SkillValue& newValue)>;
+    using OnSkillValueModified = std::function<void(const Defs::skill& skl, const short& sklModifier)>;
 
     class CharacterExperience
     {

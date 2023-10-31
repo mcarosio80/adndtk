@@ -7,13 +7,22 @@
 
 
 Adndtk::Character::Character(const std::string& name, const Defs::character_class& cls,
-                const Defs::race& raceId, const Defs::sex& sexId,
+                const Defs::race& raceId, const Defs::moral_alignment& align, const Defs::sex& sexId,
                 const std::optional<Defs::deity>& deityId/*=std::nullopt*/)
-    : _name{name}, _cls{cls}, _race{raceId}, _sex{sexId}, _deity{deityId},
+    : _name{name}, _cls{cls}, _race{raceId}, _align{align}, _sex{sexId}, _deity{deityId},
     _xp{cls, raceId}, _hp{cls}, _thaco{Cyclopedia::get_instance().get_class_type(cls)},
     _money{Cyclopedia::get_instance().get_class_type(cls)}, _inventory{},
     _forwardEvent{true}, _spellBook{cls, raceId}, _holySymbol{cls, deityId}
 {
+    if (!verify_moral_alignment())
+    {
+        throw std::runtime_error("Moral alignment is not compatible with the character class chosen");
+    }
+    if (!verify_worshipped_deity())
+    {
+        throw std::runtime_error("Worshipped deity is not compatible with the character class chosen");
+    }
+
     _hp += [&] (const HPChangeType &chgType, const HP &prevHP, const XP &newHP) -> void
     {
         this->on_change_hp(chgType, prevHP, newHP);
@@ -380,4 +389,29 @@ const Adndtk::SavingScore& Adndtk::Character::save_score(const Defs::saving_thro
 Adndtk::Defs::attack_result Adndtk::Character::try_hit(const AC& ac, const short& bonusMalus/*=0*/) const
 {
     return _thaco.try_hit(experience(), ac, bonusMalus);
+}
+
+bool Adndtk::Character::verify_moral_alignment() const
+{
+    auto aligns = Cyclopedia::get_instance().available_moral_alignments(_cls, _deity);
+    return aligns.find(_align) != aligns.end();
+}
+
+bool Adndtk::Character::verify_worshipped_deity() const
+{
+    if (!OptionalRules::get_instance().option<bool>(Option::check_for_deity_selection))
+    {
+        return true;
+    }
+    
+    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
+    {
+        if (!_deity.has_value())
+        {
+            throw std::runtime_error("This character must worship a deity");
+        }
+        auto deities = Cyclopedia::get_instance().available_deities(_align);
+        return deities.find(_deity.value()) != deities.end();
+    }
+    return true;
 }
