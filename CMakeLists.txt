@@ -54,13 +54,34 @@ set(DB_IDX_FILE ${SQL_DIR}/indexes.sql)
 file(REMOVE ${DB_FILE})
 
 message("Configuring database generation: ${DB_FILE}")
-add_custom_command(
-    OUTPUT ${DB_FILE}
-    DEPENDS ${DB_SCHEMA_FILE} ${DB_DATA_FILE} ${DB_IDX_FILE}
-    COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE}
-    COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_DATA_FILE}"
-    COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
-)
+
+# Creation of SQLite database
+message("Creation of SQLite database")
+execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
+                INPUT_FILE ${DB_SCHEMA_FILE}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE SQLITE_BUILD_DB)
+if(NOT SQLITE_BUILD_DB EQUAL "0")
+    message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE} failed with ${SQLITE_BUILD_DB}")
+endif()
+
+# Filling data into SQLite database
+message("Filling data into SQLite database")
+execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_DATA_FILE}"
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE SQLITE_FILL_DB)
+if(NOT SQLITE_FILL_DB EQUAL "0")
+    message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} '.read ${DB_DATA_FILE}' failed with ${SQLITE_FILL_DB}")
+endif()
+
+# Creating index on SQLite database
+message("Creating index on SQLite database")
+execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE SQLITE_CREATE_INDEX)
+if(NOT SQLITE_CREATE_INDEX EQUAL "0")
+    message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} '.read ${DB_IDX_FILE}' failed with ${SQLITE_CREATE_INDEX}")
+endif()
 
 message("Configuring library header generation: ${SRC_DIR}/defs.h")
 add_custom_command(
