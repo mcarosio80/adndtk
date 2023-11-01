@@ -2,7 +2,6 @@
 #define RACIAL_STATS_H
 
 #include <defs.h>
-#include <cstdint>
 #include <tuple>
 #include <common_types.h>
 
@@ -17,12 +16,12 @@ namespace Adndtk
 
         Defs::aging_effects get_age_range() const;
 
-        inline const uint16_t& current_age() const { return _currentAge; };
-        inline const uint16_t& height() const { return _height; };
-        inline const uint16_t& weight() const { return _weight; };
+        inline const short& current_age() const { return _currentAge; };
+        inline const short& height() const { return _height; };
+        inline const short& weight() const { return _weight; };
 
-        bool grow_old(const uint16_t& years);
-        bool rejuvenate(const uint16_t& years);
+        bool grow_old(const short& years);
+        bool rejuvenate(const short& years);
 
         RacialStats& operator+=(const OnSkillValueModified& cbk)
         {
@@ -33,16 +32,16 @@ namespace Adndtk
     private:
         Defs::race              _race;
         Defs::sex               _sex;
-        uint16_t	            _currentAge;
+        short	            _currentAge;
 
-        uint16_t                _height;
-        uint16_t                _weight;
-        uint16_t                _middleAge;
-	    uint16_t                _oldAge;
-	    uint16_t                _venerableAge;
+        short                _height;
+        short                _weight;
+        short                _middleAge;
+	    short                _oldAge;
+	    short                _venerableAge;
 
-        uint16_t                _startingAge;
-	    uint16_t                _maxAge;
+        short                _startingAge;
+	    short                _maxAge;
 
         std::vector<OnSkillValueModified>
                                 _sklChgCbk;

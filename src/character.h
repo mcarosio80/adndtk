@@ -21,6 +21,7 @@
 #include <holy_symbol.h>
 #include <saving_throws.h>
 #include <thaco.h>
+#include <racial_stats.h>
 
 namespace Adndtk
 {
@@ -105,6 +106,7 @@ namespace Adndtk
         SpellBook                               _spellBook;
         HolySymbol                              _holySymbol;
         bool                                    _forwardEvent;
+        RacialStats                             _racialStats;
 
         void on_change_xp(const Defs::character_class &cls, const XPChangeType &chgType,
                                           const XP &prevXP, const ExperienceLevel &prevLvl,

@@ -17,22 +17,22 @@ Adndtk::RacialStats::RacialStats(const Defs::race& race, const Defs::sex& sex)
 	auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_racial_stats, raceId);
 	auto& stats = rs[0];
 
-	auto baseHeightMale = stats.as<uint16_t>("height_base_male");
-	auto baseHeightFemale = stats.as<uint16_t>("height_base_female");
-	auto baseHeightDiceNum1 = stats.as<uint16_t>("height_dice_number");
-	auto baseHeightDiceFaces1 = stats.as<uint16_t>("height_dice_faces");
-	auto baseHeightDiceNum2 = stats.as<uint16_t>("height_dice_number_2");
-	auto baseHeightDiceFaces2 = stats.as<uint16_t>("height_dice_faces_2");
+	auto baseHeightMale = stats.as<short>("height_base_male");
+	auto baseHeightFemale = stats.as<short>("height_base_female");
+	auto baseHeightDiceNum1 = stats.as<short>("height_dice_number");
+	auto baseHeightDiceFaces1 = stats.as<short>("height_dice_faces");
+	auto baseHeightDiceNum2 = stats.as<short>("height_dice_number_2");
+	auto baseHeightDiceFaces2 = stats.as<short>("height_dice_faces_2");
 	_height = Die::roll(baseHeightDiceNum1, baseHeightDiceFaces1, 0)
 					+ Die::roll(baseHeightDiceNum2, baseHeightDiceFaces2, 0)
 					+ (_sex == Defs::sex::male) ? baseHeightMale : baseHeightFemale;
 
-	auto baseWeightMale = stats.as<uint16_t>("weight_base_male");
-	auto baseWeightFemale = stats.as<uint16_t>("weight_base_female");
-	auto baseWeightDiceNum1 = stats.as<uint16_t>("weight_dice_number");
-	auto baseWeightDiceFaces1 = stats.as<uint16_t>("weight_dice_faces");
-	auto baseWeightDiceNum2 = stats.as<uint16_t>("weight_dice_number_2");
-	auto baseWeightDiceFaces2 = stats.as<uint16_t>("weight_dice_faces_2");
+	auto baseWeightMale = stats.as<short>("weight_base_male");
+	auto baseWeightFemale = stats.as<short>("weight_base_female");
+	auto baseWeightDiceNum1 = stats.as<short>("weight_dice_number");
+	auto baseWeightDiceFaces1 = stats.as<short>("weight_dice_faces");
+	auto baseWeightDiceNum2 = stats.as<short>("weight_dice_number_2");
+	auto baseWeightDiceFaces2 = stats.as<short>("weight_dice_faces_2");
 	_weight = Die::roll(baseWeightDiceNum1, baseWeightDiceFaces1, 0)
 					+ Die::roll(baseWeightDiceNum2, baseWeightDiceFaces2, 0)
 					+ (_sex == Defs::sex::male) ? baseWeightMale : baseWeightFemale;
@@ -47,16 +47,16 @@ Adndtk::RacialStats::RacialStats(const Defs::race& race, const Defs::sex& sex)
 	auto maxAgeDiceFaces = stats.as<int>("age_maximum_dice_faces");
 	_maxAge = Die::roll(maxAgeDiceNum, maxAgeDiceFaces, maxAge);
 
-	_middleAge = stats.as<uint16_t>("middle_age");
-	_oldAge = stats.as<uint16_t>("old_age");
-	_venerableAge = stats.as<uint16_t>("venerable_age");
+	_middleAge = stats.as<short>("middle_age");
+	_oldAge = stats.as<short>("old_age");
+	_venerableAge = stats.as<short>("venerable_age");
 }
 
 Adndtk::RacialStats::~RacialStats()
 {
 }
 
-bool Adndtk::RacialStats::grow_old(const uint16_t& years)
+bool Adndtk::RacialStats::grow_old(const short& years)
 {
 	if (_currentAge + years > _maxAge)
 	{
@@ -84,7 +84,7 @@ bool Adndtk::RacialStats::grow_old(const uint16_t& years)
 	return true;
 }
 
-bool Adndtk::RacialStats::rejuvenate(const uint16_t& years)
+bool Adndtk::RacialStats::rejuvenate(const short& years)
 {
 	if (_currentAge - years < _startingAge)
 	{
