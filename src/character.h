@@ -45,6 +45,7 @@ namespace Adndtk
         const SkillValue& intelligence() const { return _skills.at(Defs::skill::intelligence); };
         const SkillValue& wisdom() const { return _skills.at(Defs::skill::wisdom); };
         const SkillValue& charisma() const { return _skills.at(Defs::skill::charisma); };
+        SkillValue& skill(const Defs::skill& skl) { return _skills[skl]; };
         void change_skill(const SkillValue& newValue);
 
         // Experience
@@ -86,6 +87,15 @@ namespace Adndtk
         // Combat
         Defs::attack_result try_hit(const AC& ac, const short& bonusMalus = 0) const;
 
+        // Racial stats
+        inline const short& age() const { return _racialStats.current_age(); };
+        inline bool grow_old(const short& years) { return _racialStats.grow_old(years); };
+        inline bool rejuvenate(const short& years) { return _racialStats.rejuvenate(years); };
+        inline Defs::aging_effects get_age_range() const { return _racialStats.get_age_range(); };
+
+        inline const short& height() const { return _racialStats.height(); };
+        inline const short& weight() const { return _racialStats.weight(); };
+        inline double total_weight() const { return weight() + _inventory.total_weight(); };
 
     private:
         std::string                             _name;

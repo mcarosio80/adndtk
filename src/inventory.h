@@ -20,7 +20,7 @@ namespace Adndtk
 
         short count_items(const Defs::equipment& id);
         bool has_item(const Defs::equipment& id);
-        double total_weight();
+        double total_weight() const;
         std::optional<Adndtk::Defs::body_slot> find(const Defs::equipment& id);
         bool move(const Defs::equipment& id, const Defs::body_slot& slot, short quantity = 1);
 

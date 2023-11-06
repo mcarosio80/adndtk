@@ -16,7 +16,8 @@ namespace Adndtk
         skills_generation_method,
         max_starting_money,
         enable_bonus_xp_for_high_prime_requisites,
-        check_for_deity_selection
+        check_for_deity_selection,
+        apply_aging_effect
     };
 
     class OptionalRules

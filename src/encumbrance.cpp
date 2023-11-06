@@ -60,7 +60,7 @@ short Adndtk::Encumbrance::movement_factor(const SkillValue& strengthValue, cons
     }
 
     auto movPair = mapWeightToMove.lower_bound(weightAllowed)->second;
-    auto modifMovFactor = (baseMovFactor == Adndtk::Encumbrance::_shortPeopleBaseMovementFactor) ? std::get<0>(movPair) : std::get<1>(movPair);
+    auto modifMovFactor = (baseMovFactor == Const::short_people_base_movement_factor) ? std::get<0>(movPair) : std::get<1>(movPair);
 
     return modifMovFactor;
 }

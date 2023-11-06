@@ -35,6 +35,10 @@ void print_character(Character& chr)
     std::cout << "--------------------------------------\n\n";
 
     std::cout << "Name:\t" << chr.name() << "\n";
+    std::cout << "\tAge:\t" << chr.age() << "\n";
+    std::cout << "\tHeight:\t" << chr.height() << " cm\n";
+    std::cout << "\tWeight:\t" << chr.weight() << " Kg\n";
+    std::cout << "\tGross weight:\t" << chr.total_weight() << " Kg\n";
 
     auto strScore = chr.strength();
     auto dexScore = chr.dexterity();

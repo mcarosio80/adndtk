@@ -25,10 +25,6 @@ namespace Adndtk
         void load_base_movement_factors();
         void load_modified_movement_rate();
 
-        static constexpr double             _clothesWeight = 2.5;
-        static constexpr short              _highPeopleBaseMovementFactor = 12;
-        static constexpr short              _shortPeopleBaseMovementFactor = 6;
-
 		static bool                         _initialised;
         std::map<SkillValue, std::map<double, std::pair<short, short>>>
                                             _movFactors;

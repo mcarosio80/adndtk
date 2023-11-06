@@ -34,7 +34,7 @@ TEST_CASE("[TC-CHAR.002] Paladin's skills are generated according to the class b
     Defs::character_class chrClass{Defs::character_class::paladin};
     Defs::race chrRace{Defs::race::human};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr};
 
     REQUIRE(chr.strength() >= 12);
     REQUIRE(chr.strength() < 19);
@@ -615,7 +615,7 @@ TEST_CASE("[TC-CHAR.013] When levels exceed the title level, a fixed amount of H
     Defs::race chrRace{Defs::race::human};
     OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr};
     chr.change_skill(SkillValue(Defs::skill::constitution, 13));
 
     chr.gain_level(11);
@@ -644,7 +644,7 @@ TEST_CASE("[TC-CHAR.014] Single-class characters with high prime requisites have
     Defs::character_class chrClass{Defs::character_class::paladin};
     Defs::race chrRace{Defs::race::human};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr};
     chr.change_skill(SkillValue(Defs::skill::strength, 17));
 
     XP pts = 2200;
@@ -660,7 +660,7 @@ TEST_CASE("[TC-CHAR.014] Multi-class characters with high prime requisites have 
     Defs::character_class chrClass{Defs::character_class::fighter_cleric};
     Defs::race chrRace{Defs::race::half_elf};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr};
     chr.change_skill(SkillValue(Defs::skill::strength, 15));
     chr.change_skill(SkillValue(Defs::skill::wisdom, 18));
 
@@ -682,7 +682,7 @@ TEST_CASE("[TC-CHAR.015] Multi-class characters with high prime requisites have 
     Defs::character_class chrClass{Defs::character_class::fighter_druid};
     Defs::race chrRace{Defs::race::half_elf};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male, Defs::deity::oghma};
     chr.change_skill(SkillValue(Defs::skill::strength, 15));
     chr.change_skill(SkillValue(Defs::skill::wisdom, 17));
     chr.change_skill(SkillValue(Defs::skill::charisma, 16));
@@ -705,7 +705,7 @@ TEST_CASE("[TC-CHAR.016] Multi-class characters with high prime requisites have 
     Defs::character_class chrClass{Defs::character_class::fighter_druid};
     Defs::race chrRace{Defs::race::half_elf};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::neutral_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::neutral_good, Defs::sex::male, Defs::deity::selune};
     chr.change_skill(SkillValue(Defs::skill::strength, 15));
     chr.change_skill(SkillValue(Defs::skill::wisdom, 17));
     chr.change_skill(SkillValue(Defs::skill::charisma, 15));
@@ -728,7 +728,7 @@ TEST_CASE("[TC-CHAR.017] Multi-class characters with high prime requisites have 
     Defs::character_class chrClass{Defs::character_class::fighter_druid};
     Defs::race chrRace{Defs::race::half_elf};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male, Defs::deity::oghma};
     chr.change_skill(SkillValue(Defs::skill::strength, 17));
     chr.change_skill(SkillValue(Defs::skill::wisdom, 15));
     chr.change_skill(SkillValue(Defs::skill::charisma, 17));
@@ -751,7 +751,7 @@ TEST_CASE("[TC-CHAR.018] Multi-class characters with high prime requisites have 
     Defs::character_class chrClass{Defs::character_class::fighter_druid};
     Defs::race chrRace{Defs::race::half_elf};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::neutral_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::neutral_good, Defs::sex::male, Defs::deity::selune};
     chr.change_skill(SkillValue(Defs::skill::strength, 18, 34));
     chr.change_skill(SkillValue(Defs::skill::wisdom, 16));
     chr.change_skill(SkillValue(Defs::skill::charisma, 17));
@@ -774,7 +774,7 @@ TEST_CASE("[TC-CHAR.019] Experience advencements are reflected on the spells ava
     Defs::character_class chrClass{Defs::character_class::mage_cleric};
     Defs::race chrRace{Defs::race::half_elf};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male};
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::ilmater};
     chr.change_skill(SkillValue(Defs::skill::intelligence, 13));
     chr.change_skill(SkillValue(Defs::skill::wisdom, 12));
 
@@ -796,7 +796,7 @@ TEST_CASE("[TC-CHAR.020] Non-magic users do not have spell book", "[character]" 
     Defs::character_class chrClass{Defs::character_class::ranger};
     Defs::race chrRace{Defs::race::human};
 
-    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male}; 
+    Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr}; 
     REQUIRE_THROWS_AS(chr.spell_book(), std::runtime_error);
 }
 
@@ -816,8 +816,8 @@ TEST_CASE("[TC-CHAR.022] Characters can be queried for their ability to cast spe
     Defs::moral_alignment align{Defs::moral_alignment::chaotic_good};
 
     REQUIRE_FALSE(Character("F", Defs::character_class::fighter, chrRace, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("P", Defs::character_class::paladin, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("R", Defs::character_class::ranger, chrRace, align, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("P", Defs::character_class::paladin, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr).is_spell_caster());
+    REQUIRE(Character("R", Defs::character_class::ranger, chrRace, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
     REQUIRE(Character("M", Defs::character_class::mage, chrRace, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("M", Defs::character_class::abjurer, chrRace, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("MA", Defs::character_class::conjurer, chrRace, align, Defs::sex::male).is_spell_caster());
@@ -827,27 +827,27 @@ TEST_CASE("[TC-CHAR.022] Characters can be queried for their ability to cast spe
     REQUIRE(Character("MK", Defs::character_class::invoker, chrRace, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("MN", Defs::character_class::necromancer, chrRace, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("MT", Defs::character_class::transmuter, chrRace, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("C", Defs::character_class::cleric, chrRace, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("D", Defs::character_class::druid, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("C", Defs::character_class::cleric, chrRace, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
+    REQUIRE(Character("D", Defs::character_class::druid, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male, Defs::deity::oghma).is_spell_caster());
     REQUIRE(Character("PSM", Defs::character_class::preist_of_specific_mythos, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr).is_spell_caster());
     REQUIRE_FALSE(Character("T", Defs::character_class::thief, chrRace, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("B", Defs::character_class::bard, chrRace, align, Defs::sex::male).is_spell_caster());
 
     REQUIRE(Character("FM", Defs::character_class::fighter_mage, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("FI", Defs::character_class::fighter_illusionist, Defs::race::gnome, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("FC", Defs::character_class::fighter_cleric, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("CR", Defs::character_class::cleric_ranger, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("MC", Defs::character_class::mage_cleric, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("FMC", Defs::character_class::fighter_mage_cleric, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("CI", Defs::character_class::cleric_illusionist, Defs::race::gnome, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("FD", Defs::character_class::fighter_druid, Defs::race::half_elf, Defs::moral_alignment::neutral_evil, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("MD", Defs::character_class::mage_druid, Defs::race::half_elf, Defs::moral_alignment::neutral_evil, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("FMD", Defs::character_class::fighter_mage_druid, Defs::race::half_elf, Defs::moral_alignment::neutral_evil, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("FC", Defs::character_class::fighter_cleric, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
+    REQUIRE(Character("CR", Defs::character_class::cleric_ranger, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
+    REQUIRE(Character("MC", Defs::character_class::mage_cleric, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
+    REQUIRE(Character("FMC", Defs::character_class::fighter_mage_cleric, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
+    REQUIRE(Character("CI", Defs::character_class::cleric_illusionist, Defs::race::gnome, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
+    REQUIRE(Character("FD", Defs::character_class::fighter_druid, Defs::race::half_elf, Defs::moral_alignment::neutral_evil, Defs::sex::male, Defs::deity::lolth).is_spell_caster());
+    REQUIRE(Character("MD", Defs::character_class::mage_druid, Defs::race::half_elf, Defs::moral_alignment::neutral_evil, Defs::sex::male, Defs::deity::lolth).is_spell_caster());
+    REQUIRE(Character("FMD", Defs::character_class::fighter_mage_druid, Defs::race::half_elf, Defs::moral_alignment::neutral_evil, Defs::sex::male, Defs::deity::lolth).is_spell_caster());
     REQUIRE_FALSE(Character("FT", Defs::character_class::fighter_thief, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("MT", Defs::character_class::mage_thief, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("FMT", Defs::character_class::fighter_mage_thief, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
     REQUIRE(Character("IT", Defs::character_class::illusionist_thief, Defs::race::gnome, align, Defs::sex::male).is_spell_caster());
-    REQUIRE(Character("CT", Defs::character_class::cleric_thief, Defs::race::half_elf, align, Defs::sex::male).is_spell_caster());
+    REQUIRE(Character("CT", Defs::character_class::cleric_thief, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::tempus).is_spell_caster());
 }
 
 TEST_CASE("[TC-CHAR.023] Only magic user characters can use the spell book", "[character]" )
@@ -855,13 +855,13 @@ TEST_CASE("[TC-CHAR.023] Only magic user characters can use the spell book", "[c
     Defs::race chrRace{Defs::race::human};
     Defs::moral_alignment align{Defs::moral_alignment::neutral_good};
 
-    Character elfRanger{"ER", Defs::character_class::ranger, Defs::race::elf, align, Defs::sex::male};
-    Character dwarfCleric{"DC", Defs::character_class::cleric, Defs::race::dwarf, align, Defs::sex::male};
+    Character elfRanger{"ER", Defs::character_class::ranger, Defs::race::elf, align, Defs::sex::male, Defs::deity::lathander};
+    Character dwarfCleric{"DC", Defs::character_class::cleric, Defs::race::dwarf, align, Defs::sex::male, Defs::deity::lathander};
     Character halflingThief{"HT", Defs::character_class::thief, Defs::race::halfling, align, Defs::sex::male};
     Character gnomeFighter{"GF", Defs::character_class::fighter, Defs::race::gnome, align, Defs::sex::male};
-    Character humanPaladin{"HP", Defs::character_class::paladin, Defs::race::human, Defs::moral_alignment::lawful_good, Defs::sex::male};
-    Character halfElfFighterCleric{"HEFC", Defs::character_class::fighter_cleric, Defs::race::half_elf, align, Defs::sex::male};
-    Character halfElfDruid{"HED", Defs::character_class::druid, Defs::race::half_elf, align, Defs::sex::male};
+    Character humanPaladin{"HP", Defs::character_class::paladin, Defs::race::human, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr};
+    Character halfElfFighterCleric{"HEFC", Defs::character_class::fighter_cleric, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::lathander};
+    Character halfElfDruid{"HED", Defs::character_class::druid, Defs::race::half_elf, align, Defs::sex::male, Defs::deity::helm};
 
     std::vector<Character> chars { elfRanger, dwarfCleric, halflingThief, gnomeFighter, humanPaladin,
                 halfElfFighterCleric, halfElfDruid };
@@ -1110,15 +1110,26 @@ TEST_CASE("[TC-CHAR.035] Deities can be chosen according to the character's mora
     REQUIRE(deitiesCE.find(Defs::deity::corellon) != deitiesCE.end());
 }
 
-TEST_CASE("[TC-CHAR.036] Deity selection is mandatory for Priests of specific mythos", "[character]" )
+TEST_CASE("[TC-CHAR.036] Deity selection is mandatory for priest spells casters", "[character]" )
 {
-    auto cls = Defs::character_class::preist_of_specific_mythos;
     auto race = Defs::race::human;
     auto align = Defs::moral_alignment::lawful_good;
     auto sex = Defs::sex::male;
 
-    REQUIRE_NOTHROW(Character("PSM", cls, race, align, sex, Defs::deity::tyr));
-    REQUIRE_THROWS_AS(Character("PSM", cls, race, align, sex), std::runtime_error);
+    REQUIRE_NOTHROW(Character("PSM", Defs::character_class::preist_of_specific_mythos, race, align, sex, Defs::deity::tyr));
+    REQUIRE_THROWS_AS(Character("PSM", Defs::character_class::preist_of_specific_mythos, race, align, sex), std::runtime_error);
+    
+    REQUIRE_NOTHROW(Character("C", Defs::character_class::cleric, race, align, sex, Defs::deity::tyr));
+    REQUIRE_THROWS_AS(Character("C", Defs::character_class::cleric, race, align, sex), std::runtime_error);
+    
+    REQUIRE_NOTHROW(Character("D", Defs::character_class::druid, race, Defs::moral_alignment::true_neutral, sex, Defs::deity::selune));
+    REQUIRE_THROWS_AS(Character("D", Defs::character_class::druid, race, Defs::moral_alignment::true_neutral, sex), std::runtime_error);
+    
+    REQUIRE_NOTHROW(Character("P", Defs::character_class::paladin, race, align, sex, Defs::deity::tyr));
+    REQUIRE_THROWS_AS(Character("P", Defs::character_class::paladin, race, align, sex), std::runtime_error);
+    
+    REQUIRE_NOTHROW(Character("R", Defs::character_class::ranger, race, align, sex, Defs::deity::tyr));
+    REQUIRE_THROWS_AS(Character("R", Defs::character_class::ranger, race, align, sex), std::runtime_error);
 }
 
 TEST_CASE("[TC-CHAR.037] Deity selection for Priests of specific mythos must agree with the character's moral alignment", "[character]" )
@@ -1130,4 +1141,209 @@ TEST_CASE("[TC-CHAR.037] Deity selection for Priests of specific mythos must agr
 
     REQUIRE_NOTHROW(Character("PSM", cls, race, align, sex, Defs::deity::tyr));
     REQUIRE_THROWS_AS(Character("PSM", cls, race, align, sex, Defs::deity::bane), std::runtime_error);
+}
+
+TEST_CASE("[TC-CHAR.038] Aging affect skill values", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+    auto currentAge = chr.age();
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::young);
+    REQUIRE(chr.age() == currentAge);
+
+    auto strVal = chr.skill(Defs::skill::strength);
+    auto conVal = chr.skill(Defs::skill::constitution);
+    auto intVal = chr.skill(Defs::skill::intelligence);
+    auto wisVal = chr.skill(Defs::skill::wisdom);
+    auto years = 45 - currentAge + 1;
+    chr.grow_old(years);
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::middle_age);
+    REQUIRE(chr.age() == 46);
+
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal - 1);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal - 1);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal + 1);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal + 1);
+}
+
+TEST_CASE("[TC-CHAR.039] Rejuvenating restore previous skill values", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+
+    chr.grow_old(40);
+    auto strValMiddleAged = chr.skill(Defs::skill::strength);
+    auto conValMiddleAged = chr.skill(Defs::skill::constitution);
+    auto intValMiddleAged = chr.skill(Defs::skill::intelligence);
+    auto wisValMiddleAged = chr.skill(Defs::skill::wisdom);
+
+    chr.rejuvenate(40);
+    REQUIRE(chr.skill(Defs::skill::strength) == strValMiddleAged + 1);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conValMiddleAged + 1);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intValMiddleAged - 1);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisValMiddleAged - 1);
+}
+
+TEST_CASE("[TC-CHAR.040] Growing very old in one shot effects cumulate", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+    auto currentAge = chr.age();
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::young);
+    REQUIRE(chr.age() == currentAge);
+
+    auto strVal = chr.skill(Defs::skill::strength);
+    auto dexVal = chr.skill(Defs::skill::dexterity);
+    auto conVal = chr.skill(Defs::skill::constitution);
+    auto intVal = chr.skill(Defs::skill::intelligence);
+    auto wisVal = chr.skill(Defs::skill::wisdom);
+    auto years = 60 - currentAge + 1;
+    chr.grow_old(years);
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::old_age);
+    REQUIRE(chr.age() == 61);
+
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal - 3);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal - 2);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal - 2);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal + 1);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal + 2);
+}
+
+TEST_CASE("[TC-CHAR.041] Becoming venerable in one shot effects cumulate", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+    auto currentAge = chr.age();
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::young);
+    REQUIRE(chr.age() == currentAge);
+
+    auto strVal = chr.skill(Defs::skill::strength);
+    auto dexVal = chr.skill(Defs::skill::dexterity);
+    auto conVal = chr.skill(Defs::skill::constitution);
+    auto intVal = chr.skill(Defs::skill::intelligence);
+    auto wisVal = chr.skill(Defs::skill::wisdom);
+    auto years = 90 - currentAge + 1;
+    chr.grow_old(years);
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::venerable);
+    REQUIRE(chr.age() == 91);
+
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal - 4);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal - 3);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal - 3);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal + 2);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal + 3);
+}
+
+TEST_CASE("[TC-CHAR.042] Rejuvenate from venerable in one shot regains the skills", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+
+    chr.grow_old(75);
+    auto strVal = chr.skill(Defs::skill::strength);
+    auto dexVal = chr.skill(Defs::skill::dexterity);
+    auto conVal = chr.skill(Defs::skill::constitution);
+    auto intVal = chr.skill(Defs::skill::intelligence);
+    auto wisVal = chr.skill(Defs::skill::wisdom);
+
+    chr.rejuvenate(75);
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal + 4);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal + 3);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal + 3);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal - 2);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal - 3);
+}
+
+TEST_CASE("[TC-CHAR.043] Rejuvenate from venerable in steps regains the skills gradually", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+
+    auto currentAge = chr.age();
+    auto years = 90 - currentAge + 1;
+    chr.grow_old(years);
+    
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::venerable);
+    auto strVal = chr.skill(Defs::skill::strength);
+    auto dexVal = chr.skill(Defs::skill::dexterity);
+    auto conVal = chr.skill(Defs::skill::constitution);
+    auto intVal = chr.skill(Defs::skill::intelligence);
+    auto wisVal = chr.skill(Defs::skill::wisdom);
+
+    currentAge = chr.age();
+    years = currentAge - 60 - 1;
+    chr.rejuvenate(years);
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::old_age);
+    REQUIRE(chr.age() == 61);
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal + 1);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal + 1);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal + 1);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal - 1);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal - 1);
+
+    strVal = chr.skill(Defs::skill::strength);
+    dexVal = chr.skill(Defs::skill::dexterity);
+    conVal = chr.skill(Defs::skill::constitution);
+    intVal = chr.skill(Defs::skill::intelligence);
+    wisVal = chr.skill(Defs::skill::wisdom);
+
+    currentAge = chr.age();
+    years = currentAge - 45 - 1;
+    chr.rejuvenate(years);
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::middle_age);
+    REQUIRE(chr.age() == 46);
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal + 2);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal + 2);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal + 1);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal - 1);
+
+    strVal = chr.skill(Defs::skill::strength);
+    dexVal = chr.skill(Defs::skill::dexterity);
+    conVal = chr.skill(Defs::skill::constitution);
+    intVal = chr.skill(Defs::skill::intelligence);
+    wisVal = chr.skill(Defs::skill::wisdom);
+
+    currentAge = chr.age();
+    chr.rejuvenate(20);
+
+    REQUIRE(chr.get_age_range() == Defs::aging_effects::young);
+    REQUIRE(chr.age() == 26);
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal + 1);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal + 1);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal - 1);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal - 1);
 }

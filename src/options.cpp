@@ -32,5 +32,6 @@ void Adndtk::OptionalRules::set_default_options_values()
     _options[Option::skills_generation_method] = static_cast<int>(SkillGenerationMethod::standard);
     _options[Option::max_starting_money] = false;
     _options[Option::enable_bonus_xp_for_high_prime_requisites] = true;
-    _options[Option::check_for_deity_selection] = false;
+    _options[Option::check_for_deity_selection] = true;
+    _options[Option::apply_aging_effect] = true;
 }

@@ -133,9 +133,9 @@ bool Adndtk::Inventory::has_item(const Defs::equipment& id)
     return count_items(id) > 0;
 }
 
-double Adndtk::Inventory::total_weight()
+double Adndtk::Inventory::total_weight() const
 {
-    return _totalWeight;
+    return _totalWeight + Const::clothes_weight;
 }
 
 bool Adndtk::Inventory::has_capacity(const Adndtk::QueryResult& res, const Defs::equipment& id, const short& count)

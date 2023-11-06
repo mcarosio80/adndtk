@@ -1,6 +1,7 @@
 #include <racial_stats.h>
 #include <cyclopedia.h>
 #include <dice.h>
+#include <options.h>
 
 
 Adndtk::RacialStats::RacialStats()
@@ -21,26 +22,33 @@ Adndtk::RacialStats::RacialStats(const Defs::race& race, const Defs::sex& sex)
 	auto baseHeightFemale = stats.as<short>("height_base_female");
 	auto baseHeightDiceNum1 = stats.as<short>("height_dice_number");
 	auto baseHeightDiceFaces1 = stats.as<short>("height_dice_faces");
-	auto baseHeightDiceNum2 = stats.as<short>("height_dice_number_2");
-	auto baseHeightDiceFaces2 = stats.as<short>("height_dice_faces_2");
-	_height = Die::roll(baseHeightDiceNum1, baseHeightDiceFaces1, 0)
-					+ Die::roll(baseHeightDiceNum2, baseHeightDiceFaces2, 0)
-					+ (_sex == Defs::sex::male) ? baseHeightMale : baseHeightFemale;
+	auto baseHeightDiceNum2 = stats.try_as<short>("height_dice_number_2");
+	auto baseHeightDiceFaces2 = stats.try_as<short>("height_dice_faces_2");
+	_height = Die::roll(baseHeightDiceNum1, baseHeightDiceFaces1, 0);
+	_height += (_sex == Defs::sex::male) ? baseHeightMale : baseHeightFemale;
+	if (baseHeightDiceNum2.has_value())
+	{
+		_height += Die::roll(baseHeightDiceNum2.value(), baseHeightDiceFaces2.value(), 0);
+	}
 
 	auto baseWeightMale = stats.as<short>("weight_base_male");
 	auto baseWeightFemale = stats.as<short>("weight_base_female");
 	auto baseWeightDiceNum1 = stats.as<short>("weight_dice_number");
 	auto baseWeightDiceFaces1 = stats.as<short>("weight_dice_faces");
-	auto baseWeightDiceNum2 = stats.as<short>("weight_dice_number_2");
-	auto baseWeightDiceFaces2 = stats.as<short>("weight_dice_faces_2");
-	_weight = Die::roll(baseWeightDiceNum1, baseWeightDiceFaces1, 0)
-					+ Die::roll(baseWeightDiceNum2, baseWeightDiceFaces2, 0)
-					+ (_sex == Defs::sex::male) ? baseWeightMale : baseWeightFemale;
+	auto baseWeightDiceNum2 = stats.try_as<short>("weight_dice_number_2");
+	auto baseWeightDiceFaces2 = stats.try_as<short>("weight_dice_faces_2");
+	_weight = Die::roll(baseWeightDiceNum1, baseWeightDiceFaces1, 0);
+	_weight += (_sex == Defs::sex::male) ? baseWeightMale : baseWeightFemale;
+	if (baseWeightDiceNum2.has_value())
+	{
+		_weight += Die::roll(baseWeightDiceNum2.value(), baseWeightDiceFaces2.value(), 0);
+	}
 
 	auto startingAge = stats.as<int>("age_starting");
 	auto startingAgeDiceNum = stats.as<int>("age_dice_number");
 	auto startingAgeDiceFaces = stats.as<int>("age_dice_faces");
 	_startingAge = Die::roll(startingAgeDiceNum, startingAgeDiceFaces, startingAge);
+	_currentAge = _startingAge;
 
 	auto maxAge = stats.as<int>("age_maximum");
 	auto maxAgeDiceNum = stats.as<int>("age_maximum_dice_number");
@@ -66,7 +74,7 @@ bool Adndtk::RacialStats::grow_old(const short& years)
 	_currentAge += years;
 	auto currAgeRange = get_age_range();
 
-	if (currAgeRange > prevAgeRange)
+	if (currAgeRange > prevAgeRange && OptionalRules::get_instance().option<bool>(Option::apply_aging_effect))
 	{
 		auto modifiers = get_skill_modifiers(prevAgeRange, currAgeRange);
 		for (auto& mod : modifiers)
@@ -94,7 +102,7 @@ bool Adndtk::RacialStats::rejuvenate(const short& years)
 	_currentAge -= years;
 	auto currAgeRange = get_age_range();
 
-	if (currAgeRange < prevAgeRange)
+	if (currAgeRange < prevAgeRange && OptionalRules::get_instance().option<bool>(Option::apply_aging_effect))
 	{
 		auto modifiers = get_skill_modifiers(currAgeRange, prevAgeRange);
 		for (auto& mod : modifiers)

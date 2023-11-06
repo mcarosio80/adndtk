@@ -121,6 +121,9 @@ namespace Adndtk
         static constexpr THAC0 base_thaco = 20;
         static constexpr THAC0 critical_hit = 20;
         static constexpr THAC0 critical_miss = 1;
+        static constexpr double clothes_weight = 2.5;
+        static constexpr short high_people_base_movement_factor = 12;
+        static constexpr short short_people_base_movement_factor = 6;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,

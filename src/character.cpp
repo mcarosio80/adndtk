@@ -12,7 +12,8 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
     : _name{name}, _cls{cls}, _race{raceId}, _align{align}, _sex{sexId}, _deity{deityId},
     _xp{cls, raceId}, _hp{cls}, _thaco{Cyclopedia::get_instance().get_class_type(cls)},
     _money{Cyclopedia::get_instance().get_class_type(cls)}, _inventory{},
-    _forwardEvent{true}, _spellBook{cls, raceId}, _holySymbol{cls, deityId}
+    _forwardEvent{true}, _spellBook{cls, raceId}, _holySymbol{cls, deityId},
+    _racialStats{raceId, sexId}
 {
     if (!verify_moral_alignment())
     {
@@ -59,6 +60,14 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
             _primeRequisites[c].emplace(sklId);
         }
     }
+
+    auto onAgingCbk = [&] (const Defs::skill& skl, const short& sklModifier) -> void
+    {
+        auto& skillVal = skill(skl);
+        skillVal += sklModifier;
+        change_skill(skillVal);
+    };
+    _racialStats += onAgingCbk;
 }
 
 std::vector<Adndtk::Defs::character_class> Adndtk::Character::get_classes() const

@@ -76,19 +76,19 @@ TEST_CASE("[TC-INVE.006] Adding items increase inventory total weight", "[invent
 {
     Inventory inv;
 
-    REQUIRE(inv.total_weight() == 0);
+    REQUIRE(inv.total_weight() == Const::clothes_weight);
 
     auto twoHandedSwordId = Defs::equipment::two_handed_sword;
     REQUIRE(inv.add(Defs::equipment::backpack));
     REQUIRE(inv.add(twoHandedSwordId));
-    REQUIRE(inv.total_weight() > 0);
+    REQUIRE(inv.total_weight() > Const::clothes_weight);
 }
 
 TEST_CASE("[TC-INVE.007] Removing items decrease inventory total weight", "[inventory]" )
 {
     Inventory inv;
 
-    REQUIRE(inv.total_weight() == 0);
+    REQUIRE(inv.total_weight() == Const::clothes_weight);
 
     auto twoHandedSwordId = Defs::equipment::two_handed_sword;
     REQUIRE(inv.add(Defs::equipment::backpack));
@@ -107,7 +107,7 @@ TEST_CASE("[TC-INVE.008] Removing items not owned throws exceptions", "[inventor
     auto twoHandedSwordId = Defs::equipment::two_handed_sword;
 
     REQUIRE_FALSE(inv.remove(twoHandedSwordId));
-    REQUIRE(inv.total_weight() == 0);
+    REQUIRE(inv.total_weight() == Const::clothes_weight);
     REQUIRE(inv.count_items(twoHandedSwordId) == 0);
     REQUIRE_FALSE(inv.has_item(twoHandedSwordId));
 }
