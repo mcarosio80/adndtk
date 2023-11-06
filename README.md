@@ -30,13 +30,15 @@ $ git clone https://gitlab.com/mcarosio/adndtk.git
 $ cd adndtk
 $ mkdir -p build/
 $ cd build/
-$ cmake ..
+$ cmake .. [-DRUN_UNIT_TESTS=on|off]
 $ cmake --build . -j16
 </pre>
 After that, the test suit will be executed (it may take time). After that, the test suit will be executed (it may take time). Moreover, tests failure will compromise the correct build of the test executable. If you want to make changes or you would like to perform some debugging on tests, it's better to avoid running the test suite at the end of the build process.
 Tests can be skipped specifying the command line option -RUN_UNIT_TESTS=off as in the example
 <pre>
-$ cmake -S . -B build -DRUN_UNIT_TESTS=off
+$ mkdir -p build/
+$ cd build/
+$ cmake .. -DRUN_UNIT_TESTS=off
 </pre>
 
 ## Dependencies
