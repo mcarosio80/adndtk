@@ -92,10 +92,21 @@ namespace Adndtk
         inline bool grow_old(const short& years) { return _racialStats.grow_old(years); };
         inline bool rejuvenate(const short& years) { return _racialStats.rejuvenate(years); };
         inline Defs::aging_effects get_age_range() const { return _racialStats.get_age_range(); };
-
         inline const short& height() const { return _racialStats.height(); };
         inline const short& weight() const { return _racialStats.weight(); };
         inline double total_weight() const { return weight() + _inventory.total_weight(); };
+
+        // Inventory
+        inline bool add_equipment(const Defs::equipment& id, const short& count = 1) { return _inventory.add(id, count); }
+        inline bool remove_equipment(const Defs::equipment& id, const short& count = 1) { return _inventory.remove(id, count); }
+        inline short count_equipment_items(const Defs::equipment& id) { return _inventory.count_items(id); }
+        inline bool has_equipment_item(const Defs::equipment& id) { return _inventory.has_item(id); }
+        inline double equipment_weight() const { return _inventory.total_weight(); };
+        inline std::optional<Adndtk::Defs::body_slot> find_equipment(const Defs::equipment& id) { return _inventory.find(id); }
+        inline bool move_equipment(const Defs::equipment& id, const Defs::body_slot& slot, short quantity = 1) { return _inventory.move(id, slot, quantity); }
+
+        // Movement
+        short movement_factor() const;
 
     private:
         std::string                             _name;

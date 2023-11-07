@@ -2,6 +2,7 @@
 #include <cyclopedia.h>
 #include <skill_creator.h>
 #include <options.h>
+#include <encumbrance.h>
 
 #include <algorithm>
 
@@ -423,4 +424,11 @@ bool Adndtk::Character::verify_worshipped_deity() const
         return deities.find(_deity.value()) != deities.end();
     }
     return true;
+}
+
+short Adndtk::Character::movement_factor() const
+{
+    auto strVal = _skills.at(Defs::skill::strength);
+    auto mov = Encumbrance::get_instance().movement_factor(strVal, _race, _inventory.total_weight());
+    return mov;
 }

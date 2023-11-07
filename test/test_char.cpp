@@ -1347,3 +1347,103 @@ TEST_CASE("[TC-CHAR.043] Rejuvenate from venerable in steps regains the skills g
     REQUIRE(chr.skill(Defs::skill::intelligence) == intVal - 1);
     REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal - 1);
 }
+
+static const double get_equipment_weight(const Defs::equipment& equipId)
+{
+    auto id = static_cast<int>(equipId);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, id);
+    const QueryResult& res = rs[0];
+    auto equipWeight = res.try_or<double>("weight", 0);
+    return equipWeight;
+}
+
+TEST_CASE("[TC-CHAR.044] Encumbrance affects a character's movement factor", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+
+    auto equipWeight = chr.equipment_weight();
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto backpackId{Defs::equipment::backpack};
+    auto backpackWeight = get_equipment_weight(backpackId);
+    REQUIRE(chr.add_equipment(backpackId) == true);
+    equipWeight += backpackWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto hideId{Defs::equipment::hide};
+    auto hideWeight = get_equipment_weight(hideId);
+    REQUIRE(chr.add_equipment(hideId) == true);
+    equipWeight += hideWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto khopeshId{Defs::equipment::khopesh};
+    auto khopeshWeight = get_equipment_weight(khopeshId);
+    REQUIRE(chr.add_equipment(khopeshId) == true);
+    equipWeight += khopeshWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == 11);
+
+    REQUIRE(chr.remove_equipment(hideId) == true);
+    equipWeight -= hideWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto halberdId{Defs::equipment::halberd};
+    auto halberdWeight = get_equipment_weight(halberdId);
+    REQUIRE(chr.add_equipment(halberdId, 3) == true);
+    equipWeight += halberdWeight * 3;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == 9);
+
+    auto waterClockId{Defs::equipment::water_clock};
+    auto waterClockWeight = get_equipment_weight(waterClockId);
+    REQUIRE(chr.add_equipment(waterClockId) == true);
+    equipWeight += waterClockWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == 0);
+}
+
+TEST_CASE("[TC-CHAR.045] Moving equipments between body slots doesn't affect encumbrance", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    Character chr{"Beohram", cls, race, align, sex};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+
+    auto equipWeight = chr.equipment_weight();
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto backpackId{Defs::equipment::backpack};
+    auto backpackWeight = get_equipment_weight(backpackId);
+    REQUIRE(chr.add_equipment(backpackId) == true);
+    equipWeight += backpackWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto equipId{Defs::equipment::scale_mail};
+    auto weight = get_equipment_weight(equipId);
+    REQUIRE(chr.add_equipment(equipId) == true);
+    equipWeight += weight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == 11);
+    REQUIRE(chr.move_equipment(equipId, Defs::body_slot::body) == true);
+    REQUIRE(chr.movement_factor() == 11);
+}
