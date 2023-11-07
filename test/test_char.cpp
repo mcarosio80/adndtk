@@ -1447,3 +1447,35 @@ TEST_CASE("[TC-CHAR.045] Moving equipments between body slots doesn't affect enc
     REQUIRE(chr.move_equipment(equipId, Defs::body_slot::body) == true);
     REQUIRE(chr.movement_factor() == 11);
 }
+
+TEST_CASE("[TC-CHAR.046] Encumbrance rule can be deactivated", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+
+    OptionalRules::get_instance().option<bool>(Option::apply_encumbrance) = false;
+    
+    Character chr{"Beohram", cls, race, align, sex};
+    chr.change_skill(SkillValue(Defs::skill::strength, 12));
+
+    auto equipWeight = chr.equipment_weight();
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto backpackId{Defs::equipment::backpack};
+    auto backpackWeight = get_equipment_weight(backpackId);
+    REQUIRE(chr.add_equipment(backpackId) == true);
+    equipWeight += backpackWeight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+
+    auto equipId{Defs::equipment::plate_mail};
+    auto weight = get_equipment_weight(equipId);
+    REQUIRE(chr.add_equipment(equipId) == true);
+    equipWeight += weight;
+    REQUIRE(chr.equipment_weight() == equipWeight);
+
+    REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
+}

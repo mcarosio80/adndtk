@@ -17,6 +17,10 @@ namespace Adndtk
 
         const short& base_movement(const Defs::race& raceId) const;
         short movement_factor(const SkillValue& strengthValue, const Defs::race& raceId, const double& weightAllowed) const;
+        inline const short get_base_movement(const Defs::race& raceId) const
+        {
+            return _baseMovFactors.at(raceId);
+        }
 
     private:
         Encumbrance();
