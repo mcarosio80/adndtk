@@ -23,6 +23,8 @@ add_library(adndtk STATIC defs.h common_types.cpp common_types.h
                         encumbrance.cpp encumbrance.h
                         racial_stats.cpp racial_stats.h
                         character.cpp character.h
+                        market.cpp market.h
+                        store.cpp store.h
 )
 
 add_dependencies(adndtk rapidjson)

@@ -45,6 +45,7 @@ namespace Adndtk
         select_turn_undead,
         select_coin_exchange_rates,
         select_equipment,
+        select_equipment_ids,
         select_strength_stats,
         select_dexterity_stats,
         select_constitution_stats,

@@ -22,6 +22,8 @@
 #include <saving_throws.h>
 #include <thaco.h>
 #include <racial_stats.h>
+#include <market.h>
+#include <store.h>
 
 namespace Adndtk
 {
@@ -96,14 +98,20 @@ namespace Adndtk
         inline const short& weight() const { return _racialStats.weight(); };
         inline double total_weight() const { return weight() + _inventory.total_weight(); };
 
+        // Money
+        const MoneyBag& money() const { return _money; };
+
         // Inventory
         inline bool add_equipment(const Defs::equipment& id, const short& count = 1) { return _inventory.add(id, count); }
         inline bool remove_equipment(const Defs::equipment& id, const short& count = 1) { return _inventory.remove(id, count); }
         inline short count_equipment_items(const Defs::equipment& id) { return _inventory.count_items(id); }
-        inline bool has_equipment_item(const Defs::equipment& id) { return _inventory.has_item(id); }
+        inline bool has_equipment_item(const Defs::equipment& id, const short& count) { return _inventory.has_item(id, count); }
         inline double equipment_weight() const { return _inventory.total_weight(); };
         inline std::optional<Adndtk::Defs::body_slot> find_equipment(const Defs::equipment& id) { return _inventory.find(id); }
         inline bool move_equipment(const Defs::equipment& id, const Defs::body_slot& slot, short quantity = 1) { return _inventory.move(id, slot, quantity); }
+
+        void buy_equipment(const std::string& storeName, const Defs::equipment& equipmentId, const short& count = 1);
+        void sell_equipment(const std::string& storeName, const Defs::equipment& equipmentId, const short& count = 1);
 
         // Movement
         short movement_factor() const;

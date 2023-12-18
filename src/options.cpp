@@ -35,4 +35,18 @@ void Adndtk::OptionalRules::set_default_options_values()
     _options[Option::check_for_deity_selection] = true;
     _options[Option::apply_aging_effect] = true;
     _options[Option::apply_encumbrance] = true;
+    _options[Option::unlimited_store_availability] = false;
+    _options[Option::unlimited_store_supply] = false;
+    _options[Option::store_profit_margin_percentage] = 0.05;
+
+    _options[Option::store_min_cp_starting_amount] = static_cast<uint32_t>(1000);
+    _options[Option::store_max_cp_starting_amount] = static_cast<uint32_t>(10000);
+    _options[Option::store_min_sp_starting_amount] = static_cast<uint32_t>(1000);
+    _options[Option::store_max_sp_starting_amount] = static_cast<uint32_t>(5000);
+    _options[Option::store_min_ep_starting_amount] = static_cast<uint32_t>(1000);
+    _options[Option::store_max_ep_starting_amount] = static_cast<uint32_t>(2000);
+    _options[Option::store_min_gp_starting_amount] = static_cast<uint32_t>(100);
+    _options[Option::store_max_gp_starting_amount] = static_cast<uint32_t>(500);
+    _options[Option::store_min_pp_starting_amount] = static_cast<uint32_t>(100);
+    _options[Option::store_max_pp_starting_amount] = static_cast<uint32_t>(200);
 }

@@ -61,7 +61,7 @@ bool Adndtk::MoneyBag::check_availability(const Defs::coin& currency, const uint
 	return Coin::convert<Defs::coin::copper_piece>(currency, amount) <= total;
 }
 
-const uint32_t& Adndtk::MoneyBag::operator[](const Defs::coin& c)
+const uint32_t& Adndtk::MoneyBag::operator[](const Defs::coin& c) const
 {
 	return _money.at(c);
 }

@@ -128,9 +128,9 @@ bool Adndtk::Inventory::move(const Defs::equipment& id, const Defs::body_slot& s
     return true;
 }
 
-bool Adndtk::Inventory::has_item(const Defs::equipment& id)
+bool Adndtk::Inventory::has_item(const Defs::equipment& id, const short& count/*=1*/)
 {
-    return count_items(id) > 0;
+    return count_items(id) >= count;
 }
 
 double Adndtk::Inventory::total_weight() const

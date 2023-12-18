@@ -426,6 +426,54 @@ bool Adndtk::Character::verify_worshipped_deity() const
     return true;
 }
 
+void Adndtk::Character::buy_equipment(const std::string& storeName, const Defs::equipment& equipmentId, const short& count/*=1*/)
+{
+    auto& store = Market::get_instance()[storeName];
+
+    if (!store.check_supply(equipmentId, count))
+    {
+        throw std::runtime_error("The specified quantity is not available");
+    }
+
+    auto price = store.get_sell_price(equipmentId, count);
+    if (!_money.check_availability(price))
+    {
+        throw std::runtime_error("Not enough money");
+    }
+    
+    _money.subtract(price);
+    store.add_money(price);
+    if (!OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply))
+    {
+        store.remove(equipmentId, count);
+    }
+    _inventory.add(equipmentId, count);
+}
+
+void Adndtk::Character::sell_equipment(const std::string& storeName, const Defs::equipment& equipmentId, const short& count/*=1*/)
+{
+    auto& store = Market::get_instance()[storeName];
+
+    if (!has_equipment_item(equipmentId, count))
+    {
+        throw std::runtime_error("The specified quantity is not available");
+    }
+
+    auto price = store.get_buy_price(equipmentId, count);
+    if (!store.check_availability(price))
+    {
+        throw std::runtime_error("Not enough money");
+    }
+    
+    if (!OptionalRules::get_instance().option<bool>(Option::unlimited_store_availability))
+    {
+        store.subtract_money(price);
+    }
+    _money.add(price);
+    _inventory.remove(equipmentId, count);
+    store.supply(equipmentId, count);
+}
+
 short Adndtk::Character::movement_factor() const
 {
     if (!OptionalRules::get_instance().option<bool>(Option::apply_encumbrance))

@@ -1479,3 +1479,34 @@ TEST_CASE("[TC-CHAR.046] Encumbrance rule can be deactivated", "[character]" )
 
     REQUIRE(chr.movement_factor() == Const::high_people_base_movement_factor);
 }
+
+TEST_CASE("[TC-CHAR.047] Buy transaction gives a new item to the character", "[character]" )
+{
+    auto cls = Defs::character_class::fighter;
+    auto race = Defs::race::human;
+    auto align = Defs::moral_alignment::lawful_neutral;
+    auto sex = Defs::sex::male;
+    const char* storeName = "Winthrop's store";
+    Market::get_instance().add(storeName);
+    
+    Character chr{"Beohram", cls, race, align, sex};
+    chr.add_equipment(Defs::equipment::backpack);
+
+    OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply) = true;
+
+    auto itemId = Defs::equipment::throwing_axe;
+    auto& mb = chr.money();
+    auto gpAmt = mb[Defs::coin::gold_piece];
+
+    REQUIRE_FALSE(chr.has_equipment_item(itemId, 1));
+    REQUIRE(mb[Defs::coin::gold_piece] == gpAmt);
+    chr.buy_equipment(storeName, itemId, 1);
+
+    REQUIRE(chr.has_equipment_item(itemId, 1));
+    REQUIRE(mb[Defs::coin::gold_piece] < gpAmt);
+
+    OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply) = false;
+
+    Market::get_instance().clear();
+    REQUIRE(Market::get_instance().count() == 0);
+}

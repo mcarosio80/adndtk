@@ -27,6 +27,8 @@
 #include <holy_symbol.h>
 #include <encumbrance.h>
 #include <racial_stats.h>
+#include <market.h>
+#include <store.h>
 #include <character.h>
 
 

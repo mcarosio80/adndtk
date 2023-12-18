@@ -18,7 +18,7 @@ namespace Adndtk
         bool check_availability(const Coin& amt) const;
         bool check_availability(const Defs::coin& currency, const uint32_t& amount) const;
 
-        const uint32_t& operator[](const Defs::coin& c);
+        const uint32_t& operator[](const Defs::coin& c) const;
 
         MoneyBag& add(const Defs::coin& coinType, const uint32_t& value);
         MoneyBag& add(const Coin& c);
