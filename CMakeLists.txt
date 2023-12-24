@@ -22,6 +22,7 @@ find_package(PythonInterp 3 REQUIRED)
 
 find_package(SQLite3 REQUIRED)
 if(SQLite3_FOUND)
+    find_path(SQLite3_EXECUTABLE sqlite3)
     message("SQLite3 " ${SQLite3_VERSION} " executable found in " ${SQLite3_EXECUTABLE})
     message("SQLite3_INCLUDE_DIRS; " ${SQLite3_INCLUDE_DIRS})
     message("SQLite3_LIBRARIES: " ${SQLite3_LIBRARIES})
