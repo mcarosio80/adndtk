@@ -59,6 +59,8 @@ file(REMOVE ${DB_FILE})
 
 message("Configuring database generation: ${DB_FILE}")
 
+execute_process(COMMAND mkdir -p ${DB_DIR})
+
 # Creation of SQLite database
 message("Creation of SQLite database")
 execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
