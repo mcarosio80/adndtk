@@ -89,8 +89,6 @@ if(NOT SQLITE_CREATE_INDEX EQUAL "0")
     message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} '.read ${DB_IDX_FILE}' failed with ${SQLITE_CREATE_INDEX}")
 endif()
 
-message(">>>> ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py --database ${DB_FILE} --json ${PY_DIR}/tables_info.json --output ${SRC_DIR}/defs.h --namespace Adndtk:Defs --version ${PROJECT_VERSION} --target enum")
-
 message("Configuring library header generation: ${SRC_DIR}/defs.h")
 execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
