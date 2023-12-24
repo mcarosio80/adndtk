@@ -61,7 +61,8 @@ message("Configuring database generation: ${DB_FILE}")
 
 # Creation of SQLite database
 message("Creation of SQLite database")
-execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
+execute_process(COMMAND mkdir -p ${DB_DIR}
+                COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
                 INPUT_FILE ${DB_SCHEMA_FILE}
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 RESULT_VARIABLE SQLITE_BUILD_DB)
