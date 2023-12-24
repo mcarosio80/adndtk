@@ -61,8 +61,7 @@ message("Configuring database generation: ${DB_FILE}")
 
 # Creation of SQLite database
 message("Creation of SQLite database")
-execute_process(COMMAND mkdir -p ${DB_DIR}
-                COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
+execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
                 INPUT_FILE ${DB_SCHEMA_FILE}
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 RESULT_VARIABLE SQLITE_BUILD_DB)
@@ -88,10 +87,10 @@ if(NOT SQLITE_CREATE_INDEX EQUAL "0")
     message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} '.read ${DB_IDX_FILE}' failed with ${SQLITE_CREATE_INDEX}")
 endif()
 
+message(">>>> ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py --database ${DB_FILE} --json ${PY_DIR}/tables_info.json --output ${SRC_DIR}/defs.h --namespace Adndtk:Defs --version ${PROJECT_VERSION} --target enum")
+
 message("Configuring library header generation: ${SRC_DIR}/defs.h")
-add_custom_command(
-    OUTPUT ${SRC_DIR}/defs.h
-    DEPENDS ${DB_FILE}
+execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
            --json ${PY_DIR}/tables_info.json
@@ -99,12 +98,14 @@ add_custom_command(
            --namespace Adndtk:Defs
            --version ${PROJECT_VERSION}
            --target enum
-)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    RESULT_VARIABLE CPP_CREATE_HEADER_DEFS_H)
+if(NOT CPP_CREATE_HEADER_DEFS_H EQUAL "0")
+    message(FATAL_ERROR "${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py --database ${DB_FILE} --json ${PY_DIR}/tables_info.json --output ${SRC_DIR}/defs.h --namespace Adndtk:Defs --version ${PROJECT_VERSION} --target enum failed with ${CPP_CREATE_HEADER_DEFS_H}")
+endif()
 
 message("Configuring library header generation: ${SRC_DIR}/tables.h")
-add_custom_command(
-    OUTPUT ${SRC_DIR}/tables.h
-    DEPENDS ${DB_FILE}
+execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py
            --database ${DB_FILE}
            --json ${PY_DIR}/orm_mapping.json
@@ -112,7 +113,11 @@ add_custom_command(
            --namespace Adndtk:Tables
            --version ${PROJECT_VERSION}
            --target struct
-)
+           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+           RESULT_VARIABLE CPP_CREATE_HEADER_TABLES_H)
+if(NOT CPP_CREATE_HEADER_TABLES_H EQUAL "0")
+    message(FATAL_ERROR "${PYTHON_EXECUTABLE} ${PY_DIR}/generate_header.py --database ${DB_FILE} --json ${PY_DIR}/orm_mapping.json --output ${SRC_DIR}/tables.h --namespace Adndtk:Defs --version ${PROJECT_VERSION} --target struct failed with ${CPP_CREATE_HEADER_TABLES_H}")
+endif()
 
 message("Configuring target for defs.h")
 add_custom_target(defs_h ALL DEPENDS ${SRC_DIR}/defs.h SOURCES ${DB_FILE})
