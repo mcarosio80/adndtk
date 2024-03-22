@@ -126,9 +126,6 @@ add_custom_target(tables_h ALL DEPENDS ${SRC_DIR}/tables.h SOURCES ${DB_FILE})
 message("Configuring target for SQLite database")
 add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
 
-#Fetch some info to complete the library metadata
-string(TIMESTAMP CURRENT_TS "%Y-%m-%d %H:%M:%S")
-
 #execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 --reverse OUTPUT_VARIABLE FIRST_COMMIT_DATE)
 execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 OUTPUT_VARIABLE LAST_COMMIT_DATE)
 message("Last commit date: " ${LAST_COMMIT_DATE})
