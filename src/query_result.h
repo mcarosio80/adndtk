@@ -54,7 +54,11 @@ namespace Adndtk
             std::string v = (*this)[key].value();
             std::stringstream ss{v};
             _T res{};
-            ss >> res;
+            if constexpr(std::is_same_v<_T, std::string>) {
+                std::getline(ss, res);
+            } else {
+                ss >> res;
+            }
             return res;
         }
         
