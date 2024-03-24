@@ -18,7 +18,7 @@ add_executable(tests test_advt.cpp test_cexc.cpp test_coin.cpp test_dice.cpp
                     test_thac.cpp test_tund.cpp test_monb.cpp test_tabi.cpp
                     test_inve.cpp test_skst.cpp test_splb.cpp test_hols.cpp
                     test_encu.cpp test_char.cpp test_mrkt.cpp test_stor.cpp
-                    test_cycl.cpp)
+                    test_cale.cpp test_cycl.cpp)
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain adndtk)
 target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR/src})

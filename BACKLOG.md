@@ -11,7 +11,6 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 * Implement lybrary telemetry (log method calls and effects)
 * Implement battle field and account for position of characters/monsters and objects on it
 * Detect object included into the Area of Effect (to be used for spells)
-* Implement Calendar (DR and conversions to the others)
 * Add Event Scheduler to control event sequence and time (to be used for spells)
 
 ## Planned changes

@@ -81,6 +81,12 @@ namespace Adndtk
         select_worshipper_alignments,
         select_racial_stats,
         select_aging_effects,
+        select_calendars,
+        select_calendar,
+        select_calendar_reckonings,
+        select_calendar_months,
+        select_calendar_special_days,
+        select_roll_of_the_year,
     };
 
     enum class XPChangeType

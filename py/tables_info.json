@@ -303,5 +303,25 @@
         "table" : "MONSTER_DRAGON_TYPE",
         "key" : "name",
         "value": "id"
+    },
+    {
+        "table" : "CALENDAR",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "CALENDAR_RECKONING",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "CALENDAR_MONTH",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "CALENDAR_SPECIAL_DAY",
+        "key" : "name",
+        "value": "id"
     }
 ]
