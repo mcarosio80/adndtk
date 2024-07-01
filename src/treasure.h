@@ -180,6 +180,7 @@ namespace Adndtk
         void add_object_of_art(const uint32_t& countFrom, const uint32_t& countTo);
         void add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature, const std::optional<int>& additionalComponent, const std::optional<int>& additionalCount);
         std::vector<Defs::magical_item_type> get_magical_types(const int& nature);
+        bool roll_for_component(const Die& d, const int probability) const;
     };
 }
 

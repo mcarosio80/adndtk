@@ -32,7 +32,8 @@ namespace Adndtk
         store_min_gp_starting_amount,
         store_max_gp_starting_amount,
         store_min_pp_starting_amount,
-        store_max_pp_starting_amount
+        store_max_pp_starting_amount,
+        treasure_components_always_present
     };
 
     class OptionalRules

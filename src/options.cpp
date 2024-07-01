@@ -49,4 +49,6 @@ void Adndtk::OptionalRules::set_default_options_values()
     _options[Option::store_max_gp_starting_amount] = static_cast<uint32_t>(500);
     _options[Option::store_min_pp_starting_amount] = static_cast<uint32_t>(100);
     _options[Option::store_max_pp_starting_amount] = static_cast<uint32_t>(200);
+
+    _options[Option::treasure_components_always_present] = false;
 }

@@ -178,7 +178,7 @@ TEST_CASE("[TC-TREA.004] Objects of art value vary according to their probabilit
     }
 }
 
-TEST_CASE("[TC-TREA.005] Class A treasure may contain appropriate values", "[treasure]" )
+TEST_CASE("[TC-TREA.005] Class A treasure contain appropriate values", "[treasure]" )
 {
     std::map<Defs::coin, std::pair<uint32_t, uint32_t>> coins
     {
@@ -188,6 +188,7 @@ TEST_CASE("[TC-TREA.005] Class A treasure may contain appropriate values", "[tre
         {Defs::coin::gold_piece, {1000, 6000}},
         {Defs::coin::platinum_piece, {300, 1800}},
     };
+    OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = true;
     Treasure t{Defs::treasure_class::a};
 
     for (auto& c : coins)
@@ -201,22 +202,15 @@ TEST_CASE("[TC-TREA.005] Class A treasure may contain appropriate values", "[tre
     }
 
     auto& gems = t.gems();
-    if (gems.size() != 0)
-    {
-        REQUIRE(gems.size() >= 10);
-        REQUIRE(gems.size() <= 40);
-    }
+    REQUIRE(gems.size() >= 10);
+    REQUIRE(gems.size() <= 40);
 
     auto& arts = t.objects_of_art();
-    if (arts.size() != 0)
-    {
-        REQUIRE(arts.size() >= 2);
-        REQUIRE(arts.size() <= 12);
-    }
+    REQUIRE(arts.size() >= 2);
+    REQUIRE(arts.size() <= 12);
 
     auto& magicals = t.magical_items();
-    if (magicals.size() != 0)
-    {
-        REQUIRE(magicals.size() == 3);
-    }
+    REQUIRE(magicals.size() == 3);
+
+    OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = false;
 }

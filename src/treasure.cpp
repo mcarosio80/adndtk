@@ -1,6 +1,7 @@
 #include <treasure.h>
 #include <cyclopedia.h>
 #include <dice.h>
+#include <options.h>
 
 #include <math.h>
 #include <ranges>
@@ -502,7 +503,7 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 			auto additionalComponent = t.try_as<int>("additional_component");
 			auto additionalCount = t.try_as<int>("additional_count");
 
-			if (d100.roll() <= probability)
+    		if (roll_for_component(d100, probability))
 			{
 				auto info = std::make_tuple(compId, countFrom, countTo, probability, nature, additionalComponent, additionalCount);
 				treasureInfo.push_back(info);
@@ -737,6 +738,13 @@ double Adndtk::Treasure::total_value(const Defs::coin& currency)
 		treasureValue += amt.value() * fx;
 	}
 	return treasureValue;
+}
+
+bool Adndtk::Treasure::roll_for_component(const Die& d, const int probability) const
+{
+	//_options[Option::unlimited_store_availability] = false;
+	return OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present)
+		|| d.roll() <= probability;
 }
 
 // const adnd::treasure::treasure& adnd::treasure::treasure_pool::create(const defs::treasure::treasure_class& cls)
