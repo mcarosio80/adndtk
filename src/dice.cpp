@@ -93,3 +93,27 @@ int Adndtk::Die::roll(int minValue, int maxValue)
 
     return roll;
 }
+
+Adndtk::DiceSet::DiceSet()
+    : _dice{}
+{
+    for (auto& t : {Defs::die::d4, Defs::die::d6, Defs::die::d8, Defs::die::d10, Defs::die::d12, Defs::die::d20, Defs::die::d100})
+    {
+        _dice[t] = Die(t);
+    }
+}
+
+Adndtk::DiceSet::~DiceSet()
+{
+}
+
+Adndtk::DiceSet& Adndtk::DiceSet::get_instance()
+{
+    static DiceSet _instance;
+    return _instance;
+}
+
+int Adndtk::DiceSet::roll(const Defs::die& dieType, const short diceNumber/*=1*/) const
+{
+    return _dice.at(dieType).roll(diceNumber);
+}

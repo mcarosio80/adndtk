@@ -114,3 +114,31 @@ TEST_CASE("[TC-DICE.011] Malformed range expression throws runtime error", "[dic
     REQUIRE_THROWS_AS(Die::roll("fhetuw"), std::runtime_error);
     REQUIRE_THROWS_AS(Die::roll("a-b"), std::runtime_error);
 }
+
+TEST_CASE("[TC-DICE.012] DiceSet stores static set of dice", "[dice]")
+{
+    for (short n = 1; n <= 3; ++n)
+    {
+        auto d4 = DiceSet::get_instance().roll(Defs::die::d4, n);
+        REQUIRE(d4 >= 1 * n);
+        REQUIRE(d4 <= 4 * n);
+        auto d6 = DiceSet::get_instance().roll(Defs::die::d6, n);
+        REQUIRE(d6 >= 1 * n);
+        REQUIRE(d6 <= 6 * n);
+        auto d8 = DiceSet::get_instance().roll(Defs::die::d8, n);
+        REQUIRE(d8 >= 1 * n);
+        REQUIRE(d8 <= 8 * n);
+        auto d10 = DiceSet::get_instance().roll(Defs::die::d10, n);
+        REQUIRE(d10 >= 1 * n);
+        REQUIRE(d10 <= 10 * n);
+        auto d12 = DiceSet::get_instance().roll(Defs::die::d12, n);
+        REQUIRE(d12 >= 1 * n);
+        REQUIRE(d12 <= 12 * n);
+        auto d20 = DiceSet::get_instance().roll(Defs::die::d20, n);
+        REQUIRE(d20 >= 1 * n);
+        REQUIRE(d20 <= 20 * n);
+        auto d100 = DiceSet::get_instance().roll(Defs::die::d100, n);
+        REQUIRE(d100 >= 1 * n);
+        REQUIRE(d100 <= 100 * n);
+    }
+}

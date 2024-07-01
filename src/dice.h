@@ -42,6 +42,22 @@ namespace Adndtk
 
         Defs::die		m_numFaces;
     };
+
+    class DiceSet
+    {
+    public:
+        static DiceSet& get_instance();
+        DiceSet(DiceSet const&) = delete;
+        void operator=(DiceSet const&) = delete;
+
+        int roll(const Defs::die& dieType, const short diceNumber = 1) const;
+
+    private:
+        DiceSet();
+        ~DiceSet();
+
+        std::map<Defs::die, Die> _dice;
+    };
 }
 
 #endif // DICE_H
