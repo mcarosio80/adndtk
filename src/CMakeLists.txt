@@ -26,6 +26,7 @@ add_library(adndtk STATIC defs.h common_types.cpp common_types.h
                         market.cpp market.h
                         store.cpp store.h
                         calendar.cpp calendar.h
+                        treasure.cpp treasure.h
 )
 
 add_dependencies(adndtk rapidjson)

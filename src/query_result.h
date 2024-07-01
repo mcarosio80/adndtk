@@ -156,7 +156,32 @@ namespace Adndtk
         auto begin() { return _records.begin(); } 
         auto end() { return _records.end(); } 
         auto cbegin() const { return _records.cbegin(); } 
-        auto cend() const { return _records.cend(); } 
+        auto cend() const { return _records.cend(); }
+
+        template<typename _T>
+        std::vector<_T> to_vector(const std::string& fieldName) const
+        {
+            std::vector<_T> data{};
+            data.reserve(_records.size());
+            for (auto& r : _records)
+            {
+                auto value = r.as<_T>(fieldName);
+                data.push_back(value);
+            }
+            return data;
+        }
+
+        // template<typename _T>
+        // std::set<_T> to_set(const std::string& fieldName) const
+        // {
+        //     std::set<_T> data{};
+        //     for (auto& r : _records)
+        //     {
+        //         auto value = r.as<_T>(fieldName);
+        //         data.emplace(value);
+        //     }
+        //     return data;
+        // } 
 
     private:
         std::vector<QueryResult>    _records;

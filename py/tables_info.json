@@ -255,7 +255,7 @@
         "value": "id"
     },
     {
-        "table" : "GEMS",
+        "table" : "GEM",
         "key" : "name",
         "value": "id"
     },

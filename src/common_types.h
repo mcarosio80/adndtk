@@ -87,6 +87,17 @@ namespace Adndtk
         select_calendar_months,
         select_calendar_special_days,
         select_roll_of_the_year,
+        select_gems_by_type,
+        select_gem,
+        select_gem_type,
+        select_object_of_art_by_probability,
+        select_magical_item,
+        select_magical_item_limitations,
+        select_magical_item_type_by_probability,
+        select_magical_item_by_type_and_probability,
+        select_magical_items_by_type,
+        select_treasure_components,
+        select_treasure_composition,
     };
 
     enum class XPChangeType

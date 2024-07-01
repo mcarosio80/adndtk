@@ -148,6 +148,18 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'name', name, 'year_day', year_day, 'leap_year_day', leap_year_day from calendar_special_day where calendar_id = ?", Query::select_calendar_special_days);
         prepare_statement("select 'name', name from roll_of_the_year where year = ?", Query::select_roll_of_the_year);
 
+        prepare_statement("select 'id', id from gem where type = ?", Query::select_gems_by_type);
+        prepare_statement("select 'id', g.id, 'name', g.name, 'type', g.type, 'value_range_coin', g.value_range_coin, 'value_range_from', g.value_range_from, 'value_range_to', g.value_range_to, 'type_name', gt.name, 'base_coin', gt.base_coin, 'base_value', gt.base_value, 'probability_from', gt.probability_from, 'probability_to', gt.probability_to from gem g inner join gem_type gt on gt.id = g.type where g.id = ?", Query::select_gem);
+        prepare_statement("select 'id', id, 'name', name, 'base_coin', base_coin, 'base_value', base_value, 'probability_from', probability_from, 'probability_to', probability_to from gem_type where ? between probability_from and probability_to", Query::select_gem_type);
+        prepare_statement("select 'id', id, 'value_coin', value_coin, 'value_from', value_from, 'value_to', value_to from object_of_art where ? between probability_from and probability_to", Query::select_object_of_art_by_probability);
+        prepare_statement("select 'id', i.id, 'name', i.name, 'nature', i.nature, 'type', i.type, 'xp_value', i.xp_value, 'item_type', i.item_type, 'equipment_id', i.equipment_id, 'unidentified_name', un.name from magical_item i inner join magical_item_unidentified_name un on un.id = i.unidentified_id where i.id = ?", Query::select_magical_item);
+        prepare_statement("select 'allowed_class_id', allowed_class_id, 'allowed_class_type_id', allowed_class_type_id, 'allowed_alignment_id', allowed_alignment_id from magical_item_limitation where item_id = ?", Query::select_magical_item_limitations);
+        prepare_statement("select 'id', id, 'name', name from magical_item_type where ? between probability_from and probability_to", Query::select_magical_item_type_by_probability);
+        prepare_statement("select 'id', i.id, 'found_probability_from', t.probability_from, 'found_probability_to', t.probability_to from MAGICAL_ITEM i inner join MAGICAL_ITEM_TYPE t on t.id = i.type inner join MAGICAL_ITEM_PROBABILITY p on p.MAGICAL_ITEM_ID = i.id where i.type = ? and ? between p.subtable_from and p.subtable_to and ? between p.probability_from and p.probability_to", Query::select_magical_item_by_type_and_probability);
+        prepare_statement("select 'id', id from magical_item where type = ?", Query::select_magical_items_by_type);
+        prepare_statement("select 'id', id from treasure_component", Query::select_treasure_components);
+        prepare_statement("select 'count_from', count_from, 'count_to', count_to, 'probability', probability, 'nature', nature, 'additional_component', additional_component, 'additional_count', additional_count from treasure_composition where treasure_class = ? and component = ?", Query::select_treasure_composition);
+
         load_advancement_table();
     }
     return ok;

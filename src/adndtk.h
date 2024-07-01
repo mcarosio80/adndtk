@@ -31,6 +31,7 @@
 #include <store.h>
 #include <character.h>
 #include <calendar.h>
+#include <treasure.h>
 
 
 #endif // ADNDTK_H
