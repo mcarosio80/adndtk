@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <sstream>
+#include <type_traits>
 
 #include <defs.h>
 #include <config.h>
@@ -53,52 +54,46 @@ namespace Adndtk
         {
             std::string v = (*this)[key].value();
             std::stringstream ss{v};
-            _T res{};
-            if constexpr(std::is_same_v<_T, std::string>) {
-                std::getline(ss, res);
-            } else {
-                ss >> res;
-            }
-            return res;
+            return convert_to<_T>(ss);
         }
         
         template <typename _T>
         std::optional<_T> try_as(const std::string& key) const
         {
-            std::optional<std::string> v = std::nullopt;
             if (_values.find(key) == _values.end() || !_values.at(key).has_value())
             {
                 return std::nullopt;
             }
 
-            v = (*this)[key];
-            std::stringstream ss{v.value()};
-            _T res{};
-            ss >> res;
-            return res;
+            auto v = as<_T>(key);
+            return std::make_optional(v);
         }
         
         template <typename _T>
         _T try_or(const std::string& key, const _T& defaultValue) const
         {
-            std::optional<std::string> v = std::nullopt;
-            if (_values.find(key) == _values.end() || !_values.at(key).has_value())
-            {
-                return defaultValue;
-            }
-
-            v = (*this)[key];
-            if (!v.has_value())
-            {
-                return defaultValue;
-            }
-            std::stringstream ss{v.value()};
-            _T res{};
-            ss >> res;
-            return res;
+            auto v = try_as<_T>(key);
+            return (v.has_value()) ? v.value() : defaultValue;
         }
 
     private:
+        template <typename _T>
+        _T convert_to(std::stringstream& ss) const
+        {
+            _T res{};
+            if constexpr(std::is_same_v<_T, std::string>) {
+                std::getline(ss, res);
+            } else if constexpr(std::is_enum<_T>::value)
+            {
+                typename std::underlying_type<_T>::type underValue;
+                ss >> underValue;
+                res = static_cast<_T>(underValue);
+            } else {
+                ss >> res;
+            }
+            return res;
+        }
+
         std::map<std::string, std::optional<std::string>>  _values;
     };
 
