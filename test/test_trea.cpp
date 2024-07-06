@@ -184,33 +184,98 @@ TEST_CASE("[TC-TREA.005] Class A treasure contain appropriate values", "[treasur
     {
         {Defs::coin::copper_piece, {1000, 3000}},
         {Defs::coin::silver_piece, {200, 2000}},
-        {Defs::coin::electrum_piece, {300, 1800}},
         {Defs::coin::gold_piece, {1000, 6000}},
-        {Defs::coin::platinum_piece, {300, 1800}},
     };
+    std::pair<uint32_t, uint32_t> gpEpMinMax{300, 1800};
+    std::pair<uint32_t, uint32_t> gemsMinMax{10, 40};
+    std::pair<uint32_t, uint32_t> objectsOfArtMinMax{2, 12};
+    uint32_t magicalsCount{3};
+    
     OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = true;
     Treasure t{Defs::treasure_class::a};
 
     for (auto& c : coins)
     {
         auto value = t.value(c.first);
-        if (value != 0)
+        REQUIRE(value >= c.second.first);
+        REQUIRE(value <= c.second.second);
+    }
+    
+    if (!t.includes(Defs::coin::electrum_piece))
+    {
+        REQUIRE(t.includes(Defs::coin::platinum_piece));
+        auto value = t.value(Defs::coin::platinum_piece);
+        REQUIRE(value >= gpEpMinMax.first);
+        REQUIRE(value <= gpEpMinMax.second);
+    }
+    else if (!t.includes(Defs::coin::platinum_piece))
+    {
+        REQUIRE(t.includes(Defs::coin::electrum_piece));
+        auto value = t.value(Defs::coin::electrum_piece);
+        REQUIRE(value >= gpEpMinMax.first);
+        REQUIRE(value <= gpEpMinMax.second);
+    }
+
+    auto& gems = t.gems();
+    REQUIRE(gems.size() >= gemsMinMax.first);
+    REQUIRE(gems.size() <= gemsMinMax.second);
+
+    auto& arts = t.objects_of_art();
+    REQUIRE(arts.size() >= objectsOfArtMinMax.first);
+    REQUIRE(arts.size() <= objectsOfArtMinMax.second);
+
+    auto& magicals = t.magical_items();
+    REQUIRE(magicals.size() == magicalsCount);
+
+    OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = false;
+}
+
+TEST_CASE("[TC-TREA.006] Class A treasure may contain appropriate values", "[treasure]" )
+{
+    std::map<Defs::coin, std::pair<uint32_t, uint32_t>> coins
+    {
+        {Defs::coin::copper_piece, {1000, 3000}},
+        {Defs::coin::silver_piece, {200, 2000}},
+        {Defs::coin::gold_piece, {1000, 6000}},
+    };
+    std::pair<uint32_t, uint32_t> gpEpMinMax{300, 1800};
+    std::pair<uint32_t, uint32_t> gemsMinMax{10, 40};
+    std::pair<uint32_t, uint32_t> objectsOfArtMinMax{2, 12};
+    uint32_t magicalsCount{3};
+    
+    Treasure t{Defs::treasure_class::a};
+
+    for (auto& c : coins)
+    {
+        auto value = t.value(c.first);
+        if (t.includes(c.first))
         {
             REQUIRE(value >= c.second.first);
             REQUIRE(value <= c.second.second);
         }
+        else
+        {
+            REQUIRE(value == 0);
+        }
     }
 
-    auto& gems = t.gems();
-    REQUIRE(gems.size() >= 10);
-    REQUIRE(gems.size() <= 40);
+    if (t.includes_gems())
+    {
+        auto& gems = t.gems();
+        REQUIRE(gems.size() >= gemsMinMax.first);
+        REQUIRE(gems.size() <= gemsMinMax.second);
+    }
 
-    auto& arts = t.objects_of_art();
-    REQUIRE(arts.size() >= 2);
-    REQUIRE(arts.size() <= 12);
+    if (t.includes_objects_of_art())
+    {
+        auto& arts = t.objects_of_art();
+        REQUIRE(arts.size() >= objectsOfArtMinMax.first);
+        REQUIRE(arts.size() <= objectsOfArtMinMax.second);
+    }
 
-    auto& magicals = t.magical_items();
-    REQUIRE(magicals.size() == 3);
-
-    OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = false;
+    if (t.includes_magicals())
+    {
+        auto& magicals = t.magical_items();
+        REQUIRE(magicals.size() == magicalsCount);
+    }
 }

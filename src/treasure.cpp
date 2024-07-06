@@ -676,7 +676,7 @@ Adndtk::Treasure& Adndtk::Treasure::operator+=(const MagicalItem& m)
 	return (*this);
 }
 
-std::set<Adndtk::Defs::coin> Adndtk::Treasure::coins()
+std::set<Adndtk::Defs::coin> Adndtk::Treasure::coins() const
 {
 	std::set<Defs::coin> result;
 
@@ -691,28 +691,48 @@ std::set<Adndtk::Defs::coin> Adndtk::Treasure::coins()
 	return result;
 }
 
-Adndtk::Coin Adndtk::Treasure::value(const Defs::coin& currency)
+bool Adndtk::Treasure::includes(const Defs::coin& currency) const
+{
+	return _coins[currency] > 0;
+}
+
+bool Adndtk::Treasure::includes_gems() const
+{
+	return _gems.size() > 0;
+}
+
+bool Adndtk::Treasure::includes_objects_of_art() const
+{
+	return _objectsOfArt.size() > 0;
+}
+
+bool Adndtk::Treasure::includes_magicals() const
+{
+	return _magicalItems.size() > 0;
+}
+
+Adndtk::Coin Adndtk::Treasure::value(const Defs::coin& currency) const
 {
 	auto value = _coins[currency];
 	return {currency, value};
 }
 
-const std::vector<Adndtk::Gem>& Adndtk::Treasure::gems()
+const std::vector<Adndtk::Gem>& Adndtk::Treasure::gems() const
 {
 	return _gems;
 }
 
-const std::vector<Adndtk::ObjectOfArt>&	Adndtk::Treasure::objects_of_art()
+const std::vector<Adndtk::ObjectOfArt>&	Adndtk::Treasure::objects_of_art() const
 {
 	return _objectsOfArt;
 }
 
-const std::vector<Adndtk::MagicalItem>&	Adndtk::Treasure::magical_items()
+const std::vector<Adndtk::MagicalItem>&	Adndtk::Treasure::magical_items() const
 {
 	return _magicalItems;
 }
 
-double Adndtk::Treasure::total_value(const Defs::coin& currency)
+double Adndtk::Treasure::total_value(const Defs::coin& currency) const
 {
 	double treasureValue = 0.0;
 

@@ -151,13 +151,17 @@ namespace Adndtk
         Treasure& operator+= (const ObjectOfArt& o);
         Treasure& operator+= (const MagicalItem& m);
 
-        std::set<Defs::coin>			coins();
-        Adndtk::Coin		            value(const Defs::coin& currency);
-        const std::vector<Gem>&			gems();
-        const std::vector<ObjectOfArt>&	objects_of_art();
-        const std::vector<MagicalItem>&	magical_items();
+        std::set<Defs::coin>			coins() const;
+        bool                			includes(const Defs::coin& currency)const;
+        bool                			includes_gems()const;
+        bool                			includes_objects_of_art()const;
+        bool                			includes_magicals()const;
+        Adndtk::Coin		            value(const Defs::coin& currency) const;
+        const std::vector<Gem>&			gems() const;
+        const std::vector<ObjectOfArt>&	objects_of_art() const;
+        const std::vector<MagicalItem>&	magical_items() const;
 
-        double							total_value(const Defs::coin& currency);
+        double							total_value(const Defs::coin& currency) const;
 
     private:
         uint32_t								_uid;
