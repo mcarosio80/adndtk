@@ -174,7 +174,7 @@ namespace Adndtk
         template <typename _T>
         _T select_one(const std::vector<_T>& v)
         {
-            auto r = Die::roll(1, v.size());
+            auto r = Die::roll(1, v.size())-1;
 			auto it = std::next(v.begin(), r);
 			return *it;
         }
@@ -182,7 +182,8 @@ namespace Adndtk
         void add_coins(const Defs::coin& coin, const uint32_t& countFrom, const uint32_t& countTo);
         void add_gem(const uint32_t& countFrom, const uint32_t& countTo);
         void add_object_of_art(const uint32_t& countFrom, const uint32_t& countTo);
-        void add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature, const std::optional<int>& additionalComponent, const std::optional<int>& additionalCount);
+        //void add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature, const std::optional<int>& additionalComponent, const std::optional<int>& additionalCount);
+        void add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature);
         std::vector<Defs::magical_item_type> get_magical_types(const int& nature);
         bool roll_for_component(const Die& d, const int probability) const;
     };

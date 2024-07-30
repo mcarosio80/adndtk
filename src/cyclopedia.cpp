@@ -158,7 +158,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', i.id, 'found_probability_from', t.probability_from, 'found_probability_to', t.probability_to from MAGICAL_ITEM i inner join MAGICAL_ITEM_TYPE t on t.id = i.type inner join MAGICAL_ITEM_PROBABILITY p on p.MAGICAL_ITEM_ID = i.id where i.type = ? and ? between p.subtable_from and p.subtable_to and ? between p.probability_from and p.probability_to", Query::select_magical_item_by_type_and_probability);
         prepare_statement("select 'id', id from magical_item where type = ?", Query::select_magical_items_by_type);
         prepare_statement("select 'id', id from treasure_component", Query::select_treasure_components);
-        prepare_statement("select 'count_from', count_from, 'count_to', count_to, 'probability', probability, 'nature', nature, 'additional_component', additional_component, 'additional_count', additional_count from treasure_composition where treasure_class = ? and component = ?", Query::select_treasure_composition);
+        prepare_statement("select 'count_from', count_from, 'count_to', count_to, 'probability', probability, 'nature', nature, 'additional_nature', additional_nature, 'additional_count', additional_count from treasure_composition where treasure_class = ? and component = ?", Query::select_treasure_composition);
 
         load_advancement_table();
     }

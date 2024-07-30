@@ -12,7 +12,7 @@
 
 bool Adndtk::TreasurePool::_initialised = false;
 
-using TreasureInfo = std::tuple<short, uint32_t, uint32_t, int, std::optional<int>, std::optional<int>, std::optional<int>>;
+using TreasureInfo = std::tuple<short, uint32_t, uint32_t, std::optional<int>>;
 
 Adndtk::TreasurePool::TreasurePool()
     : _lastItemId{0}, _rd{}, _generator{_rd()}, _uniformDistribution{_valuesFrom, _valuesTo}
@@ -496,17 +496,23 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 		if (treasureComposition.size() > 0)
 		{
 			auto& t = treasureComposition[0];
-			auto countFrom = t.as<uint32_t>("count_from");
-			auto countTo = t.as<uint32_t>("count_to");
-			auto probability = t.as<int>("probability");
+			auto countFrom = t.try_or<uint32_t>("count_from", 0);
+			auto countTo = t.try_or<uint32_t>("count_to", 0);
+			auto probability = t.try_or<int>("probability", 0);
 			auto nature = t.try_as<int>("nature");
-			auto additionalComponent = t.try_as<int>("additional_component");
+			auto additionalNature = t.try_as<int>("additional_nature");
 			auto additionalCount = t.try_as<int>("additional_count");
 
     		if (roll_for_component(d100, probability))
 			{
-				auto info = std::make_tuple(compId, countFrom, countTo, probability, nature, additionalComponent, additionalCount);
+				auto info = std::make_tuple(compId, countFrom, countTo, nature);
 				treasureInfo.push_back(info);
+				if (additionalNature.has_value() && additionalCount.has_value())
+				{
+					auto addCount = additionalCount.value_or(0);
+					auto additionalInfo = std::make_tuple(compId, addCount, addCount, additionalNature);
+					treasureInfo.push_back(additionalInfo);
+				}
 			}
 		}
 	}
@@ -516,10 +522,9 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 		auto compId = std::get<0>(i);
 		auto countFrom = std::get<1>(i);
 		auto countTo = std::get<2>(i);
-		auto probability = std::get<3>(i);
-		auto nature = std::get<4>(i);
-		auto additionalComponent = std::get<5>(i);
-		auto additionalCount = std::get<6>(i);
+		auto nature = std::get<3>(i);
+		// auto additionalComponent = std::get<5>(i);
+		// auto additionalCount = std::get<6>(i);
 
 		auto tc = static_cast<Defs::treasure_component>(compId);
 		if (tc == Defs::treasure_component::copper)
@@ -547,10 +552,9 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 		{
 			add_object_of_art(countFrom, countTo);
 		}
-		else if (tc == Defs::treasure_component::magical_items
-				|| tc == Defs::treasure_component::magical_items_additional)
+		else if (tc == Defs::treasure_component::magical_items)
 		{
-			add_magical_item(countFrom, countTo, nature.value(), additionalComponent, additionalCount);
+			add_magical_item(countFrom, countTo, nature.value());
 		}
 	}
 }
@@ -629,7 +633,8 @@ std::vector<Adndtk::Defs::magical_item_type> Adndtk::Treasure::get_magical_types
 	return magicalItemTypes;
 }
 
-void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature, const std::optional<int>& additionalComponent, const std::optional<int>& additionalCount)
+//void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature, const std::optional<int>& additionalComponent, const std::optional<int>& additionalCount)
+void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature)
 {
 	auto count = (countFrom == countTo) ? countFrom : Die::roll(countFrom, countTo);
 

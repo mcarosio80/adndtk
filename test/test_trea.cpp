@@ -178,7 +178,7 @@ TEST_CASE("[TC-TREA.004] Objects of art value vary according to their probabilit
     }
 }
 
-TEST_CASE("[TC-TREA.005] Class A treasure contain appropriate values", "[treasure]" )
+TEST_CASE("[TC-TREA.005] Class A treasure always contains values if presence flag is forced", "[treasure]" )
 {
     std::map<Defs::coin, std::pair<uint32_t, uint32_t>> coins
     {
@@ -230,52 +230,347 @@ TEST_CASE("[TC-TREA.005] Class A treasure contain appropriate values", "[treasur
     OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = false;
 }
 
-TEST_CASE("[TC-TREA.006] Class A treasure may contain appropriate values", "[treasure]" )
+TEST_CASE("[TC-TREA.005] Treasures may contain appropriate values accorging to their class", "[treasure]" )
 {
-    std::map<Defs::coin, std::pair<uint32_t, uint32_t>> coins
+    std::map<Defs::treasure_class, std::map<Defs::coin, std::pair<uint32_t, uint32_t>>> coinsPerClass
     {
-        {Defs::coin::copper_piece, {1000, 3000}},
-        {Defs::coin::silver_piece, {200, 2000}},
-        {Defs::coin::gold_piece, {1000, 6000}},
+        {Defs::treasure_class::a,
+            {
+                {Defs::coin::copper_piece, {1000, 3000}},
+                {Defs::coin::silver_piece, {200, 2000}},
+                {Defs::coin::gold_piece, {1000, 6000}},
+            }
+        },
+        {Defs::treasure_class::b,
+            {
+                {Defs::coin::copper_piece, {1000, 6000}},
+                {Defs::coin::silver_piece, {1000, 3000}},
+                {Defs::coin::gold_piece, {200, 2000}},
+            }
+        },
+        {Defs::treasure_class::c,
+            {
+                {Defs::coin::copper_piece, {1000, 10000}},
+                {Defs::coin::silver_piece, {1000, 6000}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::d,
+            {
+                {Defs::coin::copper_piece, {1000, 6000}},
+                {Defs::coin::silver_piece, {1000, 10000}},
+                {Defs::coin::gold_piece, {1000, 3000}},
+            }
+        },
+        {Defs::treasure_class::e,
+            {
+                {Defs::coin::copper_piece, {1000, 6000}},
+                {Defs::coin::silver_piece, {1000, 10000}},
+                {Defs::coin::gold_piece, {1000, 4000}},
+            }
+        },
+        {Defs::treasure_class::f,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {3000, 18000}},
+                {Defs::coin::gold_piece, {1000, 6000}},
+            }
+        },
+        {Defs::treasure_class::g,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {2000, 20000}},
+            }
+        },
+        {Defs::treasure_class::h,
+            {
+                {Defs::coin::copper_piece, {3000, 18000}},
+                {Defs::coin::silver_piece, {2000, 20000}},
+                {Defs::coin::gold_piece, {2000, 20000}},
+            }
+        },
+        {Defs::treasure_class::i,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::j,
+            {
+                {Defs::coin::copper_piece, {3, 24}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::k,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {3, 18}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::l,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::m,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {2, 8}},
+            }
+        },
+        {Defs::treasure_class::n,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::o,
+            {
+                {Defs::coin::copper_piece, {10, 40}},
+                {Defs::coin::silver_piece, {10, 30}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::p,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {10, 60}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::q,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::r,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {2, 20}},
+            }
+        },
+        {Defs::treasure_class::s,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::t,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::u,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::v,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::w,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {5, 30}},
+            }
+        },
+        {Defs::treasure_class::x,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {0, 0}},
+            }
+        },
+        {Defs::treasure_class::y,
+            {
+                {Defs::coin::copper_piece, {0, 0}},
+                {Defs::coin::silver_piece, {0, 0}},
+                {Defs::coin::gold_piece, {200, 1200}},
+            }
+        },
+        {Defs::treasure_class::z,
+            {
+                {Defs::coin::copper_piece, {100, 300}},
+                {Defs::coin::silver_piece, {100, 400}},
+                {Defs::coin::gold_piece, {100, 600}},
+            }
+        },
     };
-    std::pair<uint32_t, uint32_t> gpEpMinMax{300, 1800};
-    std::pair<uint32_t, uint32_t> gemsMinMax{10, 40};
-    std::pair<uint32_t, uint32_t> objectsOfArtMinMax{2, 12};
-    uint32_t magicalsCount{3};
+    std::map<Defs::treasure_class, std::pair<uint32_t, uint32_t>> gpEpMinMax
+    {
+        {Defs::treasure_class::a, {300, 1800}},
+        {Defs::treasure_class::b, {100, 1000}},
+        {Defs::treasure_class::c, {100, 600}},
+        {Defs::treasure_class::d, {100, 600}},
+        {Defs::treasure_class::e, {300, 1800}},
+        {Defs::treasure_class::f, {1000, 4000}},
+        {Defs::treasure_class::g, {1000, 10000}},
+        {Defs::treasure_class::h, {1000, 8000}},
+        {Defs::treasure_class::i, {100, 600}},
+        {Defs::treasure_class::j, {0, 0}},
+        {Defs::treasure_class::k, {0, 0}},
+        {Defs::treasure_class::l, {2, 12}},
+        {Defs::treasure_class::m, {0, 0}},
+        {Defs::treasure_class::n, {1, 6}},
+        {Defs::treasure_class::o, {0, 0}},
+        {Defs::treasure_class::p, {1, 20}},
+        {Defs::treasure_class::q, {0, 0}},
+        {Defs::treasure_class::r, {10, 60}},
+        {Defs::treasure_class::s, {0, 0}},
+        {Defs::treasure_class::t, {0, 0}},
+        {Defs::treasure_class::u, {0, 0}},
+        {Defs::treasure_class::v, {0, 0}},
+        {Defs::treasure_class::w, {1, 8}},
+        {Defs::treasure_class::x, {0, 0}},
+        {Defs::treasure_class::y, {0, 0}},
+        {Defs::treasure_class::z, {100, 400}},
+    };
+    std::map<Defs::treasure_class, std::pair<uint32_t, uint32_t>> gemsMinMax
+    {
+        {Defs::treasure_class::a, {10, 40}},
+        {Defs::treasure_class::b, {1, 8}},
+        {Defs::treasure_class::c, {1, 6}},
+        {Defs::treasure_class::d, {1, 10}},
+        {Defs::treasure_class::e, {1, 12}},
+        {Defs::treasure_class::f, {2, 20}},
+        {Defs::treasure_class::g, {3, 18}},
+        {Defs::treasure_class::h, {3, 30}},
+        {Defs::treasure_class::i, {2, 12}},
+        {Defs::treasure_class::j, {0, 0}},
+        {Defs::treasure_class::k, {0, 0}},
+        {Defs::treasure_class::l, {0, 0}},
+        {Defs::treasure_class::m, {0, 0}},
+        {Defs::treasure_class::n, {0, 0}},
+        {Defs::treasure_class::o, {0, 0}},
+        {Defs::treasure_class::p, {0, 0}},
+        {Defs::treasure_class::q, {1, 4}},
+        {Defs::treasure_class::r, {2, 8}},
+        {Defs::treasure_class::s, {0, 0}},
+        {Defs::treasure_class::t, {0, 0}},
+        {Defs::treasure_class::u, {2, 16}},
+        {Defs::treasure_class::v, {0, 0}},
+        {Defs::treasure_class::w, {2, 16}},
+        {Defs::treasure_class::x, {0, 0}},
+        {Defs::treasure_class::y, {0, 0}},
+        {Defs::treasure_class::z, {1, 6}},
+    };
+    std::map<Defs::treasure_class, std::pair<uint32_t, uint32_t>> objectsOfArtMinMax
+    {
+        {Defs::treasure_class::a, {2, 12}},
+        {Defs::treasure_class::b, {1, 4}},
+        {Defs::treasure_class::c, {1, 3}},
+        {Defs::treasure_class::d, {1, 6}},
+        {Defs::treasure_class::e, {1, 6}},
+        {Defs::treasure_class::f, {1, 8}},
+        {Defs::treasure_class::g, {1, 6}},
+        {Defs::treasure_class::h, {2, 20}},
+        {Defs::treasure_class::i, {2, 8}},
+        {Defs::treasure_class::j, {0, 0}},
+        {Defs::treasure_class::k, {0, 0}},
+        {Defs::treasure_class::l, {0, 0}},
+        {Defs::treasure_class::m, {0, 0}},
+        {Defs::treasure_class::n, {0, 0}},
+        {Defs::treasure_class::o, {0, 0}},
+        {Defs::treasure_class::p, {0, 0}},
+        {Defs::treasure_class::q, {0, 0}},
+        {Defs::treasure_class::r, {1, 3}},
+        {Defs::treasure_class::s, {0, 0}},
+        {Defs::treasure_class::t, {0, 0}},
+        {Defs::treasure_class::u, {1, 6}},
+        {Defs::treasure_class::v, {0, 0}},
+        {Defs::treasure_class::w, {1, 8}},
+        {Defs::treasure_class::x, {0, 0}},
+        {Defs::treasure_class::y, {0, 0}},
+        {Defs::treasure_class::z, {2, 12}},
+    };
+    std::map<Defs::treasure_class, std::pair<uint32_t, uint32_t>> magicalsCount
+    {
+        {Defs::treasure_class::a, {3, 3}},
+        {Defs::treasure_class::b, {1, 1}},
+        {Defs::treasure_class::c, {2, 2}},
+        {Defs::treasure_class::d, {3, 3}},
+        {Defs::treasure_class::e, {4, 4}},
+        {Defs::treasure_class::f, {5, 5}},
+        {Defs::treasure_class::g, {5, 5}},
+        {Defs::treasure_class::h, {6, 6}},
+        {Defs::treasure_class::i, {1, 1}},
+        {Defs::treasure_class::j, {0, 0}},
+        {Defs::treasure_class::k, {0, 0}},
+        {Defs::treasure_class::l, {0, 0}},
+        {Defs::treasure_class::m, {0, 0}},
+        {Defs::treasure_class::n, {0, 0}},
+        {Defs::treasure_class::o, {0, 0}},
+        {Defs::treasure_class::p, {0, 0}},
+        {Defs::treasure_class::q, {0, 0}},
+        {Defs::treasure_class::r, {0, 0}},
+        {Defs::treasure_class::s, {1, 8}},
+        {Defs::treasure_class::t, {1, 4}},
+        {Defs::treasure_class::u, {1, 1}},
+        {Defs::treasure_class::v, {2, 2}},
+        {Defs::treasure_class::w, {2, 2}},
+        {Defs::treasure_class::x, {2, 2}},
+        {Defs::treasure_class::y, {0, 0}},
+        {Defs::treasure_class::z, {3, 3}},
+    };
     
-    Treasure t{Defs::treasure_class::a};
-
-    for (auto& c : coins)
+    for (auto& coins : coinsPerClass)
     {
-        auto value = t.value(c.first);
-        if (t.includes(c.first))
+        Treasure t{coins.first};
+
+        for (auto& c : coins.second)
         {
-            REQUIRE(value >= c.second.first);
-            REQUIRE(value <= c.second.second);
+            auto value = t.value(c.first);
+            if (t.includes(c.first))
+            {
+                REQUIRE(value >= c.second.first);
+                REQUIRE(value <= c.second.second);
+            }
+            else
+            {
+                REQUIRE(value == 0);
+            }
         }
-        else
+
+        if (t.includes_gems())
         {
-            REQUIRE(value == 0);
+            auto& gems = t.gems();
+            REQUIRE(gems.size() >= gemsMinMax[coins.first].first);
+            REQUIRE(gems.size() <= gemsMinMax[coins.first].second);
         }
-    }
 
-    if (t.includes_gems())
-    {
-        auto& gems = t.gems();
-        REQUIRE(gems.size() >= gemsMinMax.first);
-        REQUIRE(gems.size() <= gemsMinMax.second);
-    }
+        if (t.includes_objects_of_art())
+        {
+            auto& arts = t.objects_of_art();
+            REQUIRE(arts.size() >= objectsOfArtMinMax[coins.first].first);
+            REQUIRE(arts.size() <= objectsOfArtMinMax[coins.first].second);
+        }
 
-    if (t.includes_objects_of_art())
-    {
-        auto& arts = t.objects_of_art();
-        REQUIRE(arts.size() >= objectsOfArtMinMax.first);
-        REQUIRE(arts.size() <= objectsOfArtMinMax.second);
-    }
-
-    if (t.includes_magicals())
-    {
-        auto& magicals = t.magical_items();
-        REQUIRE(magicals.size() == magicalsCount);
+        if (t.includes_magicals())
+        {
+            auto& magicals = t.magical_items();
+            REQUIRE(magicals.size() >= magicalsCount[coins.first].first);
+            REQUIRE(magicals.size() <= magicalsCount[coins.first].second);
+        }
     }
 }
