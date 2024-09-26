@@ -185,6 +185,16 @@
         "value": "id"
     },
     {
+        "table" : "DEITY_ACTIVITY",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "CULT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
         "table" : "PLANE_RANK",
         "key" : "name",
         "value": "id"

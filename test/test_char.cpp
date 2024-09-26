@@ -1086,7 +1086,7 @@ TEST_CASE("[TC-CHAR.035] Deities can be chosen according to the character's mora
 {
     auto deitiesTN = Cyclopedia::get_instance().available_deities(Defs::moral_alignment::true_neutral);
 
-    REQUIRE(deitiesTN.size() == 10);
+    REQUIRE(deitiesTN.size() == 39);
     REQUIRE(deitiesTN.find(Defs::deity::helm) != deitiesTN.end());
     REQUIRE(deitiesTN.find(Defs::deity::tempus) != deitiesTN.end());
     REQUIRE(deitiesTN.find(Defs::deity::selune) != deitiesTN.end());
@@ -1096,18 +1096,71 @@ TEST_CASE("[TC-CHAR.035] Deities can be chosen according to the character's mora
     REQUIRE(deitiesTN.find(Defs::deity::oghma) != deitiesTN.end());
     REQUIRE(deitiesTN.find(Defs::deity::sune) != deitiesTN.end());
     REQUIRE(deitiesTN.find(Defs::deity::cyric) != deitiesTN.end());
-    REQUIRE(deitiesTN.find(Defs::deity::corellon) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::corellon_larethian) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::shar) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::silvanus) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::gond) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::mask) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::mielikki) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::tymora) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::azuth) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::deneir) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::eldath) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::milil) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::bhaal) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::leira) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::waukeen) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::garagos) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::iyachtu_xvim) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::sharess) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::akadia) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::grumbar) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::ishtishia) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::kossuth) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::aerdrie_faenya) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::labelas_enoreth) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::berronar_truesilver) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::dugmaren_brightmantle) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::dumathoin) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::gorm_gulthyn) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::haela_brightaxe) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::vergadain) != deitiesTN.end());
+    REQUIRE(deitiesTN.find(Defs::deity::sheela_peryroyl) != deitiesTN.end());
 
     auto deitiesCE = Cyclopedia::get_instance().available_deities(Defs::moral_alignment::chaotic_evil);
 
-    REQUIRE(deitiesCE.size() == 7);
+    REQUIRE(deitiesCE.size() == 31);
     REQUIRE(deitiesCE.find(Defs::deity::bane) != deitiesCE.end());
     REQUIRE(deitiesCE.find(Defs::deity::tempus) != deitiesCE.end());
     REQUIRE(deitiesCE.find(Defs::deity::lolth) != deitiesCE.end());
     REQUIRE(deitiesCE.find(Defs::deity::mystryl) != deitiesCE.end());
     REQUIRE(deitiesCE.find(Defs::deity::talos) != deitiesCE.end());
     REQUIRE(deitiesCE.find(Defs::deity::cyric) != deitiesCE.end());
-    REQUIRE(deitiesCE.find(Defs::deity::corellon) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::corellon_larethian) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::shar) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::beshaba) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::gond) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::mask) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::umberlee) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::auril) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::deneir) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::eldath) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::malar) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::talona) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::bhaal) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::leira) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::myrkul) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::waukeen) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::garagos) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::iyachtu_xvim) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::shaundakul) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::akadia) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::fenmarel_mestarine) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::abbathor) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::berronar_truesilver) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::urdlen) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::shargaas) != deitiesCE.end());
+    REQUIRE(deitiesCE.find(Defs::deity::yurtrus) != deitiesCE.end());
 }
 
 TEST_CASE("[TC-CHAR.036] Deity selection is mandatory for priest spells casters", "[character]" )
