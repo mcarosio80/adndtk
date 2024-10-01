@@ -46,12 +46,6 @@ namespace Adndtk
         select_coin_exchange_rates,
         select_equipment,
         select_equipment_ids,
-        select_strength_stats,
-        select_dexterity_stats,
-        select_constitution_stats,
-        select_intelligence_stats,
-        select_wisdom_stats,
-        select_charisma_stats,
         select_thief_ability_base_scores,
         select_thieving_skill_racial_adjustments,
         select_thieving_skill_dexterity_adjustments,
@@ -98,6 +92,17 @@ namespace Adndtk
         select_magical_items_by_type,
         select_treasure_components,
         select_treasure_composition,
+
+        select_all_strength_stats,
+        select_all_dexterity_stats,
+        select_all_constitution_stats,
+        select_all_intelligence_stats,
+        select_all_wisdom_stats,
+        select_all_charisma_stats,
+        select_all_race,
+        select_all_character_class,
+        select_all_skill,
+        select_all_deity,
     };
 
     enum class XPChangeType

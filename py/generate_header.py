@@ -121,10 +121,19 @@ def fetch_table_info(conn, tableName):
 ################################
 def print_fetch_all(tableName, fields, outFile, indentationLevel):
     outFile.write(f"""
+            /// Returns data from a given column in table '{tableName}' as a typed vector
+            template<typename _T>
+			static std::vector<_T> to_vector(const std::string& fieldName)
+            {{
+                Adndtk::QueryResultSet results = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<>(Adndtk::Query::select_all_{tableName});
+                return results.to_vector<_T>(fieldName);
+			}}
+
+            /// Returns all records from table '{tableName}'
             static std::vector<{tableName}> fetch_all()
             {{
                 std::vector<{tableName}> vec;
-                Adndtk::QueryResultSet results = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<>(Adndtk::Query::select_{tableName});
+                Adndtk::QueryResultSet results = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<>(Adndtk::Query::select_all_{tableName});
                 for (Adndtk::QueryResult& r : results)
                 {{
                     {tableName} stats;\n""")
@@ -144,7 +153,7 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                 outFile.write(f"stats.{fieldName} = r.try_as<{fieldType}>(\"{fieldName}\");")
         else:
             if fieldType == "std::string":
-                outFile.write(f"stats.{fieldName} = r[\"{fieldName}\"];")
+                outFile.write(f"stats.{fieldName} = r[\"{fieldName}\"].value_or(\"\");")
             else:
                 outFile.write(f"stats.{fieldName} = r.try_as<{fieldType}>(\"{fieldName}\").value();")
         outFile.write("\n")
@@ -196,6 +205,8 @@ def write_heading(outFile, headerFile, version, addIncludes):
         outFile.write(f'#include <optional>\n')
         outFile.write(f'#include <string>\n')
         outFile.write(f'#include <vector>\n')
+        outFile.write(f'#include <set>\n')
+        outFile.write(f'#include <algorithm>\n')
         outFile.write(f'#include <common_types.h>\n')
         outFile.write(f'#include <cyclopedia.h>\n')
         outFile.write(f'#include <query_result.h>\n\n')

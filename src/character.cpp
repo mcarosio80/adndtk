@@ -421,7 +421,7 @@ bool Adndtk::Character::verify_worshipped_deity() const
             throw std::runtime_error("This character must worship a deity");
         }
         auto deities = Cyclopedia::get_instance().available_deities(_align);
-        return deities.find(_deity.value()) != deities.end();
+        return std::find(deities.begin(), deities.end(), _deity.value()) != deities.end();
     }
     return true;
 }

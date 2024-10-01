@@ -4,5 +4,9 @@
     "constitution_stats" : "yes",
     "intelligence_stats" : "yes",
     "wisdom_stats" : "yes",
-    "charisma_stats" : "yes"
+    "charisma_stats" : "yes",
+    "race" : "yes",
+    "character_class" : "yes",
+    "skill" : "yes",
+    "deity" : "yes"
 }
