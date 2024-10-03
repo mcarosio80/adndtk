@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18.4)
 
 project(adndtk
     LANGUAGES CXX
-    VERSION 0.2.0.0
+    VERSION 0.24.20.1
     DESCRIPTION "AdndTK is an open C++ role playing games library. It aims to mimic the ruleset of Advanced Dungeons & Dragons 2nd Edition"
 )
 
