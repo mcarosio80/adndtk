@@ -38,8 +38,7 @@ src/defs.h
 src/tables.h
 src/config.h
 
-.vscode/settings.json
-.vscode/launch.json
+.vscode/
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
