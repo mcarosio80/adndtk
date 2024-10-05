@@ -7,6 +7,7 @@
 #include <common_types.h>
 #include <options.h>
 #include <cyclopedia.h>
+#include <tables.h>
 #include <dice.h>
 #include <skills.h>
 #include <skill_creator.h>
