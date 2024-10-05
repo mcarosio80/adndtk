@@ -864,7 +864,7 @@ TEST_CASE("[TC-TUND.011] Turning undead (ghost/10HD) improves with priest's expe
     }
 }
 
-TEST_CASE("[TC-TUND.012] Turning undead (ghost/10HD) improves with priest's experience", "[turn_undead]" )
+TEST_CASE("[TC-TUND.012] Turning undead (lich/11HD) improves with priest's experience", "[turn_undead]" )
 {
     std::pair<Defs::turn_effect, std::optional<short>> res{};
     for (auto& undeadType : {Defs::turnable::lich, Defs::turnable::hd11_or_more})
