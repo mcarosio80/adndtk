@@ -90,7 +90,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'name', name, 'rank', rank, 'moral_alignment', moral_alignment, 'realm', realm, 'plane', plane, 'sex', sex, 'activity', activity, 'followers_race', followers_race, 'cult', cult from deity", Query::select_all_deity);
         prepare_statement("select 'id', id, 'turnable_code', turnable_code, 'level', level, 'effect', effect, 'value', value from TURN_UNDEAD", Query::select_all_turn_undead);
         prepare_statement("select 'id', id, 'name', name, 'type', type, 'cost_coin', cost_coin, 'cost_min', cost_min, 'cost_max', cost_max, 'weight', weight, 'body_slot', body_slot from equipment", Query::select_all_equipment);
-
+        prepare_statement("select 'id', id, 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type", Query::select_all_character_class_type);
+        
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id is null", Query::select_thieving_skill_no_armour_adjustments);

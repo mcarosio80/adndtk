@@ -99,6 +99,7 @@ namespace Adndtk
         select_all_charisma_stats,
         select_all_race,
         select_all_character_class,
+        select_all_character_class_type,
         select_all_skill,
         select_all_deity,
         select_all_turn_undead,

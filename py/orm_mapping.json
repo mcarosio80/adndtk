@@ -7,6 +7,7 @@
     "charisma_stats" : "yes",
     "race" : "yes",
     "character_class" : "yes",
+    "character_class_type" : "yes",
     "skill" : "yes",
     "deity" : "yes",
     "turn_undead" : "yes",
