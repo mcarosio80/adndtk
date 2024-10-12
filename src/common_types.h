@@ -42,7 +42,6 @@ namespace Adndtk
         select_class_limits,
         select_saving_throws,
         select_thaco,
-        select_turn_undead,
         select_coin_exchange_rates,
         select_equipment,
         select_equipment_ids,
@@ -103,6 +102,7 @@ namespace Adndtk
         select_all_character_class,
         select_all_skill,
         select_all_deity,
+        select_all_turn_undead,
     };
 
     enum class XPChangeType

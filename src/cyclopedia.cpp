@@ -74,8 +74,6 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'score', score, 'factor', factor from THACO t where CLASS_TYPE_ID = ?", Query::select_thaco);
 
-        prepare_statement("select 'level', level, 'turnable_code', turnable_code, 'effect', effect, 'value', value from TURN_UNDEAD", Query::select_turn_undead);
-
         prepare_statement("select 'coin_from', coin_from, 'coin_to', coin_to, 'exchange_value', exchange_value from coin_exchange_values", Query::select_coin_exchange_rates);
 
         prepare_statement("select 'name', name, 'type', type, 'cost_coin', cost_coin, 'cost_min', cost_min, 'cost_max', cost_max, 'weight', weight, 'body_slot', body_slot, 'capacity_limit', capacity_limit from equipment e left join BODY_SLOT b on b.id = e.body_slot where e.id = ?", Query::select_equipment);
@@ -91,6 +89,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class", Query::select_all_character_class);
         prepare_statement("select 'id', id, 'name', name from skill", Query::select_all_skill);
         prepare_statement("select 'id', id, 'name', name, 'rank', rank, 'moral_alignment', moral_alignment, 'realm', realm, 'plane', plane, 'sex', sex, 'activity', activity, 'followers_race', followers_race, 'cult', cult from deity", Query::select_all_deity);
+        prepare_statement("select 'id', id, 'turnable_code', turnable_code, 'level', level, 'effect', effect, 'value', value from TURN_UNDEAD", Query::select_all_turn_undead);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);

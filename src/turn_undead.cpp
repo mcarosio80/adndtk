@@ -1,6 +1,7 @@
 #include <turn_undead.h>
 #include <cyclopedia.h>
 #include <dice.h>
+#include <tables.h>
 #include <utility>
 
 bool Adndtk::TurnUndead::_initialised = false;
@@ -28,21 +29,15 @@ Adndtk::TurnUndead::~TurnUndead()
 
 void Adndtk::TurnUndead::init()
 {
-    auto result = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_turn_undead);
+    auto turnUndead = Tables::turn_undead::fetch_all();
 
-    for (auto& t : result)
+    for (auto& t : turnUndead)
     {
-        auto level = static_cast<ExperienceLevel>(t.as<int>("level"));
-        auto tCode = static_cast<Defs::turnable>(t.as<int>("turnable_code"));
-        auto effect = static_cast<Defs::turn_effect>(t.as<int>("effect"));
-        
-        std::optional<short> value{std::nullopt};
-        if (t["value"].has_value())
-        {
-            value = static_cast<short>(t.as<int>("value"));
-        }
-
-        _turnScores[level][tCode] = std::make_pair(effect, value);
+        auto level = static_cast<ExperienceLevel>(t.level);
+        auto turnableCode = static_cast<Defs::turnable>(t.turnable_code);
+        auto effect = static_cast<Defs::turn_effect>(t.effect);
+        auto value = static_cast<std::optional<short>>(t.value);
+        _turnScores[level][turnableCode] = std::make_pair(effect, value);
     }
 }
 
