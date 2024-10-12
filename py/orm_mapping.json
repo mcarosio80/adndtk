@@ -9,5 +9,6 @@
     "character_class" : "yes",
     "skill" : "yes",
     "deity" : "yes",
-    "turn_undead" : "yes"
+    "turn_undead" : "yes",
+    "equipment" : "yes"
 }

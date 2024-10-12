@@ -2,6 +2,7 @@
 #include <dice.h>
 #include <options.h>
 #include <cyclopedia.h>
+#include <tables.h>
 
 #include <cmath>
 #include <optional>
@@ -56,10 +57,9 @@ void Adndtk::Store::supply(const Defs::equipment& equipmentId, const short& coun
 
 void Adndtk::Store::supply_all(const short& count/*=1*/)
 {
-    auto equipmentIds = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_equipment_ids);
-    for (auto& res : equipmentIds)
+    auto equipmentIds = Tables::equipment::to_vector<Defs::equipment>("id");
+    for (auto& id : equipmentIds)
     {
-        auto id = static_cast<Defs::equipment>(res.as<int>("id"));
         supply(id, count);
     }
 }

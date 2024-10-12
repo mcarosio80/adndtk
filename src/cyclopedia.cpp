@@ -77,7 +77,6 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'coin_from', coin_from, 'coin_to', coin_to, 'exchange_value', exchange_value from coin_exchange_values", Query::select_coin_exchange_rates);
 
         prepare_statement("select 'name', name, 'type', type, 'cost_coin', cost_coin, 'cost_min', cost_min, 'cost_max', cost_max, 'weight', weight, 'body_slot', body_slot, 'capacity_limit', capacity_limit from equipment e left join BODY_SLOT b on b.id = e.body_slot where e.id = ?", Query::select_equipment);
-        prepare_statement("select 'id', id from equipment", Query::select_equipment_ids);
 
         prepare_statement("select 'id', id, 'ability_score_from', ability_score_from, 'excp_from', excp_from, 'ability_score_to', ability_score_to, 'excp_to', excp_to, 'hit_modifier', hit_modifier, 'damage_adjustment', damage_adjustment, 'weight_allowance', weight_allowance, 'maximum_press', maximum_press, 'open_doors', open_doors, 'open_doors_special', open_doors_special, 'bend_bars_lift_gates', bend_bars_lift_gates, 'note', note from strength_stats", Query::select_all_strength_stats);
         prepare_statement("select 'ability_score', ability_score, 'reaction_adjustment', reaction_adjustment, 'missile_attack_adjustment', missile_attack_adjustment, 'defensive_adjustment', defensive_adjustment from dexterity_stats", Query::select_all_dexterity_stats);
@@ -90,6 +89,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'name', name from skill", Query::select_all_skill);
         prepare_statement("select 'id', id, 'name', name, 'rank', rank, 'moral_alignment', moral_alignment, 'realm', realm, 'plane', plane, 'sex', sex, 'activity', activity, 'followers_race', followers_race, 'cult', cult from deity", Query::select_all_deity);
         prepare_statement("select 'id', id, 'turnable_code', turnable_code, 'level', level, 'effect', effect, 'value', value from TURN_UNDEAD", Query::select_all_turn_undead);
+        prepare_statement("select 'id', id, 'name', name, 'type', type, 'cost_coin', cost_coin, 'cost_min', cost_min, 'cost_max', cost_max, 'weight', weight, 'body_slot', body_slot from equipment", Query::select_all_equipment);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);

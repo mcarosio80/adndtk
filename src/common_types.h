@@ -44,7 +44,6 @@ namespace Adndtk
         select_thaco,
         select_coin_exchange_rates,
         select_equipment,
-        select_equipment_ids,
         select_thief_ability_base_scores,
         select_thieving_skill_racial_adjustments,
         select_thieving_skill_dexterity_adjustments,
@@ -103,6 +102,7 @@ namespace Adndtk
         select_all_skill,
         select_all_deity,
         select_all_turn_undead,
+        select_all_equipment,
     };
 
     enum class XPChangeType
