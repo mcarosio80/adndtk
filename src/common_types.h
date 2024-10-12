@@ -104,6 +104,7 @@ namespace Adndtk
         select_all_deity,
         select_all_turn_undead,
         select_all_equipment,
+        select_all_coin,
     };
 
     enum class XPChangeType
