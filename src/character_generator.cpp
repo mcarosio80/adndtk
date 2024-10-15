@@ -2,6 +2,8 @@
 #include <skill_creator.h>
 #include <cyclopedia.h>
 
+#include <algorithm>
+
 Adndtk::CharacterGenerator::CharacterGenerator()
 {
 }
@@ -26,7 +28,7 @@ std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(co
 
 std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(const std::map<Defs::skill, SkillValue>& skillValues)
 {
-    auto query = Query::select_skill_boundaries_class;
+    auto query = Query::select_skill_boundaries_race;
     std::vector<Tables::race> availableRaces{};
     auto races = Tables::race::fetch_all();
                                                 
@@ -65,40 +67,59 @@ std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::availab
         {Defs::skill::charisma, charisma},
     };
 
-    return available_classes(skillValues[Defs::skill::strength], skillValues[Defs::skill::dexterity],
-                        skillValues[Defs::skill::constitution], skillValues[Defs::skill::intelligence],
-                        skillValues[Defs::skill::wisdom], skillValues[Defs::skill::charisma],
-                        raceId);
+    return available_classes(skillValues, raceId);
 }
 
 std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::available_classes(const std::map<Defs::skill, SkillValue>& skillValues, const Defs::race& raceId)
 {
-    auto query = Adndtk::Query::select_skill_boundaries_class;
-    std::vector<Adndtk::Tables::character_class> availableClasses{};
-    auto classes = Tables::character_class::fetch_all();
+    std::vector<Tables::character_class> availableClasses{};
+    auto classes = Tables::character_class::to_map<int>("id");
     auto classesPerRace = Cyclopedia::get_instance().exec_prepared_statement<int>(
                                 Query::select_class_availability_per_race,
                                 static_cast<int>(raceId)).to_set<int>("class_id");
 
-    for (auto& c : classes)
+    for (auto& clsId : classesPerRace)
     {
         std::set<Defs::skill> sklSet{Defs::skill::strength, Defs::skill::dexterity,
                                             Defs::skill::constitution, Defs::skill::intelligence,
                                             Defs::skill::wisdom, Defs::skill::charisma};
-        if (classesPerRace.find(c.id) != classesPerRace.end())
+        auto& c = classes[clsId];
+
+        for (auto s : skillValues)
         {
-            for (auto s : skillValues)
+            std::vector<int> skillLimitMin{0};
+            std::vector<int> skillLimitMax{20};
+
+            auto clsTypeLimits = SkillCreator::get_skill_constraints(Query::select_skill_boundaries_class_type, s.first, c.class_type_id);
+            skillLimitMin.push_back(clsTypeLimits.first);
+            skillLimitMax.push_back(clsTypeLimits.second);
+            
+            auto clsLimits = SkillCreator::get_skill_constraints(Query::select_skill_boundaries_class, s.first, c.id);
+            skillLimitMin.push_back(clsLimits.first);
+            skillLimitMax.push_back(clsLimits.second);
+            
+            auto raceLimits = SkillCreator::get_skill_constraints(Query::select_skill_boundaries_race, s.first, static_cast<int>(raceId));
+            skillLimitMin.push_back(raceLimits.first);
+            skillLimitMax.push_back(raceLimits.second);
+            
+            auto res = Cyclopedia::get_instance().exec_prepared_statement(Query::select_school_of_magic_skill_requisite, c.id);
+            if (res.size() > 0)
             {
-                int minValue{0};
-                int maxValue{20};
-                SkillCreator::get_skill_constraints(query, s.first, c.id, minValue, maxValue);
-                if (s.second >= minValue && s.second <= maxValue)
+                auto& schoolLimits = res[0];
+                if(schoolLimits.as<Defs::skill>("skill_id") == s.first)
                 {
-                    sklSet.erase(s.first);
-                    if (sklSet.empty())
-                    {
-                        availableClasses.push_back(c);
-                    }
+                    skillLimitMin.push_back(schoolLimits.as<int>("skill_value_required"));
+                }
+            }
+
+            auto minLimit = *std::max_element(skillLimitMin.begin(), skillLimitMin.end());
+            auto maxLimit = *std::min_element(skillLimitMax.begin(), skillLimitMax.end());
+            if (s.second >= minLimit && s.second <= maxLimit)
+            {
+                sklSet.erase(s.first);
+                if (sklSet.empty())
+                {
+                    availableClasses.push_back(c);
                 }
             }
         }

@@ -65,7 +65,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type where id = ?", Query::select_character_class_type);
 
         prepare_statement("select 'race_id', race_id, 'skill_id', skill_id, 'value', value from skill_modifier where race_id = ? and skill_id = ?", Query::select_skill_modifier);
-        prepare_statement("select 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where class_id = ?", Query::select_school_of_magic_skill_requisite);
+        prepare_statement("select 'skill_id', skill_id, 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where class_id = ?", Query::select_school_of_magic_skill_requisite);
 
         prepare_statement("select 'class_id', class_id, 'level', level, 'score', score from LEVEL_ADVANCEMENT order by class_id, level", Query::select_level_advancement);
         prepare_statement("select 'class_id', class_id, 'score', score from LEVEL_ADVANCEMENT_FACTOR", Query::select_level_advancement_factor);

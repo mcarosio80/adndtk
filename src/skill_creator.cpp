@@ -44,6 +44,15 @@ void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, c
     }
 }
 
+std::pair<int, int> Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, const Defs::skill& skillType, const std::optional<int>& object)
+{
+    int minValue{0};
+    int maxValue{20};
+    get_skill_constraints(queryId, skillType, object, minValue, maxValue);
+    return std::make_pair(minValue, maxValue);
+}
+
+
 Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, const std::optional<Defs::character_class>& cls,
                                 const std::optional<Defs::race>& race, const SkillGenerationMethod &method/* = SkillGenerationMethod::standard*/)
 {
