@@ -1455,3 +1455,9 @@ TEST_CASE("[TC-CGEN.037] Rangers can be of any good alignment", "[character_gene
         REQUIRE(std::find_if(allowedAligns.begin(), allowedAligns.end(), alignAllowed) != allowedAligns.end());
     }
 }
+
+TEST_CASE("[TC-CGEN.038] Mages can be of any moral alignment", "[character_generator]" )
+{
+    auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::mage);
+    REQUIRE(aligns.size() == 9);
+}
