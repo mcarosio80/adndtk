@@ -237,5 +237,5 @@ void generate_character(const Adndtk::SkillGenerationMethod& method)
 
     std::cout << "Your choice is " << selectedDeity.name << ".\n";
 
-    //auto charName = prompt<std::string>("Character name");
+    auto charName = prompt<std::string>("Character name");
 }
