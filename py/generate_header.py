@@ -191,7 +191,8 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                 outFile.write(f"stats.{fieldName} = r.try_as<{fieldType}>(\"{fieldName}\").value();")
         outFile.write("\n")
             
-    outFile.write(f"""return stats;
+    outFile.write(f"""
+                return stats;
             }}\n""")
 
 ################################

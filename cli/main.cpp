@@ -5,7 +5,6 @@
 #include <set>
 #include <map>
 
-#include <tables.h>
 #include <adndtk.h>
 #include <cli_options.h>
 #include <cli_validator.h>
@@ -155,6 +154,31 @@ void generate_character(const Adndtk::SkillGenerationMethod& method)
     while (!accept);
 
     std::cout << "Your choice is " << selectedClass.long_name << ".\n";
+
+    accept = false;
+    auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);
+    auto alignments = Adndtk::CharacterGenerator::available_moral_alignments(clsId);
+    Adndtk::Tables::moral_alignment selectedAlignment{};
+    do
+    {
+        std::cout << "Choose your moral alignment...\n";
+        std::map<std::string, Adndtk::Tables::moral_alignment> acronyms{};
+        for (auto& m : alignments)
+        {
+            std::cout << "\t[" << m.acronym << "]:\t" << m.name << "\n";
+            acronyms[m.acronym] = m;
+        }
+
+        auto acronym = prompt<std::string>("Choose one");
+        accept = (acronyms.find(acronym) != acronyms.end());
+        if (accept)
+        {
+            selectedAlignment = acronyms[acronym];
+        }
+    }
+    while (!accept);
+
+    std::cout << "Your choice is " << selectedAlignment.name << ".\n";
 
     //auto charName = prompt<std::string>("Character name");
 }

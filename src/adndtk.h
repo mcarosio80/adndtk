@@ -33,6 +33,6 @@
 #include <character.h>
 #include <calendar.h>
 #include <treasure.h>
-
+#include <character_generator.h>
 
 #endif // ADNDTK_H

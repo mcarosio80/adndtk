@@ -107,6 +107,7 @@ namespace Adndtk
         select_all_turn_undead,
         select_all_equipment,
         select_all_coin,
+        select_all_moral_alignment,
     };
 
     enum class XPChangeType

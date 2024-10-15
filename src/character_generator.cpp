@@ -107,3 +107,21 @@ std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::availab
     }
     return availableClasses;
 }
+
+std::vector<Adndtk::Tables::moral_alignment> Adndtk::CharacterGenerator::available_moral_alignments(const Defs::character_class& classId)
+{
+    auto allAligns = Tables::moral_alignment::fetch_all();
+    auto alignsPerClass = Cyclopedia::get_instance().exec_prepared_statement<int>(
+                                Query::select_moral_alignments_by_class,
+                                static_cast<int>(classId)).to_set<int>("id");
+
+    std::vector<Adndtk::Tables::moral_alignment> avalableAligns{};
+    for (auto& a : allAligns)
+    {
+        if (alignsPerClass.find(a.id) == alignsPerClass.end())
+        {
+            avalableAligns.push_back(std::move(a));
+        }
+    }
+    return avalableAligns;
+}
