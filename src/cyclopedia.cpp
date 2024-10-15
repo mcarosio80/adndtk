@@ -194,6 +194,14 @@ Adndtk::Cyclopedia::~Cyclopedia()
     check_state(ret);
 }
 
+bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const
+{
+    return skillVal == 18
+        && skillVal.type() == Defs::skill::strength
+        && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(cls)
+        && race != Defs::race::halfling;
+}
+
 bool Adndtk::Cyclopedia::is_multiclass(const Defs::character_class& cls)
 {
     return split<Defs::character_class>(cls).size() > 1;

@@ -86,6 +86,8 @@ namespace Adndtk
             return found;
         }
 
+        bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const;
+        
         template <Defs::character_class_type probeType>
         bool is_type_of(const Defs::character_class& cls)
         {
