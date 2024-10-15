@@ -22,6 +22,7 @@ namespace Adndtk
         static std::vector<Adndtk::Tables::character_class> available_classes(const std::map<Defs::skill, SkillValue>& skills, const Defs::race& raceId);
         static std::vector<Adndtk::Tables::moral_alignment> available_moral_alignments(const Defs::character_class& classId);
         static std::vector<Adndtk::Tables::sex> available_sex();
+        static std::vector<Adndtk::Tables::deity> available_deities();
     };
 }
 

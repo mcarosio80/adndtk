@@ -213,5 +213,29 @@ void generate_character(const Adndtk::SkillGenerationMethod& method)
 
     std::cout << "Your choice is " << selectedSex.name << ".\n";
 
+    accept = false;
+    auto deities = Adndtk::CharacterGenerator::available_deities();
+    Adndtk::Tables::deity selectedDeity{};
+    do
+    {
+        std::cout << "Choose your deity...\n";
+        std::map<int, Adndtk::Tables::deity> acronyms{};
+        for (auto& d : deities)
+        {
+            std::cout << "\t[" << d.id << "]:\t" << d.name << "\n";
+            acronyms[d.id] = d;
+        }
+
+        auto acronym = prompt<int>("Choose one");
+        accept = (acronyms.find(acronym) != acronyms.end());
+        if (accept)
+        {
+            selectedDeity = acronyms[acronym];
+        }
+    }
+    while (!accept);
+
+    std::cout << "Your choice is " << selectedDeity.name << ".\n";
+
     //auto charName = prompt<std::string>("Character name");
 }

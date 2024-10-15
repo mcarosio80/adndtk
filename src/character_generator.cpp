@@ -149,3 +149,8 @@ std::vector<Adndtk::Tables::sex> Adndtk::CharacterGenerator::available_sex()
 {
     return Adndtk::Tables::sex::fetch_all();
 }
+
+std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities()
+{
+    return Adndtk::Tables::deity::fetch_all();
+}
