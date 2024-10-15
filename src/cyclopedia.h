@@ -86,6 +86,7 @@ namespace Adndtk
             return found;
         }
 
+        bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const Defs::skill& skillId, const short& skillValue) const;
         bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const;
         
         template <Defs::character_class_type probeType>
@@ -136,6 +137,8 @@ namespace Adndtk
             return false;
         }
         bool is_multiclass(const Defs::character_class& cls);
+        std::optional<Adndtk::Defs::school_of_magic> get_school_of_magic(const Defs::character_class& cls);
+        bool is_specialist_wizard(const Defs::character_class& cls);
 
         const AdvancementTable& advancement_table() { return _advTable; }
         Defs::character_class_type get_class_type(const Defs::character_class& cls);

@@ -25,6 +25,12 @@ namespace Adndtk
 
     private:
         static short generate_value(const SkillGenerationMethod &method = SkillGenerationMethod::standard);
+
+        static std::pair<int, int> get_default_boundaries(const Defs::skill &skillType);
+        static std::pair<int, int> get_race_boundaries(const Defs::skill &skillType, const Defs::race& race);
+        static short get_race_adjustments(const Defs::skill &skillType, const Defs::race& race);
+        static std::pair<int, int> get_class_type_boundaries(const Defs::skill &skillType, const Defs::character_class_type& clsType);
+        static std::pair<int, int> get_class_boundaries(const Defs::skill &skillType, const Defs::character_class& cls);
         
         std::optional<Defs::character_class> _class;
         std::optional<Defs::race> _race;

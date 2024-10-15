@@ -16,6 +16,9 @@ namespace Adndtk
         CharacterGenerator();
         ~CharacterGenerator();
 
+        static std::pair<int, int> get_skill_constraints_by_class_type(const Defs::character_class_type& clsType, const Defs::skill& skillId);
+        static std::pair<int, int> get_skill_constraints_by_class(const Defs::character_class& clsId, const Defs::skill& skillId);
+
         static std::vector<Adndtk::Tables::race> available_races(const SkillValue& strength, const SkillValue& dexterity, const SkillValue& constitution, const SkillValue& intelligence, const SkillValue& wisdom, const SkillValue& charisma);
         static std::vector<Adndtk::Tables::race> available_races(const std::map<Defs::skill, SkillValue>& skillValues);
         static std::vector<Adndtk::Tables::character_class> available_classes(const SkillValue& strength, const SkillValue& dexterity, const SkillValue& constitution, const SkillValue& intelligence, const SkillValue& wisdom, const SkillValue& charisma, const Defs::race& raceId);

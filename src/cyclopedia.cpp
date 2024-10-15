@@ -109,6 +109,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'race_id', a.race_id from CHARACTER_CLASS c "
                             "inner join CLASS_AVAILABILITY a on a.class_id = c.id "
                             "where c.id = ? and a.race_id = ?", Query::select_school_of_magic_per_race);
+        prepare_statement("select 'id', id from school_of_magic where class_id = ?", Query::select_school_of_magic_per_class);
+
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7, 'spell_level_8', spell_level_8, 'spell_level_9', spell_level_9 from wizard_spell_progression where level = ?", Query::select_wizard_spell_progression);
 
         prepare_statement("select 'name', name, 'level', level from priest_spell where id = ?", Query::select_priest_spell);
@@ -195,17 +197,43 @@ Adndtk::Cyclopedia::~Cyclopedia()
     check_state(ret);
 }
 
-bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const
+bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const Defs::skill& skillId, const short& skillValue) const
 {
-    return skillVal == 18
-        && skillVal.type() == Defs::skill::strength
+    return skillValue == 18 && skillId == Defs::skill::strength
         && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(cls)
         && race != Defs::race::halfling;
+}
+
+bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const
+{
+    return can_have_exceptional_strength(cls, race, skillVal.type(), skillVal);
 }
 
 bool Adndtk::Cyclopedia::is_multiclass(const Defs::character_class& cls)
 {
     return split<Defs::character_class>(cls).size() > 1;
+}
+
+std::optional<Adndtk::Defs::school_of_magic> Adndtk::Cyclopedia::get_school_of_magic(const Defs::character_class& cls)
+{
+    std::optional<Adndtk::Defs::school_of_magic> school{std::nullopt};
+    auto classes = split<Defs::character_class>(cls);
+    for (auto& c : classes)
+    {
+        auto clsId = static_cast<int>(c);
+        auto setSet = exec_prepared_statement<int>(Query::select_school_of_magic_per_class, clsId);
+        if (setSet.size() > 0)
+        {
+            auto& ret = setSet[0];
+            school = ret.as<Defs::school_of_magic>("id") ;
+        }
+    }
+    return school;
+}
+
+bool Adndtk::Cyclopedia::is_specialist_wizard(const Defs::character_class& cls)
+{
+    return get_school_of_magic(cls).has_value();
 }
 
 bool Adndtk::Cyclopedia::check_state(int return_code)

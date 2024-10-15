@@ -52,6 +52,94 @@ std::pair<int, int> Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Qu
     return std::make_pair(minValue, maxValue);
 }
 
+std::pair<int, int> Adndtk::SkillCreator::get_default_boundaries(const Defs::skill &skillType)
+{
+    int minValue{0};
+    int maxValue{20};
+    Adndtk::Query query = Adndtk::Query::select_skill_boundaries_default;
+    get_skill_constraints(query, skillType, std::nullopt, minValue, maxValue);
+
+    return std::make_pair(minValue, maxValue);
+}
+
+std::pair<int, int> Adndtk::SkillCreator::get_race_boundaries(const Defs::skill &skillType, const Defs::race& race)
+{
+    int minValue{0};
+    int maxValue{20};
+    auto query = Adndtk::Query::select_skill_boundaries_race;
+    auto raceId = static_cast<int>(race);
+    get_skill_constraints(query, skillType, raceId, minValue, maxValue);
+
+    return std::make_pair(minValue, maxValue);
+}
+
+short Adndtk::SkillCreator::get_race_adjustments(const Defs::skill &skillType, const Defs::race& race)
+{
+    int minValue{0};
+    int maxValue{20};
+    auto raceId = static_cast<int>(race);
+    auto query = Query::select_skill_modifier;
+    auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, raceId, static_cast<int>(skillType));
+
+    short raceSkillModifier{0};
+    if (raceModifier.size() > 0 && raceModifier[0]["value"].has_value())
+    {
+        raceSkillModifier = raceModifier[0].as<short>("value");
+    }
+    return raceSkillModifier;
+}
+
+std::pair<int, int> Adndtk::SkillCreator::get_class_type_boundaries(const Defs::skill &skillType, const Defs::character_class_type& clsType)
+{
+    int minValue{0};
+    int maxValue{20};
+    auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
+    auto query = Adndtk::Query::select_skill_boundaries_class_type;
+
+    for (auto& t : clsTypes)
+    {
+        get_skill_constraints(query, skillType, static_cast<int>(t), minValue, maxValue);
+    }
+
+    return std::make_pair(minValue, maxValue);
+}
+
+std::pair<int, int> Adndtk::SkillCreator::get_class_boundaries(const Defs::skill &skillType, const Defs::character_class& cls)
+{
+    int minValue{0};
+    int maxValue{20};
+    int clsId = static_cast<int>(cls);
+
+    auto query = Adndtk::Query::select_character_class;
+    auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+    Defs::character_class_type clsType{};
+    if (result.size() > 0 && result[0]["class_type_id"].has_value())
+    {
+        clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
+    }
+
+    auto clsTypLimits = get_class_type_boundaries(skillType, clsType);
+    minValue = std::max(minValue, clsTypLimits.first);
+    maxValue = std::max(minValue, clsTypLimits.second);
+
+    // check class boundaries
+    query = Adndtk::Query::select_skill_boundaries_class;
+    get_skill_constraints(query, skillType, clsId, minValue, maxValue);
+
+    query = Adndtk::Query::select_school_of_magic_skill_requisite;
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+    if (res.size() > 0)
+    {
+        auto& schoolLimits = res[0];
+        if(schoolLimits.as<Defs::skill>("skill_id") == skillType)
+        {
+            auto somReqVal = schoolLimits.as<int>("skill_value_required");
+            minValue = std::max(minValue, somReqVal);
+        }
+    }
+
+    return std::make_pair(minValue, maxValue);
+}
 
 Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, const std::optional<Defs::character_class>& cls,
                                 const std::optional<Defs::race>& race, const SkillGenerationMethod &method/* = SkillGenerationMethod::standard*/)
@@ -60,69 +148,35 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
     int maxValue{20};
 
     // Check default constraints
-    Adndtk::Query query = Adndtk::Query::select_skill_boundaries_default;
-    get_skill_constraints(query, skillType, std::nullopt, minValue, maxValue);
+    auto defLimits = SkillCreator::get_default_boundaries(skillType);
+    minValue = std::max(minValue, defLimits.first);
+    maxValue = std::max(minValue, defLimits.second);
 
-    Defs::character_class_type clsType;
+    short raceSkillModifier = 0;
+    if (race.has_value())
+    {
+        // check race boundaries
+        auto raceLimits = get_race_boundaries(skillType, race.value());
+        minValue = std::max(minValue, raceLimits.first);
+        maxValue = std::max(minValue, raceLimits.second);
+
+        // get race modifier
+        raceSkillModifier = get_race_adjustments(skillType, race.value());
+    }
 
     if (cls.has_value())
     {
         auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls.value());
         for (auto& c : classes)
         {
-            int clsId = static_cast<int>(c);
-
-            query = Adndtk::Query::select_character_class;
-            auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
-
-            if (result.size() > 0 && result[0]["class_type_id"].has_value())
-            {
-                clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
-            }
-
-            auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
-            query = Adndtk::Query::select_skill_boundaries_class_type;
-            for (auto& t : clsTypes)
-            {
-                get_skill_constraints(query, skillType, static_cast<int>(t), minValue, maxValue);
-            }
-
-            // check class boundaries
-            query = Adndtk::Query::select_skill_boundaries_class;
-            get_skill_constraints(query, skillType, clsId, minValue, maxValue);
-
-            // // check school of magic requisites
-            // query = Adndtk::Query::select_school_of_magic_skill_requisite;
-            // auto somRequisite = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, sklValue, clsId);
-            // if (somRequisite.size() > 0 && somRequisite[0]["skill_value_required"].has_value())
-            // {
-            //     auto somReqVal = somRequisite[0].as<int>("skill_value_required");
-            //     minValue = std::max(minValue, somReqVal);
-            // }
-        }
-    }
-
-    short raceSkillModifier = 0;
-    if (race.has_value())
-    {
-        // check race boundaries
-        query = Adndtk::Query::select_skill_boundaries_race;
-        int raceId = static_cast<int>(race.value());
-        get_skill_constraints(query, skillType, raceId, minValue, maxValue);
-
-        // get race modifier
-        query = Query::select_skill_modifier;
-        auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, raceId, static_cast<int>(skillType));
-
-        if (raceModifier.size() > 0 && raceModifier[0]["value"].has_value())
-        {
-            raceSkillModifier = raceModifier[0].as<short>("value");
+            auto clsLimits = get_class_boundaries(skillType, c);
+            minValue = std::max(minValue, clsLimits.first);
+            maxValue = std::max(minValue, clsLimits.second);
         }
     }
 
     // generate exceptional strength
     std::optional<short> excValue = std::nullopt;
-    
     short val = minValue;
     do
     {
@@ -131,11 +185,8 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
     while (val < minValue || val > maxValue);
     val += raceSkillModifier;
 
-    if (val == 18
-        && skillType == Defs::skill::strength
-        && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(clsType)
-        && race != Defs::race::halfling
-        )
+    if (cls.has_value() && race.has_value()
+        && Cyclopedia::get_instance().can_have_exceptional_strength(cls.value(), race.value(), skillType, val))
     {
         Adndtk::Die d{Defs::die::d100};
         excValue = d.roll();

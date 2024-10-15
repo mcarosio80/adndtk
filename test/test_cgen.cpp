@@ -1414,13 +1414,1120 @@ TEST_CASE("[TC-CGEN.034] Bards require skills Dex: 12+, Int: 13+, Cha: 15+ plus 
     }
 }
 
-TEST_CASE("[TC-CGEN.035] Fighters can be of any moral alignment", "[character_generator]" )
+TEST_CASE("[TC-CGEN.035] Humans cannot be multiclass", "[character_generator]" )
+{
+    auto isMulticlass = [](const Tables::character_class& c) -> bool
+    {
+        auto clsId = static_cast<Defs::character_class>(c.id);
+        return Cyclopedia::get_instance().is_multiclass(clsId);
+    };
+    auto classes = CharacterGenerator::available_classes(
+        SkillValue{Defs::skill::strength, 18},
+        SkillValue{Defs::skill::dexterity, 18},
+        SkillValue{Defs::skill::constitution, 18},
+        SkillValue{Defs::skill::intelligence, 18},
+        SkillValue{Defs::skill::wisdom, 18},
+        SkillValue{Defs::skill::charisma, 18},
+        Defs::race::human
+    );
+    REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), isMulticlass) != classes.end());
+}
+
+TEST_CASE("[TC-CGEN.036] Fighter/Mages require skills Str: 9+, Int: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::elf, Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 15},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 16},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.037] Fighter/Clerics require skills Str: 9+, Wis: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_cleric;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::dwarf, Defs::race::gnome, Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::elf, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 8},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.038] Fighter/Thieves require skills Str: 9+, Dex: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_thief;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::elf, Defs::race::dwarf, Defs::race::gnome, Defs::race::half_elf, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 8},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 14},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.039] Mage/Thieves require skills Int: 9+, Dex: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage_thief;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::elf, Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 8},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.040] Cleric/Thieves require skills Wis: 9+, Dex: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric_thief;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::gnome};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::half_elf, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 8},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 8},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.041] Cleric/Mages require skills Wis: 9+, Int: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage_cleric;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 8},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.042] Fighter/Illusionists require skills Str: 9+, Dex: 16+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_illusionist;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::gnome};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::half_elf, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.043] Cleric/Illusionists require skills Wis: 9+, Dex: 16+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric_illusionist;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::gnome};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::half_elf, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 8},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.044] Illusionist/Thieves require skills Dex: 16+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::illusionist_thief;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::gnome};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::half_elf, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 15},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.045] Fighter/Mage/Clerics require skills Str: 9+, Int: 9+, Wis: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage_cleric;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 8},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.046] Fighter/Mage/Thieves require skills Str: 9+, Int: 9+, Dex: 9+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage_thief;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 8},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 10},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.047] Fighter/Mage/Druids require skills Str: 9+, Int: 9+, Wis: 12+, Cha: 15+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage_druid;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 14},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.048] Fighter/Druids require skills Str: 9+, Wis: 12+, Cha: 15+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_druid;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 8},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 14},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.049] Mage/Druids require skills Int: 9+, Wis: 12+, Cha: 15+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage_druid;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 8},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 11},
+            SkillValue{Defs::skill::charisma, 15},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 15},
+            SkillValue{Defs::skill::wisdom, 12},
+            SkillValue{Defs::skill::charisma, 14},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.050] Cleric/Rangers require skills Str: 13+, Dex: 13+, Con: 14+, Wis: 14+, plus race requisites", "[character_generator]" )
+{
+    auto classAllowed = [](const Tables::character_class& c) -> bool
+    {
+        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric_ranger;
+    };
+    std::vector<Tables::character_class> classes{};
+    std::set<Defs::race> suitableRaces{Defs::race::half_elf};
+    std::set<Defs::race> unsuitableRaces{Defs::race::dwarf, Defs::race::elf, Defs::race::gnome, Defs::race::halfling};
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 10},
+            SkillValue{Defs::skill::wisdom, 14},
+            SkillValue{Defs::skill::charisma, 11},
+            race
+        );
+        REQUIRE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 12},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 10},
+            SkillValue{Defs::skill::wisdom, 14},
+            SkillValue{Defs::skill::charisma, 11},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 12},
+            SkillValue{Defs::skill::constitution, 14},
+            SkillValue{Defs::skill::intelligence, 10},
+            SkillValue{Defs::skill::wisdom, 14},
+            SkillValue{Defs::skill::charisma, 11},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 13},
+            SkillValue{Defs::skill::intelligence, 10},
+            SkillValue{Defs::skill::wisdom, 14},
+            SkillValue{Defs::skill::charisma, 11},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : suitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 14},
+            SkillValue{Defs::skill::dexterity, 16},
+            SkillValue{Defs::skill::constitution, 13},
+            SkillValue{Defs::skill::intelligence, 10},
+            SkillValue{Defs::skill::wisdom, 13},
+            SkillValue{Defs::skill::charisma, 11},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+
+    for (auto& race : unsuitableRaces)
+    {
+        classes = CharacterGenerator::available_classes(
+            SkillValue{Defs::skill::strength, 17},
+            SkillValue{Defs::skill::dexterity, 17},
+            SkillValue{Defs::skill::constitution, 17},
+            SkillValue{Defs::skill::intelligence, 17},
+            SkillValue{Defs::skill::wisdom, 17},
+            SkillValue{Defs::skill::charisma, 17},
+            race
+        );
+        REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.051] Fighters can be of any moral alignment", "[character_generator]" )
 {
     auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::fighter);
     REQUIRE(aligns.size() == 9);
 }
 
-TEST_CASE("[TC-CGEN.036] Paladins can only be lawful good", "[character_generator]" )
+TEST_CASE("[TC-CGEN.052] Paladins can only be lawful good", "[character_generator]" )
 {
     auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::paladin);
     REQUIRE(aligns.size() == 1);
@@ -1437,7 +2544,7 @@ TEST_CASE("[TC-CGEN.036] Paladins can only be lawful good", "[character_generato
     }
 }
 
-TEST_CASE("[TC-CGEN.037] Rangers can be of any good alignment", "[character_generator]" )
+TEST_CASE("[TC-CGEN.053] Rangers can be of any good alignment", "[character_generator]" )
 {
     auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::ranger);
     REQUIRE(aligns.size() == 3);
@@ -1456,7 +2563,7 @@ TEST_CASE("[TC-CGEN.037] Rangers can be of any good alignment", "[character_gene
     }
 }
 
-TEST_CASE("[TC-CGEN.038] Mages can be of any moral alignment", "[character_generator]" )
+TEST_CASE("[TC-CGEN.054] Mages can be of any moral alignment", "[character_generator]" )
 {
     auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::mage);
     REQUIRE(aligns.size() == 9);
