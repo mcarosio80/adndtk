@@ -44,6 +44,9 @@ $ cmake .. -DRUN_UNIT_TESTS=off
 ## Dependencies
 Check out the [requisites](REQUISITES.md) for project dependencies.
 
+## CLI - Command line tool
+AdndTK comes with a specifically designed tool that allows to use the library features interactively, i.e. [adndtk-cli tool](cli/README.md). See the related documentation for further information.
+
 ## Future development
 AdndTK is under heavy development. Many things can change without notice.
 A brief list of future changes, bug fixes and future improvement can be found in the project [Backlog](BACKLOG.md).
