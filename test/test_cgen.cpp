@@ -1413,3 +1413,45 @@ TEST_CASE("[TC-CGEN.034] Bards require skills Dex: 12+, Int: 13+, Cha: 15+ plus 
         REQUIRE_FALSE(std::find_if(classes.begin(), classes.end(), classAllowed) != classes.end());
     }
 }
+
+TEST_CASE("[TC-CGEN.035] Fighters can be of any moral alignment", "[character_generator]" )
+{
+    auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::fighter);
+    REQUIRE(aligns.size() == 9);
+}
+
+TEST_CASE("[TC-CGEN.036] Paladins can only be lawful good", "[character_generator]" )
+{
+    auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::paladin);
+    REQUIRE(aligns.size() == 1);
+
+    auto alignAllowed = [](const Defs::moral_alignment& a) -> bool
+    {
+        return a == Defs::moral_alignment::lawful_good;
+    };
+
+    auto allowedAligns = Tables::moral_alignment::to_vector<Defs::moral_alignment>("id");
+    for (auto& a : allowedAligns)
+    {
+        REQUIRE(std::find_if(allowedAligns.begin(), allowedAligns.end(), alignAllowed) != allowedAligns.end());
+    }
+}
+
+TEST_CASE("[TC-CGEN.037] Rangers can be of any good alignment", "[character_generator]" )
+{
+    auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::ranger);
+    REQUIRE(aligns.size() == 3);
+
+    auto alignAllowed = [](const Defs::moral_alignment& a) -> bool
+    {
+        return a == Defs::moral_alignment::lawful_good
+            || a == Defs::moral_alignment::neutral_good
+            || a == Defs::moral_alignment::chaotic_good;
+    };
+
+    auto allowedAligns = Tables::moral_alignment::to_vector<Defs::moral_alignment>("id");
+    for (auto& a : allowedAligns)
+    {
+        REQUIRE(std::find_if(allowedAligns.begin(), allowedAligns.end(), alignAllowed) != allowedAligns.end());
+    }
+}
