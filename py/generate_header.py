@@ -120,25 +120,58 @@ def fetch_table_info(conn, tableName):
 
 ################################
 def print_fetch_all(tableName, fields, outFile, indentationLevel):
+    # Generate function to_vector
     outFile.write(f"""
             /// Returns data from a given column in table '{tableName}' as a typed vector
             template<typename _T>
 			static std::vector<_T> to_vector(const std::string& fieldName)
             {{
-                Adndtk::QueryResultSet results = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<>(Adndtk::Query::select_all_{tableName});
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
                 return results.to_vector<_T>(fieldName);
-			}}
+			}}\n""")
 
+    # Generate function to_map
+    outFile.write(f"""
+            /// Returns all records from table '{tableName}' indexed on 'fieldName'
+            template<typename _KeyType>
+			static std::map<_KeyType, {tableName}> to_map(const std::string& fieldName)
+            {{
+                std::map<_KeyType, {tableName}> data{{}};
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
+                for (auto& r : results)
+                {{
+                    auto key = r.as<_KeyType>(fieldName);
+                    data[key] = convert(r);
+                }}
+                return data;
+			}}\n""")
+
+    # Generate function fetch_all
+    outFile.write(f"""
             /// Returns all records from table '{tableName}'
             static std::vector<{tableName}> fetch_all()
             {{
-                std::vector<{tableName}> vec;
-                Adndtk::QueryResultSet results = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<>(Adndtk::Query::select_all_{tableName});
-                for (Adndtk::QueryResult& r : results)
+                std::vector<{tableName}> vec{{}};
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
+                for (auto& r : results)
                 {{
-                    {tableName} stats;\n""")
+                    {tableName} stats = convert(r);
+                    vec.push_back(stats);
+                }}
+                return vec;
+            }}\n\n""")
+
+    # Begins private block
+    outFile.write(f"""{indent(indentationLevel)}private:""")
+
+    # Generate function convert
+    outFile.write(f"""
+            /// Converts a record from table '{tableName}' to plain data object
+            static {tableName} convert(const QueryResult& r)
+            {{
+                {tableName} stats{{}};\n""")
     
-    indentationLevel += 3
+    indentationLevel += 2
     for t in fields:
         # field-type, field-name, is-nullable
         fieldName = t[0]
@@ -158,10 +191,7 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                 outFile.write(f"stats.{fieldName} = r.try_as<{fieldType}>(\"{fieldName}\").value();")
         outFile.write("\n")
             
-    outFile.write(f"""
-                    vec.push_back(stats);
-                }}
-                return vec;
+    outFile.write(f"""return stats;
             }}\n""")
 
 ################################
@@ -176,9 +206,9 @@ def print_struct(tableName, fields, outFile, indentationLevel):
         for field in fields:
             outFile.write(f"{indent(indentationLevel+1)}")
             if field[2] == 1:
-                outFile.write(f"{field[1]} {field[0]};\n")
+                outFile.write(f"{field[1]} {field[0]}{{}};\n")
             else:
-                outFile.write(f"std::optional<{field[1]}> {field[0]};\n")
+                outFile.write(f"std::optional<{field[1]}> {field[0]}{{}};\n")
         
         print_fetch_all(tableName, fields, outFile, indentationLevel)
 

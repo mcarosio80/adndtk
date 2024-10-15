@@ -1,6 +1,7 @@
 #include <cyclopedia.h>
 #include <common_types.h>
 #include <skills.h>
+#include <skill_creator.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -59,6 +60,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'min', min, 'max', max from skill_requisite_values where requisite_id = 2 and skill_id = ? and object = ?", Query::select_skill_boundaries_class);
         prepare_statement("select 'min', min, 'max', max from skill_requisite_values where requisite_id = 3 and skill_id = ? and object = ?", Query::select_skill_boundaries_race);
 
+        prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class", Query::select_character_classes);
         prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class where id = ?", Query::select_character_class);
         prepare_statement("select 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type where id = ?", Query::select_character_class_type);
 
@@ -164,6 +166,16 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id from magical_item where type = ?", Query::select_magical_items_by_type);
         prepare_statement("select 'id', id from treasure_component", Query::select_treasure_components);
         prepare_statement("select 'count_from', count_from, 'count_to', count_to, 'probability', probability, 'nature', nature, 'additional_nature', additional_nature, 'additional_count', additional_count from treasure_composition where treasure_class = ? and component = ?", Query::select_treasure_composition);
+
+        prepare_statement("select 'class_id', class_id from class_availability where race_id = ?", Query::select_class_availability_per_race);
+
+        // prepare_statement("select r.id as id, "
+	    //     "case when rr.min > rd.min then rr.min else rd.min end as mirt_skill, "
+	    //     "case when rr.max < rd.max then rr.max else rd.max end as max_skill "
+        //     "from race r left join SKILL s "
+        //     "inner join SKILL_REQUISITE_VALUES rd on rd.REQUISITE_ID = 0 and rd.SKILL_ID = s.id "
+        //     "left join SKILL_REQUISITE_VALUES rr on rr.REQUISITE_ID = 3 and rr.SKILL_ID = s.id and rr.object = r.id "
+        //     "where r.id = ?", Query::select_skill_boundaries_per_race);
 
         load_advancement_table();
     }

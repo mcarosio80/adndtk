@@ -33,6 +33,7 @@ namespace Adndtk
         select_skill_boundaries_class_type,
         select_skill_boundaries_class,
         select_skill_boundaries_race,
+        select_character_classes,
         select_character_class,
         select_character_class_type,
         select_skill_modifier,
@@ -90,6 +91,7 @@ namespace Adndtk
         select_magical_items_by_type,
         select_treasure_components,
         select_treasure_composition,
+        select_class_availability_per_race,
 
         select_all_strength_stats,
         select_all_dexterity_stats,

@@ -3,15 +3,15 @@
 
 #include <defs.h>
 #include <config.h>
+#include <query_result.h>
+#include <advancement_table.h>
 
 #include <sqlite3.h>
 
 #include <map>
 #include <vector>
 #include <set>
-
-#include <query_result.h>
-#include <advancement_table.h>
+#include <optional>
 
 namespace Adndtk
 {

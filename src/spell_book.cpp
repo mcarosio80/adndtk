@@ -3,6 +3,7 @@
 #include <dice.h>
 #include <algorithm>
 #include <config.h>
+#include <cyclopedia.h>
 
 #include <options.h>
 
