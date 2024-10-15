@@ -155,6 +155,16 @@ void generate_character(const Adndtk::SkillGenerationMethod& method)
 
     std::cout << "Your choice is " << selectedClass.long_name << ".\n";
 
+    auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);
+    auto raceId = static_cast<Adndtk::Defs::race>(selectedRace.id);
+    if (Adndtk::Cyclopedia::get_instance().can_have_exceptional_strength(clsId, raceId, skills[Adndtk::Defs::skill::strength]))
+    {
+        Adndtk::Die d{Adndtk::Defs::die::d100};
+        auto excValue = d.roll();
+        skills[Adndtk::Defs::skill::strength].setExceptionalStrength(excValue);
+        std::cout << "The character is entitoled to exceptional strength. Strength value changed to " << skills[Adndtk::Defs::skill::strength] << ".\n";
+    }
+
     accept = false;
     auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);
     auto alignments = Adndtk::CharacterGenerator::available_moral_alignments(clsId);

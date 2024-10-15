@@ -17,6 +17,7 @@ namespace Adndtk
         SkillValue(const Defs::skill& type, const short& value, const std::optional<short>& excValue = std::nullopt);
 
         bool hasExceptionalStrength() const;
+        bool setExceptionalStrength(const short& newValue);
         std::optional<short> exceptionalStrength() const;
         inline const Defs::skill& type() const { return _skillType; };
 
