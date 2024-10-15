@@ -144,3 +144,8 @@ std::vector<Adndtk::Tables::moral_alignment> Adndtk::CharacterGenerator::availab
     }
     return avalableAligns;
 }
+
+std::vector<Adndtk::Tables::sex> Adndtk::CharacterGenerator::available_sex()
+{
+    return Adndtk::Tables::sex::fetch_all();
+}

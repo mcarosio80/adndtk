@@ -13,5 +13,6 @@
     "turn_undead" : "yes",
     "equipment" : "yes",
     "coin" : "yes",
-    "moral_alignment" : "yes"
+    "moral_alignment" : "yes",
+    "sex" : "yes"
 }

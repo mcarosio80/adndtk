@@ -166,7 +166,6 @@ void generate_character(const Adndtk::SkillGenerationMethod& method)
     }
 
     accept = false;
-    auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);
     auto alignments = Adndtk::CharacterGenerator::available_moral_alignments(clsId);
     Adndtk::Tables::moral_alignment selectedAlignment{};
     do
@@ -189,6 +188,30 @@ void generate_character(const Adndtk::SkillGenerationMethod& method)
     while (!accept);
 
     std::cout << "Your choice is " << selectedAlignment.name << ".\n";
+
+    accept = false;
+    auto sex = Adndtk::CharacterGenerator::available_sex();
+    Adndtk::Tables::sex selectedSex{};
+    do
+    {
+        std::cout << "Choose your sex...\n";
+        std::map<char, Adndtk::Tables::sex> acronyms{};
+        for (auto& s : sex)
+        {
+            std::cout << "\t[" << s.acronym << "]:\t" << s.name << "\n";
+            acronyms[s.acronym] = s;
+        }
+
+        auto acronym = prompt<std::string>("Choose one");
+        accept = (acronyms.find(acronym.at(0)) != acronyms.end());
+        if (accept)
+        {
+            selectedSex = acronyms[acronym.at(0)];
+        }
+    }
+    while (!accept);
+
+    std::cout << "Your choice is " << selectedSex.name << ".\n";
 
     //auto charName = prompt<std::string>("Character name");
 }
