@@ -13,17 +13,15 @@ Adndtk::CharacterGenerator::~CharacterGenerator()
 std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(const SkillValue& strength, const SkillValue& dexterity, const SkillValue& constitution, const SkillValue& intelligence, const SkillValue& wisdom, const SkillValue& charisma)
 {
     std::map<Defs::skill, SkillValue> skillValues{
-        {Defs::skill::strength, strength},
-        {Defs::skill::dexterity, dexterity},
-        {Defs::skill::constitution, constitution},
-        {Defs::skill::intelligence, intelligence},
-        {Defs::skill::wisdom, wisdom},
-        {Defs::skill::charisma, charisma},
+        {strength.type(), strength},
+        {dexterity.type(), dexterity},
+        {constitution.type(), constitution},
+        {intelligence.type(), intelligence},
+        {wisdom.type(), wisdom},
+        {charisma.type(), charisma},
     };
 
-    return available_races(skillValues[Defs::skill::strength], skillValues[Defs::skill::dexterity],
-                        skillValues[Defs::skill::constitution], skillValues[Defs::skill::intelligence],
-                        skillValues[Defs::skill::wisdom], skillValues[Defs::skill::charisma]);
+    return available_races(skillValues);
 }
 
 std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(const std::map<Defs::skill, SkillValue>& skillValues)
@@ -113,12 +111,12 @@ std::vector<Adndtk::Tables::moral_alignment> Adndtk::CharacterGenerator::availab
     auto allAligns = Tables::moral_alignment::fetch_all();
     auto alignsPerClass = Cyclopedia::get_instance().exec_prepared_statement<int>(
                                 Query::select_moral_alignments_by_class,
-                                static_cast<int>(classId)).to_set<int>("id");
+                                static_cast<int>(classId)).to_set<int>("alignment_id");
 
     std::vector<Adndtk::Tables::moral_alignment> avalableAligns{};
     for (auto& a : allAligns)
     {
-        if (alignsPerClass.find(a.id) == alignsPerClass.end())
+        if (alignsPerClass.find(a.id) != alignsPerClass.end())
         {
             avalableAligns.push_back(std::move(a));
         }
