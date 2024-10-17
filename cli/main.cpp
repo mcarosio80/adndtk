@@ -306,4 +306,12 @@ void print_summary(const Adndtk::Character& chr)
     std::cout << "\tMaximum Number of Henchmen:\t" << chaStats.maximum_number_of_henchmen << "\n";
     std::cout << "\tLoyalty Base:\t" << chaStats.loyalty_base << "\n";
     std::cout << "\tReaction Adjustment:\t" << chaStats.reaction_adjustment.value_or(0) << "\n";
+
+    std::cout << "\nSaving Throws:\n";
+    auto savingThrows = Adndtk::Tables::saving_throw::fetch_all();
+    for (auto& st : savingThrows)
+    {
+        auto savId = static_cast<Adndtk::Defs::saving_throw>(st.id);
+        std::cout << "\t" << st.description << ":\t" << chr.save_score(savId);
+    }
 }
