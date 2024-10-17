@@ -307,6 +307,8 @@ void print_summary(const Adndtk::Character& chr)
     std::cout << "\tLoyalty Base:\t" << chaStats.loyalty_base << "\n";
     std::cout << "\tReaction Adjustment:\t" << chaStats.reaction_adjustment.value_or(0) << "\n";
 
+    std::cout << "\nHP: " << chr.total_hp() << "\n";
+
     std::cout << "\nSaving Throws:\n";
     auto savingThrows = Adndtk::Tables::saving_throw::fetch_all();
     for (auto& st : savingThrows)
@@ -314,4 +316,9 @@ void print_summary(const Adndtk::Character& chr)
         auto savId = static_cast<Adndtk::Defs::saving_throw>(st.id);
         std::cout << "\t" << st.description << ":\t" << chr.save_score(savId);
     }
+
+    std::cout << "\nRacial traits:\n";
+    std::cout << "\tWeight: " << chr.weight() << "\n";
+    std::cout << "\tHeight: " << chr.height() << "\n";
+    std::cout << "\tMovement factor: " << chr.movement_factor() << "\n";
 }
