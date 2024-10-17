@@ -144,8 +144,7 @@ namespace Adndtk
         Defs::character_class_type get_class_type(const Defs::character_class& cls);
         std::vector<Defs::character_class_type> get_class_types(const Defs::character_class& cls);
 
-        std::set<Defs::moral_alignment> available_moral_alignments(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId = std::nullopt) const;
-        std::set<Defs::deity> available_deities(const Defs::moral_alignment& align) const;
+        //std::set<Defs::moral_alignment> available_moral_alignments(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId = std::nullopt) const;
 
     private:
         Cyclopedia();
@@ -203,10 +202,6 @@ namespace Adndtk
         AdvancementTable                    _advTable;
 
         void load_advancement_table();
-
-        std::set<Defs::moral_alignment> available_moral_alignments_by_mythos(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId = std::nullopt) const;
-        std::set<Defs::moral_alignment> available_moral_alignments_by_single_class(const Defs::character_class& cls) const;
-        
     };
 }
 

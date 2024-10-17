@@ -2568,3 +2568,80 @@ TEST_CASE("[TC-CGEN.054] Mages can be of any moral alignment", "[character_gener
     auto aligns = CharacterGenerator::available_moral_alignments(Defs::character_class::mage);
     REQUIRE(aligns.size() == 9);
 }
+
+TEST_CASE("[TC-CGEN.055] Multiclass combinations of fighter and mage can be of any moral alignment", "[character_generator]" )
+{
+    std::set<Defs::character_class> multiclass =
+    {
+        Defs::character_class::fighter_mage,
+        Defs::character_class::fighter_illusionist
+    };
+
+    for (auto& cls : multiclass)
+    {
+        auto aligns = CharacterGenerator::available_moral_alignments(cls);
+        REQUIRE(aligns.size() == 9);
+    }
+}
+
+TEST_CASE("[TC-CGEN.056] Multiclass combinations of fighter or mage with thief can be of any moral alignment except lawful good", "[character_generator]" )
+{
+    std::set<Defs::character_class> multiclass =
+    {
+        Defs::character_class::fighter_thief,
+        Defs::character_class::mage_thief,
+        Defs::character_class::illusionist_thief,
+        Defs::character_class::fighter_mage_thief
+    };
+
+    auto alignAllowed = [](const Tables::moral_alignment& a) -> bool
+    {
+        return static_cast<Defs::moral_alignment>(a.id) != Defs::moral_alignment::lawful_good;
+    };
+
+    for (auto& cls : multiclass)
+    {
+        auto aligns = CharacterGenerator::available_moral_alignments(cls);
+        REQUIRE(aligns.size() == 8);
+
+        for (auto& a : aligns)
+        {
+            REQUIRE(std::find_if(aligns.begin(), aligns.end(), alignAllowed) != aligns.end());
+        }
+    }
+}
+
+TEST_CASE("[TC-CGEN.057] Multticlass combinations of druid can only be neutral", "[character_generator]" )
+{
+    std::set<Defs::character_class> multiclass =
+    {
+        Defs::character_class::fighter_druid,
+        Defs::character_class::mage_druid,
+        Defs::character_class::fighter_mage_druid
+    };
+
+    for (auto& cls : multiclass)
+    {
+        auto aligns = CharacterGenerator::available_moral_alignments(cls);
+        REQUIRE(aligns.size() == 3);
+
+        auto alignAllowed = [](const Defs::moral_alignment& a) -> bool
+        {
+            return a == Defs::moral_alignment::neutral_good
+                || a == Defs::moral_alignment::true_neutral
+                || a == Defs::moral_alignment::neutral_evil;
+        };
+
+        auto allowedAligns = Tables::moral_alignment::to_vector<Defs::moral_alignment>("id");
+        for (auto& a : allowedAligns)
+        {
+            REQUIRE(std::find_if(allowedAligns.begin(), allowedAligns.end(), alignAllowed) != allowedAligns.end());
+        }
+    }
+}
+
+// Fighter Cleric
+// Cleric Ranger
+// Mage Cleric
+// Fighter Mage Cleric
+// Cleric Illusionist

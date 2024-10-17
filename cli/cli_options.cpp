@@ -4,6 +4,7 @@ namespace CliTools
 {
 const char* Option::help = "help";
 const char* Option::generate = "generate";
+const char* Option::skills = "skills";
 
 
 CliOptions::CliOptions(int argc, char** argv)
@@ -26,6 +27,12 @@ void CliOptions::add_options()
             "[standard] - 3d6 per each skill\n"
             "[best4] - 4d6, the least of them is discarded\n"
             "[best-twice] - 3d6 twice, the best is chosen\n"
+        )
+        ("skills,s",
+            boost::program_options::value<std::string>(),
+            "generate a new character (skills mode), the tool queries for choices or missing data. "
+            "Argument is a comma-separated list representing the six skill values in standard order "
+            "(strength, dexterity, constitution, intelligence, wisdom, charisma)\n"
         )
         ;
 }

@@ -13,6 +13,7 @@ namespace CliTools
     {
         static const char* help;
         static const char* generate;
+        static const char* skills;
     };
 
     class CliOptions

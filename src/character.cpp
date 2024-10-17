@@ -3,6 +3,7 @@
 #include <skill_creator.h>
 #include <options.h>
 #include <encumbrance.h>
+#include <character_generator.h>
 
 #include <algorithm>
 
@@ -403,7 +404,7 @@ Adndtk::Defs::attack_result Adndtk::Character::try_hit(const AC& ac, const short
 
 bool Adndtk::Character::verify_moral_alignment() const
 {
-    auto aligns = Cyclopedia::get_instance().available_moral_alignments(_cls, _deity);
+    auto aligns = CharacterGenerator::available_moral_alignment_ids(_cls, _deity);
     return aligns.find(_align) != aligns.end();
 }
 
@@ -420,7 +421,7 @@ bool Adndtk::Character::verify_worshipped_deity() const
         {
             throw std::runtime_error("This character must worship a deity");
         }
-        auto deities = Cyclopedia::get_instance().available_deities(_align);
+        auto deities = CharacterGenerator::available_deity_ids(_align);
         return std::find(deities.begin(), deities.end(), _deity.value()) != deities.end();
     }
     return true;
