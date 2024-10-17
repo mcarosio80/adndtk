@@ -146,6 +146,22 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                 return data;
 			}}\n""")
 
+    # Generate function to_set
+    outFile.write(f"""
+            /// Returns data from a given column in table '{tableName}' as a typed set
+            template<typename _Type>
+			static std::set<_Type> to_set(const std::string& fieldName)
+            {{
+                std::set<_Type> data{{}};
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
+                for (auto& r : results)
+                {{
+                    auto value = r.as<_Type>(fieldName);
+                    data.emplace(value);
+                }}
+                return data;
+			}}\n""")
+
     # Generate function fetch_all
     outFile.write(f"""
             /// Returns all records from table '{tableName}'
