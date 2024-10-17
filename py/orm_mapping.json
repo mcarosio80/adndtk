@@ -14,5 +14,6 @@
     "equipment" : "yes",
     "coin" : "yes",
     "moral_alignment" : "yes",
-    "sex" : "yes"
+    "sex" : "yes",
+    "saving_throw" : "yes"
 }

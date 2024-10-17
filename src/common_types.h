@@ -110,6 +110,7 @@ namespace Adndtk
         select_all_coin,
         select_all_moral_alignment,
         select_all_sex,
+        select_all_saving_throw,
     };
 
     enum class XPChangeType

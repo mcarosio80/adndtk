@@ -96,6 +96,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'acronym', acronym, 'description', description from coin", Query::select_all_coin);
         prepare_statement("select 'id', id, 'name', name, 'acronym', acronym from moral_alignment", Query::select_all_moral_alignment);
         prepare_statement("select 'id', id, 'name', name, 'acronym', acronym from sex", Query::select_all_sex);
+        prepare_statement("select 'id', id, 'description', description, 'score', score from saving_throw", Query::select_all_saving_throw);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
