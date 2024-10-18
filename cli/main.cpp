@@ -4,6 +4,7 @@
 #include <optional>
 #include <set>
 #include <map>
+#include <iomanip>
 
 #include <adndtk.h>
 #include <cli_options.h>
@@ -243,6 +244,14 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
             static_cast<Adndtk::Defs::sex>(selectedSex.id), 
             static_cast<Adndtk::Defs::deity>(selectedDeity.id),
     };
+
+    chr.change_skill(skills[Adndtk::Defs::skill::strength]);
+    chr.change_skill(skills[Adndtk::Defs::skill::dexterity]);
+    chr.change_skill(skills[Adndtk::Defs::skill::constitution]);
+    chr.change_skill(skills[Adndtk::Defs::skill::intelligence]);
+    chr.change_skill(skills[Adndtk::Defs::skill::wisdom]);
+    chr.change_skill(skills[Adndtk::Defs::skill::charisma]);
+
     return chr;
 }
 
@@ -257,40 +266,40 @@ void print_summary(const Adndtk::Character& chr)
 
     std::cout << "Strength: " << chr.strength() << "\n";
     auto strStats = Adndtk::SkillStats::get_instance().get_strength_stats(chr.strength());
-    std::cout << "\tHit Probability:\t" << strStats.hit_modifier << "\n";
-    std::cout << "\tDamage Adjustment:\t" << strStats.damage_adjustment << "\n";
-    std::cout << "\tWeight Allowance:\t" << strStats.weight_allowance << "\n";
-    std::cout << "\tMaximum Press:\t" << strStats.maximum_press << "\n";
-    std::cout << "\tOpen Doors:\t" << strStats.open_doors << " (" << strStats.open_doors_special.value_or(0) << ")\n";
-    std::cout << "\tBend Bars/Lift Gates:\t" << strStats.bend_bars_lift_gates << "\n";
-    std::cout << "\tNotes:\t" << strStats.note.value_or("") << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Hit Probability:" << strStats.hit_modifier << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Damage Adjustment:" << strStats.damage_adjustment << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Weight Allowance:" << strStats.weight_allowance << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Maximum Press:" << strStats.maximum_press << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Open Doors:" << strStats.open_doors << " (" << strStats.open_doors_special.value_or(0) << ")\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Bend Bars/Lift Gates:" << strStats.bend_bars_lift_gates << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Notes:" << strStats.note.value_or("") << "\n";
 
     std::cout << "Dexterity: " << chr.dexterity() << "\n";
     auto dexStats = Adndtk::SkillStats::get_instance().get_dexterity_stats(chr.dexterity());
-    std::cout << "\tReaction Adjustment:\t" << dexStats.reaction_adjustment << "\n";
-    std::cout << "\tMissile Attack Adjustment:\t" << dexStats.missile_attack_adjustment << "\n";
-    std::cout << "\tDefensive Adjustment:\t" << dexStats.defensive_adjustment << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Reaction Adjustment:" << dexStats.reaction_adjustment << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Missile Attack Adjustment:" << dexStats.missile_attack_adjustment << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Defensive Adjustment:" << dexStats.defensive_adjustment << "\n";
 
     std::cout << "Constitution: " << chr.constitution() << "\n";
     auto conStats = Adndtk::SkillStats::get_instance().get_constitution_stats(chr.constitution());
-    std::cout << "\tHit Point Adjustment:\t" << conStats.hit_point_adjustment << " (" << conStats.hit_point_adjustment_warriors.value_or(0) << ")\n";
-    std::cout << "\tSystem Shock:\t" << conStats.system_shock << "\n";
-    std::cout << "\tResurrection Survival:\t" << conStats.resurrection_survival << "\n";
-    std::cout << "\tPoison Save:\t" << conStats.poison_save << "\n";
-    std::cout << "\tRegeneration:\t" << conStats.regeneration_points.value_or(0) << "/" << conStats.regeneration_turns.value_or(0) << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Hit Point Adjustment:" << conStats.hit_point_adjustment << " (" << conStats.hit_point_adjustment_warriors.value_or(0) << ")\n";
+    std::cout << "\t" << std::left << std::setw(40) << "System Shock:" << conStats.system_shock << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Resurrection Survival:" << conStats.resurrection_survival << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Poison Save:" << conStats.poison_save << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Regeneration:" << conStats.regeneration_points.value_or(0) << "/" << conStats.regeneration_turns.value_or(0) << "\n";
     
     std::cout << "Intelligence: " << chr.intelligence() << "\n";
     auto intStats = Adndtk::SkillStats::get_instance().get_intelligence_stats(chr.intelligence());
-    std::cout << "\tNo. of Languages:\t" << intStats.number_of_languages << "\n";
-    std::cout << "\tSpell Level:\t" << intStats.spell_level.value_or(0) << "\n";
-    std::cout << "\tChance to Learn Spell:\t" << intStats.chance_to_learn_spell.value_or(0) << "\n";
-    std::cout << "\tMaximum Number of Spells per Level:\t" << intStats.max_number_of_spells_per_level.value_or(0) << "\n";
-    //std::cout << "\tSpell Immunity:\t" << intStats.s << "\n";    
+    std::cout << "\t" << std::left << std::setw(40) << "No. of Languages:" << intStats.number_of_languages << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Spell Level:" << intStats.spell_level.value_or(0) << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Chance to Learn Spell:" << intStats.chance_to_learn_spell.value_or(0) << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Maximum Number of Spells per Level:" << intStats.max_number_of_spells_per_level.value_or(0) << "\n";
+    //std::cout << "\t" << std::left << std::setw(40) << "Spell Immunity:" << intStats.s << "\n";    
     
     std::cout << "Wisdom: " << chr.wisdom() << "\n";
     auto wisStats = Adndtk::SkillStats::get_instance().get_wisdom_stats(chr.wisdom());
-    std::cout << "\tMagical Defense Adjustment:\t" << wisStats.magical_defence_adjustment << "\n";
-    std::cout << "\tBonus Spells:\t" << wisStats.bonus_spell_level_1.value_or(0)
+    std::cout << "\t" << std::left << std::setw(40) << "Magical Defense Adjustment:" << wisStats.magical_defence_adjustment << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Bonus Spells:" << wisStats.bonus_spell_level_1.value_or(0)
                                     << "/" << wisStats.bonus_spell_level_2.value_or(0)
                                     << "/" << wisStats.bonus_spell_level_3.value_or(0)
                                     << "/" << wisStats.bonus_spell_level_4.value_or(0)
@@ -298,27 +307,40 @@ void print_summary(const Adndtk::Character& chr)
                                     << "/" << wisStats.bonus_spell_level_6.value_or(0)
                                     << "/" << wisStats.bonus_spell_level_7.value_or(0)
                                     << "\n";
-    std::cout << "\tChance of Spell Failure:\t" << wisStats.chance_of_spell_failure << "\n";
-    std::cout << "\tSpell Immunity:\t" << wisStats.spell_immunity.value_or(0) << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Chance of Spell Failure:" << wisStats.chance_of_spell_failure << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Spell Immunity:" << wisStats.spell_immunity.value_or(0) << "\n";
     
     std::cout << "Charisma: " << chr.charisma() << "\n";
     auto chaStats = Adndtk::SkillStats::get_instance().get_charisma_stats(chr.charisma());
-    std::cout << "\tMaximum Number of Henchmen:\t" << chaStats.maximum_number_of_henchmen << "\n";
-    std::cout << "\tLoyalty Base:\t" << chaStats.loyalty_base << "\n";
-    std::cout << "\tReaction Adjustment:\t" << chaStats.reaction_adjustment.value_or(0) << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Maximum Number of Henchmen:" << chaStats.maximum_number_of_henchmen << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Loyalty Base:" << chaStats.loyalty_base << "\n";
+    std::cout << "\t" << std::left << std::setw(40) << "Reaction Adjustment:" << chaStats.reaction_adjustment.value_or(0) << "\n";
 
-    std::cout << "\nHP: " << chr.total_hp() << "\n";
+    std::cout << "\nCombat:\n";
+    std::cout << "\t" << std::left << std::setw(10) << "HP: " << chr.total_hp() << "\n";
+    // std::cout << "\t" << std::left << std::setw(10) << "THAC0: " << chr.total_hp() << "\n";
 
     std::cout << "\nSaving Throws:\n";
     auto savingThrows = Adndtk::Tables::saving_throw::fetch_all();
     for (auto& st : savingThrows)
     {
         auto savId = static_cast<Adndtk::Defs::saving_throw>(st.id);
-        std::cout << "\t" << st.description << ":\t" << chr.save_score(savId);
+        std::cout << "\t" << std::left << std::setw(20) << st.description << chr.save_score(savId) << "\n";
     }
 
     std::cout << "\nRacial traits:\n";
-    std::cout << "\tWeight: " << chr.weight() << "\n";
-    std::cout << "\tHeight: " << chr.height() << "\n";
-    std::cout << "\tMovement factor: " << chr.movement_factor() << "\n";
+    std::cout << "\t" << std::left << std::setw(20) << "Age: " << chr.age() << "\n";
+    std::cout << "\t" << std::left << std::setw(20) << "Weight: " << chr.weight() << "\n";
+    std::cout << "\t" << std::left << std::setw(20) << "Encumbrance: " << chr.equipment_weight() << "\n";
+    std::cout << "\t" << std::left << std::setw(20) << "Total weight: " << chr.total_weight() << "\n";
+    std::cout << "\t" << std::left << std::setw(20) << "Height: " << chr.height() << "\n";
+    std::cout << "\t" << std::left << std::setw(20) << "Movement factor: " << chr.movement_factor() << "\n";
+
+    std::cout << "\nMoney:\n";
+    auto coins = Adndtk::Tables::coin::fetch_all();
+    for (auto& c : coins)
+    {
+        auto type = static_cast<Adndtk::Defs::coin>(c.id);
+        std::cout << "\t" << std::left << std::setw(4) << c.acronym << std::right << std::setw(3) << chr.money()[type] << "\n";
+    }
 }
