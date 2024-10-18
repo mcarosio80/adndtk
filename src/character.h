@@ -88,6 +88,7 @@ namespace Adndtk
 
         // Combat
         Defs::attack_result try_hit(const AC& ac, const short& bonusMalus = 0) const;
+        Adndtk::THAC0 thaco() const;
 
         // Racial stats
         inline const short& age() const { return _racialStats.current_age(); };

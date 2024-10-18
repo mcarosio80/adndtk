@@ -402,6 +402,12 @@ Adndtk::Defs::attack_result Adndtk::Character::try_hit(const AC& ac, const short
     return _thaco.try_hit(experience(), ac, bonusMalus);
 }
 
+Adndtk::THAC0 Adndtk::Character::thaco() const
+{
+    auto xp = experience().level(_cls);
+    return _thaco.get(xp);
+}
+
 bool Adndtk::Character::verify_moral_alignment() const
 {
     auto aligns = CharacterGenerator::available_moral_alignment_ids(_cls, _deity);
