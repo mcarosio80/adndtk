@@ -173,17 +173,22 @@ Adndtk::Tables::sex choose_sex()
 
 std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId)
 {
-    auto yesNo = CliTools::prompt<std::string>("Choose a faity data? [Y/n]");
+    auto yesNo = CliTools::prompt<std::string>("Choose your faith? [Y/n]");
     bool accept = (yesNo == "y" || yesNo == "Y");
 
     if (!accept)
     {
         return std::nullopt;
     }
+
+    auto cults = Adndtk::Tables::cult::to_map<Adndtk::Defs::cult>("id");
+    auto ranks = Adndtk::Tables::deity_rank::to_map<Adndtk::Defs::deity_rank>("id");
     
-    auto formatDeityMenu = [](const Adndtk::Tables::deity& r, std::map<int, Adndtk::Tables::deity>& menu) -> void
+    auto formatDeityMenu = [&](const Adndtk::Tables::deity& r, std::map<int, Adndtk::Tables::deity>& menu) -> void
     {
-        std::cout << "\t[" << r.id << "]:\t" << r.name << "\n";
+        auto cultId = static_cast<Adndtk::Defs::cult>(r.cult);
+        auto rankId = static_cast<Adndtk::Defs::deity_rank>(r.rank);
+        std::cout << "\t[" << r.id << "]:\t" << r.name << " (status: " << ranks[rankId].description << ", cult: " << cults[cultId].name << ")\n";
         menu[r.id] = r;
     };
     auto deities = Adndtk::CharacterGenerator::available_deities(alignId);

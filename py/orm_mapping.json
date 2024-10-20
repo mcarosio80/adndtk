@@ -15,5 +15,7 @@
     "coin" : "yes",
     "moral_alignment" : "yes",
     "sex" : "yes",
-    "saving_throw" : "yes"
+    "saving_throw" : "yes",
+    "cult" : "yes",
+    "deity_rank" : "yes"
 }

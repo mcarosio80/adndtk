@@ -111,6 +111,8 @@ namespace Adndtk
         select_all_moral_alignment,
         select_all_sex,
         select_all_saving_throw,
+        select_all_cult,
+        select_all_deity_rank,
     };
 
     enum class XPChangeType
