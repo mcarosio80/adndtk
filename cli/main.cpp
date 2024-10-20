@@ -339,20 +339,22 @@ void print_summary(const Adndtk::Character& chr)
     std::cout << "\t" << std::left << std::setw(40) << "Reaction Adjustment:" << chaStats.reaction_adjustment.value_or(0) << "\n";
 
     std::cout << "\nCombat:\n";
+    std::cout << "\t" << std::left << std::setw(10) << "HP: " << chr.total_hp() << "\n";
+    std::cout << "\t" << std::left << std::setw(10) << "THAC0: " << chr.thaco() << "\n";
+    std::cout << "\n";
+
     auto xps = chr.experience();
-    std::cout << "\t" << std::left << std::setw(10) << "Experience:\n";
+    std::cout << std::left << std::setw(10) << "Experience:\n";
     auto classes = Adndtk::Tables::character_class::to_map<Adndtk::Defs::character_class>("id");
     for (auto& xp : xps)
     {
         std::cout
-                << "\t\t" << std::left << std::setw(8) << classes[xp.first].acronym
+                << "\t" << std::left << std::setw(8) << classes[xp.first].acronym
                 << "level " << xps.level(xp.first) << " (" << xps.xp(xp.first) << " xp)\n";
     }
     std::cout << "\n";
-    std::cout << "\t" << std::left << std::setw(10) << "HP: " << chr.total_hp() << "\n";
-    //std::cout << "\t" << std::left << std::setw(10) << "THAC0: " << chr.thaco() << "\n";
 
-    std::cout << "\nSaving Throws:\n";
+    std::cout << "Saving Throws:\n";
     auto savingThrows = Adndtk::Tables::saving_throw::fetch_all();
     for (auto& st : savingThrows)
     {
