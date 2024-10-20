@@ -225,7 +225,7 @@ std::vector<Adndtk::Tables::sex> Adndtk::CharacterGenerator::available_sex()
     return Adndtk::Tables::sex::fetch_all();
 }
 
-std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities(const Defs::moral_alignment& align)
+std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities(const Defs::moral_alignment& align, const bool filterDeadGods/*=false*/)
 {
     auto allDeities = Tables::deity::to_map<Defs::deity>("id");
     auto query = Query::select_deities_by_moral_alignment;
@@ -237,7 +237,13 @@ std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities
     {
         if (deities.contains(d.first))
         {
-            availableDeities.push_back(std::move(d.second));
+            std::cout << d.second.name << " : " << d.second.activity << "\n";
+            std::cout << std::boolalpha << "filterDeadGods: " << filterDeadGods << "\n";
+            std::cout << "d.second.activity: " << d.second.activity << "\n";
+            if (!filterDeadGods || static_cast<Defs::deity_activity>(d.second.activity) == Defs::deity_activity::alive)
+            {
+                availableDeities.push_back(std::move(d.second));
+            }
         }
     }
     return availableDeities;

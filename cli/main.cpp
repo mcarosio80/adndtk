@@ -191,7 +191,7 @@ std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_
         std::cout << "\t[" << r.id << "]:\t" << r.name << " (status: " << ranks[rankId].description << ", cult: " << cults[cultId].name << ")\n";
         menu[r.id] = r;
     };
-    auto deities = Adndtk::CharacterGenerator::available_deities(alignId);
+    auto deities = Adndtk::CharacterGenerator::available_deities(alignId, true);
     CliTools::CliMenu<Adndtk::Tables::deity, int> deityMenu{"Choose one", deities};
     deityMenu.line_formatter() = formatDeityMenu;
     auto selectedDeity = deityMenu();

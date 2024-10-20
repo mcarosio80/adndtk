@@ -26,7 +26,7 @@ namespace Adndtk
         static std::vector<Adndtk::Tables::moral_alignment> available_moral_alignments(const Defs::character_class& classId, const std::optional<Defs::deity>& deityId = std::nullopt);
         static std::set<Adndtk::Defs::moral_alignment> available_moral_alignment_ids(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId = std::nullopt);
         static std::vector<Adndtk::Tables::sex> available_sex();
-        static std::vector<Adndtk::Tables::deity> available_deities(const Defs::moral_alignment& align);
+        static std::vector<Adndtk::Tables::deity> available_deities(const Defs::moral_alignment& align, const bool filterDeadGods = false);
         static std::set<Adndtk::Defs::deity> available_deity_ids(const Defs::moral_alignment& align);
     };
 }
