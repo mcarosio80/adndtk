@@ -21,7 +21,7 @@ Adndtk::Tables::race choose_race(const std::map<Adndtk::Defs::skill, Adndtk::Ski
 Adndtk::Tables::character_class choose_class(const std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills, const Adndtk::Defs::race& raceId);
 Adndtk::Tables::moral_alignment choose_moral_alignment(const Adndtk::Defs::character_class& clsId);
 Adndtk::Tables::sex choose_sex();
-Adndtk::Tables::deity choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId);
+std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId);
 
 int main(int argc, char** argv)
 {
@@ -171,8 +171,16 @@ Adndtk::Tables::sex choose_sex()
     return selectedSex;
 }
 
-Adndtk::Tables::deity choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId)
+std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId)
 {
+    auto yesNo = CliTools::prompt<std::string>("Choose a faity data? [Y/n]");
+    bool accept = (yesNo == "y" || yesNo == "Y");
+
+    if (!accept)
+    {
+        return std::nullopt;
+    }
+    
     auto formatDeityMenu = [](const Adndtk::Tables::deity& r, std::map<int, Adndtk::Tables::deity>& menu) -> void
     {
         std::cout << "\t[" << r.id << "]:\t" << r.name << "\n";
@@ -228,7 +236,16 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
 
     // Select a faith
     auto selectedDeity = choose_deity(clsId, alignId);
-    std::cout << "Your choice is " << selectedDeity.name << ".\n";
+    std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
+    if (selectedDeity.has_value())
+    {
+        optDeityId = static_cast<Adndtk::Defs::deity>(selectedDeity.value().id);
+        std::cout << "Your choice is " << selectedDeity.value().name << ".\n";
+    }
+    else
+    {
+        std::cout << "Your chose no faith.\n";
+    }
 
     std::cout << "Choose a name for your character\n";
     auto charName = CliTools::prompt<std::string>("Character name");
@@ -242,7 +259,7 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
             static_cast<Adndtk::Defs::race>(selectedRace.id),
             static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id),
             static_cast<Adndtk::Defs::sex>(selectedSex.id), 
-            static_cast<Adndtk::Defs::deity>(selectedDeity.id),
+            optDeityId,
     };
 
     chr.change_skill(skills[Adndtk::Defs::skill::strength]);
