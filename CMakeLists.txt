@@ -26,9 +26,6 @@ if(SQLite3_FOUND)
     message("SQLite3 " ${SQLite3_VERSION} " executable found in " ${SQLite3_EXECUTABLE})
     message("SQLite3_INCLUDE_DIRS; " ${SQLite3_INCLUDE_DIRS})
     message("SQLite3_LIBRARIES: " ${SQLite3_LIBRARIES})
-
-    #include_directories(${SQLite3_INCLUDE_DIRS})
-    #target_link_libraries (adndtk ${SQLITE3_LIBRARIES})
 endif()
 
 find_package(Git REQUIRED)

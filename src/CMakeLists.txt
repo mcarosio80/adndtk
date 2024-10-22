@@ -3,10 +3,12 @@ file (GLOB ADNDTK_LIB_SOURCES
   "*.cpp"
 )
 
-add_library(adndtk STATIC ${ADNDTK_LIB_SOURCES})
+set(ADNDTK_LIB adndtk)
 
-add_dependencies(adndtk rapidjson)
+add_library(${ADNDTK_LIB} STATIC ${ADNDTK_LIB_SOURCES})
 
-target_include_directories(adndtk PUBLIC ${SQLite3_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR})
+add_dependencies(${ADNDTK_LIB} rapidjson)
 
-target_link_libraries (adndtk ${SQLite3_LIBRARIES})
+target_include_directories(${ADNDTK_LIB} PUBLIC ${SQLite3_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries (${ADNDTK_LIB} ${SQLite3_LIBRARIES})
