@@ -215,6 +215,18 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
     auto raceId = static_cast<Adndtk::Defs::race>(selectedRace.id);
     std::cout << "Your race is " << selectedRace.name << ".\n";
 
+    for (auto& skl : Adndtk::Tables::skill::fetch_all())
+    {
+        auto skillId = static_cast<Adndtk::Defs::skill>(skl.id);
+        auto raceSkillModifier = Adndtk::SkillCreator::get_race_adjustments(skillId, raceId);
+        if (raceSkillModifier != 0)
+        {
+            std::cout << skl.name << " value changes by race modifier: " << skills[skillId];
+            skills[skillId] += raceSkillModifier;
+            std::cout << " ==> " << skills[skillId] << "\n";
+        }
+    }
+
     // Select a Class
     auto selectedClass = choose_class(skills, static_cast<Adndtk::Defs::race>(selectedRace.id));
     auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);

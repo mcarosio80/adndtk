@@ -22,13 +22,13 @@ namespace Adndtk
                                 const std::optional<Defs::race>& race, const SkillGenerationMethod &method = SkillGenerationMethod::standard);
         static void get_skill_constraints(const Query &queryId, const Defs::skill& skillType, const std::optional<int> &object, int &minValue, int &maxValue);
         static std::pair<int, int> get_skill_constraints(const Query &queryId, const Defs::skill& skillType, const std::optional<int> &object);
+        static short get_race_adjustments(const Defs::skill &skillType, const Defs::race& race);
 
     private:
         static short generate_value(const SkillGenerationMethod &method = SkillGenerationMethod::standard);
 
         static std::pair<int, int> get_default_boundaries(const Defs::skill &skillType);
         static std::pair<int, int> get_race_boundaries(const Defs::skill &skillType, const Defs::race& race);
-        static short get_race_adjustments(const Defs::skill &skillType, const Defs::race& race);
         static std::pair<int, int> get_class_type_boundaries(const Defs::skill &skillType, const Defs::character_class_type& clsType);
         static std::pair<int, int> get_class_boundaries(const Defs::skill &skillType, const Defs::character_class& cls);
         
