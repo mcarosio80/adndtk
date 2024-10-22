@@ -12,7 +12,7 @@
 #include <character_generator.h>
 
 Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method);
-//Adndtk::Character generate_character(const std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills);
+Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills);
 void print_summary(const Adndtk::Character& chr);
 
 std::map<Adndtk::Defs::skill, Adndtk::SkillValue> generate_skills(const Adndtk::SkillGenerationMethod& method);
@@ -63,8 +63,8 @@ int main(int argc, char** argv)
             auto skills = validator.validate_skills_list(argVal.value());
             if (skills.has_value())
             {
-                // auto chr = generate_character(genMethod.value());
-                // print_summary(chr);
+                auto chr = generate_character(skills.value());
+                print_summary(chr);
             }
             else
             {
@@ -210,6 +210,11 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
                 << skills[Adndtk::Defs::skill::wisdom] << " "
                 << skills[Adndtk::Defs::skill::charisma] << "\n";
 
+    return generate_character(skills);
+}
+
+Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills)
+{
     // Choose a Race
     auto selectedRace = choose_race(skills);
     auto raceId = static_cast<Adndtk::Defs::race>(selectedRace.id);
@@ -287,11 +292,6 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
 
     return chr;
 }
-
-// Adndtk::Character generate_character(const std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills)
-// {
-//     return {};
-// }
 
 void print_summary(const Adndtk::Character& chr)
 {
