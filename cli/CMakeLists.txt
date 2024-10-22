@@ -1,4 +1,4 @@
-file (GLOB CLI_TEST_SOURCES 
+file (GLOB CLI_SOURCES 
   "*.h"
   "*.cpp"
 )
@@ -6,8 +6,8 @@ file (GLOB CLI_TEST_SOURCES
 find_package(Boost 1.74 COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-set(CLI_TARGET adndtk-cli)
-add_executable(${CLI_TARGET} ${CLI_TEST_SOURCES})
+set(CLI_TARGET "adndtk-cli")
+add_executable(${CLI_TARGET} ${CLI_SOURCES})
 
 target_include_directories(${CLI_TARGET}
         PUBLIC ${CMAKE_SOURCE_DIR}/src
