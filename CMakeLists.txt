@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #Compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
 
-option(RUN_UNIT_TESTS "Run unit tests after build" ON)
+option(RUN_UNIT_TESTS "Run unit tests after build" OFF)
 
 include(ExternalProject)
 
@@ -41,7 +41,6 @@ include_directories(${RAPIDJSON_INCLUDE_DIR})
 set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)
 set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
 set(PY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/py)
-#set(GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
 
