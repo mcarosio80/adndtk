@@ -8,7 +8,6 @@
 
 #include <adndtk.h>
 #include <cli_options.h>
-#include <cli_validator.h>
 #include <cli_menu.h>
 #include <character_generator.h>
 
@@ -27,7 +26,7 @@ int main(int argc, char** argv)
 {
     std::cout << "AdndTK CLI tool\n\n";
     CliTools::CliOptions cliOpts{argc, argv};
-    CliTools::AdndtkCliValidator validator{};
+    Adndtk::DataValidator validator{};
 
     if (cliOpts.has_option(CliTools::Option::help)) {
         std::cout << cliOpts.get_help() << "\n";

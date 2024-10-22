@@ -34,5 +34,6 @@
 #include <calendar.h>
 #include <treasure.h>
 #include <character_generator.h>
+#include <data_validator.h>
 
 #endif // ADNDTK_H
