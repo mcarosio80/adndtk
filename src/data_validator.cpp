@@ -1,4 +1,5 @@
 #include <data_validator.h>
+#include <tables.h>
 
 #include <regex>
 #include <sstream>
@@ -119,4 +120,18 @@ auto Adndtk::DataValidator::validate_skills_list(const std::string& value) const
     skillVals[Defs::skill::charisma] = SkillValue{Defs::skill::charisma, chaValue.value()};
 
     return skillVals;
+}
+
+auto Adndtk::DataValidator::validate_class(const std::string& value) const -> std::optional<Defs::character_class>
+{
+    auto classes = Adndtk::Tables::character_class::fetch_all();
+    for (auto& c : classes)
+    {
+        if (value == c.long_name || value == c.short_name || value == c.acronym)
+        {
+            return std::make_optional(static_cast<Adndtk::Defs::character_class>(c.id));
+        }
+    }
+
+    return std::nullopt;
 }

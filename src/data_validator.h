@@ -18,6 +18,7 @@ namespace Adndtk
         auto validate_skill(const std::string& stringValue) const -> std::optional<short>;
         auto validate_generation_method(const std::string& value) const -> std::optional<SkillGenerationMethod>;
         auto validate_skills_list(const std::string& value) const -> std::optional<std::map<Defs::skill, SkillValue>>;
+        auto validate_class(const std::string& value) const -> std::optional<Defs::character_class>;
     };
 } // namespace Adndtk
 
