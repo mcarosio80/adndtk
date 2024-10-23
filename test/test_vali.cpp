@@ -153,3 +153,81 @@ TEST_CASE("[TC-VALI.012] Skill list must contain skill values in the order speci
     REQUIRE(list.value().at(Adndtk::Defs::skill::wisdom) == 15);
     REQUIRE(list.value().at(Adndtk::Defs::skill::charisma) == 16);
 }
+
+TEST_CASE("[TC-VALI.013] Classes can be validated by name", "[validator]" )
+{
+    Adndtk::DataValidator validator{};
+    std::optional<Defs::character_class> classId{};
+    
+    classId = validator.validate_class("paladin");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::paladin);
+
+    classId = validator.validate_class("ranger");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::ranger);
+
+    classId = validator.validate_class("cleric");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::cleric);
+
+    classId = validator.validate_class("druid");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::druid);
+
+    classId = validator.validate_class("Fighter Mage Thief");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::fighter_mage_thief);
+}
+
+TEST_CASE("[TC-VALI.014] Classes can be validated by capitalised name", "[validator]" )
+{
+    Adndtk::DataValidator validator{};
+    std::optional<Defs::character_class> classId{};
+
+    classId = validator.validate_class("Paladin");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::paladin);
+
+    classId = validator.validate_class("Ranger");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::ranger);
+
+    classId = validator.validate_class("Cleric");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::cleric);
+
+    classId = validator.validate_class("Druid");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::druid);
+
+    classId = validator.validate_class("fighter mage thief");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::fighter_mage_thief);
+}
+
+TEST_CASE("[TC-VALI.015] Classes can be validated by acronym", "[validator]" )
+{
+    Adndtk::DataValidator validator{};
+    std::optional<Defs::character_class> classId{};
+
+    classId = validator.validate_class("P");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::paladin);
+
+    classId = validator.validate_class("R");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::ranger);
+
+    classId = validator.validate_class("C");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::cleric);
+
+    classId = validator.validate_class("D");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::druid);
+
+    classId = validator.validate_class("F/M/T");
+    REQUIRE(classId.has_value());
+    REQUIRE(classId.value() == Adndtk::Defs::character_class::fighter_mage_thief);
+}
