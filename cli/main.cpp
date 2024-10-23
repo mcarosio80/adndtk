@@ -21,6 +21,7 @@ Adndtk::Tables::character_class choose_class(const std::map<Adndtk::Defs::skill,
 Adndtk::Tables::moral_alignment choose_moral_alignment(const Adndtk::Defs::character_class& clsId);
 Adndtk::Tables::sex choose_sex();
 std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId);
+short select_exceptional_strength();
 
 int main(int argc, char** argv)
 {
@@ -122,7 +123,7 @@ Adndtk::Tables::race choose_race(const std::map<Adndtk::Defs::skill, Adndtk::Ski
     raceMenu.line_formatter() = formatRaceMenu;
     auto selectedRace = raceMenu();
 
-    return selectedRace;
+    return selectedRace; 
 }
 
 Adndtk::Tables::character_class choose_class(const std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills, const Adndtk::Defs::race& raceId)
@@ -213,6 +214,42 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
     return generate_character(skills);
 }
 
+short select_exceptional_strength()
+{
+    Adndtk::Die d{Adndtk::Defs::die::d100};
+    std::cout << "Your character is entitled to exceptional strength.\n";
+    auto formatMenuItem = [](const std::pair<int, std::string>& r, std::map<int, std::pair<int, std::string>>& menu) -> void
+    {
+        std::cout << "\t[" << r.first << "]:\t" << r.second << "\n";
+        menu[r.first] = r;
+    };
+
+    std::vector<std::pair<int, std::string>> choices{{1,"Keep it"}, {2,"Reroll"}, {3,"Set your own"}};
+    CliTools::CliMenu<std::pair<int, std::string>, int> menu{"Choose one", choices};
+    menu.line_formatter() = formatMenuItem;
+
+    short excValue{};
+    std::pair<int, std::string> selectedItem{};
+    do
+    {
+        excValue = d.roll();
+        std::cout << "The proposed value is " << excValue << ".\n";
+
+        selectedItem = menu();
+        if (selectedItem.first == 3)
+        {
+            do
+            {
+                excValue = CliTools::prompt<short>("Enter value [1-100]: ");
+            }
+            while (excValue < 1 || excValue > 100); 
+            
+        }
+    } while (selectedItem.first == 2);
+
+    return excValue;
+}
+
 Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills)
 {
     // Choose a Race
@@ -240,10 +277,9 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     // Determine if entitoled to exceptional strength
     if (Adndtk::Cyclopedia::get_instance().can_have_exceptional_strength(clsId, raceId, skills[Adndtk::Defs::skill::strength]))
     {
-        Adndtk::Die d{Adndtk::Defs::die::d100};
-        auto excValue = d.roll();
+        auto excValue = select_exceptional_strength();
         skills[Adndtk::Defs::skill::strength].setExceptionalStrength(excValue);
-        std::cout << "The character is entitoled to exceptional strength. Strength value changed to " << skills[Adndtk::Defs::skill::strength] << ".\n";
+        std::cout << "Strength value changed to " << skills[Adndtk::Defs::skill::strength] << ".\n";
     }
 
     // Choose an Alignment
