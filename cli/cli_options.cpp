@@ -5,6 +5,7 @@ namespace CliTools
 const char* Option::help = "help";
 const char* Option::generate = "generate";
 const char* Option::skills = "skills";
+const char* Option::char_class = "class";
 
 
 CliOptions::CliOptions(int argc, char** argv)
@@ -33,6 +34,12 @@ void CliOptions::add_options()
             "generate a new character (skills mode), the tool queries for choices or missing data. "
             "Argument is a comma-separated list representing the six skill values in standard order "
             "(strength, dexterity, constitution, intelligence, wisdom, charisma)\n"
+        )
+        ("class,c",
+            boost::program_options::value<std::string>(),
+            "generate a new character (class mode), the tool queries for choices or missing data. "
+            "Argument is a character class name or acronym "
+            "(i.e. full class names like 'Paladin', 'Ranger', 'Cleric' or acronyms like 'F/M' for Fighter/Mage)\n"
         )
         ;
 }

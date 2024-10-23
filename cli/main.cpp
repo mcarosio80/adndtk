@@ -13,10 +13,12 @@
 
 Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method);
 Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills);
+Adndtk::Character generate_character(const Adndtk::Defs::character_class& classId);
 void print_summary(const Adndtk::Character& chr);
 
 std::map<Adndtk::Defs::skill, Adndtk::SkillValue> generate_skills(const Adndtk::SkillGenerationMethod& method);
 Adndtk::Tables::race choose_race(const std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills);
+Adndtk::Tables::race choose_race(const Adndtk::Defs::character_class& classId);
 Adndtk::Tables::character_class choose_class(const std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills, const Adndtk::Defs::race& raceId);
 Adndtk::Tables::moral_alignment choose_moral_alignment(const Adndtk::Defs::character_class& clsId);
 Adndtk::Tables::sex choose_sex();
@@ -78,6 +80,28 @@ int main(int argc, char** argv)
         }
         return 0;
     }
+    else if (cliOpts.has_option(CliTools::Option::char_class)) {
+        std::cout << "Entering class-based character generation..." << "\n\n";
+        auto argVal = cliOpts.get_option<std::string>(CliTools::Option::char_class);
+        if (argVal.has_value())
+        {
+            auto classId = validator.validate_class(argVal.value());
+            if (classId.has_value())
+            {
+                auto chr = generate_character(classId.value());
+                print_summary(chr);
+            }
+            else
+            {
+                std::cerr << "Invalid argument provided" << "\n\n";
+            }
+        }
+        else
+        {
+            std::cerr << "Missing argument for character generator" << "\n\n";
+        }
+        return 0;
+    }
 
     return 0;
 }
@@ -119,6 +143,21 @@ Adndtk::Tables::race choose_race(const std::map<Adndtk::Defs::skill, Adndtk::Ski
         menu[r.acronym] = r;
     };
     auto races = Adndtk::CharacterGenerator::available_races(skills);
+    CliTools::CliMenu<Adndtk::Tables::race, std::string> raceMenu{"Choose a race", races};
+    raceMenu.line_formatter() = formatRaceMenu;
+    auto selectedRace = raceMenu();
+
+    return selectedRace;
+}
+
+Adndtk::Tables::race choose_race(const Adndtk::Defs::character_class& classId)
+{
+    auto formatRaceMenu = [](const Adndtk::Tables::race& r, std::map<std::string, Adndtk::Tables::race>& menu) -> void
+    {
+        std::cout << "\t[" << r.acronym << "]:\t" << r.name << "\n";
+        menu[r.acronym] = r;
+    };
+    auto races = Adndtk::CharacterGenerator::available_races(classId);
     CliTools::CliMenu<Adndtk::Tables::race, std::string> raceMenu{"Choose a race", races};
     raceMenu.line_formatter() = formatRaceMenu;
     auto selectedRace = raceMenu();
@@ -203,7 +242,7 @@ Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method
 {
     // Roll Ability Scores
     auto skills = generate_skills(method);
-    std::cout << "Yous skills are "
+    std::cout << "Your skills are "
                 << skills[Adndtk::Defs::skill::strength] << " "
                 << skills[Adndtk::Defs::skill::dexterity] << " "
                 << skills[Adndtk::Defs::skill::constitution] << " "
@@ -325,6 +364,53 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     chr.change_skill(skills[Adndtk::Defs::skill::intelligence]);
     chr.change_skill(skills[Adndtk::Defs::skill::wisdom]);
     chr.change_skill(skills[Adndtk::Defs::skill::charisma]);
+
+    return chr;
+}
+
+Adndtk::Character generate_character(const Adndtk::Defs::character_class& classId)
+{
+    // Choose a Race
+    auto selectedRace = choose_race(classId);
+    auto raceId = static_cast<Adndtk::Defs::race>(selectedRace.id);
+    std::cout << "Your race is " << selectedRace.name << ".\n";
+
+    // Choose an Alignment
+    auto selectedAlignment = choose_moral_alignment(classId);
+    auto alignId = static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id);
+    std::cout << "Your choice is " << selectedAlignment.name << ".\n";
+
+    // Choose a Sex
+    auto selectedSex = choose_sex();
+    std::cout << "Your choice is " << selectedSex.name << ".\n";
+
+    // Select a faith
+    auto selectedDeity = choose_deity(classId, alignId);
+    std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
+    if (selectedDeity.has_value())
+    {
+        optDeityId = static_cast<Adndtk::Defs::deity>(selectedDeity.value().id);
+        std::cout << "Your choice is " << selectedDeity.value().name << ".\n";
+    }
+    else
+    {
+        std::cout << "Your chose no faith.\n";
+    }
+
+    std::cout << "Choose a name for your character\n";
+    auto charName = CliTools::prompt<std::string>("Character name");
+    std::cout << charName << " is being generated...\n";
+
+    // Select Proficiencies
+    // Equip Your Character
+
+    Adndtk::Character chr{charName,
+            classId,
+            static_cast<Adndtk::Defs::race>(selectedRace.id),
+            static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id),
+            static_cast<Adndtk::Defs::sex>(selectedSex.id), 
+            optDeityId,
+    };
 
     return chr;
 }
