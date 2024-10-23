@@ -93,6 +93,7 @@ namespace Adndtk
         select_treasure_components,
         select_treasure_composition,
         select_class_availability_per_race,
+        select_race_availability_per_class,
 
         select_all_strength_stats,
         select_all_dexterity_stats,

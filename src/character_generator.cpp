@@ -101,6 +101,21 @@ std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(co
     return availableRaces;
 }
 
+std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(const Defs::character_class& classId)
+{
+    auto query = Query::select_race_availability_per_class;
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<int>(query, static_cast<int>(classId));
+    std::vector<Tables::race> availableRaces{};
+    auto races = Tables::race::to_map<Defs::race>("id");
+                                                
+    for (auto& r : res)
+    {
+        auto raceId = r.as<Defs::race>("race_id");
+        availableRaces.push_back(races[raceId]);
+    }
+    return availableRaces;
+}
+
 std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::available_classes(const SkillValue& strength, const SkillValue& dexterity, const SkillValue& constitution, const SkillValue& intelligence, const SkillValue& wisdom, const SkillValue& charisma, const Defs::race& raceId)
 {
     std::map<Defs::skill, SkillValue> skillValues{

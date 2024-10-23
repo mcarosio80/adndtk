@@ -175,6 +175,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'count_from', count_from, 'count_to', count_to, 'probability', probability, 'nature', nature, 'additional_nature', additional_nature, 'additional_count', additional_count from treasure_composition where treasure_class = ? and component = ?", Query::select_treasure_composition);
 
         prepare_statement("select 'class_id', class_id from class_availability where race_id = ?", Query::select_class_availability_per_race);
+        prepare_statement("select 'race_id', race_id from class_availability where class_id = ?", Query::select_race_availability_per_class);
 
         load_advancement_table();
     }
