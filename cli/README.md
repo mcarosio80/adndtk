@@ -31,4 +31,22 @@ Skills can be randomly generated according the three available procedures:
 * best_twice: 3d6 are rolled twice for each skills, the best score is kept and assigned in standard order (strength, dexterity, constitution, intelligence, wisdom and charisma).
 Then the user is proposed a list of available races, according to the skills requisites. Once a race is chosen, a list of suitable classes and moral alignments are displayed.
 
+Step by step from a selected set of skills:
+<pre>
+$ adndtk-cli -s <skills-list>
+</pre>
+Skills are taken from the user and must be in the standard order (i.e. Strength, Dexterity, Constitution, Intelligence, Wisdom and Charisma). The values provided must fall in the range 3-18.
+This option is designed for those who prefer to roll their own dice and submit those values to the system.
+The option guides the user through the options available according to the given set of skills.
+If the user choose a class entitled to exceptional strength, then a value is generated and set automatically.
+The user is then asked if they want to keep it, reroll it or insert their's own.
+
+Step by step from a selected class:
+<pre>
+$ adndtk-cli -c <class ID>
+</pre>
+Skills are taken from the user and must be in the standard order (i.e. Strength, Dexterity, Constitution, Intelligence, Wisdom and Charisma). The values provided must fall in the range 3-18.
+This option is designed for those who prefer to roll their own dice and submit those values to the system.
+The option guides the user through the options available according to the given set of skills.
+
 Have fun and long life to AD&D!
