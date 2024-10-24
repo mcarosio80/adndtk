@@ -177,6 +177,35 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                 return vec;
             }}\n\n""")
 
+    # Generate function select
+    outFile.write(f"""
+            /// Returns all records from table '{tableName}' where fieldName matches fieldValue
+            template<typename _FieldType>
+            static std::vector<{tableName}> select(const std::string& fieldName, const _FieldType& fieldValue)
+            {{
+                std::vector<{tableName}> vec{{}};
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
+                for (auto& r : results)
+                {{
+                    if (r.as<_FieldType>(fieldName) == fieldValue)
+                    {{
+                        {tableName} stats = convert(r);
+                        vec.push_back(stats);
+                    }}
+                }}
+                return vec;
+            }}\n\n""")
+
+    # Generate function select_one
+    outFile.write(f"""
+            /// Returns the first record from table '{tableName}' where fieldName matches fieldValue
+            template<typename _FieldType>
+            static std::optional<{tableName}> select_one(const std::string& fieldName, const _FieldType& fieldValue)
+            {{
+                const auto data = select(fieldName, fieldValue).front();
+                return (data.empty()) ? std::nullopt : std::make_optional(data.at(0));
+            }}\n\n""")
+
     # Begins private block
     outFile.write(f"""{indent(indentationLevel)}private:""")
 
