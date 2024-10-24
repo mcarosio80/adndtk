@@ -21,7 +21,20 @@ TEST_CASE("[TC-VALI.001] Skill values can be any well-formed value between min a
     }
 }
 
-TEST_CASE("[TC-VALI.002] Skill values cannot be zero or negative", "[validator]" )
+TEST_CASE("[TC-VALI.002] Extended skill values can be any well-formed value between min and max extended values", "[validator]" )
+{
+    Adndtk::DataValidator validator{};
+
+    for (auto skillValue = Const::min_extended_skill_value; skillValue <= Const::max_extended_skill_value; ++skillValue)
+    {
+        std::stringstream ss{};
+        ss << skillValue;
+
+        REQUIRE(validator.validate_extended_skill(ss.str()));
+    }
+}
+
+TEST_CASE("[TC-VALI.003] Skill values cannot be zero or negative", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -29,14 +42,6 @@ TEST_CASE("[TC-VALI.002] Skill values cannot be zero or negative", "[validator]"
     REQUIRE_FALSE(validator.validate_skill("-1"));
     REQUIRE_FALSE(validator.validate_skill("-2"));
     REQUIRE_FALSE(validator.validate_skill("-5"));
-}
-
-TEST_CASE("[TC-VALI.003] Skill values cannot be greater than maximum value", "[validator]" )
-{
-    Adndtk::DataValidator validator{};
-
-    REQUIRE_FALSE(validator.validate_skill("26"));
-    REQUIRE_FALSE(validator.validate_skill("30"));
 }
 
 TEST_CASE("[TC-VALI.004] Skill values cannot be greater than maximum value", "[validator]" )
@@ -47,7 +52,15 @@ TEST_CASE("[TC-VALI.004] Skill values cannot be greater than maximum value", "[v
     REQUIRE_FALSE(validator.validate_skill("30"));
 }
 
-TEST_CASE("[TC-VALI.005] Skill values can contain spaces", "[validator]" )
+TEST_CASE("[TC-VALI.005] Skill values cannot be greater than maximum value", "[validator]" )
+{
+    Adndtk::DataValidator validator{};
+
+    REQUIRE_FALSE(validator.validate_skill("26"));
+    REQUIRE_FALSE(validator.validate_skill("30"));
+}
+
+TEST_CASE("[TC-VALI.006] Skill values can contain spaces", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -57,7 +70,7 @@ TEST_CASE("[TC-VALI.005] Skill values can contain spaces", "[validator]" )
     REQUIRE(validator.validate_skill("    14   "));
 }
 
-TEST_CASE("[TC-VALI.006] Strength values can contain spaces", "[validator]" )
+TEST_CASE("[TC-VALI.007] Strength values can contain spaces", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -69,7 +82,7 @@ TEST_CASE("[TC-VALI.006] Strength values can contain spaces", "[validator]" )
     REQUIRE(validator.validate_strength(" 18/81   "));
 }
 
-TEST_CASE("[TC-VALI.007] Exceptional strength values must be between 18/01 and 18/00", "[validator]" )
+TEST_CASE("[TC-VALI.008] Exceptional strength values must be between 18/01 and 18/00", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -84,7 +97,7 @@ TEST_CASE("[TC-VALI.007] Exceptional strength values must be between 18/01 and 1
     REQUIRE_FALSE(validator.validate_strength("18/234"));
 }
 
-TEST_CASE("[TC-VALI.008] When exceptional strength applies, strength value must equals 18", "[validator]" )
+TEST_CASE("[TC-VALI.009] When exceptional strength applies, strength value must equals 18", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -94,7 +107,7 @@ TEST_CASE("[TC-VALI.008] When exceptional strength applies, strength value must 
     REQUIRE_FALSE(validator.validate_strength("19/34"));
 }
 
-TEST_CASE("[TC-VALI.009] Generation methods can only be one of the valid values", "[validator]" )
+TEST_CASE("[TC-VALI.010] Generation methods can only be one of the valid values", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -105,7 +118,7 @@ TEST_CASE("[TC-VALI.009] Generation methods can only be one of the valid values"
     REQUIRE_FALSE(validator.validate_generation_method("standardd"));
 }
 
-TEST_CASE("[TC-VALI.010] Skill lists must be a sequence of valid skill values in standard order (STR, DEX, CON, INT, WIS, CHA)", "[validator]" )
+TEST_CASE("[TC-VALI.011] Skill lists must be a sequence of valid skill values in standard order (STR, DEX, CON, INT, WIS, CHA)", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -117,7 +130,7 @@ TEST_CASE("[TC-VALI.010] Skill lists must be a sequence of valid skill values in
     REQUIRE(validator.validate_skills_list("18/35, 12, 14,      15,13,12 "));
 }
 
-TEST_CASE("[TC-VALI.011] Strength values must be at the first position", "[validator]" )
+TEST_CASE("[TC-VALI.012] Strength values must be at the first position", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -129,7 +142,7 @@ TEST_CASE("[TC-VALI.011] Strength values must be at the first position", "[valid
     REQUIRE_FALSE(validator.validate_skills_list("18/35, 12, 14,      15,18/43,12 "));
 }
 
-TEST_CASE("[TC-VALI.011] Skill list must contain exactly six values", "[validator]" )
+TEST_CASE("[TC-VALI.013] Skill list must contain exactly six values", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -139,7 +152,7 @@ TEST_CASE("[TC-VALI.011] Skill list must contain exactly six values", "[validato
     REQUIRE(list.value().size() == 6);
 }
 
-TEST_CASE("[TC-VALI.012] Skill list must contain skill values in the order specified", "[validator]" )
+TEST_CASE("[TC-VALI.014] Skill list must contain skill values in the order specified", "[validator]" )
 {
     Adndtk::DataValidator validator{};
 
@@ -154,7 +167,7 @@ TEST_CASE("[TC-VALI.012] Skill list must contain skill values in the order speci
     REQUIRE(list.value().at(Adndtk::Defs::skill::charisma) == 16);
 }
 
-TEST_CASE("[TC-VALI.013] Classes can be validated by name", "[validator]" )
+TEST_CASE("[TC-VALI.015] Classes can be validated by name", "[validator]" )
 {
     Adndtk::DataValidator validator{};
     std::optional<Defs::character_class> classId{};
@@ -180,7 +193,7 @@ TEST_CASE("[TC-VALI.013] Classes can be validated by name", "[validator]" )
     REQUIRE(classId.value() == Adndtk::Defs::character_class::fighter_mage_thief);
 }
 
-TEST_CASE("[TC-VALI.014] Classes can be validated by capitalised name", "[validator]" )
+TEST_CASE("[TC-VALI.016] Classes can be validated by capitalised name", "[validator]" )
 {
     Adndtk::DataValidator validator{};
     std::optional<Defs::character_class> classId{};
@@ -206,7 +219,7 @@ TEST_CASE("[TC-VALI.014] Classes can be validated by capitalised name", "[valida
     REQUIRE(classId.value() == Adndtk::Defs::character_class::fighter_mage_thief);
 }
 
-TEST_CASE("[TC-VALI.015] Classes can be validated by acronym", "[validator]" )
+TEST_CASE("[TC-VALI.017] Classes can be validated by acronym", "[validator]" )
 {
     Adndtk::DataValidator validator{};
     std::optional<Defs::character_class> classId{};

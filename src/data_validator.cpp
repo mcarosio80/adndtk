@@ -1,7 +1,6 @@
 #include <data_validator.h>
 #include <tables.h>
 
-#include <regex>
 #include <sstream>
 
 Adndtk::DataValidator::DataValidator()
@@ -40,8 +39,18 @@ auto Adndtk::DataValidator::validate_strength(const std::string& stringValue) co
 
 auto Adndtk::DataValidator::validate_skill(const std::string& stringValue) const -> std::optional<short>
 {
+    std::regex pattern("\\s*(|1[0-8]|[3-9])\\s*", std::regex_constants::ECMAScript);
+    return validate_skill_value(stringValue, pattern);
+}
+
+auto Adndtk::DataValidator::validate_extended_skill(const std::string& stringValue) const -> std::optional<short>
+{
     std::regex pattern("\\s*(2[0-5]|1[0-9]|[1-9])\\s*", std::regex_constants::ECMAScript);
-    
+    return validate_skill_value(stringValue, pattern);
+}
+
+auto Adndtk::DataValidator::validate_skill_value(const std::string& stringValue, const std::regex& pattern) const -> std::optional<short>
+{
     std::smatch matches;
     short skillValue{0};
 

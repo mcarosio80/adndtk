@@ -158,8 +158,10 @@ namespace Adndtk
         static constexpr double clothes_weight = 2.5;
         static constexpr short high_people_base_movement_factor = 12;
         static constexpr short short_people_base_movement_factor = 6;
-        static constexpr short min_skill_value = 1;
-        static constexpr short max_skill_value = 25;
+        static constexpr short min_extended_skill_value = 1;
+        static constexpr short min_skill_value = 3;
+        static constexpr short max_skill_value = 18;
+        static constexpr short max_extended_skill_value = 25;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
