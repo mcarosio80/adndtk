@@ -13,7 +13,7 @@
 
 Adndtk::Character generate_character(const Adndtk::SkillGenerationMethod& method);
 Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::SkillValue>& skills);
-Adndtk::Character generate_character(const Adndtk::Defs::character_class& classId);
+Adndtk::Character generate_character(const Adndtk::Defs::character_class& classId, const Adndtk::SkillGenerationMethod& genMethod);
 void print_summary(const Adndtk::Character& chr);
 
 std::map<Adndtk::Defs::skill, Adndtk::SkillValue> generate_skills(const Adndtk::SkillGenerationMethod& method);
@@ -88,7 +88,26 @@ int main(int argc, char** argv)
             auto classId = validator.validate_class(argVal.value());
             if (classId.has_value())
             {
-                auto chr = generate_character(classId.value());
+                auto genMethod = cliOpts.get_option<std::string>(CliTools::Option::method);
+                Adndtk::SkillGenerationMethod skillGenMethod{Adndtk::SkillGenerationMethod::standard};
+                if (genMethod.has_value())
+                {
+                    auto method = validator.validate_generation_method(genMethod.value());
+                    if (method.has_value())
+                    {
+                        std::cout << "Skills will be generated using " << genMethod.value() << " method\n";
+                    }
+                    else
+                    {
+                        std::cout << "Invalid generation method specified. Using default method\n";
+                    }
+                    skillGenMethod = method.value_or(Adndtk::SkillGenerationMethod::standard);
+                }
+                else
+                {
+                    std::cout << "Skills will be generated using default method\n";
+                }
+                auto chr = generate_character(classId.value(), skillGenMethod);
                 print_summary(chr);
             }
             else
@@ -368,7 +387,7 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     return chr;
 }
 
-Adndtk::Character generate_character(const Adndtk::Defs::character_class& classId)
+Adndtk::Character generate_character(const Adndtk::Defs::character_class& classId, const Adndtk::SkillGenerationMethod& genMethod)
 {
     // Choose a Race
     auto selectedRace = choose_race(classId);
@@ -404,6 +423,9 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     // Select Proficiencies
     // Equip Your Character
 
+    auto prevVaue = static_cast<Adndtk::SkillGenerationMethod>(Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method));
+    Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method) = static_cast<int>(genMethod);
+
     Adndtk::Character chr{charName,
             classId,
             static_cast<Adndtk::Defs::race>(selectedRace.id),
@@ -411,6 +433,8 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
             static_cast<Adndtk::Defs::sex>(selectedSex.id), 
             optDeityId,
     };
+
+    Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method) = static_cast<int>(prevVaue);
 
     return chr;
 }

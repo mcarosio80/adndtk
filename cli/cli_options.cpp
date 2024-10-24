@@ -6,6 +6,7 @@ const char* Option::help = "help";
 const char* Option::generate = "generate";
 const char* Option::skills = "skills";
 const char* Option::char_class = "class";
+const char* Option::method = "method";
 
 
 CliOptions::CliOptions(int argc, char** argv)
@@ -40,6 +41,15 @@ void CliOptions::add_options()
             "generate a new character (class mode), the tool queries for choices or missing data. "
             "Argument is a character class name or acronym "
             "(i.e. full class names like 'Paladin', 'Ranger', 'Cleric' or acronyms like 'F/M' for Fighter/Mage)\n"
+        )
+        ("method,m",
+            boost::program_options::value<std::string>(),
+            "set the skill generation method to the desired value. "
+            "The option is ignored when 'generate' or 'skills' options are used. "
+            "Argument can be any of the following:\n"
+            "[standard] - 3d6 per each skill\n"
+            "[best4] - 4d6, the least of them is discarded\n"
+            "[best-twice] - 3d6 twice, the best is chosen\n"
         )
         ;
 }

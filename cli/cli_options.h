@@ -15,6 +15,7 @@ namespace CliTools
         static const char* generate;
         static const char* skills;
         static const char* char_class;
+        static const char* method;
     };
 
     class CliOptions
