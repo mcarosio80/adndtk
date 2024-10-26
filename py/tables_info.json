@@ -333,5 +333,25 @@
         "table" : "CALENDAR_SPECIAL_DAY",
         "key" : "name",
         "value": "id"
+    },
+    {
+        "table" : "GEO_AREA",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "REGION",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "PLACE_OF_INTEREST_TYPE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "PLACE_OF_INTEREST",
+        "key" : "name",
+        "value": "id"
     }
 ]
