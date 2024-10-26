@@ -4,7 +4,6 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 
 ## New features
 * Account for non movable objects (boat, live cattle, horse, etc)
-* Treasures
 * Account for encumbrance of treasure items
 * Monsters
 * Implement ledger of buy/sell transaction for a store

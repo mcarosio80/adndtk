@@ -29,6 +29,16 @@ bool Adndtk::SkillValue::hasExceptionalStrength() const
             && _exceptionalValue.has_value();
 }
 
+bool Adndtk::SkillValue::setExceptionalStrength(const short& newValue)
+{
+    if (_skillType == Defs::skill::strength && _skillValue == 18)
+    {
+        _exceptionalValue = newValue;
+        return true;
+    }
+    return false;
+}
+
 std::optional<short> Adndtk::SkillValue::exceptionalStrength() const
 {
     if (_skillType == Defs::skill::strength && _skillValue == 18)

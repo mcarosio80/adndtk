@@ -950,7 +950,7 @@ TEST_CASE("[TC-CHAR.027] Fighters, mages and clerics have no limitation on moral
 
     for (auto& c : classes)
     {
-        auto aligns = Cyclopedia::get_instance().available_moral_alignments(c);
+        auto aligns = CharacterGenerator::available_moral_alignment_ids(c);
         REQUIRE(aligns.size() == 9);
 
         REQUIRE(aligns.find(Defs::moral_alignment::lawful_good) != aligns.end());
@@ -967,7 +967,7 @@ TEST_CASE("[TC-CHAR.027] Fighters, mages and clerics have no limitation on moral
 
 TEST_CASE("[TC-CHAR.028] Thieves cannot be lawful good", "[character]" )
 {
-    auto aligns = Cyclopedia::get_instance().available_moral_alignments(Defs::character_class::thief);
+    auto aligns = CharacterGenerator::available_moral_alignment_ids(Defs::character_class::thief);
     REQUIRE(aligns.size() == 8);
 
     REQUIRE(aligns.find(Defs::moral_alignment::lawful_neutral) != aligns.end());
@@ -982,7 +982,7 @@ TEST_CASE("[TC-CHAR.028] Thieves cannot be lawful good", "[character]" )
 
 TEST_CASE("[TC-CHAR.029] Druids can only be neutral", "[character]" )
 {
-    auto aligns = Cyclopedia::get_instance().available_moral_alignments(Defs::character_class::druid);
+    auto aligns = CharacterGenerator::available_moral_alignment_ids(Defs::character_class::druid);
     REQUIRE(aligns.size() == 3);
 
     REQUIRE(aligns.find(Defs::moral_alignment::neutral_good) != aligns.end());
@@ -992,7 +992,7 @@ TEST_CASE("[TC-CHAR.029] Druids can only be neutral", "[character]" )
 
 TEST_CASE("[TC-CHAR.030] Paladins can only be lawful good", "[character]" )
 {
-    auto aligns = Cyclopedia::get_instance().available_moral_alignments(Defs::character_class::paladin);
+    auto aligns = CharacterGenerator::available_moral_alignment_ids(Defs::character_class::paladin);
     REQUIRE(aligns.size() == 1);
 
     REQUIRE(aligns.find(Defs::moral_alignment::lawful_good) != aligns.end());
@@ -1000,7 +1000,7 @@ TEST_CASE("[TC-CHAR.030] Paladins can only be lawful good", "[character]" )
 
 TEST_CASE("[TC-CHAR.031] Rangers can only be good", "[character]" )
 {
-    auto aligns = Cyclopedia::get_instance().available_moral_alignments(Defs::character_class::ranger);
+    auto aligns = CharacterGenerator::available_moral_alignment_ids(Defs::character_class::ranger);
     REQUIRE(aligns.size() == 3);
 
     REQUIRE(aligns.find(Defs::moral_alignment::lawful_good) != aligns.end());
@@ -1023,7 +1023,7 @@ TEST_CASE("[TC-CHAR.032] Specialistic wizards have no limitation on moral alignm
 
     for (auto& c : classes)
     {
-        auto aligns = Cyclopedia::get_instance().available_moral_alignments(c);
+        auto aligns = CharacterGenerator::available_moral_alignment_ids(c);
         REQUIRE(aligns.size() == 9);
 
         REQUIRE(aligns.find(Defs::moral_alignment::lawful_good) != aligns.end());
@@ -1040,7 +1040,7 @@ TEST_CASE("[TC-CHAR.032] Specialistic wizards have no limitation on moral alignm
 
 TEST_CASE("[TC-CHAR.033] Bards have no limitation on moral alignments", "[character]" )
 {
-    auto aligns = Cyclopedia::get_instance().available_moral_alignments(Defs::character_class::bard);
+    auto aligns = CharacterGenerator::available_moral_alignment_ids(Defs::character_class::bard);
     REQUIRE(aligns.size() == 9);
 
     REQUIRE(aligns.find(Defs::moral_alignment::lawful_good) != aligns.end());
@@ -1058,7 +1058,7 @@ TEST_CASE("[TC-CHAR.034] Priests of specific mythos must align to the deity of c
 {
     auto clsId = Defs::character_class::preist_of_specific_mythos;
 
-    auto alignsLathander = Cyclopedia::get_instance().available_moral_alignments(clsId, Defs::deity::lathander);
+    auto alignsLathander = CharacterGenerator::available_moral_alignment_ids(clsId, Defs::deity::lathander);
     REQUIRE(alignsLathander.size() == 4);
 
     REQUIRE(alignsLathander.find(Defs::moral_alignment::lawful_good) != alignsLathander.end());
@@ -1066,7 +1066,7 @@ TEST_CASE("[TC-CHAR.034] Priests of specific mythos must align to the deity of c
     REQUIRE(alignsLathander.find(Defs::moral_alignment::neutral_good) != alignsLathander.end());
     REQUIRE(alignsLathander.find(Defs::moral_alignment::chaotic_good) != alignsLathander.end());
 
-    auto alignsLolth = Cyclopedia::get_instance().available_moral_alignments(clsId, Defs::deity::lolth);
+    auto alignsLolth = CharacterGenerator::available_moral_alignment_ids(clsId, Defs::deity::lolth);
     REQUIRE(alignsLolth.size() == 4);
 
     REQUIRE(alignsLolth.find(Defs::moral_alignment::lawful_evil) != alignsLolth.end());
@@ -1074,7 +1074,7 @@ TEST_CASE("[TC-CHAR.034] Priests of specific mythos must align to the deity of c
     REQUIRE(alignsLolth.find(Defs::moral_alignment::chaotic_neutral) != alignsLolth.end());
     REQUIRE(alignsLolth.find(Defs::moral_alignment::chaotic_evil) != alignsLolth.end());
 
-    auto alignsTyr = Cyclopedia::get_instance().available_moral_alignments(clsId, Defs::deity::tyr);
+    auto alignsTyr = CharacterGenerator::available_moral_alignment_ids(clsId, Defs::deity::tyr);
     REQUIRE(alignsTyr.size() == 3);
 
     REQUIRE(alignsTyr.find(Defs::moral_alignment::lawful_good) != alignsTyr.end());
@@ -1084,7 +1084,7 @@ TEST_CASE("[TC-CHAR.034] Priests of specific mythos must align to the deity of c
 
 TEST_CASE("[TC-CHAR.035] Deities can be chosen according to the character's moral alignment", "[character]" )
 {
-    auto deitiesTN = Cyclopedia::get_instance().available_deities(Defs::moral_alignment::true_neutral);
+    auto deitiesTN = CharacterGenerator::available_deity_ids(Defs::moral_alignment::true_neutral);
 
     REQUIRE(deitiesTN.size() == 39);
     REQUIRE(std::find(deitiesTN.begin(), deitiesTN.end(), Defs::deity::helm) != deitiesTN.end());
@@ -1127,7 +1127,7 @@ TEST_CASE("[TC-CHAR.035] Deities can be chosen according to the character's mora
     REQUIRE(std::find(deitiesTN.begin(), deitiesTN.end(), Defs::deity::vergadain) != deitiesTN.end());
     REQUIRE(std::find(deitiesTN.begin(), deitiesTN.end(), Defs::deity::sheela_peryroyl) != deitiesTN.end());
 
-    auto deitiesCE = Cyclopedia::get_instance().available_deities(Defs::moral_alignment::chaotic_evil);
+    auto deitiesCE = CharacterGenerator::available_deity_ids(Defs::moral_alignment::chaotic_evil);
 
     REQUIRE(deitiesCE.size() == 31);
     REQUIRE(std::find(deitiesCE.begin(), deitiesCE.end(), Defs::deity::bane) != deitiesCE.end());

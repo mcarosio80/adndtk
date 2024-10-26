@@ -3,15 +3,15 @@
 
 #include <defs.h>
 #include <config.h>
+#include <query_result.h>
+#include <advancement_table.h>
 
 #include <sqlite3.h>
 
 #include <map>
 #include <vector>
 #include <set>
-
-#include <query_result.h>
-#include <advancement_table.h>
+#include <optional>
 
 namespace Adndtk
 {
@@ -86,6 +86,9 @@ namespace Adndtk
             return found;
         }
 
+        bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const Defs::skill& skillId, const short& skillValue) const;
+        bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const;
+        
         template <Defs::character_class_type probeType>
         bool is_type_of(const Defs::character_class& cls)
         {
@@ -134,13 +137,12 @@ namespace Adndtk
             return false;
         }
         bool is_multiclass(const Defs::character_class& cls);
+        std::optional<Adndtk::Defs::school_of_magic> get_school_of_magic(const Defs::character_class& cls);
+        bool is_specialist_wizard(const Defs::character_class& cls);
 
         const AdvancementTable& advancement_table() { return _advTable; }
         Defs::character_class_type get_class_type(const Defs::character_class& cls);
         std::vector<Defs::character_class_type> get_class_types(const Defs::character_class& cls);
-
-        std::set<Defs::moral_alignment> available_moral_alignments(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId = std::nullopt) const;
-        std::set<Defs::deity> available_deities(const Defs::moral_alignment& align) const;
 
     private:
         Cyclopedia();
@@ -198,10 +200,6 @@ namespace Adndtk
         AdvancementTable                    _advTable;
 
         void load_advancement_table();
-
-        std::set<Defs::moral_alignment> available_moral_alignments_by_mythos(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId = std::nullopt) const;
-        std::set<Defs::moral_alignment> available_moral_alignments_by_single_class(const Defs::character_class& cls) const;
-        
     };
 }
 

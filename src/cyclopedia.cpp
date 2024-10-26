@@ -1,6 +1,7 @@
 #include <cyclopedia.h>
 #include <common_types.h>
 #include <skills.h>
+#include <skill_creator.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -59,11 +60,12 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'min', min, 'max', max from skill_requisite_values where requisite_id = 2 and skill_id = ? and object = ?", Query::select_skill_boundaries_class);
         prepare_statement("select 'min', min, 'max', max from skill_requisite_values where requisite_id = 3 and skill_id = ? and object = ?", Query::select_skill_boundaries_race);
 
+        prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class", Query::select_character_classes);
         prepare_statement("select 'id', id, 'class_type_id', class_type_id, 'long_name', long_name, 'short_name', short_name, 'acronym', acronym from character_class where id = ?", Query::select_character_class);
         prepare_statement("select 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type where id = ?", Query::select_character_class_type);
 
         prepare_statement("select 'race_id', race_id, 'skill_id', skill_id, 'value', value from skill_modifier where race_id = ? and skill_id = ?", Query::select_skill_modifier);
-        prepare_statement("select 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where class_id = ?", Query::select_school_of_magic_skill_requisite);
+        prepare_statement("select 'skill_id', skill_id, 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where class_id = ?", Query::select_school_of_magic_skill_requisite);
 
         prepare_statement("select 'class_id', class_id, 'level', level, 'score', score from LEVEL_ADVANCEMENT order by class_id, level", Query::select_level_advancement);
         prepare_statement("select 'class_id', class_id, 'score', score from LEVEL_ADVANCEMENT_FACTOR", Query::select_level_advancement_factor);
@@ -92,6 +94,11 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'name', name, 'type', type, 'cost_coin', cost_coin, 'cost_min', cost_min, 'cost_max', cost_max, 'weight', weight, 'body_slot', body_slot from equipment", Query::select_all_equipment);
         prepare_statement("select 'id', id, 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type", Query::select_all_character_class_type);
         prepare_statement("select 'id', id, 'acronym', acronym, 'description', description from coin", Query::select_all_coin);
+        prepare_statement("select 'id', id, 'name', name, 'acronym', acronym from moral_alignment", Query::select_all_moral_alignment);
+        prepare_statement("select 'id', id, 'name', name, 'acronym', acronym from sex", Query::select_all_sex);
+        prepare_statement("select 'id', id, 'description', description, 'score', score from saving_throw", Query::select_all_saving_throw);
+        prepare_statement("select 'id', id, 'name', name from cult", Query::select_all_cult);
+        prepare_statement("select 'id', id, 'description', description from deity_rank", Query::select_all_deity_rank);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
@@ -105,6 +112,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'race_id', a.race_id from CHARACTER_CLASS c "
                             "inner join CLASS_AVAILABILITY a on a.class_id = c.id "
                             "where c.id = ? and a.race_id = ?", Query::select_school_of_magic_per_race);
+        prepare_statement("select 'id', id from school_of_magic where class_id = ?", Query::select_school_of_magic_per_class);
+
         prepare_statement("select 'level', level, 'spell_level_1', spell_level_1, 'spell_level_2', spell_level_2, 'spell_level_3', spell_level_3, 'spell_level_4', spell_level_4, 'spell_level_5', spell_level_5, 'spell_level_6', spell_level_6, 'spell_level_7', spell_level_7, 'spell_level_8', spell_level_8, 'spell_level_9', spell_level_9 from wizard_spell_progression where level = ?", Query::select_wizard_spell_progression);
 
         prepare_statement("select 'name', name, 'level', level from priest_spell where id = ?", Query::select_priest_spell);
@@ -165,6 +174,9 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id from treasure_component", Query::select_treasure_components);
         prepare_statement("select 'count_from', count_from, 'count_to', count_to, 'probability', probability, 'nature', nature, 'additional_nature', additional_nature, 'additional_count', additional_count from treasure_composition where treasure_class = ? and component = ?", Query::select_treasure_composition);
 
+        prepare_statement("select 'class_id', class_id from class_availability where race_id = ?", Query::select_class_availability_per_race);
+        prepare_statement("select 'race_id', race_id from class_availability where class_id = ?", Query::select_race_availability_per_class);
+
         load_advancement_table();
     }
     return ok;
@@ -181,9 +193,43 @@ Adndtk::Cyclopedia::~Cyclopedia()
     check_state(ret);
 }
 
+bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const Defs::skill& skillId, const short& skillValue) const
+{
+    return skillValue == 18 && skillId == Defs::skill::strength
+        && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(cls)
+        && race != Defs::race::halfling;
+}
+
+bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const
+{
+    return can_have_exceptional_strength(cls, race, skillVal.type(), skillVal);
+}
+
 bool Adndtk::Cyclopedia::is_multiclass(const Defs::character_class& cls)
 {
     return split<Defs::character_class>(cls).size() > 1;
+}
+
+std::optional<Adndtk::Defs::school_of_magic> Adndtk::Cyclopedia::get_school_of_magic(const Defs::character_class& cls)
+{
+    std::optional<Adndtk::Defs::school_of_magic> school{std::nullopt};
+    auto classes = split<Defs::character_class>(cls);
+    for (auto& c : classes)
+    {
+        auto clsId = static_cast<int>(c);
+        auto setSet = exec_prepared_statement<int>(Query::select_school_of_magic_per_class, clsId);
+        if (setSet.size() > 0)
+        {
+            auto& ret = setSet[0];
+            school = ret.as<Defs::school_of_magic>("id") ;
+        }
+    }
+    return school;
+}
+
+bool Adndtk::Cyclopedia::is_specialist_wizard(const Defs::character_class& cls)
+{
+    return get_school_of_magic(cls).has_value();
 }
 
 bool Adndtk::Cyclopedia::check_state(int return_code)
@@ -339,107 +385,4 @@ std::vector<Adndtk::Defs::character_class_type> Adndtk::Cyclopedia::get_class_ty
 {
     auto types = get_class_type(cls);
     return split<Defs::character_class_type>(types);
-}
-
-std::set<Adndtk::Defs::moral_alignment> Adndtk::Cyclopedia::available_moral_alignments_by_mythos(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId/*=std::nullopt*/) const
-{
-    if (cls != Defs::character_class::preist_of_specific_mythos || !deityId.has_value())
-    {
-        throw std::runtime_error("Unable to determine the available moral alignments");
-    }
-
-    auto deity = static_cast<int>(deityId.value());
-    auto rsWorshipperAligns = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_worshipper_alignments, deity);
-    
-    std::set<Adndtk::Defs::moral_alignment> psmAligns;
-    for (auto& a : rsWorshipperAligns)
-    {
-        auto alignId = static_cast<Defs::moral_alignment>(a.as<int>("moral_alignment"));
-        psmAligns.emplace(alignId);
-    }
-
-    return psmAligns;
-}
-
-std::set<Adndtk::Defs::moral_alignment> Adndtk::Cyclopedia::available_moral_alignments_by_single_class(const Defs::character_class& cls) const
-{
-    if (cls == Defs::character_class::preist_of_specific_mythos)
-    {
-        throw std::runtime_error("Unable to determine the available moral alignments");
-    }
-
-    std::set<Adndtk::Defs::moral_alignment> aligns;
-
-    auto clsId = static_cast<int>(cls);
-    auto rsAlign = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_moral_alignments_by_class, clsId);
-    for (auto& a : rsAlign)
-    {
-        auto alignId = static_cast<Defs::moral_alignment>(a.as<int>("alignment_id"));
-        aligns.emplace(alignId);
-    }
-    return aligns;
-}
-
-std::set<Adndtk::Defs::moral_alignment> Adndtk::Cyclopedia::available_moral_alignments(const Defs::character_class& cls, const std::optional<Defs::deity>& deityId/*=std::nullopt*/) const
-{
-    if (cls == Defs::character_class::preist_of_specific_mythos)
-    {
-        return available_moral_alignments_by_mythos(cls, deityId);
-    }
-
-    if (!Cyclopedia::get_instance().is_multiclass(cls))
-    {
-        return available_moral_alignments_by_single_class(cls);
-    }
-
-    std::set<Adndtk::Defs::moral_alignment> alignments{
-        Defs::moral_alignment::lawful_good,
-        Defs::moral_alignment::lawful_neutral,
-        Defs::moral_alignment::lawful_evil,
-        Defs::moral_alignment::neutral_good,
-        Defs::moral_alignment::true_neutral,
-        Defs::moral_alignment::neutral_evil,
-        Defs::moral_alignment::chaotic_good,
-        Defs::moral_alignment::chaotic_neutral,
-        Defs::moral_alignment::chaotic_evil
-    };
-
-    auto classes = Cyclopedia::get_instance().split<Defs::character_class>(cls);
-    for (auto& c : classes)
-    {
-        auto availableAligns = available_moral_alignments_by_single_class(c);
-
-        for (auto alignId : {
-                        Defs::moral_alignment::lawful_good,
-                        Defs::moral_alignment::lawful_neutral,
-                        Defs::moral_alignment::lawful_evil,
-                        Defs::moral_alignment::neutral_good,
-                        Defs::moral_alignment::true_neutral,
-                        Defs::moral_alignment::neutral_evil,
-                        Defs::moral_alignment::chaotic_good,
-                        Defs::moral_alignment::chaotic_neutral,
-                        Defs::moral_alignment::chaotic_evil
-                    })
-        {
-            if (availableAligns.find(alignId) == availableAligns.end())
-            {
-                alignments.erase(alignId);
-            }
-        }
-    }
-    return alignments;
-}
-
-std::set<Adndtk::Defs::deity> Adndtk::Cyclopedia::available_deities(const Defs::moral_alignment& align) const
-{
-    std::set<Adndtk::Defs::deity> deities;
-    auto alignId = static_cast<int>(align);
-    auto rsDeities = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_deities_by_moral_alignment, alignId);
-    for (auto& d : rsDeities)
-    {
-        auto deityId = static_cast<Defs::deity>(d.as<int>("deity_id"));
-        deities.emplace(deityId);
-    }
-        
-    return deities;
 }

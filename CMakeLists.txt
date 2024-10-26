@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #Compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
 
-option(RUN_UNIT_TESTS "Run unit tests after build" ON)
+option(RUN_UNIT_TESTS "Run unit tests after build" OFF)
 
 include(ExternalProject)
 
@@ -26,9 +26,6 @@ if(SQLite3_FOUND)
     message("SQLite3 " ${SQLite3_VERSION} " executable found in " ${SQLite3_EXECUTABLE})
     message("SQLite3_INCLUDE_DIRS; " ${SQLite3_INCLUDE_DIRS})
     message("SQLite3_LIBRARIES: " ${SQLite3_LIBRARIES})
-
-    #include_directories(${SQLite3_INCLUDE_DIRS})
-    #target_link_libraries (adndtk ${SQLITE3_LIBRARIES})
 endif()
 
 find_package(Git REQUIRED)
@@ -44,7 +41,6 @@ include_directories(${RAPIDJSON_INCLUDE_DIR})
 set(DB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/db)
 set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
 set(PY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/py)
-#set(GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
 
@@ -220,3 +216,5 @@ message("Adding subdirectory demo")
 add_subdirectory(demo)
 message("Adding subdirectory test")
 add_subdirectory(test)
+message("Adding subdirectory cli")
+add_subdirectory(cli)

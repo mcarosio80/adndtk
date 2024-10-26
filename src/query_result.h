@@ -4,6 +4,7 @@
 #include <optional>
 #include <string>
 #include <map>
+#include <set>
 #include <vector>
 #include <sstream>
 #include <type_traits>
@@ -166,17 +167,30 @@ namespace Adndtk
             return data;
         }
 
-        // template<typename _T>
-        // std::set<_T> to_set(const std::string& fieldName) const
-        // {
-        //     std::set<_T> data{};
-        //     for (auto& r : _records)
-        //     {
-        //         auto value = r.as<_T>(fieldName);
-        //         data.emplace(value);
-        //     }
-        //     return data;
-        // } 
+        template<typename _KeyType, typename _ValueType>
+        std::map<_KeyType, _ValueType> to_map(const std::string& keyField, const std::string& valueField) const
+        {
+            std::map<_KeyType, _ValueType> data{};
+            for (auto& r : _records)
+            {
+                auto key = r.as<_KeyType>(keyField);
+                auto value = r.as<_ValueType>(valueField);
+                data[key] = value;
+            }
+            return data;
+        }
+
+        template<typename _KeyType>
+        std::set<_KeyType> to_set(const std::string& fieldName) const
+        {
+            std::set<_KeyType> data{};
+            for (auto& r : _records)
+            {
+                auto value = r.as<_KeyType>(fieldName);
+                data.emplace(value);
+            }
+            return data;
+        }
 
     private:
         std::vector<QueryResult>    _records;

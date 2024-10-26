@@ -17,6 +17,7 @@ namespace Adndtk
         Defs::aging_effects get_age_range() const;
 
         inline const short& current_age() const { return _currentAge; };
+        inline const short& max_age() const { return _maxAge; };
         inline const short& height() const { return _height; };
         inline const short& weight() const { return _weight; };
 

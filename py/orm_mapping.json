@@ -12,5 +12,10 @@
     "deity" : "yes",
     "turn_undead" : "yes",
     "equipment" : "yes",
-    "coin" : "yes"
+    "coin" : "yes",
+    "moral_alignment" : "yes",
+    "sex" : "yes",
+    "saving_throw" : "yes",
+    "cult" : "yes",
+    "deity_rank" : "yes"
 }

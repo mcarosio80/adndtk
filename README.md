@@ -33,16 +33,20 @@ $ cd build/
 $ cmake .. [-DRUN_UNIT_TESTS=on|off]
 $ cmake --build . -j16
 </pre>
-After that, the test suite will be executed (it may take time). Moreover, tests failure will compromise the correct build of the test executable. If you want to make changes or you would like to perform some debugging on tests, it's better to avoid running the test suite at the end of the build process.
-Tests can be skipped specifying the command line option -RUN_UNIT_TESTS=off as in the example
+After that, if the compile option RUN_UNIT_TESTS is set to ON, the test suite will be executed (it may take time). Tests failure will compromise the correct build of the test executable. If you want to make changes or you would like to perform some debugging on tests, it's better to avoid running the test suite at the end of the build process.
+Tests can be skipped specifying the command line option -RUN_UNIT_TESTS=off as in the example.
 <pre>
 $ mkdir -p build/
 $ cd build/
 $ cmake .. -DRUN_UNIT_TESTS=off
 </pre>
+Automatic run of Unit Tests is disabled by default. 
 
 ## Dependencies
 Check out the [requisites](REQUISITES.md) for project dependencies.
+
+## CLI - Command line tool
+AdndTK comes with a specifically designed tool that allows to use the library features interactively, i.e. [adndtk-cli tool](cli/README.md). See the related documentation for further information.
 
 ## Future development
 AdndTK is under heavy development. Many things can change without notice.

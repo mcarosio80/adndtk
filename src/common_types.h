@@ -33,6 +33,7 @@ namespace Adndtk
         select_skill_boundaries_class_type,
         select_skill_boundaries_class,
         select_skill_boundaries_race,
+        select_character_classes,
         select_character_class,
         select_character_class_type,
         select_skill_modifier,
@@ -53,6 +54,7 @@ namespace Adndtk
         select_wizard_spell_school,
         select_school_of_magic_access,
         select_school_of_magic_per_race,
+        select_school_of_magic_per_class,
         select_wizard_spell_progression,
         select_priest_spell,
         select_priest_spell_sphere,
@@ -90,6 +92,8 @@ namespace Adndtk
         select_magical_items_by_type,
         select_treasure_components,
         select_treasure_composition,
+        select_class_availability_per_race,
+        select_race_availability_per_class,
 
         select_all_strength_stats,
         select_all_dexterity_stats,
@@ -105,6 +109,11 @@ namespace Adndtk
         select_all_turn_undead,
         select_all_equipment,
         select_all_coin,
+        select_all_moral_alignment,
+        select_all_sex,
+        select_all_saving_throw,
+        select_all_cult,
+        select_all_deity_rank,
     };
 
     enum class XPChangeType
@@ -149,8 +158,10 @@ namespace Adndtk
         static constexpr double clothes_weight = 2.5;
         static constexpr short high_people_base_movement_factor = 12;
         static constexpr short short_people_base_movement_factor = 6;
-        static constexpr short min_skill_value = 1;
-        static constexpr short max_skill_value = 25;
+        static constexpr short min_extended_skill_value = 1;
+        static constexpr short min_skill_value = 3;
+        static constexpr short max_skill_value = 18;
+        static constexpr short max_extended_skill_value = 25;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,
