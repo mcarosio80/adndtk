@@ -40,3 +40,33 @@ void Adndtk::CharacterExperience::set_level(const Defs::character_class& cls, co
         set(c, lvl, pts);
     }
 }
+
+Adndtk::Defs::character_class Adndtk::CharacterExperience::get_higher_class() const
+{
+    Defs::character_class cls{_xps.begin()->first};
+    ExperienceLevel level{0};
+
+    for (auto& xp : _xps)
+    {
+        if (xp.second.first > level)
+        {
+            cls = xp.first;
+        }
+    }
+    return cls;
+}
+
+Adndtk::Defs::character_class Adndtk::CharacterExperience::get_lower_class() const
+{
+    Defs::character_class cls{_xps.begin()->first};
+    ExperienceLevel level{0};
+
+    for (auto& xp : _xps)
+    {
+        if (xp.second.first < level)
+        {
+            cls = xp.first;
+        }
+    }
+    return cls;
+}

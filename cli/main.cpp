@@ -25,6 +25,8 @@ Adndtk::Tables::sex choose_sex();
 std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId);
 short select_exceptional_strength();
 
+void select_proficiencies(Adndtk::Character& chr);
+
 int main(int argc, char** argv)
 {
     std::cout << "AdndTK CLI tool\n\n";
@@ -437,6 +439,10 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method) = static_cast<int>(prevVaue);
 
     return chr;
+}
+
+void select_proficiencies(Adndtk::Character& chr)
+{
 }
 
 void print_summary(const Adndtk::Character& chr)
