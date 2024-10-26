@@ -45,8 +45,40 @@ Step by step from a selected class:
 <pre>
 $ adndtk-cli -c <class ID>
 </pre>
-Skills are taken from the user and must be in the standard order (i.e. Strength, Dexterity, Constitution, Intelligence, Wisdom and Charisma). The values provided must fall in the range 3-18.
-This option is designed for those who prefer to roll their own dice and submit those values to the system.
-The option guides the user through the options available according to the given set of skills.
+Class ID can be any of the full name or acronym of the available classes. The table below summarise the available option values:
+| Class Full name               | Short name                    | Acronym   |
+| :---                          | :---                          | :---      |
+| Fighter                       | fighter                       | F         |
+| Paladin                       | paladin                       | P         |
+| Ranger                        | ranger                        | R         |
+| Mage                          | mage                          | M         |
+| Fighter Mage                  | figther mage                  | F/M       |
+| Abjurer                       | abjurer                       | W_A       |
+| Conjurer                      | conjurer                      | W_C       |
+| Diviner                       | diviner                       | W_D       |
+| Enchanter                     | enchanter                     | W_E       |
+| Illusionist                   | illusionist                   | W_I       |
+| Fighter Illusionist           | fighter illusionist           | F/I       |
+| Invoker                       | invoker                       | W_K       |
+| Necromancer                   | necromancer                   | W_N       |
+| Transmuter                    | transmuter                    | W_T       |
+| Cleric                        | cleric                        | C         |
+| Fighter Cleric                | figther cleric                | F/C       |
+| Cleric Ranger                 | cleric ranger                 | C/R       |
+| Mage Cleric                   | mage cleric                   | M/C       |
+| Fighter Mage Cleric           | fighter mage cleric           | F/M/C     |
+| Cleric Illusionist	        | fighter illusionist           | C/I       |
+| Druid                         | druid                         | D         |
+| Fighter Druid                 | fighter druid                 | F/D       |
+| Mage Druid                    | mage druid                    | M/D       |
+| Fighter Mage Druid            | fighter mage druid            | F/M/D     |
+| Preist of Specific Mythos     | preist of specific mythos     | PSM       |
+| Thief                         | thief                         | T         |
+| Fighter Thief                 | figther thief                 | F/T       |
+| Mage Thief                    | mage thief                    | M/T       |
+| Fighter Mage Thief            | fighter mage thief            | F/M/T     |
+| Illusionist Thief             | illusionist thief             | I/T       |
+| Cleric Thief                  | cleric thief                  | C/T       |
+| Bard                          | bard                          | B         |
 
 Have fun and long life to AD&D!
