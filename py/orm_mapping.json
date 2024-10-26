@@ -17,5 +17,9 @@
     "sex" : "yes",
     "saving_throw" : "yes",
     "cult" : "yes",
-    "deity_rank" : "yes"
+    "deity_rank" : "yes",
+    "geo_area" : "yes",
+    "region" : "yes",
+    "place_of_interest_type" : "yes",
+    "place_of_interest" : "yes"
 }

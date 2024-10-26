@@ -114,6 +114,10 @@ namespace Adndtk
         select_all_saving_throw,
         select_all_cult,
         select_all_deity_rank,
+        select_all_geo_area,
+        select_all_region,
+        select_all_place_of_interest_type,
+        select_all_place_of_interest,
     };
 
     enum class XPChangeType
@@ -188,6 +192,9 @@ namespace Adndtk
             void set(const Defs::character_class& cls, const ExperienceLevel& lvl, const XP& pts);
             void set_xp(const Defs::character_class& cls, const XP& pts);
             void set_level(const Defs::character_class& cls, const ExperienceLevel& lvl);
+
+            Defs::character_class get_higher_class() const;
+            Defs::character_class get_lower_class() const;
 
         private:
             std::map<Defs::character_class, std::pair<ExperienceLevel, XP>> _xps;

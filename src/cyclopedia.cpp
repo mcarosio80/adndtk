@@ -99,6 +99,10 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'description', description, 'score', score from saving_throw", Query::select_all_saving_throw);
         prepare_statement("select 'id', id, 'name', name from cult", Query::select_all_cult);
         prepare_statement("select 'id', id, 'description', description from deity_rank", Query::select_all_deity_rank);
+        prepare_statement("select 'id', id, 'campaign_id', campaign_id, 'name', name from geo_area", Query::select_all_geo_area);
+        prepare_statement("select 'id', id, 'geo_area_id', geo_area_id 'name', name from region", Query::select_all_region);
+        prepare_statement("select 'id', id, 'description', description from place_of_interest_type", Query::select_all_place_of_interest_type);
+        prepare_statement("select 'id', id, 'region_id', region_id, 'type', type, 'name', name from place_of_interest", Query::select_all_place_of_interest);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
@@ -176,6 +180,8 @@ bool Adndtk::Cyclopedia::init()
 
         prepare_statement("select 'class_id', class_id from class_availability where race_id = ?", Query::select_class_availability_per_race);
         prepare_statement("select 'race_id', race_id from class_availability where class_id = ?", Query::select_race_availability_per_class);
+
+        prepare_statement("select 'weapon_initial_score', weapon_initial_score, 'weapon_num_levels', weapon_num_levels, 'penalty', penalty, 'non_weapon_initial_score', non_weapon_initial_score, 'non_weapon_num_levels', non_weapon_num_levels from proficiency_slots where class_type_id = ?", Query::select_proficiency_slots_by_class_type);
 
         load_advancement_table();
     }
