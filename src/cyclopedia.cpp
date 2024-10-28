@@ -100,7 +100,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'name', name from cult", Query::select_all_cult);
         prepare_statement("select 'id', id, 'description', description from deity_rank", Query::select_all_deity_rank);
         prepare_statement("select 'id', id, 'campaign_id', campaign_id, 'name', name from geo_area", Query::select_all_geo_area);
-        prepare_statement("select 'id', id, 'geo_area_id', geo_area_id 'name', name from region", Query::select_all_region);
+        prepare_statement("select 'id', id, 'geo_area_id', geo_area_id, 'name', name from region", Query::select_all_region);
         prepare_statement("select 'id', id, 'description', description from place_of_interest_type", Query::select_all_place_of_interest_type);
         prepare_statement("select 'id', id, 'region_id', region_id, 'type', type, 'name', name from place_of_interest", Query::select_all_place_of_interest);
 

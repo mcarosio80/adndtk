@@ -12,6 +12,8 @@
 #include <vector>
 #include <set>
 #include <optional>
+#include <tuple>
+#include <type_traits>
 
 namespace Adndtk
 {
@@ -151,6 +153,21 @@ namespace Adndtk
         bool init();
         bool check_state(int return_code);
         void prepare_statement(const char *stmt, const Query& queryId, const QueryType& queryType = Settings::query_type);
+
+        template<typename _FieldType>
+        void bind(const Query& queryId, int position, _FieldType value)
+        {
+            sqlite3_stmt* stmt = _statements[queryId];
+
+            if constexpr(std::is_enum<_FieldType>::value)
+            {
+                sqlite3_bind_int(stmt, position, static_cast<std::underlying_type<_FieldType>::type>(value));
+            }
+            else
+            {
+                sqlite3_bind_int(stmt, position, value);
+            }
+        }
 
         void bind(const Query& queryId, int position, int value)
         {
