@@ -75,7 +75,6 @@ namespace Adndtk
         select_worshipper_alignments,
         select_racial_stats,
         select_aging_effects,
-        select_calendars,
         select_calendar,
         select_calendar_reckonings,
         select_calendar_months,
@@ -119,6 +118,7 @@ namespace Adndtk
         select_all_region,
         select_all_place_of_interest_type,
         select_all_place_of_interest,
+        select_all_calendar,
     };
 
     enum class XPChangeType

@@ -21,5 +21,6 @@
     "geo_area" : "yes",
     "region" : "yes",
     "place_of_interest_type" : "yes",
-    "place_of_interest" : "yes"
+    "place_of_interest" : "yes",
+    "calendar" : "yes"
 }

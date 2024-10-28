@@ -103,6 +103,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'geo_area_id', geo_area_id, 'name', name from region", Query::select_all_region);
         prepare_statement("select 'id', id, 'description', description from place_of_interest_type", Query::select_all_place_of_interest_type);
         prepare_statement("select 'id', id, 'region_id', region_id, 'type', type, 'name', name from place_of_interest", Query::select_all_place_of_interest);
+        prepare_statement("select 'id', id,'name', name, 'campaign_settings_id', campaign_settings_id from calendar", Query::select_all_calendar);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
@@ -159,7 +160,6 @@ bool Adndtk::Cyclopedia::init()
         
         prepare_statement("select 'id', id, 'description', description, 'strength_modifier', strength_modifier, 'dexterity_modifier', dexterity_modifier, 'constitution_modifier', constitution_modifier, 'intelligence_modifier', intelligence_modifier, 'wisdom_modifier', wisdom_modifier, 'charisma_modifier', charisma_modifier from aging_effects", Query::select_aging_effects);
         
-        prepare_statement("select 'id', id from calendar", Query::select_calendars);
         prepare_statement("select 'name', name, 'campaign_settings_id', campaign_settings_id from calendar where id = ?", Query::select_calendar);
         prepare_statement("select 'id', id, 'name', name, 'acronym', acronym, 'calendar_id', calendar_id, 'base_year', base_year from calendar_reckoning where calendar_id = ?", Query::select_calendar_reckonings);
         prepare_statement("select 'id', id, 'name', name, 'duration', duration from calendar_month where calendar_id = ?", Query::select_calendar_months);

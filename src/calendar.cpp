@@ -1,5 +1,6 @@
 #include <calendar.h>
 #include <cyclopedia.h>
+#include <tables.h>
 
 #include <algorithm>
 
@@ -289,12 +290,10 @@ const Adndtk::Calendar& Adndtk::CalendarProvider::get_calendar(const Defs::calen
 
 void Adndtk::CalendarProvider::init()
 {
-    auto result = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_calendars);
+    auto calIds = Tables::calendar::to_set<Defs::calendar>("id");
 
-    for (auto& r : result)
+    for (auto& id : calIds)
     {
-        auto id = static_cast<Defs::calendar>(r.as<int>("id"));
-
         Calendar cal{id};
         _calendars[id] = cal;
     }
