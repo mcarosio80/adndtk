@@ -353,5 +353,20 @@
         "table" : "PLACE_OF_INTEREST",
         "key" : "name",
         "value": "id"
+    },
+    {
+        "table" : "WEAPON_PROFICIENCY_LEVEL",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "NON_WEAPON_PROFICIENCY_GROUP",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "NON_WEAPON_PROFICIENCY",
+        "key" : "name",
+        "value": "id"
     }
 ]

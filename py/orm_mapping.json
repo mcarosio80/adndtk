@@ -22,5 +22,9 @@
     "region" : "yes",
     "place_of_interest_type" : "yes",
     "place_of_interest" : "yes",
-    "calendar" : "yes"
+    "calendar" : "yes",
+    "specialist_attacks_per_round" : "yes",
+    "weapon_proficiency_level" : "yes",
+    "non_weapon_proficiency_group" : "yes",
+    "non_weapon_proficiency" : "yes"
 }

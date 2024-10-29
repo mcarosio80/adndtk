@@ -94,6 +94,8 @@ namespace Adndtk
         select_class_availability_per_race,
         select_race_availability_per_class,
         select_proficiency_slots_by_class_type,
+        select_weapon_details,
+        select_non_weapon_proficiencies_by_class,
 
         select_all_strength_stats,
         select_all_dexterity_stats,
@@ -119,6 +121,10 @@ namespace Adndtk
         select_all_place_of_interest_type,
         select_all_place_of_interest,
         select_all_calendar,
+        select_all_specialist_attacks_per_round,
+        select_all_non_weapon_proficiency_group,
+        select_all_non_weapon_proficiency,
+        select_all_weapon_proficiency_level,
     };
 
     enum class XPChangeType
@@ -167,6 +173,9 @@ namespace Adndtk
         static constexpr short min_skill_value = 3;
         static constexpr short max_skill_value = 18;
         static constexpr short max_extended_skill_value = 25;
+        static constexpr short weapon_proficient_slots_num = 1;
+        static constexpr short weapon_specialised_slots_num = 2;
+        static constexpr short x_bows_specialised_slots_num = 3;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,

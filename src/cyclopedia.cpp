@@ -104,6 +104,9 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id, 'description', description from place_of_interest_type", Query::select_all_place_of_interest_type);
         prepare_statement("select 'id', id, 'region_id', region_id, 'type', type, 'name', name from place_of_interest", Query::select_all_place_of_interest);
         prepare_statement("select 'id', id,'name', name, 'campaign_settings_id', campaign_settings_id from calendar", Query::select_all_calendar);
+        prepare_statement("select 'level', level, 'melee_weapon_attacks', melee_weapon_attacks, 'melee_weapon_round', melee_weapon_round, 'light_x_bow_attacks', light_x_bow_attacks, 'light_x_bow_round', light_x_bow_round, 'heavy_x_bow_attacks', heavy_x_bow_attacks, 'heavy_x_bow_round', heavy_x_bow_round, 'thrown_dagger_attacks', thrown_dagger_attacks, 'thrown_dagger_round', thrown_dagger_round, 'thrown_dart_attacks', thrown_dart_attacks, 'thrown_dart_round', thrown_dart_round, 'other_missile_attacks', other_missile_attacks, 'other_missile_round', other_missile_round from specialist_attacks_per_round", Query::select_all_specialist_attacks_per_round);
+        prepare_statement("select 'id', id,'name', name from non_weapon_proficiency_group", Query::select_all_non_weapon_proficiency_group);
+        prepare_statement("select 'id', id, 'description', description from weapon_proficiency_level", Query::select_all_weapon_proficiency_level);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
@@ -182,6 +185,18 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'race_id', race_id from class_availability where class_id = ?", Query::select_race_availability_per_class);
 
         prepare_statement("select 'weapon_initial_score', weapon_initial_score, 'weapon_num_levels', weapon_num_levels, 'penalty', penalty, 'non_weapon_initial_score', non_weapon_initial_score, 'non_weapon_num_levels', non_weapon_num_levels from proficiency_slots where class_type_id = ?", Query::select_proficiency_slots_by_class_type);
+
+        prepare_statement("select 'equipment_id', w1.equipment_id, 'weapon_size', w1.weapon_size, 'weapon_type', w1.weapon_type, "
+                            "'speed_factor', w1.speed_factor, 'attack_type', w1.attack_type, 'weapon_group', w1.weapon_group, "
+                            "'damage_dice_number_1', w1.damage_dice_number, 'damage_die_faces_1', w1.damage_die_faces, 'damage_modifier_1', ifnull(w1.damage_modifier, 0), "
+                            "'damage_dice_number_2', w2.damage_dice_number, 'damage_die_faces_2', w2.damage_die_faces, 'damage_modifier_2', ifnull(w2.damage_modifier, 0) "
+                            "from weapon w1 "
+                            "inner join weapon w2 on w2.equipment_id = w1.equipment_id and w2.target_size in (1,2) "
+                            "where w1.equipment_id = ? and w1.target_size in (0,2)", Query::select_weapon_details);
+
+        prepare_statement("select 'proficiency_id', g.proficiency_id from non_weapon_proficiency_group_access a "
+	                        "inner join non_weapon_proficiency_group_association g on g.group_id = a.group_id "
+                            "where a.class_id = ? group by g.proficiency_id", Query::select_non_weapon_proficiencies_by_class);
 
         load_advancement_table();
     }

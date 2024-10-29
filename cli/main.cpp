@@ -443,6 +443,9 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
 
 void select_proficiencies(Adndtk::Character& chr)
 {
+    // auto selectedAlignment = choose_moral_alignment(chr.get_class());
+    // auto alignId = static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id);
+    // std::cout << "Your choice is " << selectedAlignment.name << ".\n";
 }
 
 void print_summary(const Adndtk::Character& chr)
