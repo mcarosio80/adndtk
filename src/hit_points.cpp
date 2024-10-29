@@ -14,25 +14,24 @@ Adndtk::HitPoints::HitPoints(const Defs::character_class& cls)
 {
     auto classes = Cyclopedia::get_instance().split(cls);
 
-    for (auto& c : classes)
+    for (auto& clsId : classes)
     {
-        int clsId = static_cast<int>(c);
-        auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class, clsId);
+        auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Adndtk::Query::select_character_class, clsId);
         auto& clsInfo = rs[0];
-        auto clsType = clsInfo.as<int>("class_type_id");
+        auto clsType = clsInfo.as<Defs::character_class_type>("class_type_id");
 
-        auto clsTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class_type, clsType);
+        auto clsTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Adndtk::Query::select_character_class_type, clsType);
         auto hdFaces = clsTypeInfo[0].as<int>("hit_dice");
         auto titleLevel = clsTypeInfo[0].as<short>("title_level");
-        _titleLevel[c] = titleLevel;
+        _titleLevel[clsId] = titleLevel;
         auto hpAfterTitle = clsTypeInfo[0].as<short>("hp_after_title");
-        _hpAfterTitle[c] = hpAfterTitle;
+        _hpAfterTitle[clsId] = hpAfterTitle;
 
-        _hitDice[c] = static_cast<Defs::die>(hdFaces);
+        _hitDice[clsId] = static_cast<Defs::die>(hdFaces);
         
-        HP pts = generate_hp(c, 1);
-        _hps[c].push_back(pts);
-        _levels[c] = 1;
+        HP pts = generate_hp(clsId, 1);
+        _hps[clsId].push_back(pts);
+        _levels[clsId] = 1;
     }
     
     /*The character's hit points are the average of all his Hit Dice rolls. When the character is

@@ -220,10 +220,9 @@ std::optional<Adndtk::Defs::school_of_magic> Adndtk::Cyclopedia::get_school_of_m
 {
     std::optional<Adndtk::Defs::school_of_magic> school{std::nullopt};
     auto classes = split<Defs::character_class>(cls);
-    for (auto& c : classes)
+    for (auto& clsId : classes)
     {
-        auto clsId = static_cast<int>(c);
-        auto setSet = exec_prepared_statement<int>(Query::select_school_of_magic_per_class, clsId);
+        auto setSet = exec_prepared_statement<Defs::character_class>(Query::select_school_of_magic_per_class, clsId);
         if (setSet.size() > 0)
         {
             auto& ret = setSet[0];
@@ -381,8 +380,7 @@ void Adndtk::Cyclopedia::load_advancement_table()
 
 Adndtk::Defs::character_class_type Adndtk::Cyclopedia::get_class_type(const Defs::character_class& cls)
 {
-    int clsId = static_cast<int>(cls);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Adndtk::Query::select_character_class, clsId);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Adndtk::Query::select_character_class, cls);
     auto& clsInfo = rs[0];
     return static_cast<Defs::character_class_type>(clsInfo.as<int>("class_type_id"));
 }

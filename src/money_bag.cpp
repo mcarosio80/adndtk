@@ -22,8 +22,8 @@ Adndtk::MoneyBag::MoneyBag(const Defs::character_class_type& clsType)
 		_money[c] = 0;
 	}
 	
-	int type = static_cast<int>(select_class_type_for_money(clsType));
-	auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_starting_money, type);
+	auto type = select_class_type_for_money(clsType);
+	auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Query::select_starting_money, type);
 	auto& startingMoney = rs[0];
 
 	auto number = startingMoney.as<int>("die_number");
@@ -163,7 +163,7 @@ Adndtk::Defs::character_class_type Adndtk::MoneyBag::select_class_type_for_money
 	for (auto& t : types)
 	{
 		auto typeId = static_cast<int>(t);
-		auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_starting_money, typeId);
+		auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Query::select_starting_money, t);
 		auto& startingMoney = rs[0];
 
 		auto number = startingMoney.as<int>("die_number");

@@ -11,15 +11,14 @@ bool Adndtk::CalendarProvider::_initialised = false;
 Adndtk::Calendar::Calendar(const Defs::calendar& calendarId)
     : _id{calendarId}
 {
-    int id = static_cast<int>(_id);
-    auto calInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_calendar, id);
+    auto calInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::calendar>(Query::select_calendar, _id);
     {
         auto& r = calInfo[0];
         _name = r.as<std::string>("name");
         _campaignId = static_cast<Defs::campaign_settings>(r.as<int>("campaign_settings_id"));
     }
 
-    auto reckoningsInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_calendar_reckonings, id);
+    auto reckoningsInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::calendar>(Query::select_calendar_reckonings, _id);
     {
         for (auto& r : reckoningsInfo)
         {
@@ -31,7 +30,7 @@ Adndtk::Calendar::Calendar(const Defs::calendar& calendarId)
         }
     }
 
-    auto monthsInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_calendar_months, id);
+    auto monthsInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::calendar>(Query::select_calendar_months, _id);
     {
         for (auto& r : monthsInfo)
         {
@@ -42,7 +41,7 @@ Adndtk::Calendar::Calendar(const Defs::calendar& calendarId)
         }
     }
 
-    auto specDaysInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_calendar_special_days, id);
+    auto specDaysInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::calendar>(Query::select_calendar_special_days, _id);
     {
         for (auto& r : specDaysInfo)
         {
@@ -195,7 +194,7 @@ uint16_t Adndtk::Calendar::get_day_of_the_year(const uint16_t& day, const uint16
 
 std::optional<std::string> Adndtk::Calendar::get_year_name(const uint16_t& year) const
 {
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_roll_of_the_year, year);
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<uint16_t>(Query::select_roll_of_the_year, year);
     if (info.size() >= 1)
     {
         return info[0].as<std::string>("name");

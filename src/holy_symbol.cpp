@@ -78,9 +78,9 @@ bool Adndtk::HolySymbol::pray_for_spell(const Defs::priest_spell& spellId)
 
     SpellLevel spellLevel = HolySymbol::get_spell_level(spellId);
     
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
     Query queryId = get_spell_progression_query_id();
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
 
     std::string label;
@@ -124,11 +124,9 @@ bool Adndtk::HolySymbol::remove(const Defs::priest_spell& spellId)
 
 bool Adndtk::HolySymbol::is_sphere_allowed(const Defs::priest_spell& spellId)
 {
-    int id = static_cast<int>(spellId);
-    auto rsSphere = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_priest_spell_sphere, id);
-    auto sphere = rsSphere[0].as<int>("sphere_id");
-    int cls = static_cast<int>(_casterClass);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_sphere_access_per_class, cls, sphere);
+    auto rsSphere = Cyclopedia::get_instance().exec_prepared_statement<Defs::priest_spell>(Query::select_priest_spell_sphere, spellId);
+    auto sphere = rsSphere[0].as<Defs::spheres_of_influence>("sphere_id");
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class, Defs::spheres_of_influence>(Query::select_sphere_access_per_class, _casterClass, sphere);
     auto hasAccess = rs.size() > 0;
 
     return hasAccess;
@@ -136,29 +134,12 @@ bool Adndtk::HolySymbol::is_sphere_allowed(const Defs::priest_spell& spellId)
 
 Adndtk::SpellLevel Adndtk::HolySymbol::get_spell_level(const Defs::priest_spell& spellId)
 {
-    int id = static_cast<int>(spellId);
-
-    auto rsSpellInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_priest_spell, id);
+    auto rsSpellInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::priest_spell>(Query::select_priest_spell, spellId);
     auto& spellInfo = rsSpellInfo[0];
     SpellLevel spellLevel = static_cast<SpellLevel>(spellInfo.as<int>("level"));
     
     return spellLevel;
 }
-
-// bool Adndtk::HolySymbol::is_level_available(const Defs::priest_spell& spellId)
-// {
-//     SpellLevel spellLevel = HolySymbol::get_spell_level(spellId);
-    
-//     int lvl = std::min(static_cast<int>(_casterLevel), 20);
-//     auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_priest_spell_progression, lvl);
-//     auto& prog = rs[0];
-
-//     std::stringstream ss;
-//     ss << "spell_level_" << spellLevel;
-//     auto spellCount = prog.try_or(ss.str(), 0);
-
-//     return spellCount > 0;
-// }
 
 bool Adndtk::HolySymbol::exists(const Defs::priest_spell& spellId)
 {
@@ -256,9 +237,9 @@ short Adndtk::HolySymbol::get_bonus_spells(const SpellLevel& spellLevel) const
 
 short Adndtk::HolySymbol::total_slots(const SpellLevel& spellLevel) const
 {
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
     Query queryId = get_spell_progression_query_id();
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
 
     std::stringstream ss;

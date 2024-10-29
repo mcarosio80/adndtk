@@ -1403,8 +1403,7 @@ TEST_CASE("[TC-CHAR.043] Rejuvenate from venerable in steps regains the skills g
 
 static const double get_equipment_weight(const Defs::equipment& equipId)
 {
-    auto id = static_cast<int>(equipId);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, id);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, equipId);
     const QueryResult& res = rs[0];
     auto equipWeight = res.try_or<double>("weight", 0);
     return equipWeight;

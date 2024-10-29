@@ -191,8 +191,7 @@ TEST_CASE("[TC-STOR.014] Stores apply a price spread when price is not defined b
     Store s{frArmStore};
 
     auto equipId = Defs::equipment::long_sword;
-    auto id = static_cast<int>(equipId);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, id);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, equipId);
     const QueryResult& equipInfo = rs[0];
 
     auto currency = static_cast<Defs::coin>(equipInfo.as<short>("cost_coin"));
@@ -206,8 +205,7 @@ TEST_CASE("[TC-STOR.015] Stores apply a random price in price interval, never le
     Store s{frArmStore};
 
     auto equipId = Defs::equipment::full_plate;
-    auto id = static_cast<int>(equipId);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, id);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, equipId);
     const QueryResult& equipInfo = rs[0];
 
     auto currency = static_cast<Defs::coin>(equipInfo.as<short>("cost_coin"));

@@ -17,16 +17,15 @@ Adndtk::SkillCreator::SkillCreator(const std::optional<Adndtk::Defs::character_c
 void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, const Defs::skill& skillType, const std::optional<int>& object, int& minValue, int& maxValue)
 {
     Adndtk::QueryResultSet result;
-    auto skillID = static_cast<int>(skillType);
     
     if (object.has_value())
     {
         int obj = object.value();
-        result = Cyclopedia::get_instance().exec_prepared_statement<int, int>(queryId, skillID, obj);
+        result = Cyclopedia::get_instance().exec_prepared_statement<Defs::skill, int>(queryId, skillType, obj);
     }
     else
     {
-        result = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, skillID);
+        result = Cyclopedia::get_instance().exec_prepared_statement<Defs::skill>(queryId, skillType);
     }
 
     if (result.size() == 0)
@@ -108,10 +107,9 @@ std::pair<int, int> Adndtk::SkillCreator::get_class_boundaries(const Defs::skill
 {
     int minValue{0};
     int maxValue{20};
-    int clsId = static_cast<int>(cls);
 
     auto query = Adndtk::Query::select_character_class;
-    auto result = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+    auto result = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
     Defs::character_class_type clsType{};
     if (result.size() > 0 && result[0]["class_type_id"].has_value())
     {
@@ -124,10 +122,10 @@ std::pair<int, int> Adndtk::SkillCreator::get_class_boundaries(const Defs::skill
 
     // check class boundaries
     query = Adndtk::Query::select_skill_boundaries_class;
-    get_skill_constraints(query, skillType, clsId, minValue, maxValue);
+    get_skill_constraints(query, skillType, static_cast<int>(cls), minValue, maxValue);
 
     query = Adndtk::Query::select_school_of_magic_skill_requisite;
-    auto res = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
     if (res.size() > 0)
     {
         auto& schoolLimits = res[0];

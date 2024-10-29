@@ -54,7 +54,7 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
         && _casterLevel == 1 && newLevel == 2)
     {
         auto numSpells = Die::roll(1, 4);
-        auto rsSpells = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_wizard_spells_by_level, 1);
+        auto rsSpells = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(Query::select_wizard_spells_by_level, 1);
         while (numSpells > 0)
         {
             auto id = Die::roll(0, rsSpells.size()-1) + 1000;
@@ -66,8 +66,8 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
     _casterLevel = newLevel;
     
     Query queryId = get_spell_progression_query();
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& spellProgr = rs[0];
 
     for (auto& page : _spells)
@@ -270,14 +270,12 @@ bool Adndtk::SpellBook::has_capacity(const Defs::wizard_spell& spellId) const
 
 bool Adndtk::SpellBook::is_school_allowed(const Defs::wizard_spell& spellId) const
 {
-    int id = static_cast<int>(spellId);
-    auto rsSchool = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_wizard_spell_school, id);
+    auto rsSchool = Cyclopedia::get_instance().exec_prepared_statement<Defs::wizard_spell>(Query::select_wizard_spell_school, spellId);
 
-    int cls = static_cast<int>(_casterClass);
     for (auto& r : rsSchool)
     {
-        auto school = r.as<int>("school_id");
-        auto rs = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_school_of_magic_access, cls, school);
+        auto school = r.as<Defs::school_of_magic>("school_id");
+        auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class, Defs::school_of_magic>(Query::select_school_of_magic_access, _casterClass, school);
         if (rs.size() == 0)
         {
             return false;
@@ -289,9 +287,7 @@ bool Adndtk::SpellBook::is_school_allowed(const Defs::wizard_spell& spellId) con
 
 Adndtk::SpellLevel Adndtk::SpellBook::get_spell_level(const Defs::wizard_spell& spellId)
 {
-    int id = static_cast<int>(spellId);
-
-    auto rsSpellInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_wizard_spell, id);
+    auto rsSpellInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::wizard_spell>(Query::select_wizard_spell, spellId);
     auto& spellInfo = rsSpellInfo[0];
     SpellLevel spellLevel = static_cast<SpellLevel>(spellInfo.as<int>("level"));
     
@@ -303,9 +299,9 @@ bool Adndtk::SpellBook::is_level_available(const Defs::wizard_spell& spellId) co
     SpellLevel spellLevel = SpellBook::get_spell_level(spellId);
     auto stats = SkillStats::get_instance().get_intelligence_stats(_intelligenceScore);
 
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
     Query queryId = get_spell_progression_query();
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
 
     std::stringstream ss;
@@ -334,9 +330,9 @@ bool Adndtk::SpellBook::try_scribe(const Defs::wizard_spell& spellId)
 
 short Adndtk::SpellBook::get_spells_available(const SpellLevel& spellLvl) const
 {
-    int lvl = std::min(static_cast<int>(_casterLevel), 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
     Query queryId = get_spell_progression_query();
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, lvl);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
 
     std::stringstream ss;

@@ -95,8 +95,7 @@ namespace Adndtk
         bool is_type_of(const Defs::character_class& cls)
         {
             Adndtk::Query query = Adndtk::Query::select_character_class;
-            int clsId = static_cast<int>(cls);
-            auto classInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(query, clsId);
+            auto classInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
             Defs::character_class_type clsType = static_cast<Defs::character_class_type>(classInfo[0].as<int>("class_type_id"));
 
             return is_type_of<probeType>(clsType);

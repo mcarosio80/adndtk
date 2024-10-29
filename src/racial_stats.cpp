@@ -14,8 +14,7 @@ Adndtk::RacialStats::RacialStats(const Defs::race& race, const Defs::sex& sex)
 	: _race{race}, _sex{sex}, _currentAge{0},
 	_middleAge{0}, _oldAge{0}, _venerableAge{0}, _startingAge{0}, _maxAge{0}, _height{0}, _weight{0}
 {
-	auto raceId = static_cast<int>(_race);
-	auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_racial_stats, raceId);
+	auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::race>(Query::select_racial_stats, _race);
 	auto& stats = rs[0];
 
 	auto baseHeightMale = stats.as<short>("height_base_male");

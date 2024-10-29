@@ -58,13 +58,10 @@ Adndtk::Defs::gem Adndtk::TreasurePool::pick_gem()
     auto getTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_gem_type, prob);
     auto gemType = static_cast<Defs::gem_type>(getTypeInfo[0].as<int>("id"));
 
-    auto t = static_cast<int>(gemType);
-    auto gemIds = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_gems_by_type, t);
+    auto gemIds = Cyclopedia::get_instance().exec_prepared_statement<Defs::gem_type>(Query::select_gems_by_type, gemType);
 
     auto index = _uniformDistribution(_generator) % gemIds.size();
-    auto g = gemIds[index].as<int>("id");
-
-	return static_cast<Defs::gem>(g);
+    return gemIds[index].as<Defs::gem>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_magical()
@@ -350,8 +347,7 @@ Adndtk::Gem::Gem()
 Adndtk::Gem::Gem(const Defs::gem& gemId)
     : _uid{TreasurePool::get_instance().get_next_id()}, _gemId{gemId}, _value{Defs::coin::gold_piece, 0}
 {
-    int id = static_cast<int>(_gemId);
-    auto gemInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_gem, id);
+    auto gemInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::gem>(Query::select_gem, _gemId);
 	
 	auto& i = gemInfo[0];
 	_name = i.as<std::string>("name");
@@ -415,20 +411,19 @@ Adndtk::MagicalItem::MagicalItem(const Defs::magical_item& itemId)
       _equipmentId{std::nullopt},
 	  _identified{false}
 {
-	int id = static_cast<int>(_id);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_magical_item, id);
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item>(Query::select_magical_item, _id);
 	
 	auto& i = info[0];
 	_name = i.as<std::string>("name");
-	_nature = static_cast<Defs::magical_item_nature>(i.as<int>("nature"));
-	_type = static_cast<Defs::magical_item_type>(i.as<int>("type"));
-	_xpValue = static_cast<XP>(i.try_or<uint64_t>("xp_value", 0));
-	_itemType = static_cast<Defs::equipment_type>(i.as<int>("item_type"));
-	auto v = i.try_as<int>("equipment_id");
-	auto rangeCoin = (v.has_value()) ? std::make_optional(static_cast<Defs::equipment>(v.value())) : std::nullopt;
+	_nature = i.as<Defs::magical_item_nature>("nature");
+	_type = i.as<Defs::magical_item_type>("type");
+	_xpValue = i.try_or<XP>("xp_value", 0);
+	_itemType = i.as<Defs::equipment_type>("item_type");
+	auto v = i.try_as<Defs::equipment>("equipment_id");
+	auto rangeCoin = (v.has_value()) ? std::make_optional(v.value()) : std::nullopt;
 	_unidentifiedName = i.as<std::string>("unidentified_name");
 
-	auto limits = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_magical_item_limitations, id);
+	auto limits = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item>(Query::select_magical_item_limitations, _id);
 	if (limits.size() > 0)
 	{
 		auto& l = limits[0];
@@ -644,9 +639,9 @@ void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_
 		if (!magicalItemTypes.empty())
 		{
 			auto magicalType = select_one<Defs::magical_item_type>(magicalItemTypes);
-			auto magicalsByType = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_magical_items_by_type, static_cast<int>(magicalType));
-			auto ids = magicalsByType.to_vector<int>("id");
-			auto magicalId = static_cast<Defs::magical_item>(select_one<int>(ids));
+			auto magicalsByType = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type>(Query::select_magical_items_by_type, magicalType);
+			auto ids = magicalsByType.to_vector<Defs::magical_item>("id");
+			auto magicalId = select_one<Defs::magical_item>(ids);
 			MagicalItem item{magicalId};
 			_magicalItems.push_back(item);
 		}

@@ -52,14 +52,13 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
         _skills[skl] = val;
     }
 
-    for (auto& c : Cyclopedia::get_instance().split<Defs::character_class>(cls))
+    for (auto& clsId : Cyclopedia::get_instance().split<Defs::character_class>(cls))
     {
-        auto clsId = static_cast<int>(c);
-        auto resSet = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_primary_skills, clsId);
+        auto resSet = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Query::select_primary_skills, clsId);
         for (auto& r : resSet)
         {
             auto sklId = static_cast<Defs::skill>(r.as<int>("skill_id"));
-            _primeRequisites[c].emplace(sklId);
+            _primeRequisites[clsId].emplace(sklId);
         }
     }
 

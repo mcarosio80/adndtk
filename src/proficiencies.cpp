@@ -9,10 +9,9 @@ Adndtk::ProficiencySlots::ProficiencySlots()
 
 Adndtk::ProficiencySlots::ProficiencySlots(const Defs::character_class_type& clsType)
 {
-    for (auto& t : Cyclopedia::get_instance().split<Defs::character_class_type>(clsType))
+    for (auto& clsTypeId : Cyclopedia::get_instance().split<Defs::character_class_type>(clsType))
     {
-        auto clsTypeId = static_cast<int>(t);
-        auto resSet = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_proficiency_slots_by_class_type, clsTypeId);
+        auto resSet = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Query::select_proficiency_slots_by_class_type, clsTypeId);
         for (auto& r : resSet)
         {
             auto weaponInitialScore = r.as<int>("weapon_initial_score");

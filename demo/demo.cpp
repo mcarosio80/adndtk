@@ -108,9 +108,8 @@ void demo_character()
 void demo_cyclopedia()
 {
     Query queryId = Query::select_coin;
-    int param = static_cast<int>(Defs::coin::gold_piece);
 
-    auto res = Cyclopedia::get_instance().exec_prepared_statement<int>(queryId, param);
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<Defs::coin>(queryId, Defs::coin::gold_piece);
     for (auto& r : res)
     {
         std::cout << r << "\n";

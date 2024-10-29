@@ -12,8 +12,7 @@ Adndtk::Inventory::~Inventory()
 
 bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
 {
-    int equipmentId = static_cast<int>(id);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, equipmentId);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, id);
     const QueryResult& res = rs[0];
 
     std::optional<Defs::body_slot> bodySlot = std::nullopt;
@@ -63,8 +62,7 @@ bool Adndtk::Inventory::remove(const Defs::equipment& id, const short& count/*=1
         return false;
     }
 
-    int equipmentId = static_cast<int>(id);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, equipmentId);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, id);
     const QueryResult& res = rs[0];
 
     short num = _items[bodySlot.value()][id];

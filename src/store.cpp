@@ -120,8 +120,7 @@ double Adndtk::Store::get_amount(const double& minPrice, const std::optional<dou
 
 std::tuple<Adndtk::Defs::coin, double, std::optional<double>> Adndtk::Store::get_price_min_max(const Defs::equipment& id) const
 {
-    int equipmentId = static_cast<int>(id);
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_equipment, equipmentId);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, id);
     const QueryResult& res = rs[0];
 
     auto currency = static_cast<Defs::coin>(res.as<short>("cost_coin"));

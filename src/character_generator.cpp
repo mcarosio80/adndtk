@@ -104,7 +104,7 @@ std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(co
 std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(const Defs::character_class& classId)
 {
     auto query = Query::select_race_availability_per_class;
-    auto res = Cyclopedia::get_instance().exec_prepared_statement<int>(query, static_cast<int>(classId));
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, classId);
     std::vector<Tables::race> availableRaces{};
     auto races = Tables::race::to_map<Defs::race>("id");
                                                 
@@ -134,9 +134,8 @@ std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::availab
 {
     std::vector<Tables::character_class> availableClasses{};
     auto classes = Tables::character_class::to_map<int>("id");
-    auto classesPerRace = Cyclopedia::get_instance().exec_prepared_statement<int>(
-                                Query::select_class_availability_per_race,
-                                static_cast<int>(raceId)).to_set<int>("class_id");
+    auto classesPerRace = Cyclopedia::get_instance().exec_prepared_statement<Defs::race>(
+                                Query::select_class_availability_per_race, raceId).to_set<int>("class_id");
 
     for (auto& clsId : classesPerRace)
     {
@@ -191,16 +190,14 @@ std::vector<Adndtk::Tables::moral_alignment> Adndtk::CharacterGenerator::availab
         std::set<Defs::moral_alignment> alignsPerClass{};
         if (c == Defs::character_class::preist_of_specific_mythos && deityId.has_value())
         {
-            auto id = static_cast<int>(deityId.value());
-            alignsPerClass = Cyclopedia::get_instance().exec_prepared_statement<int>(
+            alignsPerClass = Cyclopedia::get_instance().exec_prepared_statement<Defs::deity>(
                                 Query::select_worshipper_alignments,
-                                id).to_set<Defs::moral_alignment>("moral_alignment");
+                                deityId.value()).to_set<Defs::moral_alignment>("moral_alignment");
         }
         else
         {
-            alignsPerClass = Cyclopedia::get_instance().exec_prepared_statement<int>(
-                                Query::select_moral_alignments_by_class,
-                                static_cast<int>(c)).to_set<Defs::moral_alignment>("alignment_id");
+            alignsPerClass = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(
+                                Query::select_moral_alignments_by_class, c).to_set<Defs::moral_alignment>("alignment_id");
         }
         if (avalableAligns.empty())
         {
@@ -244,10 +241,9 @@ std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities
 {
     auto allDeities = Tables::deity::to_map<Defs::deity>("id");
     auto query = Query::select_deities_by_moral_alignment;
-    auto alignId = static_cast<int>(align);
     std::vector<Tables::deity> availableDeities{};
 
-    auto deities = Cyclopedia::get_instance().exec_prepared_statement<int>(query, alignId).to_set<Defs::deity>("deity_id");
+    auto deities = Cyclopedia::get_instance().exec_prepared_statement<Defs::moral_alignment>(query, align).to_set<Defs::deity>("deity_id");
     for (auto& d : allDeities)
     {
         if (deities.contains(d.first))
@@ -267,8 +263,7 @@ std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities
 std::set<Adndtk::Defs::deity> Adndtk::CharacterGenerator::available_deity_ids(const Defs::moral_alignment& align)
 {
     std::set<Adndtk::Defs::deity> deities;
-    auto alignId = static_cast<int>(align);
-    auto rsDeities = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_deities_by_moral_alignment, alignId);
+    auto rsDeities = Cyclopedia::get_instance().exec_prepared_statement<Defs::moral_alignment>(Query::select_deities_by_moral_alignment, align);
     for (auto& d : rsDeities)
     {
         auto deityId = static_cast<Defs::deity>(d.as<int>("deity_id"));

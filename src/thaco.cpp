@@ -12,8 +12,7 @@ Adndtk::Thaco::Thaco(const Defs::character_class_type& clsType)
 
     for (auto& t : types)
     {
-        int typId = static_cast<int>(t);
-        auto thacoInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_thaco, typId);
+        auto thacoInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Query::select_thaco, t);
         auto thacoScore = thacoInfo[0].as<short>("score");
         auto thacoFactor = thacoInfo[0].as<short>("factor");
 
