@@ -308,6 +308,7 @@ def write_heading(outFile, headerFile, version, addIncludes):
         outFile.write(f'#include <vector>\n')
         outFile.write(f'#include <set>\n')
         outFile.write(f'#include <algorithm>\n')
+        outFile.write(f'#include <defs.h>\n')
         outFile.write(f'#include <common_types.h>\n')
         outFile.write(f'#include <cyclopedia.h>\n')
         outFile.write(f'#include <query_result.h>\n\n')
