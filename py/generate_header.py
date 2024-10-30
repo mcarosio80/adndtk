@@ -363,10 +363,18 @@ def generate_struct(dbPath, headerFile, namespaces, version, jsonConfig):
             for i in info:
                 #cid = info[1]
                 # field-type, field-name, is-nullable
-                fields.append( (i[2], i[3], i[4]) )
+                fieldName = i[2]
+                fieldType = i[3]
+                for idx in range(len(data[table])):
+                    print(f"idx = {idx}")
+                    if 'field' in data[table][idx] and 'type' in data[table][idx] and data[table][idx]['field'] == fieldName:
+                        fieldType = data[table][idx]['type']
+
+                fields.append( (fieldName, fieldType, i[4]) )
                 #isNullable = info[4]
                 #defaultValue = info[5]
                 #isPrimaryKey = info[6]
+            print(fields)
 
             if firstElement:
                 firstElement = False
