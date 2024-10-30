@@ -119,15 +119,47 @@ def fetch_table_info(conn, tableName):
     return info
 
 ################################
-def print_fetch_all(tableName, fields, outFile, indentationLevel):
+def print_free_helpers(outFile, indentationLevel):
+    outFile.write(f"""{indent(indentationLevel)}namespace Helpers\n""")
+    outFile.write(f"""{indent(indentationLevel)}{{""")
+
+    # Generate function to_vector
+    outFile.write(f"""
+            /// Returns data from a given column and specified query
+            template<typename _T>
+            static std::vector<_T> to_vector(const std::string& fieldName, const Query& queryId)
+            {{
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(queryId);
+                return results.to_vector<_T>(fieldName);
+            }}\n""")
+
+    # Generate function to_set
+    outFile.write(f"""
+            /// Returns data from a given column and specified query as a typed set
+            template<typename _Type>
+			static std::set<_Type> to_set(const std::string& fieldName, const Query& queryId)
+            {{
+                std::set<_Type> data{{}};
+                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(queryId);
+                for (auto& r : results)
+                {{
+                    auto value = r.as<_Type>(fieldName);
+                    data.emplace(value);
+                }}
+                return data;
+			}}\n""")
+
+    outFile.write(f"""{indent(indentationLevel)}}} // namespace Helpers\n\n""")
+
+################################
+def print_struct_methods(tableName, fields, outFile, indentationLevel):
     # Generate function to_vector
     outFile.write(f"""
             /// Returns data from a given column in table '{tableName}' as a typed vector
             template<typename _T>
 			static std::vector<_T> to_vector(const std::string& fieldName)
             {{
-                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
-                return results.to_vector<_T>(fieldName);
+                return Helpers::to_vector<_T>(fieldName, Query::select_all_{tableName});
 			}}\n""")
 
     # Generate function to_map
@@ -152,14 +184,7 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
             template<typename _Type>
 			static std::set<_Type> to_set(const std::string& fieldName)
             {{
-                std::set<_Type> data{{}};
-                auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
-                for (auto& r : results)
-                {{
-                    auto value = r.as<_Type>(fieldName);
-                    data.emplace(value);
-                }}
-                return data;
+                return Helpers::to_set<_Type>(fieldName, Query::select_all_{tableName});
 			}}\n""")
 
     # Generate function fetch_all
@@ -175,7 +200,7 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                     vec.push_back(stats);
                 }}
                 return vec;
-            }}\n\n""")
+            }}\n""")
 
     # Generate function select
     outFile.write(f"""
@@ -194,7 +219,7 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
                     }}
                 }}
                 return vec;
-            }}\n\n""")
+            }}\n""")
 
     # Generate function select_one
     outFile.write(f"""
@@ -204,7 +229,7 @@ def print_fetch_all(tableName, fields, outFile, indentationLevel):
             {{
                 const auto data = select(fieldName, fieldValue).front();
                 return (data.empty()) ? std::nullopt : std::make_optional(data.at(0));
-            }}\n\n""")
+            }}\n""")
 
     # Begins private block
     outFile.write(f"""{indent(indentationLevel)}private:""")
@@ -256,7 +281,7 @@ def print_struct(tableName, fields, outFile, indentationLevel):
             else:
                 outFile.write(f"std::optional<{field[1]}> {field[0]}{{}};\n")
         
-        print_fetch_all(tableName, fields, outFile, indentationLevel)
+        print_struct_methods(tableName, fields, outFile, indentationLevel)
 
         outFile.write(f"{indent(indentationLevel)}")
         outFile.write("};\n")
@@ -326,6 +351,8 @@ def generate_struct(dbPath, headerFile, namespaces, version, jsonConfig):
         write_heading(outFile, headerFile, version, True)
     
         indentation = open_namespace(outFile, namespaces)
+
+        print_free_helpers(outFile, indentation)
 
         firstElement = True
         fields = list()
