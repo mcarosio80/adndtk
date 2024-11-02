@@ -227,7 +227,7 @@ def print_struct_methods(tableName, fields, outFile, indentationLevel):
             template<typename _FieldType>
             static std::optional<{tableName}> select_one(const std::string& fieldName, const _FieldType& fieldValue)
             {{
-                const auto data = select(fieldName, fieldValue).front();
+                const auto data = select(fieldName, fieldValue);
                 return (data.empty()) ? std::nullopt : std::make_optional(data.at(0));
             }}\n""")
 
