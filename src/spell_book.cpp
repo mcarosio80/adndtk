@@ -12,14 +12,14 @@ Adndtk::SpellBook::SpellBook(const Defs::character_class& cls, Defs::race raceId
 {
     if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(cls))
     {
-        int c = static_cast<int>(_casterClass);
-        int r = static_cast<int>(_casterRace);
-        auto races = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_school_of_magic_per_race, c, r);
+        auto races = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class, Defs::race>(
+            Query::select_school_of_magic_per_race, _casterClass, _casterRace
+        );
         
         bool raceEnabled{true};
         for (auto& rc : races)
         {
-            auto availableRace = static_cast<Defs::race>(rc.as<short>("race_id"));
+            auto availableRace = rc.as<Defs::race>("race_id");
             raceEnabled &= availableRace == raceId;
         }
         if (races.size() == 0 || !raceEnabled)
@@ -289,7 +289,7 @@ Adndtk::SpellLevel Adndtk::SpellBook::get_spell_level(const Defs::wizard_spell& 
 {
     auto rsSpellInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::wizard_spell>(Query::select_wizard_spell, spellId);
     auto& spellInfo = rsSpellInfo[0];
-    SpellLevel spellLevel = static_cast<SpellLevel>(spellInfo.as<int>("level"));
+    SpellLevel spellLevel = spellInfo.as<SpellLevel>("level");
     
     return spellLevel;
 }

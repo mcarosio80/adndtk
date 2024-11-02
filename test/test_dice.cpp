@@ -73,7 +73,7 @@ TEST_CASE("[TC-DICE.007] Dice creation defaults to d6 when not specified", "[dic
 
 TEST_CASE("[TC-DICE.008] Rolling default die (d6) between (1 - 6)", "[dice]" )
 {
-    Die dd;
+    Die dd{};
     
     for (int i=0; i<6; ++i)
     {

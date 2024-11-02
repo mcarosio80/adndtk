@@ -96,7 +96,7 @@ namespace Adndtk
         {
             Adndtk::Query query = Adndtk::Query::select_character_class;
             auto classInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
-            Defs::character_class_type clsType = static_cast<Defs::character_class_type>(classInfo[0].as<int>("class_type_id"));
+            auto clsType = classInfo[0].as<Defs::character_class_type>("class_type_id");
 
             return is_type_of<probeType>(clsType);
         }

@@ -244,15 +244,14 @@ std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_
     auto cults = Adndtk::Tables::cult::to_map<Adndtk::Defs::cult>("id");
     auto ranks = Adndtk::Tables::deity_rank::to_map<Adndtk::Defs::deity_rank>("id");
     
-    auto formatDeityMenu = [&](const Adndtk::Tables::deity& r, std::map<int, Adndtk::Tables::deity>& menu) -> void
+    auto formatDeityMenu = [&](const Adndtk::Tables::deity& r, std::map<Adndtk::Defs::deity, Adndtk::Tables::deity>& menu) -> void
     {
-        auto cultId = static_cast<Adndtk::Defs::cult>(r.cult);
-        auto rankId = static_cast<Adndtk::Defs::deity_rank>(r.rank);
-        std::cout << "\t[" << r.id << "]:\t" << r.name << " (status: " << ranks[rankId].description << ", cult: " << cults[cultId].name << ")\n";
+        std::cout << "\t[" << static_cast<int>(r.id) << "]:\t" << r.name << " (status: "
+            << ranks[r.rank].description << ", cult: " << cults[r.cult].name << ")\n";
         menu[r.id] = r;
     };
     auto deities = Adndtk::CharacterGenerator::available_deities(alignId, true);
-    CliTools::CliMenu<Adndtk::Tables::deity, int> deityMenu{"Choose one", deities};
+    CliTools::CliMenu<Adndtk::Tables::deity, Adndtk::Defs::deity> deityMenu{"Choose one", deities};
     deityMenu.line_formatter() = formatDeityMenu;
     auto selectedDeity = deityMenu();
 
@@ -344,7 +343,6 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
 
     // Choose an Alignment
     auto selectedAlignment = choose_moral_alignment(clsId);
-    auto alignId = static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id);
     std::cout << "Your choice is " << selectedAlignment.name << ".\n";
 
     // Choose a Sex
@@ -352,11 +350,11 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     std::cout << "Your choice is " << selectedSex.name << ".\n";
 
     // Select a faith
-    auto selectedDeity = choose_deity(clsId, alignId);
+    auto selectedDeity = choose_deity(clsId, selectedAlignment.id);
     std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
     if (selectedDeity.has_value())
     {
-        optDeityId = static_cast<Adndtk::Defs::deity>(selectedDeity.value().id);
+        optDeityId = selectedDeity.value().id;
         std::cout << "Your choice is " << selectedDeity.value().name << ".\n";
     }
     else
@@ -372,10 +370,10 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     // Equip Your Character
 
     Adndtk::Character chr{charName,
-            static_cast<Adndtk::Defs::character_class>(selectedClass.id),
+            selectedClass.id,
             static_cast<Adndtk::Defs::race>(selectedRace.id),
-            static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id),
-            static_cast<Adndtk::Defs::sex>(selectedSex.id), 
+            selectedAlignment.id,
+            selectedSex.id, 
             optDeityId,
     };
 
@@ -398,7 +396,6 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
 
     // Choose an Alignment
     auto selectedAlignment = choose_moral_alignment(classId);
-    auto alignId = static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id);
     std::cout << "Your choice is " << selectedAlignment.name << ".\n";
 
     // Choose a Sex
@@ -406,7 +403,7 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     std::cout << "Your choice is " << selectedSex.name << ".\n";
 
     // Select a faith
-    auto selectedDeity = choose_deity(classId, alignId);
+    auto selectedDeity = choose_deity(classId, selectedAlignment.id);
     std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
     if (selectedDeity.has_value())
     {
@@ -431,8 +428,8 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     Adndtk::Character chr{charName,
             classId,
             static_cast<Adndtk::Defs::race>(selectedRace.id),
-            static_cast<Adndtk::Defs::moral_alignment>(selectedAlignment.id),
-            static_cast<Adndtk::Defs::sex>(selectedSex.id), 
+            selectedAlignment.id,
+            selectedSex.id, 
             optDeityId,
     };
 

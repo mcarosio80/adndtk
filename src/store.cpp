@@ -123,7 +123,7 @@ std::tuple<Adndtk::Defs::coin, double, std::optional<double>> Adndtk::Store::get
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_equipment, id);
     const QueryResult& res = rs[0];
 
-    auto currency = static_cast<Defs::coin>(res.as<short>("cost_coin"));
+    auto currency = res.as<Defs::coin>("cost_coin");
     auto minCost = res.as<double>("cost_min");
     auto maxCost = res.try_as<double>("cost_max");
 

@@ -1,32 +1,99 @@
 {
-    "strength_stats" : [],
-    "dexterity_stats" : [],
-    "constitution_stats" : [],
-    "intelligence_stats" : [],
-    "wisdom_stats" : [],
-    "charisma_stats" : [],
-    "race" : [],
-    "character_class" : [],
+    "strength_stats" : [
+        { "field" : "ability_score_from", "type" : "short" },
+        { "field" : "ability_score_to", "type" : "short" },
+        { "field" : "excp_from", "type" : "short" },
+        { "field" : "excp_to", "type" : "short" }
+    ],
+    "dexterity_stats" : [
+        { "field" : "ability_score", "type" : "short" }
+    ],
+    "constitution_stats" : [
+        { "field" : "ability_score", "type" : "short" }
+    ],
+    "intelligence_stats" : [
+        { "field" : "ability_score", "type" : "short" }
+    ],
+    "wisdom_stats" : [
+        { "field" : "ability_score", "type" : "short" }
+    ],
+    "charisma_stats" : [
+        { "field" : "ability_score", "type" : "short" }
+    ],
+    "race" : [
+        { "field" : "id", "type" : "Defs::race" }
+    ],
+    "character_class" : [
+        { "field" : "id", "type" : "Defs::character_class" },
+        { "field" : "class_type_id", "type" : "Defs::character_class_type" }
+    ],
     "character_class_type" : [
         { "field" : "id", "type" : "Defs::character_class_type" }
     ],
-    "skill" : [],
-    "deity" : [],
-    "turn_undead" : [],
-    "equipment" : [],
-    "coin" : [],
-    "moral_alignment" : [],
-    "sex" : [],
-    "saving_throw" : [],
-    "cult" : [],
-    "deity_rank" : [],
-    "geo_area" : [],
-    "region" : [],
-    "place_of_interest_type" : [],
-    "place_of_interest" : [],
-    "calendar" : [],
+    "skill" : [
+        { "field" : "id", "type" : "Defs::skill" }
+    ],
+    "deity" : [
+        { "field" : "id", "type" : "Defs::deity" },
+        { "field" : "rank", "type" : "Defs::deity_rank" },
+        { "field" : "moral_alignment", "type" : "Defs::moral_alignment" },
+        { "field" : "realm", "type" : "Defs::realm" },
+        { "field" : "plane", "type" : "Defs::plane_of_existence" },
+        { "field" : "sex", "type" : "Defs::sex" },
+        { "field" : "activity", "type" : "Defs::deity_activity" },
+        { "field" : "cult", "type" : "Defs::cult" }
+    ],
+    "turn_undead" : [
+        { "field" : "turnable_code", "type" : "Defs::turnable" },
+        { "field" : "effect", "type" : "Defs::turn_effect" }
+    ],
+    "equipment" : [
+        { "field" : "id", "type" : "Defs::equipment" },
+        { "field" : "body_slot", "type" : "Defs::body_slot" }
+    ],
+    "coin" : [
+        { "field" : "id", "type" : "Defs::coin" }
+    ],
+    "moral_alignment" : [
+        { "field" : "id", "type" : "Defs::moral_alignment" }
+    ],
+    "sex" : [
+        { "field" : "id", "type" : "Defs::sex" }
+    ],
+    "saving_throw" : [
+        { "field" : "id", "type" : "Defs::saving_throw" }
+    ],
+    "cult" : [
+        { "field" : "id", "type" : "Defs::cult" }
+    ],
+    "deity_rank" : [
+        { "field" : "id", "type" : "Defs::deity_rank" }
+    ],
+    "geo_area" : [
+        { "field" : "id", "type" : "Defs::geo_area" }
+    ],
+    "region" : [
+        { "field" : "id", "type" : "Defs::region" },
+        { "field" : "geo_area_id", "type" : "Defs::geo_area" }
+    ],
+    "place_of_interest_type" : [
+        { "field" : "id", "type" : "Defs::place_of_interest_type" }
+    ],
+    "place_of_interest" : [
+        { "field" : "id", "type" : "Defs::place_of_interest" },
+        { "field" : "region_id", "type" : "Defs::region" },
+        { "field" : "type", "type" : "Defs::place_of_interest_type" }
+    ],
+    "calendar" : [
+        { "field" : "id", "type" : "Defs::calendar" },
+        { "field" : "campaign_settings_id", "type" : "Defs::campaign_settings" }
+    ],
     "specialist_attacks_per_round" : [],
-    "weapon_proficiency_level" : [],
+    "weapon_proficiency_level" : [
+        { "field" : "id", "type" : "Defs::weapon_proficiency_level" }
+    ],
     "non_weapon_proficiency_group" : [],
-    "non_weapon_proficiency" : []
+    "non_weapon_proficiency" : [
+        { "field" : "id", "type" : "Defs::non_weapon_proficiency" }
+    ]
 }

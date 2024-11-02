@@ -71,7 +71,7 @@ void Adndtk::Encumbrance::load_base_movement_factors()
     auto movFactors = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_race_base_movement);
     for (auto& mf : movFactors)
     {
-        auto raceId = static_cast<Defs::race>(mf.as<short>("id"));
+        auto raceId = mf.as<Defs::race>("id");
         auto baseMov = mf.as<short>("base_movement_rate");
 
         _baseMovFactors[raceId] = baseMov;

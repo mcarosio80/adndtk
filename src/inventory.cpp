@@ -18,7 +18,7 @@ bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
     std::optional<Defs::body_slot> bodySlot = std::nullopt;
     if (res.exists("body_slot"))
     {
-        bodySlot = static_cast<Defs::body_slot>(res.as<int>("body_slot"));
+        bodySlot = res.as<Defs::body_slot>("body_slot");
     }
     else
     {

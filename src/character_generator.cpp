@@ -43,7 +43,7 @@ std::pair<int, int> Adndtk::CharacterGenerator::get_skill_constraints_by_class(c
 
         if (Cyclopedia::get_instance().is_specialist_wizard(cls))
         {
-            auto res = Cyclopedia::get_instance().exec_prepared_statement(Query::select_school_of_magic_skill_requisite, static_cast<int>(cls));
+            auto res = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Query::select_school_of_magic_skill_requisite, cls);
             if (res.size() > 0)
             {
                 auto& schoolLimits = res[0];
@@ -86,7 +86,7 @@ std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(co
         {
             int minValue{0};
             int maxValue{20};
-            Adndtk::SkillCreator::get_skill_constraints(query, s.first, r.id, minValue, maxValue);
+            Adndtk::SkillCreator::get_skill_constraints(query, s.first, static_cast<int>(r.id), minValue, maxValue);
             auto sklValue = skillValues.at(s.first);
             if (sklValue >= minValue && sklValue <= maxValue)
             {
@@ -149,14 +149,11 @@ std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::availab
             std::vector<int> skillLimitMin{0};
             std::vector<int> skillLimitMax{20};
 
-            auto clsTypeLimits = get_skill_constraints_by_class_type(
-                                        static_cast<Defs::character_class_type>(c.class_type_id),
-                                        s.first
-            );
+            auto clsTypeLimits = get_skill_constraints_by_class_type(c.class_type_id, s.first);
             skillLimitMin.push_back(clsTypeLimits.first);
             skillLimitMax.push_back(clsTypeLimits.second);
             
-            auto clsLimits = get_skill_constraints_by_class(static_cast<Defs::character_class>(c.id), s.first);
+            auto clsLimits = get_skill_constraints_by_class(c.id, s.first);
             skillLimitMin.push_back(clsLimits.first);
             skillLimitMax.push_back(clsLimits.second);
             
@@ -227,7 +224,7 @@ std::set<Adndtk::Defs::moral_alignment> Adndtk::CharacterGenerator::available_mo
     auto aligns = available_moral_alignments(cls, deityId);
     for (auto& a : aligns)
     {
-        alignments.emplace(static_cast<Defs::moral_alignment>(a.id));
+        alignments.emplace(a.id);
     }
     return alignments;
 }
@@ -248,10 +245,7 @@ std::vector<Adndtk::Tables::deity> Adndtk::CharacterGenerator::available_deities
     {
         if (deities.contains(d.first))
         {
-            std::cout << d.second.name << " : " << d.second.activity << "\n";
-            std::cout << std::boolalpha << "filterDeadGods: " << filterDeadGods << "\n";
-            std::cout << "d.second.activity: " << d.second.activity << "\n";
-            if (!filterDeadGods || static_cast<Defs::deity_activity>(d.second.activity) == Defs::deity_activity::alive)
+            if (!filterDeadGods || d.second.activity== Defs::deity_activity::alive)
             {
                 availableDeities.push_back(std::move(d.second));
             }
@@ -266,7 +260,7 @@ std::set<Adndtk::Defs::deity> Adndtk::CharacterGenerator::available_deity_ids(co
     auto rsDeities = Cyclopedia::get_instance().exec_prepared_statement<Defs::moral_alignment>(Query::select_deities_by_moral_alignment, align);
     for (auto& d : rsDeities)
     {
-        auto deityId = static_cast<Defs::deity>(d.as<int>("deity_id"));
+        auto deityId = d.as<Defs::deity>("deity_id");
         deities.emplace(deityId);
     }
         

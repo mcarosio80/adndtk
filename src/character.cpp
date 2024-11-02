@@ -57,7 +57,7 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
         auto resSet = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Query::select_primary_skills, clsId);
         for (auto& r : resSet)
         {
-            auto sklId = static_cast<Defs::skill>(r.as<int>("skill_id"));
+            auto sklId = r.as<Defs::skill>("skill_id");
             _primeRequisites[clsId].emplace(sklId);
         }
     }

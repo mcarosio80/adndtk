@@ -65,7 +65,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'description', description, 'title_level', title_level, 'title', title, 'hit_dice', hit_dice, 'hp_after_title', hp_after_title from character_class_type where id = ?", Query::select_character_class_type);
 
         prepare_statement("select 'race_id', race_id, 'skill_id', skill_id, 'value', value from skill_modifier where race_id = ? and skill_id = ?", Query::select_skill_modifier);
-        prepare_statement("select 'skill_id', skill_id, 'skill_value_required', skill_value_required from SCHOOL_OF_MAGIC where class_id = ?", Query::select_school_of_magic_skill_requisite);
+        prepare_statement("select 'skill_id', skill_id, 'skill_value_required', skill_value_required from school_of_magic where class_id = ?", Query::select_school_of_magic_skill_requisite);
 
         prepare_statement("select 'class_id', class_id, 'level', level, 'score', score from LEVEL_ADVANCEMENT order by class_id, level", Query::select_level_advancement);
         prepare_statement("select 'class_id', class_id, 'score', score from LEVEL_ADVANCEMENT_FACTOR", Query::select_level_advancement_factor);
@@ -376,9 +376,9 @@ void Adndtk::Cyclopedia::load_advancement_table()
     auto advTable = exec_prepared_statement<>(Query::select_level_advancement);
     for (auto& r : advTable)
     {
-        auto cls = static_cast<Defs::character_class>(r.as<int>("class_id"));
-        auto lvl = static_cast<ExperienceLevel>(r.as<int>("level"));
-        auto score = static_cast<XP>(r.as<int>("score"));
+        auto cls = r.as<Defs::character_class>("class_id");
+        auto lvl = r.as<ExperienceLevel>("level");
+        auto score = r.as<XP>("score");
 
         _advTable.add_level(cls, lvl, score);
     }
@@ -386,8 +386,8 @@ void Adndtk::Cyclopedia::load_advancement_table()
     auto advFactors = exec_prepared_statement<>(Query::select_level_advancement_factor);
     for (auto& r : advFactors)
     {
-        auto cls = static_cast<Defs::character_class>(r.as<int>("class_id"));
-        auto score = static_cast<XP>(r.as<int>("score"));
+        auto cls = r.as<Defs::character_class>("class_id");
+        auto score = r.as<XP>("score");
 
         _advTable.set_advancement_factor(cls, score);
     }
@@ -397,7 +397,7 @@ Adndtk::Defs::character_class_type Adndtk::Cyclopedia::get_class_type(const Defs
 {
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Adndtk::Query::select_character_class, cls);
     auto& clsInfo = rs[0];
-    return static_cast<Defs::character_class_type>(clsInfo.as<int>("class_type_id"));
+    return clsInfo.as<Defs::character_class_type>("class_type_id");
 }
 
 std::vector<Adndtk::Defs::character_class_type> Adndtk::Cyclopedia::get_class_types(const Defs::character_class& cls)

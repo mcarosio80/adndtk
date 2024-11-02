@@ -20,7 +20,7 @@ TEST_CASE("[TC-CGEN.001] Human race is always available, no matter the skill val
     auto races = CharacterGenerator::available_races(str, dex, con, inl, wis, cha);
     auto pred = [](const Tables::race& r) -> bool
     {
-        return static_cast<Defs::race>(r.id) == Defs::race::human;
+        return r.id == Defs::race::human;
     };
     auto found = std::find_if(races.begin(), races.end(), pred) != races.end();
     REQUIRE(found);
@@ -30,7 +30,7 @@ TEST_CASE("[TC-CGEN.002] Dwarf race requires skills Str: 8-18, Dex: 3-17, Con: 1
 {
     auto raceAllowed = [](const Tables::race& r) -> bool
     {
-        return static_cast<Defs::race>(r.id) == Defs::race::dwarf;
+        return r.id == Defs::race::dwarf;
     };
     std::vector<Tables::race> races{}; 
 
@@ -89,7 +89,7 @@ TEST_CASE("[TC-CGEN.003] Elf race requires skills Str: 3-18, Dex: 6-18, Con: 7-1
 {
     auto raceAllowed = [](const Tables::race& r) -> bool
     {
-        return static_cast<Defs::race>(r.id) == Defs::race::elf;
+        return r.id == Defs::race::elf;
     };
     std::vector<Tables::race> races{}; 
 
@@ -138,7 +138,7 @@ TEST_CASE("[TC-CGEN.004] Gnome race requires skills Str: 6-18, Dex: 3-18, Con: 8
 {
     auto raceAllowed = [](const Tables::race& r) -> bool
     {
-        return static_cast<Defs::race>(r.id) == Defs::race::gnome;
+        return r.id == Defs::race::gnome;
     };
     std::vector<Tables::race> races{}; 
 
@@ -187,7 +187,7 @@ TEST_CASE("[TC-CGEN.005] Half-elf race requires skills Str: 3-18, Dex: 6-18, Con
 {
     auto raceAllowed = [](const Tables::race& r) -> bool
     {
-        return static_cast<Defs::race>(r.id) == Defs::race::half_elf;
+        return r.id == Defs::race::half_elf;
     };
     std::vector<Tables::race> races{}; 
 
@@ -236,7 +236,7 @@ TEST_CASE("[TC-CGEN.006] Halfling race requires skills Str: 7-18, Dex: 7-18, Con
 {
     auto raceAllowed = [](const Tables::race& r) -> bool
     {
-        return static_cast<Defs::race>(r.id) == Defs::race::halfling;
+        return r.id == Defs::race::halfling;
     };
     std::vector<Tables::race> races{}; 
 
@@ -305,7 +305,7 @@ TEST_CASE("[TC-CGEN.007] Fighters require skills Str: 9+, plus race requisites",
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter;
+        return c.id == Defs::character_class::fighter;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -344,7 +344,7 @@ TEST_CASE("[TC-CGEN.008] Paladin require skills Str: 12+, Con: 9+, Wis: 13+, Cha
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::paladin;
+        return c.id == Defs::character_class::paladin;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -408,7 +408,7 @@ TEST_CASE("[TC-CGEN.009] Demi-humans cannot be paladins", "[character_generator]
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::paladin;
+        return c.id == Defs::character_class::paladin;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -432,7 +432,7 @@ TEST_CASE("[TC-CGEN.010] Rangers require skills Str: 13+, Dex: 13+, Con: 14+, Wi
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::ranger;
+        return c.id == Defs::character_class::ranger;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -511,7 +511,7 @@ TEST_CASE("[TC-CGEN.011] Dwarves, Gnomes and Halflings cannot be rangers", "[cha
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::ranger;
+        return c.id == Defs::character_class::ranger;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -534,7 +534,7 @@ TEST_CASE("[TC-CGEN.012] Mages require skills Int: 9+, plus race requisites", "[
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage;
+        return c.id == Defs::character_class::mage;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -571,7 +571,7 @@ TEST_CASE("[TC-CGEN.013] Dwarves, Gnomes and Halflings cannot be mages", "[chara
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage;
+        return c.id == Defs::character_class::mage;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -594,7 +594,7 @@ TEST_CASE("[TC-CGEN.014] Abjurers require skills Int: 9+, Wis: 15+, plus race re
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::abjurer;
+        return c.id == Defs::character_class::abjurer;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -636,7 +636,7 @@ TEST_CASE("[TC-CGEN.015] Demi-humans cannot be abjurers", "[character_generator]
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::abjurer;
+        return c.id == Defs::character_class::abjurer;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -660,7 +660,7 @@ TEST_CASE("[TC-CGEN.016] Conjurers require skills Int: 9+, Con: 15+", "[characte
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::conjurer;
+        return c.id == Defs::character_class::conjurer;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -711,7 +711,7 @@ TEST_CASE("[TC-CGEN.017] Dwarves, Elves, Gnomes and Halflings cannot be conjurer
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::conjurer;
+        return c.id == Defs::character_class::conjurer;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -734,7 +734,7 @@ TEST_CASE("[TC-CGEN.018] Diviners require skills Int: 9+, Wis: 16+", "[character
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::diviner;
+        return c.id == Defs::character_class::diviner;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -785,7 +785,7 @@ TEST_CASE("[TC-CGEN.019] Dwarves, Gnomes and Halflings cannot be diviners", "[ch
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::diviner;
+        return c.id == Defs::character_class::diviner;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -808,7 +808,7 @@ TEST_CASE("[TC-CGEN.020] Enchanters require skills Int: 9+, Cha: 16+", "[charact
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::enchanter;
+        return c.id == Defs::character_class::enchanter;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -859,7 +859,7 @@ TEST_CASE("[TC-CGEN.021] Dwarves, Gnomes and Halflings cannot be enchanters", "[
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::enchanter;
+        return c.id == Defs::character_class::enchanter;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -882,7 +882,7 @@ TEST_CASE("[TC-CGEN.022] Illusioninsts require skills Int: 9+, Dex: 16+", "[char
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::illusionist;
+        return c.id == Defs::character_class::illusionist;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -933,7 +933,7 @@ TEST_CASE("[TC-CGEN.023] Dwarves, Elves, Half-elves and Halflings cannot be illu
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::illusionist;
+        return c.id == Defs::character_class::illusionist;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -956,7 +956,7 @@ TEST_CASE("[TC-CGEN.024] Invokers require skills Int: 9+, Con: 16+", "[character
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::invoker;
+        return c.id == Defs::character_class::invoker;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -998,7 +998,7 @@ TEST_CASE("[TC-CGEN.025] Demi-humans cannot be invokers", "[character_generator]
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::invoker;
+        return c.id == Defs::character_class::invoker;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1022,7 +1022,7 @@ TEST_CASE("[TC-CGEN.026] Necromancers require skills Int: 9+, Wis: 16+", "[chara
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::necromancer;
+        return c.id == Defs::character_class::necromancer;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1064,7 +1064,7 @@ TEST_CASE("[TC-CGEN.027] Demi-humans cannot be necromancers", "[character_genera
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::necromancer;
+        return c.id == Defs::character_class::necromancer;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1088,7 +1088,7 @@ TEST_CASE("[TC-CGEN.028] Transmuters require skills Int: 9+, Dex: 15+", "[charac
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::transmuter;
+        return c.id == Defs::character_class::transmuter;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1139,7 +1139,7 @@ TEST_CASE("[TC-CGEN.029] Dwarves, Elves, Gnomes and Halflings cannot be transmut
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::transmuter;
+        return c.id == Defs::character_class::transmuter;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1162,7 +1162,7 @@ TEST_CASE("[TC-CGEN.030] Clerics require skills Wis: 9+, plus race requisites", 
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric;
+        return c.id == Defs::character_class::cleric;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1201,7 +1201,7 @@ TEST_CASE("[TC-CGEN.031] Preists of specific mythos require skills Wis: 9+, plus
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::preist_of_specific_mythos;
+        return c.id == Defs::character_class::preist_of_specific_mythos;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1240,7 +1240,7 @@ TEST_CASE("[TC-CGEN.032] Druids require skills Wis: 12+, Cha: 15+", "[character_
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::druid;
+        return c.id == Defs::character_class::druid;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1291,7 +1291,7 @@ TEST_CASE("[TC-CGEN.033] Dwarves, Elves, Gnomes and Halflings cannot be druids",
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::druid;
+        return c.id == Defs::character_class::druid;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1314,7 +1314,7 @@ TEST_CASE("[TC-CGEN.034] Thiefs require skills Dex: 9+, plus race requisites", "
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::thief;
+        return c.id == Defs::character_class::thief;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1353,7 +1353,7 @@ TEST_CASE("[TC-CGEN.034] Bards require skills Dex: 12+, Int: 13+, Cha: 15+ plus 
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::bard;
+        return c.id == Defs::character_class::bard;
     };
     std::vector<Tables::character_class> classes{}; 
 
@@ -1418,8 +1418,7 @@ TEST_CASE("[TC-CGEN.035] Humans cannot be multiclass", "[character_generator]" )
 {
     auto isMulticlass = [](const Tables::character_class& c) -> bool
     {
-        auto clsId = static_cast<Defs::character_class>(c.id);
-        return Cyclopedia::get_instance().is_multiclass(clsId);
+        return Cyclopedia::get_instance().is_multiclass(c.id);
     };
     auto classes = CharacterGenerator::available_classes(
         SkillValue{Defs::skill::strength, 18},
@@ -1437,7 +1436,7 @@ TEST_CASE("[TC-CGEN.036] Fighter/Mages require skills Str: 9+, Int: 9+, plus rac
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage;
+        return c.id == Defs::character_class::fighter_mage;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::elf, Defs::race::half_elf};
@@ -1504,7 +1503,7 @@ TEST_CASE("[TC-CGEN.037] Fighter/Clerics require skills Str: 9+, Wis: 9+, plus r
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_cleric;
+        return c.id == Defs::character_class::fighter_cleric;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::dwarf, Defs::race::gnome, Defs::race::half_elf};
@@ -1571,7 +1570,7 @@ TEST_CASE("[TC-CGEN.038] Fighter/Thieves require skills Str: 9+, Dex: 9+, plus r
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_thief;
+        return c.id == Defs::character_class::fighter_thief;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::elf, Defs::race::dwarf, Defs::race::gnome, Defs::race::half_elf, Defs::race::halfling};
@@ -1623,7 +1622,7 @@ TEST_CASE("[TC-CGEN.039] Mage/Thieves require skills Int: 9+, Dex: 9+, plus race
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage_thief;
+        return c.id == Defs::character_class::mage_thief;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::elf, Defs::race::half_elf};
@@ -1690,7 +1689,7 @@ TEST_CASE("[TC-CGEN.040] Cleric/Thieves require skills Wis: 9+, Dex: 9+, plus ra
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric_thief;
+        return c.id == Defs::character_class::cleric_thief;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::gnome};
@@ -1757,7 +1756,7 @@ TEST_CASE("[TC-CGEN.041] Cleric/Mages require skills Wis: 9+, Int: 9+, plus race
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage_cleric;
+        return c.id == Defs::character_class::mage_cleric;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -1824,7 +1823,7 @@ TEST_CASE("[TC-CGEN.042] Fighter/Illusionists require skills Str: 9+, Dex: 16+, 
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_illusionist;
+        return c.id == Defs::character_class::fighter_illusionist;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::gnome};
@@ -1891,7 +1890,7 @@ TEST_CASE("[TC-CGEN.043] Cleric/Illusionists require skills Wis: 9+, Dex: 16+, p
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric_illusionist;
+        return c.id == Defs::character_class::cleric_illusionist;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::gnome};
@@ -1958,7 +1957,7 @@ TEST_CASE("[TC-CGEN.044] Illusionist/Thieves require skills Dex: 16+, plus race 
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::illusionist_thief;
+        return c.id == Defs::character_class::illusionist_thief;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::gnome};
@@ -2011,7 +2010,7 @@ TEST_CASE("[TC-CGEN.045] Fighter/Mage/Clerics require skills Str: 9+, Int: 9+, W
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage_cleric;
+        return c.id == Defs::character_class::fighter_mage_cleric;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -2092,7 +2091,7 @@ TEST_CASE("[TC-CGEN.046] Fighter/Mage/Thieves require skills Str: 9+, Int: 9+, D
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage_thief;
+        return c.id == Defs::character_class::fighter_mage_thief;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -2173,7 +2172,7 @@ TEST_CASE("[TC-CGEN.047] Fighter/Mage/Druids require skills Str: 9+, Int: 9+, Wi
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_mage_druid;
+        return c.id == Defs::character_class::fighter_mage_druid;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -2268,7 +2267,7 @@ TEST_CASE("[TC-CGEN.048] Fighter/Druids require skills Str: 9+, Wis: 12+, Cha: 1
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::fighter_druid;
+        return c.id == Defs::character_class::fighter_druid;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -2349,7 +2348,7 @@ TEST_CASE("[TC-CGEN.049] Mage/Druids require skills Int: 9+, Wis: 12+, Cha: 15+,
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::mage_druid;
+        return c.id == Defs::character_class::mage_druid;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -2430,7 +2429,7 @@ TEST_CASE("[TC-CGEN.050] Cleric/Rangers require skills Str: 13+, Dex: 13+, Con: 
 {
     auto classAllowed = [](const Tables::character_class& c) -> bool
     {
-        return static_cast<Defs::character_class>(c.id) == Defs::character_class::cleric_ranger;
+        return c.id == Defs::character_class::cleric_ranger;
     };
     std::vector<Tables::character_class> classes{};
     std::set<Defs::race> suitableRaces{Defs::race::half_elf};
@@ -2596,7 +2595,7 @@ TEST_CASE("[TC-CGEN.056] Multiclass combinations of fighter or mage with thief c
 
     auto alignAllowed = [](const Tables::moral_alignment& a) -> bool
     {
-        return static_cast<Defs::moral_alignment>(a.id) != Defs::moral_alignment::lawful_good;
+        return a.id != Defs::moral_alignment::lawful_good;
     };
 
     for (auto& cls : multiclass)

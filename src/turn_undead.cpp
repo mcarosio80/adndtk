@@ -34,8 +34,8 @@ void Adndtk::TurnUndead::init()
     for (auto& t : turnUndead)
     {
         auto level = static_cast<ExperienceLevel>(t.level);
-        auto turnableCode = static_cast<Defs::turnable>(t.turnable_code);
-        auto effect = static_cast<Defs::turn_effect>(t.effect);
+        auto turnableCode = t.turnable_code;
+        auto effect = t.effect;
         auto value = static_cast<std::optional<short>>(t.value);
         _turnScores[level][turnableCode] = std::make_pair(effect, value);
     }

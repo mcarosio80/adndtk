@@ -33,8 +33,8 @@ void Adndtk::CoinExchange::init()
 
     for (auto& t : result)
     {
-        auto coinFrom = static_cast<Defs::coin>(t.as<int>("coin_from"));
-        auto coinTo = static_cast<Defs::coin>(t.as<int>("coin_to"));
+        auto coinFrom = t.as<Defs::coin>("coin_from");
+        auto coinTo = t.as<Defs::coin>("coin_to");
         auto fx = t.as<double>("exchange_value");
 
         _exchangeRates[coinFrom][coinTo] = fx;

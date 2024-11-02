@@ -20,7 +20,16 @@ namespace CliTools
             getline(std::cin, input);
             std::stringstream ss{input};
             try{
-                ss >> ret;
+                if constexpr(std::is_enum<_RetType>::value)
+                {
+                    int iValue{};
+                    ss >> iValue;
+                    ret = static_cast<_RetType>(iValue);
+                }
+                else
+                {
+                    ss >> ret;
+                }
                 continuePrompt = false;
             }
             catch(...)

@@ -92,11 +92,10 @@ short Adndtk::ThiefAbility::level_change(const ExperienceLevel& newLevel)
 
 void Adndtk::ThiefAbility::set_race_abilities(const Defs::race& race)
 {
-    short id = static_cast<short>(race);
-    auto res = Cyclopedia::get_instance().exec_prepared_statement<short>(Query::select_thieving_skill_racial_adjustments, id);
+    auto res = Cyclopedia::get_instance().exec_prepared_statement<Defs::race>(Query::select_thieving_skill_racial_adjustments, race);
     for (auto& r : res)
     {
-        Defs::thief_ability thievingSkill = static_cast<Defs::thief_ability>(r.as<short>("thieving_skill"));
+        auto thievingSkill = r.as<Defs::thief_ability>("thieving_skill");
         auto modifier = r.try_or<short>("modifier", 0);
         _raceModifiers[thievingSkill] = modifier;
     }
@@ -107,8 +106,7 @@ void Adndtk::ThiefAbility::set_armour_abilities(const std::optional<Defs::equipm
     QueryResultSet res{};
     if (armourId.has_value())
     {
-        short id = static_cast<short>(armourId.value());
-        res = Cyclopedia::get_instance().exec_prepared_statement<short>(Query::select_thieving_skill_armour_adjustments, id);
+        res = Cyclopedia::get_instance().exec_prepared_statement<Defs::equipment>(Query::select_thieving_skill_armour_adjustments, armourId.value());
     }
     else
     {
@@ -117,8 +115,8 @@ void Adndtk::ThiefAbility::set_armour_abilities(const std::optional<Defs::equipm
 
     for (auto& r : res)
     {
-        Defs::thief_ability thievingSkill = static_cast<Defs::thief_ability>(r.as<short>("thieving_skill"));
-        short modifier = r.try_or<short>("modifier", 0);
+        auto thievingSkill = r.as<Defs::thief_ability>("thieving_skill");
+        auto modifier = r.try_or<short>("modifier", 0);
 
         _armourModifiers[thievingSkill] = modifier;
     }
@@ -129,8 +127,8 @@ void Adndtk::ThiefAbility::set_dexterity_abilities(const short& skillValue)
     auto res = Cyclopedia::get_instance().exec_prepared_statement<short>(Query::select_thieving_skill_dexterity_adjustments, skillValue);
     for (auto& r : res)
     {
-        Defs::thief_ability thievingSkill = static_cast<Defs::thief_ability>(r.as<short>("thieving_skill"));
-        short modifier = r.try_or<short>("modifier", 0);
+        Defs::thief_ability thievingSkill = r.as<Defs::thief_ability>("thieving_skill");
+        auto modifier = r.try_or<short>("modifier", 0);
         _dexterityModifiers[thievingSkill] = modifier;
     }
 }
@@ -140,8 +138,8 @@ void Adndtk::ThiefAbility::set_base_abilities()
     auto res = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_thief_ability_base_scores);
     for (auto& r : res)
     {
-        Defs::thief_ability ability = static_cast<Defs::thief_ability>(r.as<short>("id"));
-        short score = static_cast<short>(r.as<short>("base_score"));
+        auto ability = r.as<Defs::thief_ability>("id");
+        auto score = r.as<short>("base_score");
 
         _baseAbilities[ability] = score;
     }

@@ -76,9 +76,8 @@ short Adndtk::SkillCreator::get_race_adjustments(const Defs::skill &skillType, c
 {
     int minValue{0};
     int maxValue{20};
-    auto raceId = static_cast<int>(race);
     auto query = Query::select_skill_modifier;
-    auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<int, int>(query, raceId, static_cast<int>(skillType));
+    auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<Defs::race, Defs::skill>(query, race, skillType);
 
     short raceSkillModifier{0};
     if (raceModifier.size() > 0 && raceModifier[0]["value"].has_value())
@@ -113,7 +112,7 @@ std::pair<int, int> Adndtk::SkillCreator::get_class_boundaries(const Defs::skill
     Defs::character_class_type clsType{};
     if (result.size() > 0 && result[0]["class_type_id"].has_value())
     {
-        clsType = static_cast<Defs::character_class_type>(result[0].as<int>("class_type_id"));
+        clsType = result[0].as<Defs::character_class_type>("class_type_id");
     }
 
     auto clsTypLimits = get_class_type_boundaries(skillType, clsType);

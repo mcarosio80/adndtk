@@ -15,14 +15,14 @@ Adndtk::Calendar::Calendar(const Defs::calendar& calendarId)
     {
         auto& r = calInfo[0];
         _name = r.as<std::string>("name");
-        _campaignId = static_cast<Defs::campaign_settings>(r.as<int>("campaign_settings_id"));
+        _campaignId = r.as<Defs::campaign_settings>("campaign_settings_id");
     }
 
     auto reckoningsInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::calendar>(Query::select_calendar_reckonings, _id);
     {
         for (auto& r : reckoningsInfo)
         {
-            auto reckId = static_cast<Defs::calendar_reckoning>(r.as<int>("id"));
+            auto reckId = r.as<Defs::calendar_reckoning>("id");
             auto reckName = r.as<std::string>("name");
             auto acronym = r.as<std::string>("acronym");
             auto baseYear = r.as<uint16_t>("base_year");
@@ -34,7 +34,7 @@ Adndtk::Calendar::Calendar(const Defs::calendar& calendarId)
     {
         for (auto& r : monthsInfo)
         {
-            auto monthId = static_cast<Defs::calendar_month>(r.as<int>("id"));
+            auto monthId = r.as<Defs::calendar_month>("id");
             auto monthName = r.as<std::string>("name");
             auto monthDuration = r.as<uint16_t>("duration");
             _months[monthId] = std::make_pair(monthName, monthDuration);
@@ -45,7 +45,7 @@ Adndtk::Calendar::Calendar(const Defs::calendar& calendarId)
     {
         for (auto& r : specDaysInfo)
         {
-            auto specDayId = static_cast<Defs::calendar_special_day>(r.as<int>("id"));
+            auto specDayId = r.as<Defs::calendar_special_day>("id");
             auto dayName = r.as<std::string>("name");
             auto yearDay = r.try_or<uint16_t>("year_day", 0);
             auto leapYearDay = r.as<uint16_t>("leap_year_day");

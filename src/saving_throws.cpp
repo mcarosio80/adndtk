@@ -32,10 +32,10 @@ void Adndtk::SavingThrows::init()
 
     for (auto& t : result)
     {
-        auto cType = static_cast<Defs::character_class_type>(t.as<int>("class_type_id"));
-        auto level = static_cast<ExperienceLevel>(t.as<int>("level"));
-        auto savId = static_cast<Defs::saving_throw>(t.as<int>("saving_throw_id"));
-        auto score = static_cast<SavingScore>(t.as<int>("score"));
+        auto cType = t.as<Defs::character_class_type>("class_type_id");
+        auto level = t.as<ExperienceLevel>("level");
+        auto savId = t.as<Defs::saving_throw>("saving_throw_id");
+        auto score = t.as<SavingScore>("score");
 
         _savingScores[cType][level][savId] = score;
     }

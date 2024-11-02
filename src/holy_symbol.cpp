@@ -136,7 +136,7 @@ Adndtk::SpellLevel Adndtk::HolySymbol::get_spell_level(const Defs::priest_spell&
 {
     auto rsSpellInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::priest_spell>(Query::select_priest_spell, spellId);
     auto& spellInfo = rsSpellInfo[0];
-    SpellLevel spellLevel = static_cast<SpellLevel>(spellInfo.as<int>("level"));
+    SpellLevel spellLevel = spellInfo.as<SpellLevel>("level");
     
     return spellLevel;
 }
@@ -150,19 +150,19 @@ bool Adndtk::HolySymbol::exists(const Defs::priest_spell& spellId)
 
 void Adndtk::HolySymbol::enable_levels() 
 {
-    auto lvl = std::min<short>(static_cast<short>(_casterLevel), 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
 
     Query queryId = get_spell_progression_query_id();
-    auto rs = Cyclopedia::get_instance().exec_prepared_statement<short>(queryId, lvl);
+    auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
 
-    _actualCasterLevel = prog.try_or<short>("casting_level", _casterLevel);
+    _actualCasterLevel = prog.try_or<ExperienceLevel>("casting_level", _casterLevel);
 
     for (SpellLevel sl=1; sl<=Const::holy_symbol_limit; ++sl)
     {
         std::stringstream ss;
         ss << "spell_level_" << sl;
-        if (prog.try_as<short>(ss.str()).has_value())
+        if (prog.try_as<ExperienceLevel>(ss.str()).has_value())
         {
             fill_level(sl);
         }
@@ -259,20 +259,20 @@ void Adndtk::HolySymbol::fill_level(const SpellLevel& spellLevel)
     QueryResultSet spells;
     if (_deityId.has_value())
     {
-        auto deityId = static_cast<short>(_deityId.value());
-        auto lvl = static_cast<short>(spellLevel);
-        spells = Cyclopedia::get_instance().exec_prepared_statement<short, short>(Query::select_priest_spells_per_level_deity, lvl, deityId);
+        spells = Cyclopedia::get_instance().exec_prepared_statement<SpellLevel, Defs::deity>(
+            Query::select_priest_spells_per_level_deity, spellLevel, _deityId.value()
+        );
     }
     else
     {
-        auto cls = static_cast<short>(_casterClass);
-        auto lvl = static_cast<short>(spellLevel);
-        spells = Cyclopedia::get_instance().exec_prepared_statement<short, short>(Query::select_priest_spells_per_class_level, cls, lvl);
+        spells = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class, SpellLevel>(
+            Query::select_priest_spells_per_class_level, _casterClass, spellLevel
+        );
     }
 
     for (auto& s : spells)
     {
-        auto spellId = static_cast<Defs::priest_spell>(s.as<short>("id"));
+        auto spellId = s.as<Defs::priest_spell>("id");
         _spells[spellLevel][spellId] = 0;
     }
 }

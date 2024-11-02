@@ -21,13 +21,11 @@ Adndtk::HitPoints::HitPoints(const Defs::character_class& cls)
         auto clsType = clsInfo.as<Defs::character_class_type>("class_type_id");
 
         auto clsTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Adndtk::Query::select_character_class_type, clsType);
-        auto hdFaces = clsTypeInfo[0].as<int>("hit_dice");
+        _hitDice[clsId] = clsTypeInfo[0].as<Defs::die>("hit_dice");
         auto titleLevel = clsTypeInfo[0].as<short>("title_level");
         _titleLevel[clsId] = titleLevel;
         auto hpAfterTitle = clsTypeInfo[0].as<short>("hp_after_title");
         _hpAfterTitle[clsId] = hpAfterTitle;
-
-        _hitDice[clsId] = static_cast<Defs::die>(hdFaces);
         
         HP pts = generate_hp(clsId, 1);
         _hps[clsId].push_back(pts);
@@ -129,7 +127,7 @@ Adndtk::HP Adndtk::HitPoints::total() const
         for (int i=1; i<_levels.at(x.first); ++i)
         {
             HP pts = std::div(x.second[i], _hps.size()).quot;
-            total += std::max(1, static_cast<int>(pts));
+            total += std::max<HP>(1, pts);
         }
     }
     return total;

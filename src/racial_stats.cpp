@@ -163,7 +163,7 @@ std::map<Adndtk::Defs::skill, short> Adndtk::RacialStats::get_skill_modifiers(co
 
 	for (auto& r : rs)
 	{
-		auto id = static_cast<Defs::aging_effects>(r.as<int>("id"));
+		auto id = r.as<Defs::aging_effects>("id");
 		if (id > ageRangeFrom && id <= ageRangeTo)
 		{
 			strModifier += r.as<short>("strength_modifier");

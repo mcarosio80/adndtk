@@ -20,13 +20,13 @@ Adndtk::Experience::Experience(const Adndtk::Defs::character_class& cls, const D
         _xpBonus[c] = Const::xp_bonus_none;
     }
 
-    int clsId = static_cast<int>(cls);
-    int raceId = static_cast<int>(race);
-    auto limits = Cyclopedia::get_instance().exec_prepared_statement<int, int>(Query::select_class_limits, clsId, raceId);
+    auto limits = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class, Defs::race>(
+        Query::select_class_limits, cls, race
+    );
     for (auto& l : limits)
     {
-        auto classId = static_cast<Defs::character_class>(l.as<int>("class_id"));
-        auto lvlLimit = static_cast<ExperienceLevel>(l.as<int>("level_limit"));
+        auto classId = l.as<Defs::character_class>("class_id");
+        auto lvlLimit = l.as<ExperienceLevel>("level_limit");
         _limits[classId] = lvlLimit;
     }
 }

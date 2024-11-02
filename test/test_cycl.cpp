@@ -9,7 +9,6 @@ using namespace Adndtk;
 TEST_CASE("[TC-CYCL.001] Reading text data from knowledge base returns the whole text", "[cyclopedia]" )
 {
     auto cls = Defs::character_class::fighter_mage;
-    auto clsId = static_cast<int>(cls);
     auto results = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(Query::select_character_class, cls);
     auto& r = results[0];
 

@@ -162,7 +162,6 @@ Adndtk::Defs::character_class_type Adndtk::MoneyBag::select_class_type_for_money
 	uint32_t maxAmount{0};
 	for (auto& t : types)
 	{
-		auto typeId = static_cast<int>(t);
 		auto rs = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Query::select_starting_money, t);
 		auto& startingMoney = rs[0];
 

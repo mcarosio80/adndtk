@@ -12,7 +12,7 @@
 
 bool Adndtk::TreasurePool::_initialised = false;
 
-using TreasureInfo = std::tuple<short, uint32_t, uint32_t, std::optional<int>>;
+using TreasureInfo = std::tuple<short, uint32_t, uint32_t, std::optional<Adndtk::Defs::treasure_nature>>;
 
 Adndtk::TreasurePool::TreasurePool()
     : _lastItemId{0}, _rd{}, _generator{_rd()}, _uniformDistribution{_valuesFrom, _valuesTo}
@@ -56,7 +56,7 @@ Adndtk::Defs::gem Adndtk::TreasurePool::pick_gem()
 	auto prob = d.roll();
 
     auto getTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_gem_type, prob);
-    auto gemType = static_cast<Defs::gem_type>(getTypeInfo[0].as<int>("id"));
+    auto gemType = getTypeInfo[0].as<Defs::gem_type>("id");
 
     auto gemIds = Cyclopedia::get_instance().exec_prepared_statement<Defs::gem_type>(Query::select_gems_by_type, gemType);
 
@@ -70,7 +70,7 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_magical()
 	auto prob = d.roll();
 
     auto info = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_magical_item_type_by_probability, prob);
-    auto magicalItemType = static_cast<Defs::magical_item_type>(info[0].as<int>("id"));
+    auto magicalItemType = info[0].as<Defs::magical_item_type>("id");
 
 	Defs::magical_item magicalItem{};
 	if (magicalItemType == Defs::magical_item_type::potions_and_oils)
@@ -155,9 +155,10 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_potion()
 	auto d6 = Die{Defs::die::d6};
 	auto subtableIndex = d6.roll();
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::potions_and_oils);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::potions_and_oils, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_scroll()
@@ -165,10 +166,10 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_scroll()
 	auto d6 = Die{Defs::die::d6};
 	auto subtableIndex = d6.roll();
 	auto itemIndex = (subtableIndex >= 5) ? Die::roll(2, 19) : Die::roll(1, 100);
-	
-	auto itemType = static_cast<int>(Defs::magical_item_type::scrolls);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::scrolls, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_ring()
@@ -176,45 +177,50 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_ring()
 	auto d6 = Die{Defs::die::d6};
 	auto subtableIndex = d6.roll();
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::rings);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::rings, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_rod()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::rods);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::rods, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_stave()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::staves);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::staves, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_wand()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::wands);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::wands, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_book()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::books_and_tomes);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::books_and_tomes, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_jewel()
@@ -222,72 +228,80 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_jewel()
 	auto d6 = Die{Defs::die::d6};
 	auto subtableIndex = d6.roll();
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::jewels_and_jewelry);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::jewels_and_jewelry, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_cloak()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::cloaks_and_robes);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::cloaks_and_robes, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_boot()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::boots_and_gloves);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::boots_and_gloves, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_girdle()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::girdles_and_helms);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::girdles_and_helms, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_bag()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::bags_and_bottles);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::bags_and_bottles, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_dust()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::dusts_and_stones);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::dusts_and_stones, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_household()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::household_items_and_tools);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::household_items_and_tools, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_musical()
 {
 	auto subtableIndex = 1;
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::musical_instruments);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::musical_instruments, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_wierd()
@@ -295,9 +309,10 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_wierd()
 	auto d6 = Die{Defs::die::d6};
 	auto subtableIndex = d6.roll();
 	auto itemIndex = Die::roll(1, 19);
-	auto itemType = static_cast<int>(Defs::magical_item_type::the_wierd_stuff);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::the_wierd_stuff, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_armour()
@@ -312,9 +327,10 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_armour()
 		subtableIndex = 2;
 	}
 
-	auto itemType = static_cast<int>(Defs::magical_item_type::armour_and_shields);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::armour_and_shields, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_weapon()
@@ -330,9 +346,10 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_weapon()
 		subtableIndex = Die::roll(11, 20);
 	}
 
-	auto itemType = static_cast<int>(Defs::magical_item_type::weapons);
-    auto info = Cyclopedia::get_instance().exec_prepared_statement<int, int, int>(Query::select_magical_item_by_type_and_probability, itemType, subtableIndex, itemIndex);
-    return static_cast<Defs::magical_item>(info[0].as<int>("id"));
+    auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
+		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::weapons, subtableIndex, itemIndex
+	);
+    return info[0].as<Defs::magical_item>("id");
 }
 
 
@@ -351,13 +368,13 @@ Adndtk::Gem::Gem(const Defs::gem& gemId)
 	
 	auto& i = gemInfo[0];
 	_name = i.as<std::string>("name");
-	_gemType = static_cast<Defs::gem_type>(i.as<int>("type"));
+	_gemType = i.as<Defs::gem_type>("type");
 
-	auto v = i.try_as<int>("value_range_coin");
-	auto rangeCoin = (v.has_value()) ? std::make_optional(static_cast<Defs::coin>(v.value())) : std::nullopt;
+	auto v = i.try_as<Defs::coin>("value_range_coin");
+	auto rangeCoin = (v.has_value()) ? std::make_optional(v.value()) : std::nullopt;
 	auto rangeFrom = i.try_as<uint32_t>("value_range_from");
 	auto rangeTo = i.try_as<uint32_t>("value_range_to");
-	auto baseCoin = static_cast<Defs::coin>(i.as<int>("base_coin"));
+	auto baseCoin = i.as<Defs::coin>("base_coin");
 	auto baseValue = i.as<uint32_t>("base_value");
 
 	_value = TreasurePool::get_instance().generate_value(rangeCoin, rangeFrom, rangeTo, baseCoin, baseValue);
@@ -383,9 +400,9 @@ Adndtk::ObjectOfArt::ObjectOfArt(const std::optional<std::string> name/*=std::nu
 	auto& i = objInfo[0];
 
 	_objectType = i.as<short>("id");
-	auto coin = static_cast<Defs::coin>(i.as<short>("value_coin"));
-	auto valueFrom = i.as<int>("value_from");
-	auto valueTo = i.as<int>("value_to");
+	auto coin = i.as<Defs::coin>("value_coin");
+	auto valueFrom = i.as<uint32_t>("value_from");
+	auto valueTo = i.as<uint32_t>("value_to");
 
 	_value = TreasurePool::get_instance().generate_value(coin, valueFrom, valueTo);
 }
@@ -427,28 +444,34 @@ Adndtk::MagicalItem::MagicalItem(const Defs::magical_item& itemId)
 	if (limits.size() > 0)
 	{
 		auto& l = limits[0];
-		auto allowedClasses = l.try_as<int>("allowed_class_id");
-		auto classes = Cyclopedia::get_instance().split<int>(allowedClasses.value_or(0));
-		for (auto& c : classes)
+		auto allowedClasses = l.try_as<Defs::character_class>("allowed_class_id");
+		if (allowedClasses.has_value())
 		{
-			auto cls = static_cast<Defs::character_class>(c);
-			_allowedClasses.emplace(cls);
+			auto classes = Cyclopedia::get_instance().split<Defs::character_class>(allowedClasses.value());
+			for (auto& cls : classes)
+			{
+				_allowedClasses.emplace(cls);
+			}
 		}
 
-		auto allowedClassTypes = l.try_as<int>("allowed_class_type_id");
-		auto clsTypes = Cyclopedia::get_instance().split<int>(allowedClassTypes.value_or(0));
-		for (auto& ct : clsTypes)
+		auto allowedClassTypes = l.try_as<Defs::character_class_type>("allowed_class_type_id");
+		if (allowedClassTypes.has_value())
 		{
-			auto cType = static_cast<Defs::character_class_type>(ct);
-			_allowedClassTypes.emplace(cType);
+			auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(allowedClassTypes.value());
+			for (auto& cType : clsTypes)
+			{
+				_allowedClassTypes.emplace(cType);
+			}
 		}
 
-		auto allowedAlignments = l.try_as<int>("allowed_alignment_id");
-		auto aligns = Cyclopedia::get_instance().split<int>(allowedAlignments.value_or(0));
-		for (auto& a : aligns)
+		auto allowedAlignments = l.try_as<Defs::moral_alignment>("allowed_alignment_id");
+		if (allowedAlignments.has_value())
 		{
-			auto align = static_cast<Defs::moral_alignment>(a);
-			_allowedAlignments.emplace(align);
+			auto aligns = Cyclopedia::get_instance().split<Defs::moral_alignment>(allowedAlignments.value());
+			for (auto& align : aligns)
+			{
+				_allowedAlignments.emplace(align);
+			}
 		}
 	}
 }
@@ -476,7 +499,6 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
       _objectsOfArt{},
       _magicalItems{}
 {
-	auto treasCls = static_cast<short>(cls);
     auto components = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_treasure_components);
 
 	auto compIds = components.to_vector<short>("id");
@@ -486,7 +508,9 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 
 	for (auto& compId : compIds)
 	{
-		auto treasureComposition = Cyclopedia::get_instance().exec_prepared_statement<short, short>(Query::select_treasure_composition, treasCls, compId);
+		auto treasureComposition = Cyclopedia::get_instance().exec_prepared_statement<Defs::treasure_class, short>(
+			Query::select_treasure_composition, cls, compId
+		);
 
 		if (treasureComposition.size() > 0)
 		{
@@ -494,8 +518,8 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 			auto countFrom = t.try_or<uint32_t>("count_from", 0);
 			auto countTo = t.try_or<uint32_t>("count_to", 0);
 			auto probability = t.try_or<int>("probability", 0);
-			auto nature = t.try_as<int>("nature");
-			auto additionalNature = t.try_as<int>("additional_nature");
+			auto nature = t.try_as<Defs::treasure_nature>("nature");
+			auto additionalNature = t.try_as<Defs::treasure_nature>("additional_nature");
 			auto additionalCount = t.try_as<int>("additional_count");
 
     		if (roll_for_component(d100, probability))
@@ -578,37 +602,38 @@ void Adndtk::Treasure::add_object_of_art(const uint32_t& countFrom, const uint32
 	}
 }
 
-std::vector<Adndtk::Defs::magical_item_type> Adndtk::Treasure::get_magical_types(const int& nature)
+std::vector<Adndtk::Defs::magical_item_type> Adndtk::Treasure::get_magical_types(const Defs::treasure_nature& nature)
 {
 	std::vector<Defs::magical_item_type> magicalItemTypes{};
+	auto natureValue = static_cast<int>(nature);
 
-	if (nature & static_cast<int>(Defs::treasure_nature::magical_weapon))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::magical_weapon))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::weapons);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::magical_armour))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::magical_armour))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::armour_and_shields);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::potions_and_oils))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::potions_and_oils))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::potions_and_oils);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::scrolls))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::scrolls))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::scrolls);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::rings))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::rings))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::rings);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::wands_staves_and_rods))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::wands_staves_and_rods))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::wands);
 		magicalItemTypes.push_back(Defs::magical_item_type::staves);
 		magicalItemTypes.push_back(Defs::magical_item_type::rods);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::miscellaneous))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::miscellaneous))
 	{
 		magicalItemTypes.push_back(Defs::magical_item_type::books_and_tomes);
 		magicalItemTypes.push_back(Defs::magical_item_type::jewels_and_jewelry);
@@ -621,15 +646,14 @@ std::vector<Adndtk::Defs::magical_item_type> Adndtk::Treasure::get_magical_types
 		magicalItemTypes.push_back(Defs::magical_item_type::musical_instruments);
 		magicalItemTypes.push_back(Defs::magical_item_type::the_wierd_stuff);
 	}
-	if (nature & static_cast<int>(Defs::treasure_nature::artifacts_and_relics))
+	if (natureValue & static_cast<int>(Defs::treasure_nature::artifacts_and_relics))
 	{
 	}
 
 	return magicalItemTypes;
 }
 
-//void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature, const std::optional<int>& additionalComponent, const std::optional<int>& additionalCount)
-void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const int& nature)
+void Adndtk::Treasure::add_magical_item(const uint32_t& countFrom, const uint32_t& countTo, const Defs::treasure_nature& nature)
 {
 	auto count = (countFrom == countTo) ? countFrom : Die::roll(countFrom, countTo);
 
