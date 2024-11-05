@@ -33,7 +33,7 @@ Then the user is proposed a list of available races, according to the skills req
 
 Step by step from a selected set of skills:
 <pre>
-$ adndtk-cli -s <skills-list>
+$ adndtk-cli -s [skills-list]
 </pre>
 Skills are taken from the user and must be in the standard order (i.e. Strength, Dexterity, Constitution, Intelligence, Wisdom and Charisma). The values provided must fall in the range 3-18.
 This option is designed for those who prefer to roll their own dice and submit those values to the system.
@@ -43,7 +43,7 @@ The user is then asked if they want to keep it, reroll it or insert their's own.
 
 Step by step from a selected class:
 <pre>
-$ adndtk-cli -c <class ID>
+$ adndtk-cli -c [class ID]
 </pre>
 Class ID can be any of the full name or acronym of the available classes. The table below summarise the available option values:
 | Class Full name               | Short name                    | Acronym   |
