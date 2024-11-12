@@ -218,12 +218,12 @@ configure_file(${CFG_DIR}/config.h.in ${DEPLOY_DIR}/config.h)
 
 message("Adding subdirectory src")
 add_subdirectory(src)
-# message("Adding subdirectory demo")
-# add_subdirectory(demo)
-# message("Adding subdirectory test")
-# add_subdirectory(test)
-# message("Adding subdirectory cli")
-# add_subdirectory(cli)
+message("Adding subdirectory demo")
+add_subdirectory(demo)
+message("Adding subdirectory test")
+add_subdirectory(test)
+message("Adding subdirectory cli")
+add_subdirectory(cli)
 
 
 
