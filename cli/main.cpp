@@ -316,29 +316,26 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
 {
     // Choose a Race
     auto selectedRace = choose_race(skills);
-    auto raceId = static_cast<Adndtk::Defs::race>(selectedRace.id);
     std::cout << "Your race is " << selectedRace.name << ".\n";
 
     for (auto& skl : Adndtk::Tables::skill::fetch_all())
     {
-        auto skillId = static_cast<Adndtk::Defs::skill>(skl.id);
-        auto raceSkillModifier = Adndtk::SkillCreator::get_race_adjustments(skillId, raceId);
+        auto raceSkillModifier = Adndtk::SkillCreator::get_race_adjustments(skl.id, selectedRace.id);
         if (raceSkillModifier != 0)
         {
-            std::cout << skl.name << " value changes by race modifier: " << skills[skillId];
-            skills[skillId] += raceSkillModifier;
-            std::cout << " ==> " << skills[skillId] << "\n";
+            std::cout << skl.name << " value changes by race modifier: " << skills[skl.id];
+            skills[skl.id] += raceSkillModifier;
+            std::cout << " ==> " << skills[skl.id] << "\n";
         }
     }
 
     // Select a Class
     //TODO??? Handle demihumans with skill scores = 19 -> no classes available
-    auto selectedClass = choose_class(skills, static_cast<Adndtk::Defs::race>(selectedRace.id));
-    auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);
+    auto selectedClass = choose_class(skills, selectedRace.id);
     std::cout << "Your class is " << selectedClass.long_name << ".\n";
 
     // Determine if entitoled to exceptional strength
-    if (Adndtk::Cyclopedia::get_instance().can_have_exceptional_strength(clsId, raceId, skills[Adndtk::Defs::skill::strength]))
+    if (Adndtk::Cyclopedia::get_instance().can_have_exceptional_strength(selectedClass.id, selectedRace.id, skills[Adndtk::Defs::skill::strength]))
     {
         auto excValue = select_exceptional_strength();
         skills[Adndtk::Defs::skill::strength].setExceptionalStrength(excValue);
@@ -346,7 +343,7 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     }
 
     // Choose an Alignment
-    auto selectedAlignment = choose_moral_alignment(clsId);
+    auto selectedAlignment = choose_moral_alignment(selectedClass.id);
     std::cout << "Your choice is " << selectedAlignment.name << ".\n";
 
     // Choose a Sex
@@ -354,7 +351,7 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     std::cout << "Your choice is " << selectedSex.name << ".\n";
 
     // Select a faith
-    auto selectedDeity = choose_deity(clsId, selectedAlignment.id);
+    auto selectedDeity = choose_deity(selectedClass.id, selectedAlignment.id);
     std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
     if (selectedDeity.has_value())
     {
@@ -375,7 +372,7 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
 
     Adndtk::Character chr{charName,
             selectedClass.id,
-            static_cast<Adndtk::Defs::race>(selectedRace.id),
+            selectedRace.id,
             selectedAlignment.id,
             selectedSex.id, 
             optDeityId,
@@ -395,7 +392,6 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
 {
     // Choose a Race
     auto selectedRace = choose_race(classId);
-    auto raceId = static_cast<Adndtk::Defs::race>(selectedRace.id);
     std::cout << "Your race is " << selectedRace.name << ".\n";
 
     // Choose an Alignment
@@ -407,12 +403,11 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     std::cout << "Your choice is " << selectedSex.name << ".\n";
 
     // Select a faith
-    //TODO??? Make mandatory fro priests
     auto selectedDeity = choose_deity(classId, selectedAlignment.id);
     std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
     if (selectedDeity.has_value())
     {
-        optDeityId = static_cast<Adndtk::Defs::deity>(selectedDeity.value().id);
+        optDeityId = selectedDeity.value().id;
         std::cout << "Your choice is " << selectedDeity.value().name << ".\n";
     }
     else
@@ -432,7 +427,7 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
 
     Adndtk::Character chr{charName,
             classId,
-            static_cast<Adndtk::Defs::race>(selectedRace.id),
+            selectedRace.id,
             selectedAlignment.id,
             selectedSex.id, 
             optDeityId,
@@ -532,8 +527,7 @@ void print_summary(const Adndtk::Character& chr)
     auto savingThrows = Adndtk::Tables::saving_throw::fetch_all();
     for (auto& st : savingThrows)
     {
-        auto savId = static_cast<Adndtk::Defs::saving_throw>(st.id);
-        std::cout << "\t" << std::left << std::setw(20) << st.description << chr.save_score(savId) << "\n";
+        std::cout << "\t" << std::left << std::setw(20) << st.description << chr.save_score(st.id) << "\n";
     }
 
     std::cout << "\nRacial traits:\n";
@@ -549,7 +543,6 @@ void print_summary(const Adndtk::Character& chr)
     auto coins = Adndtk::Tables::coin::fetch_all();
     for (auto& c : coins)
     {
-        auto type = static_cast<Adndtk::Defs::coin>(c.id);
-        std::cout << "\t" << std::left << std::setw(4) << c.acronym << std::right << std::setw(3) << chr.money()[type] << "\n";
+        std::cout << "\t" << std::left << std::setw(4) << c.acronym << std::right << std::setw(3) << chr.money()[c.id] << "\n";
     }
 }
