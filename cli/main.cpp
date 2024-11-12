@@ -233,12 +233,15 @@ Adndtk::Tables::sex choose_sex()
 
 std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId)
 {
-    auto yesNo = CliTools::prompt<std::string>("Choose your faith? [Y/n]");
-    bool accept = (yesNo == "y" || yesNo == "Y");
+    auto isPriest = Adndtk::Cyclopedia::get_instance().is_type_of<Adndtk::Defs::character_class_type::priest>(clsId);
 
-    if (!accept)
+    if (!isPriest)
     {
-        return std::nullopt;
+        auto yesNo = CliTools::prompt<std::string>("Choose your faith? [Y/n]");
+        if (yesNo != "y" && yesNo != "Y")
+        {
+            return std::nullopt;
+        }
     }
 
     auto cults = Adndtk::Tables::cult::to_map<Adndtk::Defs::cult>("id");
@@ -329,6 +332,7 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     }
 
     // Select a Class
+    //TODO??? Handle demihumans with skill scores = 19 -> no classes available
     auto selectedClass = choose_class(skills, static_cast<Adndtk::Defs::race>(selectedRace.id));
     auto clsId = static_cast<Adndtk::Defs::character_class>(selectedClass.id);
     std::cout << "Your class is " << selectedClass.long_name << ".\n";
@@ -403,6 +407,7 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     std::cout << "Your choice is " << selectedSex.name << ".\n";
 
     // Select a faith
+    //TODO??? Make mandatory fro priests
     auto selectedDeity = choose_deity(classId, selectedAlignment.id);
     std::optional<Adndtk::Defs::deity> optDeityId{std::nullopt};
     if (selectedDeity.has_value())
