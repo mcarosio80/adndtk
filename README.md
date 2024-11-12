@@ -48,6 +48,42 @@ Check out the [requisites](REQUISITES.md) for project dependencies.
 ## CLI - Command line tool
 AdndTK comes with a specifically designed tool that allows to use the library features interactively, i.e. [adndtk-cli tool](cli/README.md). See the related documentation for further information.
 
+## Installation
+To deploy AdndTK and related components to your machine, you first need to configure the build as above. Just add a flag to specify the build type (i.e. Debug or Release):
+<pre>
+$ mkdir -p build/
+$ cd build/
+$ cmake .. -DCMAKE_BUILD_TYPE=Debug|Release
+</pre>
+Then, build the toolkit as usual
+<pre>
+$ cmake --build . -j24
+</pre>
+Finally, run the configured installer as:
+<pre>
+$ sudo make install
+</pre>
+This will deploy the library and related public headers to the standard location in your machine.
+For example, on my linux machine the library location will look smething like this:
+
+![Logo](images/adndtk-lib-deployed.png)
+
+The header files will be located similarly:
+
+![Logo](images/adndtk-includes-deployed.png)
+
+The CLI tool will be deployed in your binary folder
+
+![Logo](images/adndtk-cli-deployed.png)
+
+and added to the command path, so you will be able to launch it from any place
+
+![Logo](images/adndtk-cli-running.png)
+
+The Sqlite DB will be deployed along with the library itself and the path in the config.h file adjusted accordingly. The db file will be located in a suitable directory
+
+![Logo](images/adndtk-db-deployed.png)
+
 ## Future development
 AdndTK is under heavy development. Many things can change without notice.
 A brief list of future changes, bug fixes and future improvement can be found in the project [Backlog](BACKLOG.md).

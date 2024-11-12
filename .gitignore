@@ -37,6 +37,7 @@ log/
 src/defs.h
 src/tables.h
 src/config.h
+deploy/*
 
 .vscode/
 CMakeLists.txt.user

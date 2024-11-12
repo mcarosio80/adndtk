@@ -19,3 +19,10 @@ target_link_directories(${CLI_TARGET}
 )
 
 target_link_libraries(${CLI_TARGET} adndtk ${Boost_LIBRARIES})
+
+
+# Install adndtk-cli
+install(TARGETS ${CLI_TARGET}
+    RUNTIME
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
