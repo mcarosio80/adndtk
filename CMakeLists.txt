@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18.4)
 
-project(adndtk
+set(ADNDTK_LIB adndtk)
+project(${ADNDTK_LIB}
     LANGUAGES CXX
     VERSION 0.24.20.1
     DESCRIPTION "AdndTK is an open C++ role playing games library. It aims to mimic the ruleset of Advanced Dungeons & Dragons 2nd Edition"
@@ -15,6 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
 
 option(RUN_UNIT_TESTS "Run unit tests after build" OFF)
 
+include(GNUInstallDirs)
 include(ExternalProject)
 
 #Find packages
@@ -43,9 +45,11 @@ set(SQL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sql)
 set(PY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/py)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
+set(DEPLOY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deploy)
 
 # Setup SQLite files
-set(DB_FILE ${DB_DIR}/adndtk.db)
+set(DB_NAME adndtk.db)
+set(DB_FILE ${DB_DIR}/${DB_NAME})
 set(DB_SCHEMA_FILE ${SQL_DIR}/schema.sql)
 set(DB_DATA_FILE ${SQL_DIR}/data.sql)
 set(DB_IDX_FILE ${SQL_DIR}/indexes.sql)
@@ -207,14 +211,25 @@ else()
 endif()
 
 
-
 configure_file(${CFG_DIR}/config.h.in ${SRC_DIR}/config.h)
+
+set(ADNDTK_DATABASE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${ADNDTK_LIB}/${CMAKE_PROJECT_VERSION}/data/${DB_NAME})
+configure_file(${CFG_DIR}/config.h.in ${DEPLOY_DIR}/config.h)
 
 message("Adding subdirectory src")
 add_subdirectory(src)
-message("Adding subdirectory demo")
-add_subdirectory(demo)
-message("Adding subdirectory test")
-add_subdirectory(test)
-message("Adding subdirectory cli")
-add_subdirectory(cli)
+# message("Adding subdirectory demo")
+# add_subdirectory(demo)
+# message("Adding subdirectory test")
+# add_subdirectory(test)
+# message("Adding subdirectory cli")
+# add_subdirectory(cli)
+
+
+
+# Install Sqlite DB
+install(
+    FILES
+        ${DB_FILE}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/${ADNDTK_LIB}/${CMAKE_PROJECT_VERSION}/data
+)
