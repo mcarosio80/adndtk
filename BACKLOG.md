@@ -12,6 +12,8 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 * Detect object included into the Area of Effect (to be used for spells)
 * Add Event Scheduler to control event sequence and time (to be used for spells)
 * Fix name generation for enum class magical_item (+1 or similar objects)
+* Revision of versioning as YEAR.MONTH
+* Include LICENSE header in files
 
 ## Planned changes
 
