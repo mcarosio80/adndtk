@@ -45,7 +45,8 @@
     ],
     "turn_undead" : [
         { "field" : "turnable_code", "type" : "Defs::turnable" },
-        { "field" : "effect", "type" : "Defs::turn_effect" }
+        { "field" : "effect", "type" : "Defs::turn_effect" },
+        { "field" : "level", "type" : "Adndtk::ExperienceLevel" }
     ],
     "equipment" : [
         { "field" : "id", "type" : "Defs::equipment" },
