@@ -22,10 +22,8 @@ Adndtk::HitPoints::HitPoints(const Defs::character_class& cls)
 
         auto clsTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class_type>(Adndtk::Query::select_character_class_type, clsType);
         _hitDice[clsId] = clsTypeInfo[0].as<Defs::die>("hit_dice");
-        auto titleLevel = clsTypeInfo[0].as<short>("title_level");
-        _titleLevel[clsId] = titleLevel;
-        auto hpAfterTitle = clsTypeInfo[0].as<short>("hp_after_title");
-        _hpAfterTitle[clsId] = hpAfterTitle;
+        _titleLevel[clsId] = clsTypeInfo[0].as<ExperienceLevel>("title_level");
+        _hpAfterTitle[clsId] = clsTypeInfo[0].as<HP>("hp_after_title");
         
         HP pts = generate_hp(clsId, 1);
         _hps[clsId].push_back(pts);
@@ -235,7 +233,7 @@ Adndtk::HP Adndtk::HitPoints::generate_hp(const Adndtk::Defs::character_class& c
 {
     if (lvl > _titleLevel[cls])
     {
-        return static_cast<HP>(_hpAfterTitle[cls]);
+        return _hpAfterTitle[cls];
     }
     if (OptionalRules::get_instance().option<bool>(Option::max_score_for_hd))
     {

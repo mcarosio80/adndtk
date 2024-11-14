@@ -51,8 +51,8 @@ namespace Adndtk
         std::map<Defs::character_class, std::vector<HP>>    _hps;
         std::map<Defs::character_class, ExperienceLevel>    _levels;
         std::map<Defs::character_class, Defs::die>          _hitDice;
-        std::map<Defs::character_class, short>              _titleLevel;
-        std::map<Defs::character_class, short>              _hpAfterTitle;
+        std::map<Defs::character_class, ExperienceLevel>    _titleLevel;
+        std::map<Defs::character_class, HP>                 _hpAfterTitle;
         HP                                                  _currentHP;
         std::vector<OnHPChange>                             _cbks;
         std::optional<int>                                  _constitutionAdjustment;
