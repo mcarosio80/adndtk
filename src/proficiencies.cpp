@@ -117,8 +117,7 @@ Adndtk::Defs::weapon_proficiency_level Adndtk::ProficiencySlots::add_weapon_prof
     {
         throw std::runtime_error("Specified equipment does not exist");
     }
-    auto equipType = static_cast<Defs::equipment_type>(itWpn->second.type);
-    if (equipType != Defs::equipment_type::weapons)
+    if (itWpn->second.type != Defs::equipment_type::weapons)
     {
         throw std::runtime_error("Specified equipment is not a weapon");
     }

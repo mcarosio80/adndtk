@@ -138,7 +138,7 @@ auto Adndtk::DataValidator::validate_class(const std::string& value) const -> st
     {
         if (value == c.long_name || value == c.short_name || value == c.acronym)
         {
-            return std::make_optional(static_cast<Adndtk::Defs::character_class>(c.id));
+            return std::make_optional(c.id);
         }
     }
 
