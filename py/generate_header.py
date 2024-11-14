@@ -58,7 +58,14 @@ def print_enum(lines, enumName, outFile, indentationLevel, isClass = True):
             countEnums += 1
 
         outFile.write(f"{indent(indentationLevel)}")
-        outFile.write("};\n")
+        outFile.write("};\n\n")
+
+        outFile.write(f"{indent(indentationLevel)}")
+        outFile.write(f"inline std::ostream& operator<<(std::ostream& out, const {enumName}& data)\n")
+        outFile.write(f"{indent(indentationLevel)}{{\n")
+        outFile.write(f"{indent(indentationLevel+1)}out << static_cast<std::underlying_type<{enumName}>::type>(data);\n")
+        outFile.write(f"{indent(indentationLevel+1)}return out;\n")
+        outFile.write(f"{indent(indentationLevel)}}}\n")
 
 ################################
 def print_help(exeName):
@@ -399,6 +406,9 @@ def generate_enum(dbPath, headerFile, namespaces, version, jsonConfig):
     
     with open(headerFile, 'w') as outFile:
         write_heading(outFile, headerFile, version, False)
+
+        outFile.write(f'#include <iostream>\n')
+        outFile.write(f'#include <type_traits>\n\n')
     
         indentation = open_namespace(outFile, namespaces)
 

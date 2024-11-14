@@ -249,7 +249,7 @@ std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_
     
     auto formatDeityMenu = [&](const Adndtk::Tables::deity& r, std::map<Adndtk::Defs::deity, Adndtk::Tables::deity>& menu) -> void
     {
-        std::cout << "\t[" << static_cast<int>(r.id) << "]:\t" << r.name << " (status: "
+        std::cout << "\t[" << r.id << "]:\t" << r.name << " (status: "
             << ranks[r.rank].description << ", cult: " << cults[r.cult].name << ")\n";
         menu[r.id] = r;
     };

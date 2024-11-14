@@ -404,7 +404,6 @@ void demo_thaco()
 void demo_turn_undead()
 {
     std::pair<Defs::turn_effect, std::optional<short>> res = TurnUndead::get_instance().get(15, Defs::turnable::skeleton);
-    std::cout << "Result: " << static_cast<int>(res.first) << std::endl;
-    //std::cout << "Result: " << res.second.value() << std::endl;
+    std::cout << "Result: " << res.first << std::endl;
     std::cout << "Result: " << std::boolalpha << res.second.has_value() << std::endl;
 }
