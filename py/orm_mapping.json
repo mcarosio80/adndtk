@@ -49,7 +49,9 @@
     ],
     "equipment" : [
         { "field" : "id", "type" : "Defs::equipment" },
-        { "field" : "body_slot", "type" : "Defs::body_slot" }
+        { "field" : "body_slot", "type" : "Defs::body_slot" },
+        { "field" : "type", "type" : "Defs::equipment_type" },
+        { "field" : "cost_coin", "type" : "Defs::coin" }
     ],
     "coin" : [
         { "field" : "id", "type" : "Defs::coin" }
