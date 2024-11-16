@@ -14,6 +14,7 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 * Fix name generation for enum class magical_item (+1 or similar objects)
 * Revision of versioning as YEAR.MONTH
 * Include LICENSE header in files
+* Add place of birth in character generation in CLI tool
 
 ## Planned changes
 
