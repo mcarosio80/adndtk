@@ -11,6 +11,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+string(TIMESTAMP CURRENT_YEAR "%Y")
+
 #Compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
 
@@ -212,6 +214,7 @@ endif()
 
 
 configure_file(${CFG_DIR}/config.h.in ${SRC_DIR}/config.h)
+configure_file(${CFG_DIR}/LICENSE.md.in ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
 
 set(ADNDTK_DATABASE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${ADNDTK_LIB}/${CMAKE_PROJECT_VERSION}/data/${DB_NAME})
 configure_file(${CFG_DIR}/config.h.in ${DEPLOY_DIR}/config.h)
