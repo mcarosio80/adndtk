@@ -14,6 +14,15 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 * Fix name generation for enum class magical_item (+1 or similar objects)
 * Revision of versioning as YEAR.MONTH
 * Add place of birth in character generation in CLI tool
+* CLI: Handle demihumans with skill scores = 19, resulting in no classes available
+* Check notes for Necromantic in DEITY_SPHERE_OF_INFLUENCE
+* Insert data into PLANE_ALIGNMENT
+* Insert data into DEITY_TITLE
+* Insert data into AREA_OF_CONTROL
+* Insert data into DEITY_AREA_OF_CONTROL
+* Insert data into DEITY_SPHERE_OF_INFLUENCE
+* Insert data into DEITY_AVATAR
+* Split SQL data files for DB
 
 ## Planned changes
 

@@ -330,7 +330,6 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     }
 
     // Select a Class
-    //TODO??? Handle demihumans with skill scores = 19 -> no classes available
     auto selectedClass = choose_class(skills, selectedRace.id);
     std::cout << "Your class is " << selectedClass.long_name << ".\n";
 
