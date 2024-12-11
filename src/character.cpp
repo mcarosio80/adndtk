@@ -403,8 +403,15 @@ Adndtk::Defs::attack_result Adndtk::Character::try_hit(const AC& ac, const short
 
 Adndtk::THAC0 Adndtk::Character::thaco() const
 {
-    auto xp = experience().level(_cls);
-    return _thaco.get(xp);
+    auto classes = Cyclopedia::get_instance().split(_cls);
+    std::vector<THAC0> thacoValues{};
+    for (auto& c : classes)
+    {
+        auto xp = experience().level(c);
+        auto t = _thaco.get(xp);
+        thacoValues.push_back(t);
+    }
+    return *std::min_element(thacoValues.begin(), thacoValues.end());
 }
 
 bool Adndtk::Character::verify_moral_alignment() const
