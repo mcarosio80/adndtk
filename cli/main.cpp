@@ -318,6 +318,10 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
     auto selectedRace = choose_race(skills);
     std::cout << "Your race is " << selectedRace.name << ".\n";
 
+    // Select a Class
+    auto selectedClass = choose_class(skills, selectedRace.id);
+    std::cout << "Your class is " << selectedClass.long_name << ".\n";
+
     for (auto& skl : Adndtk::Tables::skill::fetch_all())
     {
         auto raceSkillModifier = Adndtk::SkillCreator::get_race_adjustments(skl.id, selectedRace.id);
@@ -328,10 +332,6 @@ Adndtk::Character generate_character(std::map<Adndtk::Defs::skill, Adndtk::Skill
             std::cout << " ==> " << skills[skl.id] << "\n";
         }
     }
-
-    // Select a Class
-    auto selectedClass = choose_class(skills, selectedRace.id);
-    std::cout << "Your class is " << selectedClass.long_name << ".\n";
 
     // Determine if entitoled to exceptional strength
     if (Adndtk::Cyclopedia::get_instance().can_have_exceptional_strength(selectedClass.id, selectedRace.id, skills[Adndtk::Defs::skill::strength]))
