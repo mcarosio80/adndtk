@@ -33,11 +33,11 @@ Adndtk::MoneyBag::MoneyBag(const Defs::character_class_type& clsType)
 
 	if (OptionalRules::get_instance().option<bool>(Option::max_starting_money))
 	{
-		_money[Defs::coin::gold_piece] = Die::roll(number, faces, base) * mult;
+		_money[Defs::coin::gold_piece] = (number * faces + base) * mult;
 	}
 	else
 	{
-		_money[Defs::coin::gold_piece] = (number * faces + base) * mult;
+		_money[Defs::coin::gold_piece] = Die::roll(number, faces, base) * mult;
 	}
 }
 
