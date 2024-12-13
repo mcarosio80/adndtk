@@ -15,7 +15,7 @@ Adndtk::CharacterGenerator::~CharacterGenerator()
 std::pair<int, int> Adndtk::CharacterGenerator::get_skill_constraints_by_class_type(const Defs::character_class_type& clsType, const Defs::skill& skillId)
 {
     auto types = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
-    std::pair<int, int> clsTypeLimits{1, 20};
+    std::pair<int, int> clsTypeLimits{Const::min_extended_skill_value, Const::max_extended_skill_value};
 
     for (auto& t : types)
     {
@@ -31,7 +31,7 @@ std::pair<int, int> Adndtk::CharacterGenerator::get_skill_constraints_by_class_t
 std::pair<int, int> Adndtk::CharacterGenerator::get_skill_constraints_by_class(const Defs::character_class& clsId, const Defs::skill& skillId)
 {
     auto classes = Cyclopedia::get_instance().split<Defs::character_class>(clsId);
-    std::pair<int, int> clsLimits{1, 20};
+    std::pair<int, int> clsLimits{Const::min_extended_skill_value, Const::max_extended_skill_value};
 
     for (auto& cls : classes)
     {
@@ -84,8 +84,8 @@ std::vector<Adndtk::Tables::race> Adndtk::CharacterGenerator::available_races(co
                                         Defs::skill::wisdom, Defs::skill::charisma};
         for (auto& s : skillValues)
         {
-            int minValue{0};
-            int maxValue{20};
+            int minValue{Const::min_extended_skill_value};
+            int maxValue{Const::max_extended_skill_value};
             Adndtk::SkillCreator::get_skill_constraints(query, s.first, static_cast<int>(r.id), minValue, maxValue);
             auto sklValue = skillValues.at(s.first);
             if (sklValue >= minValue && sklValue <= maxValue)
@@ -146,8 +146,8 @@ std::vector<Adndtk::Tables::character_class> Adndtk::CharacterGenerator::availab
 
         for (auto s : skillValues)
         {
-            std::vector<int> skillLimitMin{0};
-            std::vector<int> skillLimitMax{20};
+            std::vector<int> skillLimitMin{Const::min_extended_skill_value};
+            std::vector<int> skillLimitMax{Const::max_extended_skill_value};
 
             auto clsTypeLimits = get_skill_constraints_by_class_type(c.class_type_id, s.first);
             skillLimitMin.push_back(clsTypeLimits.first);

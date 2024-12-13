@@ -45,16 +45,16 @@ void Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, c
 
 std::pair<int, int> Adndtk::SkillCreator::get_skill_constraints(const Adndtk::Query& queryId, const Defs::skill& skillType, const std::optional<int>& object)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
     get_skill_constraints(queryId, skillType, object, minValue, maxValue);
     return std::make_pair(minValue, maxValue);
 }
 
 std::pair<int, int> Adndtk::SkillCreator::get_default_boundaries(const Defs::skill &skillType)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
     Adndtk::Query query = Adndtk::Query::select_skill_boundaries_default;
     get_skill_constraints(query, skillType, std::nullopt, minValue, maxValue);
 
@@ -63,8 +63,8 @@ std::pair<int, int> Adndtk::SkillCreator::get_default_boundaries(const Defs::ski
 
 std::pair<int, int> Adndtk::SkillCreator::get_race_boundaries(const Defs::skill &skillType, const Defs::race& race)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
     auto query = Adndtk::Query::select_skill_boundaries_race;
     auto raceId = static_cast<int>(race);
     get_skill_constraints(query, skillType, raceId, minValue, maxValue);
@@ -74,8 +74,8 @@ std::pair<int, int> Adndtk::SkillCreator::get_race_boundaries(const Defs::skill 
 
 short Adndtk::SkillCreator::get_race_adjustments(const Defs::skill &skillType, const Defs::race& race)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
     auto query = Query::select_skill_modifier;
     auto raceModifier = Cyclopedia::get_instance().exec_prepared_statement<Defs::race, Defs::skill>(query, race, skillType);
 
@@ -89,8 +89,8 @@ short Adndtk::SkillCreator::get_race_adjustments(const Defs::skill &skillType, c
 
 std::pair<int, int> Adndtk::SkillCreator::get_class_type_boundaries(const Defs::skill &skillType, const Defs::character_class_type& clsType)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
     auto clsTypes = Cyclopedia::get_instance().split<Defs::character_class_type>(clsType);
     auto query = Adndtk::Query::select_skill_boundaries_class_type;
 
@@ -104,8 +104,8 @@ std::pair<int, int> Adndtk::SkillCreator::get_class_type_boundaries(const Defs::
 
 std::pair<int, int> Adndtk::SkillCreator::get_class_boundaries(const Defs::skill &skillType, const Defs::character_class& cls)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
 
     auto query = Adndtk::Query::select_character_class;
     auto result = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
@@ -141,8 +141,8 @@ std::pair<int, int> Adndtk::SkillCreator::get_class_boundaries(const Defs::skill
 Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, const std::optional<Defs::character_class>& cls,
                                 const std::optional<Defs::race>& race, const SkillGenerationMethod &method/* = SkillGenerationMethod::standard*/)
 {
-    int minValue{0};
-    int maxValue{20};
+    int minValue{Const::min_extended_skill_value};
+    int maxValue{Const::max_extended_skill_value};
 
     // Check default constraints
     auto defLimits = SkillCreator::get_default_boundaries(skillType);
