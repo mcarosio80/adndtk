@@ -17,6 +17,7 @@ string(TIMESTAMP CURRENT_YEAR "%Y")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++20")
 
 option(RUN_UNIT_TESTS "Run unit tests after build" OFF)
+option(RUN_CLANG_TIDY "Run clang-tidy linering tool" OFF)
 
 include(GNUInstallDirs)
 include(ExternalProject)
@@ -226,6 +227,27 @@ add_subdirectory(test)
 message("Adding subdirectory cli")
 add_subdirectory(cli)
 
+
+# Clang-tidy
+if(RUN_CLANG_TIDY)
+    message("Clang-tidy was required: checking module availability")
+    find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+    if(CLANG_TIDY_EXE)
+        message("Clang-tidy was found: module enabled")
+        set(CLANG_TIDY_COMMAND
+            ${CLANG_TIDY_EXE};
+            --checks=*;
+            --header-filter=.;
+            --warnings-as-errors=*;
+            --use-color
+        )
+        set_target_properties(${ADNDTK_LIB} PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+    else()
+        message("Clang-tidy not found: module disabled")
+    endif()
+else()
+    message("Clang-tidy was not required: lintering disabled")
+endif()
 
 
 # Install Sqlite DB

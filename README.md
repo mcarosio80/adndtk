@@ -42,6 +42,16 @@ $ cmake .. -DRUN_UNIT_TESTS=off
 </pre>
 Automatic run of Unit Tests is disabled by default. 
 
+## Static analisys
+Static code analisys can be enabled when building AdndTK library.
+To enable clang-tidy static code analisys, set CMake flag ``DRUN_CLANG_TIDY``. Default value is ``off``.
+<pre>
+$ mkdir -p build/
+$ cd build/
+$ cmake .. -DRUN_CLANG_TIDY=on
+</pre>
+The flag checks the tool availability. The linering tool will be invoked only if available in the host system.
+
 ## Dependencies
 Check out the [requisites](REQUISITES.md) for project dependencies.
 
