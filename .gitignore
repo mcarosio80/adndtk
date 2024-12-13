@@ -30,6 +30,9 @@
 # Database objects
 *.db
 
+# Python modules
+__pycache__/
+
 # Temporary dirs and files
 out/build/
 log/

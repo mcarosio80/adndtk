@@ -23,7 +23,6 @@ List of the new features, changes to existing features, bug fixes, infrastructur
 * Insert data into DEITY_SPHERE_OF_INFLUENCE
 * Insert data into DEITY_AVATAR
 * Split SQL data files for DB
-* Split python script to generate headers
 * Generate static headers with map data from SQL tables
 
 ## Planned changes
