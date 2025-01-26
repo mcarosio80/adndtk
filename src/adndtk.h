@@ -30,7 +30,9 @@
 #include <racial_stats.h>
 #include <market.h>
 #include <store.h>
+#include <avatar.h>
 #include <character.h>
+#include <monster.h>
 #include <calendar.h>
 #include <treasure.h>
 #include <character_generator.h>

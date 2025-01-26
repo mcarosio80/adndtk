@@ -107,6 +107,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'level', level, 'melee_weapon_attacks', melee_weapon_attacks, 'melee_weapon_round', melee_weapon_round, 'light_x_bow_attacks', light_x_bow_attacks, 'light_x_bow_round', light_x_bow_round, 'heavy_x_bow_attacks', heavy_x_bow_attacks, 'heavy_x_bow_round', heavy_x_bow_round, 'thrown_dagger_attacks', thrown_dagger_attacks, 'thrown_dagger_round', thrown_dagger_round, 'thrown_dart_attacks', thrown_dart_attacks, 'thrown_dart_round', thrown_dart_round, 'other_missile_attacks', other_missile_attacks, 'other_missile_round', other_missile_round from specialist_attacks_per_round", Query::select_all_specialist_attacks_per_round);
         prepare_statement("select 'id', id,'name', name from non_weapon_proficiency_group", Query::select_all_non_weapon_proficiency_group);
         prepare_statement("select 'id', id, 'description', description from weapon_proficiency_level", Query::select_all_weapon_proficiency_level);
+        prepare_statement("select 'id', id, 'name', name from monster", Query::select_all_monster);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);

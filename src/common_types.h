@@ -125,6 +125,7 @@ namespace Adndtk
         select_all_non_weapon_proficiency_group,
         select_all_non_weapon_proficiency,
         select_all_weapon_proficiency_level,
+        select_all_monster,
     };
 
     enum class XPChangeType

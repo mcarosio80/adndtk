@@ -98,5 +98,8 @@
     "non_weapon_proficiency_group" : [],
     "non_weapon_proficiency" : [
         { "field" : "id", "type" : "Defs::non_weapon_proficiency" }
+    ],
+    "monster" : [
+        { "field" : "id", "type" : "Defs::monster" }
     ]
 }

@@ -290,17 +290,17 @@
         "value": "id"
     },
     {
-        "table" : "MONSTER_FREQUENCY",
+        "table" : "ENCOUNTER_FREQUENCY",
         "key" : "description",
         "value": "id"
     },
     {
-        "table" : "MONSTER_INTELLIGENCE",
+        "table" : "INTELLIGENCE",
         "key" : "description",
         "value": "id"
     },
     {
-        "table" : "MONSTER_MORALE",
+        "table" : "MORALE",
         "key" : "description",
         "value": "id"
     },

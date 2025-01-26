@@ -24,15 +24,21 @@
 #include <racial_stats.h>
 #include <market.h>
 #include <store.h>
+#include <avatar.h>
 
 namespace Adndtk
 {
-    class Character
+    class Character : public Avatar
     {
     public:
         Character(const std::string& name, const Defs::character_class& cls, const Defs::race& raceId,
             const Defs::moral_alignment& align, const Defs::sex& sexId,
             const std::optional<Defs::deity>& deityId = std::nullopt);
+        
+        Avatar::Type get_avatar_type() const override
+        {
+            return Avatar::Type::PlayngCharacter;
+        };
 
         const std::string& name() const { return _name; };
         inline const Defs::character_class& get_class() const { return _cls; };
