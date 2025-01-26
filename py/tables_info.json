@@ -290,7 +290,27 @@
         "value": "id"
     },
     {
+        "table" : "CLIMATE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "TERRAIN",
+        "key" : "description",
+        "value": "id"
+    },
+    {
         "table" : "ENCOUNTER_FREQUENCY",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "MOVEMENT_TYPE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "MONSTER_SIZE",
         "key" : "description",
         "value": "id"
     },
