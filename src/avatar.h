@@ -8,8 +8,8 @@ namespace Adndtk
     public:
         enum class Type
         {
-            PlayngCharacter,
-            NonPlayngCharacter,
+            PlayerCharacter,
+            NonPlayerCharacter,
             Monster
         };
 
