@@ -37,7 +37,7 @@ namespace Adndtk
         
         Avatar::Type get_avatar_type() const override
         {
-            return Avatar::Type::PlayngCharacter;
+            return Avatar::Type::PlayerCharacter;
         };
 
         const std::string& name() const { return _name; };
