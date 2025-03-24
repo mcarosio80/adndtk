@@ -67,7 +67,7 @@ def generate_enum(dbPath, headerFile, namespaces, version, jsonConfig):
             else:
                 outFile.write("\n")
 
-            lines = common.fetch_key_value_pairs(conn, keyColumn, valueColumn, tableName)
+            lines = common.fetch_key_value_pairs(conn, keyColumn, valueColumn, tableName, True)
             print_enum(lines, enumName, outFile, indentation)
 
         common.close_namespace(outFile, namespaces, indentation)
