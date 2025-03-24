@@ -300,6 +300,11 @@
         "value": "id"
     },
     {
+        "table" : "ORGANISATION",
+        "key" : "description",
+        "value": "id"
+    },
+    {
         "table" : "ENCOUNTER_FREQUENCY",
         "key" : "description",
         "value": "id"
@@ -327,6 +332,16 @@
     {
         "table" : "MONSTER",
         "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "ACTIVITY_CYCLE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
+        "table" : "DIET",
+        "key" : "description",
         "value": "id"
     },
     {

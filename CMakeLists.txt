@@ -50,6 +50,8 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
 set(DEPLOY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deploy)
 
+set(LOAD_MONSTER_STAGING_DATA_FILE ${PY_DIR}/load_monster_data_staging.sqlite)
+
 # Setup SQLite files
 set(DB_NAME adndtk.db)
 set(DB_FILE ${DB_DIR}/${DB_NAME})
@@ -74,6 +76,10 @@ message("Configuring database generation: ${DB_FILE}")
 
 execute_process(COMMAND mkdir -p ${DB_DIR})
 
+
+configure_file(${CFG_DIR}/load_monster_data_staging.sqlite.in ${PY_DIR}/load_monster_data_staging.sqlite)
+
+
 # Creation of SQLite database
 message("Creation of SQLite database")
 execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
@@ -82,6 +88,16 @@ execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
                 RESULT_VARIABLE SQLITE_BUILD_DB)
 if(NOT SQLITE_BUILD_DB EQUAL "0")
     message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${DB_SCHEMA_FILE} failed with ${SQLITE_BUILD_DB}")
+endif()
+
+
+message("Loading staging data into SQLite database")
+execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE}
+                INPUT_FILE ${LOAD_MONSTER_STAGING_DATA_FILE}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE SQLITE_BUILD_DB)
+if(NOT SQLITE_BUILD_DB EQUAL "0")
+    message(FATAL_ERROR "${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} < ${LOAD_MONSTER_STAGING_DATA_FILE} failed with ${SQLITE_BUILD_DB}")
 endif()
 
 
