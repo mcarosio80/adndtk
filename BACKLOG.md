@@ -28,6 +28,9 @@ List of the new features, changes to existing features, bug fixes, infrastructur
         REQUIRE(ProficiencySlots(Defs::character_class::necromancer).get_base_weapon_initial_score() == 1);
         </code>
   * Check: no attacks may cause less than 1 damage (pag 13 PHB)
+  * Check: n. of resurrection attemps equals initial Constitution score
+  * Check: after resurrection Constitution score decreases
+  * Check: Halflings and Dwarves have separate bonus vs magic/poison
   
 ## Planned changes
 
