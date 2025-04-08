@@ -37,6 +37,20 @@ def fetch_key_value_pairs(conn, key, value, table, sort = False):
 
 
 ################################
+def fetch_values(conn, table, key, value):
+    cur = conn.cursor()
+    query = "SELECT {}, {} FROM {};".format(key, value, table)
+    cur.execute(query)
+
+    rows = cur.fetchall()
+
+    data = {}
+    for row in rows:
+        data[row[1]] = row[0]
+    return data
+
+
+################################
 def print_help(exeName):
     print (f'Usage: {exeName} -d <db_file> -j <json_config> -o <output_header> -n <lib-namespace:module-namespace>')
 
@@ -161,7 +175,9 @@ def write_csv_row(outFile, fieldsData, useApices = True, separator = ','):
         else:
             outFile.write(f'{separator}')
 
-        if useApices:
+        if fieldValue == None:
+            outFile.write('')
+        elif useApices:
             outFile.write(f'"{fieldsData[fieldValue]}"')
         else:
             outFile.write(f'{fieldsData[fieldValue]}')
