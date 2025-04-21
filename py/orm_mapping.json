@@ -100,6 +100,10 @@
         { "field" : "id", "type" : "Defs::non_weapon_proficiency" }
     ],
     "monster" : [
-        { "field" : "id", "type" : "Defs::monster" }
+        { "field" : "id", "type" : "Defs::monster" },
+        { "field" : "campaign_settings_id", "type" : "Defs::campaign_settings" },
+        { "field" : "frequency_id", "type" : "Defs::encounter_frequency" },
+        { "field" : "intelligence_from", "type" : "short" },
+        { "field" : "intelligence_to", "type" : "short" }
     ]
 }
