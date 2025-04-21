@@ -31,6 +31,10 @@ List of the new features, changes to existing features, bug fixes, infrastructur
   * Check: n. of resurrection attemps equals initial Constitution score
   * Check: after resurrection Constitution score decreases
   * Check: Halflings and Dwarves have separate bonus vs magic/poison
+  * CLI: add saving scores for groups
+  * CLI: add cli option to add experience
+  * CLI: add cli option to force no race modifiers to skills
+  * Split tables.h into separate modules
   
 ## Planned changes
 
