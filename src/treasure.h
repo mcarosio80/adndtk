@@ -174,7 +174,7 @@ namespace Adndtk
         template <typename _T>
         _T select_one(const std::vector<_T>& v)
         {
-            auto r = Die::roll(1, v.size())-1;
+            auto r = Die::roll<size_t>(1, v.size())-1;
 			auto it = std::next(v.begin(), r);
 			return *it;
         }

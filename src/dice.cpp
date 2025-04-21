@@ -83,17 +83,6 @@ int Adndtk::Die::roll(int numDice, int numFaces, int addendum)
     return d.roll(numDice) + addendum;
 }
 
-int Adndtk::Die::roll(int minValue, int maxValue)
-{
-    std::random_device rd;
-    std::mt19937 generator(rd());	//mersenne_twister_engine
-    std::uniform_int_distribution<int> distribution(1, static_cast<int>(maxValue - minValue + 1));
-
-    int roll = distribution(generator) + (minValue - 1);
-
-    return roll;
-}
-
 Adndtk::DiceSet::DiceSet()
     : _dice{}
 {

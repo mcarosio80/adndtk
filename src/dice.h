@@ -34,7 +34,19 @@ namespace Adndtk
         }
         static int roll(const char *diceExpression);
         static int roll(int numDice, int numFaces, int addendum);
-        static int roll(int minValue, int maxValue);
+        //static int roll(int minValue, int maxValue);
+
+        template<typename _NumberType = int>
+        static _NumberType roll(const _NumberType minValue, const _NumberType maxValue)
+        {
+            std::random_device rd;
+            std::mt19937 generator(rd());	//mersenne_twister_engine
+            std::uniform_int_distribution<_NumberType> distribution(1, static_cast<_NumberType>(maxValue - minValue + 1));
+
+            auto roll = distribution(generator) + (minValue - 1);
+
+            return roll;
+        }
 
     private:
         static int match_dice_expression(const std::smatch& matches);
