@@ -4,7 +4,8 @@
 #include <cstdlib>
 
 Adndtk::ProficiencySlots::ProficiencySlots(const Defs::character_class& clsId)
-    : _weaponSlots{}, _clsId{clsId}
+    : _clsId{clsId}, _weaponSlots{}, _weaponInitialScore{}, _weaponNumLevels{}, _penalty{},
+        _nonWeaponInitialScore{}, _nonWeaponNumLevels{}, _nonWeaponSlots{}
 {
     auto clsType = Cyclopedia::get_instance().get_class_type(clsId);
     for (auto& clsTypeId : Cyclopedia::get_instance().split<Defs::character_class_type>(clsType))
