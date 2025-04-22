@@ -27,6 +27,7 @@ List of the new features, changes to existing features, bug fixes, infrastructur
         <br><code>
         REQUIRE(ProficiencySlots(Defs::character_class::necromancer).get_base_weapon_initial_score() == 1);
         </code>
+  * Check test failure [TC-SKIL.077]
   * Check: no attacks may cause less than 1 damage (pag 13 PHB)
   * Check: n. of resurrection attemps equals initial Constitution score
   * Check: after resurrection Constitution score decreases
