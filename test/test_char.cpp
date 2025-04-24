@@ -1318,19 +1318,25 @@ TEST_CASE("[TC-CHAR.042] Rejuvenate from venerable in one shot regains the skill
 
     Character chr{"Beohram", cls, race, align, sex};
 
-    chr.grow_old(75);
     auto strVal = chr.skill(Defs::skill::strength);
     auto dexVal = chr.skill(Defs::skill::dexterity);
     auto conVal = chr.skill(Defs::skill::constitution);
     auto intVal = chr.skill(Defs::skill::intelligence);
     auto wisVal = chr.skill(Defs::skill::wisdom);
 
+    chr.grow_old(75);
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal - 4);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal - 3);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal - 3);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal + 2);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal + 3);
+
     chr.rejuvenate(75);
-    REQUIRE(chr.skill(Defs::skill::strength) == strVal + 4);
-    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal + 3);
-    REQUIRE(chr.skill(Defs::skill::constitution) == conVal + 3);
-    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal - 2);
-    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal - 3);
+    REQUIRE(chr.skill(Defs::skill::strength) == strVal);
+    REQUIRE(chr.skill(Defs::skill::dexterity) == dexVal);
+    REQUIRE(chr.skill(Defs::skill::constitution) == conVal);
+    REQUIRE(chr.skill(Defs::skill::intelligence) == intVal);
+    REQUIRE(chr.skill(Defs::skill::wisdom) == wisVal);
 }
 
 TEST_CASE("[TC-CHAR.043] Rejuvenate from venerable in steps regains the skills gradually", "[character]" )
