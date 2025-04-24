@@ -127,14 +127,14 @@ namespace Adndtk
         select_all_weapon_proficiency_level,
         select_all_monster,
 
-        select_monster_climante_terrain,
+        select_monster_climate_terrain,
         select_monster_plane,
         select_monster_organisation,
         select_monster_undead,
         select_monster_activity_cycle,
         select_monster_diet,
         select_monster_alignment,
-        select_monster_treasuret,
+        select_monster_treasure,
         select_monster_elemntal,
         select_monster_dragon,
     };

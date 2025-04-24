@@ -107,7 +107,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'level', level, 'melee_weapon_attacks', melee_weapon_attacks, 'melee_weapon_round', melee_weapon_round, 'light_x_bow_attacks', light_x_bow_attacks, 'light_x_bow_round', light_x_bow_round, 'heavy_x_bow_attacks', heavy_x_bow_attacks, 'heavy_x_bow_round', heavy_x_bow_round, 'thrown_dagger_attacks', thrown_dagger_attacks, 'thrown_dagger_round', thrown_dagger_round, 'thrown_dart_attacks', thrown_dart_attacks, 'thrown_dart_round', thrown_dart_round, 'other_missile_attacks', other_missile_attacks, 'other_missile_round', other_missile_round from specialist_attacks_per_round", Query::select_all_specialist_attacks_per_round);
         prepare_statement("select 'id', id,'name', name from non_weapon_proficiency_group", Query::select_all_non_weapon_proficiency_group);
         prepare_statement("select 'id', id, 'description', description from weapon_proficiency_level", Query::select_all_weapon_proficiency_level);
-        prepare_statement("select 'id', id, 'name', name from monster", Query::select_all_monster);
+        prepare_statement("select 'id', id, 'campaign_settings_id', campaign_settings_id, 'ext_key', ext_key, 'ext_subkey', ext_subkey, 'name', name, 'display_name', display_name, 'frequency_id', frequency_id, 'intelligence_from', intelligence_from, 'intelligence_to', intelligence_to from monster", Query::select_all_monster);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
@@ -199,14 +199,14 @@ bool Adndtk::Cyclopedia::init()
 	                        "inner join non_weapon_proficiency_group_association g on g.group_id = a.group_id "
                             "where a.class_id = ? group by g.proficiency_id", Query::select_non_weapon_proficiencies_by_class);
 
-        prepare_statement("select 'climate_id', climate_id, 'terrain_id', terrain_id from monster_climate_terrain where monster_id = ?", Query::select_monster_climante_terrain);
+        prepare_statement("select 'climate_id', climate_id, 'terrain_id', terrain_id from monster_climate_terrain where monster_id = ?", Query::select_monster_climate_terrain);
         prepare_statement("select 'plane_id', plane_id from monster_plane where monster_id = ?", Query::select_monster_plane);
         prepare_statement("select 'organisation_id', organisation_id from monster_organisation where monster_id = ?", Query::select_monster_organisation);
         prepare_statement("select 'turned_as', turned_as from monster_undead where monster_id = ?", Query::select_monster_undead);
         prepare_statement("select 'activity_cycle_id', activity_cycle_id from monster_activity_cycle where monster_id = ?", Query::select_monster_activity_cycle);
         prepare_statement("select 'diet_id', diet_id from monster_diet where monster_id = ?", Query::select_monster_diet);
         prepare_statement("select 'alignment_id', alignment_id from monster_alignment where monster_id = ?", Query::select_monster_alignment);
-        prepare_statement("select 'treasure_class_id', treasure_class_id, 'multiplier', multiplier, 'multiplier_dice_num', multiplier_dice_num, 'multiplier_die_faces', multiplier_die_faces, 'location_id', location_id, 'treasure_component_id', treasure_component_id from monster_treasure where monster_id = ?", Query::select_monster_treasuret);
+        prepare_statement("select 'treasure_class_id', treasure_class_id, 'multiplier', multiplier, 'multiplier_dice_num', multiplier_dice_num, 'multiplier_die_faces', multiplier_die_faces, 'location_id', location_id, 'treasure_component_id', treasure_component_id from monster_treasure where monster_id = ?", Query::select_monster_treasure);
         prepare_statement("select 'element_id', element_id from monster_elemental where monster_id = ?", Query::select_monster_elemntal);
         prepare_statement("select 'type', type from monster_dragon where monster_id = ?", Query::select_monster_dragon);
     
