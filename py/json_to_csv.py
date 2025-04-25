@@ -237,7 +237,7 @@ def main():
     generate_csv(csvFile, monsters, separator, useApices)
 
     #generate_treasure_features(sqlOutDir, monsters, separator, useApices)
-    generate_alignment_features(dbPath, sqlOutDir, monsters, separator, useApices)
+    #generate_alignment_features(dbPath, sqlOutDir, monsters, separator, useApices)
 
 
 ###############################################
