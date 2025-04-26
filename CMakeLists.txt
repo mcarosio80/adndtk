@@ -50,7 +50,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
 set(DEPLOY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deploy)
 
-set(LOAD_MONSTER_STAGING_DATA_FILE ${PY_DIR}/load_monster_data_staging.sqlite)
+set(LOAD_MONSTER_STAGING_DATA_FILE ${DB_DIR}/load_monster_data_staging.sqlite)
 
 # Setup SQLite files
 set(DB_NAME adndtk.db)
@@ -77,7 +77,7 @@ message("Configuring database generation: ${DB_FILE}")
 execute_process(COMMAND mkdir -p ${DB_DIR})
 
 
-configure_file(${CFG_DIR}/load_monster_data_staging.sqlite.in ${PY_DIR}/load_monster_data_staging.sqlite)
+configure_file(${CFG_DIR}/load_monster_data_staging.sqlite.in ${DB_DIR}/load_monster_data_staging.sqlite)
 
 
 # Creation of SQLite database

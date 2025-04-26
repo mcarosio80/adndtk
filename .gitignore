@@ -41,6 +41,7 @@ src/defs.h
 src/tables.h
 src/config.h
 deploy/*
+db/*
 
 .vscode/
 CMakeLists.txt.user

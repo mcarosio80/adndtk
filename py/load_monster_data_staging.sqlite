@@ -1,3 +1,0 @@
-.mode csv
-.separator "|"
-.import --skip 1 /home/marco/repos/gitlab/mcarosio/adndtk/sql/monsters_data.csv STAGING_DATA_MONSTER
