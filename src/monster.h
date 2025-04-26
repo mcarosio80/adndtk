@@ -109,8 +109,11 @@ namespace Adndtk
             std::set<_FeatureType> set{};
             for (const auto& r : rs)
             {
-                auto item = r.as<_FeatureType>(label);
-                set.emplace(item);
+                auto item = r.try_as<_FeatureType>(label);
+                if (item.has_value())
+                {
+                    set.emplace(item.value());
+                }
             }
             return set;
         }
@@ -118,13 +121,18 @@ namespace Adndtk
         template <typename _FeatureType>
         std::optional<_FeatureType> set_optional_feature(const Defs::monster& id, const Adndtk::Query& queryId, const std::string& label)
         {
-            auto rs = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<Defs::monster>(queryId, id).to_vector<_FeatureType>(label);
+            auto rs = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<Defs::monster>(queryId, id);
             if (rs.size() == 0)
             {
                 return std::nullopt;
             }
             auto idx = Die::roll<size_t>(0, rs.size()-1);
-            return rs[idx];
+            auto val = rs[idx].try_as<_FeatureType>(label);
+            if (!val.has_value())
+            {
+                return std::nullopt;
+            }
+            return val.value();
         }
 
         static double get_treasure_multiplier(const std::optional<double>& multiplier, const std::optional<short>& diceNumber, const std::optional<Defs::die>& dieFaces);
