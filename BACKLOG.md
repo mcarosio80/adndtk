@@ -36,6 +36,7 @@ List of the new features, changes to existing features, bug fixes, infrastructur
   * CLI: add cli option to add experience
   * CLI: add cli option to force no race modifiers to skills
   * Split tables.h into separate modules
+  * Handle treasure for monsters groups
   
 ## Planned changes
 
