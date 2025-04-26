@@ -2,3 +2,6 @@
 .separator "|"
 .import --skip 1 @SQL_DIR@/monsters_data.csv STAGING_DATA_MONSTER
 .import --skip 1 @SQL_DIR@/monsters_data-2107.csv STAGING_DATA_MONSTER
+.import --skip 1 @SQL_DIR@/monsters_data-2122.csv STAGING_DATA_MONSTER
+.import --skip 1 @SQL_DIR@/monsters_data-2139.csv STAGING_DATA_MONSTER
+.import --skip 1 @SQL_DIR@/monsters_data-2153.csv STAGING_DATA_MONSTER
