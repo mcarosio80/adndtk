@@ -1,0 +1,17 @@
+[
+    {
+        "table" : "CALENDAR",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "RACE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "DEITY",
+        "key" : "name",
+        "value": "id"
+    }
+]

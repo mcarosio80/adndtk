@@ -3,6 +3,7 @@
 
 #include <defs.h>
 #include <config.h>
+#include <dictionary.h>
 
 #include <common_types.h>
 #include <options.h>

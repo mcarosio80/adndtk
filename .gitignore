@@ -40,6 +40,7 @@ log/
 src/defs.h
 src/tables.h
 src/config.h
+src/dictionary.h
 deploy/*
 db/*
 
