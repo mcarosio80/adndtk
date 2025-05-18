@@ -39,5 +39,6 @@
 #include <character_generator.h>
 #include <data_validator.h>
 #include <proficiencies.h>
+#include <battleground.h>
 
 #endif // ADNDTK_H
