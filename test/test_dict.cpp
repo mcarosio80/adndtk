@@ -2,7 +2,8 @@
 #include <catch2/catch_all.hpp>
 #include <string>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <dictionary.h>
 
 using namespace Adndtk;
 
