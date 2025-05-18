@@ -421,8 +421,8 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
     // Select Proficiencies
     // Equip Your Character
 
-    auto prevVaue = static_cast<Adndtk::SkillGenerationMethod>(Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method));
-    Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method) = static_cast<int>(genMethod);
+    auto prevVaue = Adndtk::OptionalRules::get_instance().get_option<Adndtk::SkillGenerationMethod>(Adndtk::Option::skills_generation_method);
+    Adndtk::OptionalRules::get_instance().set_option<Adndtk::SkillGenerationMethod>(Adndtk::Option::skills_generation_method, genMethod);
 
     Adndtk::Character chr{charName,
             classId,
@@ -432,7 +432,7 @@ Adndtk::Character generate_character(const Adndtk::Defs::character_class& classI
             optDeityId,
     };
 
-    Adndtk::OptionalRules::get_instance().option<int>(Adndtk::Option::skills_generation_method) = static_cast<int>(prevVaue);
+    Adndtk::OptionalRules::get_instance().set_option<Adndtk::SkillGenerationMethod>(Adndtk::Option::skills_generation_method, prevVaue);
 
     return chr;
 }

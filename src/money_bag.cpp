@@ -31,7 +31,7 @@ Adndtk::MoneyBag::MoneyBag(const Defs::character_class_type& clsType)
 	auto base = startingMoney.as<int>("die_base");
 	auto mult = startingMoney.as<int>("multiplier");
 
-	if (OptionalRules::get_instance().option<bool>(Option::max_starting_money))
+	if (OptionalRules::get_instance().get_option<bool>(Option::max_starting_money))
 	{
 		_money[Defs::coin::gold_piece] = (number * faces + base) * mult;
 	}

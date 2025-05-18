@@ -120,7 +120,7 @@ TEST_CASE("[TC-CHAR.006] When levels are gained, HP are increment accordingly", 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::chaotic_good, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -164,7 +164,7 @@ TEST_CASE("[TC-CHAR.007] When levels are lost, HPs are restored to the previous 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::chaotic_good, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -262,7 +262,7 @@ TEST_CASE("[TC-CHAR.008] When levels are lost, HPs are restored to the previous 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::chaotic_good, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -333,7 +333,7 @@ TEST_CASE("[TC-CHAR.009] When levels are lost, HPs are restored to the previous 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::chaotic_good, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -404,7 +404,7 @@ TEST_CASE("[TC-CHAR.010] When levels are lost, HPs are restored to the previous 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::chaotic_good, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -475,7 +475,7 @@ TEST_CASE("[TC-CHAR.011] When levels are lost, HPs are restored to the previous 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_neutral, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -546,7 +546,7 @@ TEST_CASE("[TC-CHAR.012] When levels are lost, HPs are restored to the previous 
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_neutral, Defs::sex::male};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -616,7 +616,7 @@ TEST_CASE("[TC-CHAR.013] When levels exceed the title level, a fixed amount of H
     std::string chrName{"Palantir"};
     Defs::character_class chrClass{Defs::character_class::paladin};
     Defs::race chrRace{Defs::race::human};
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr};
     chr.change_skill(SkillValue(Defs::skill::constitution, 13));
@@ -1516,7 +1516,7 @@ TEST_CASE("[TC-CHAR.046] Encumbrance rule can be deactivated", "[character]" )
     auto align = Defs::moral_alignment::lawful_neutral;
     auto sex = Defs::sex::male;
 
-    OptionalRules::get_instance().option<bool>(Option::apply_encumbrance) = false;
+    OptionalRules::get_instance().set_option(Option::apply_encumbrance, false);
     
     Character chr{"Beohram", cls, race, align, sex};
     chr.change_skill(SkillValue(Defs::skill::strength, 12));
@@ -1553,7 +1553,7 @@ TEST_CASE("[TC-CHAR.047] Buy transaction gives a new item to the character", "[c
     Character chr{"Beohram", cls, race, align, sex};
     chr.add_equipment(Defs::equipment::backpack);
 
-    OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply) = true;
+    OptionalRules::get_instance().set_option(Option::unlimited_store_supply, true);
 
     auto itemId = Defs::equipment::throwing_axe;
     auto& mb = chr.money();
@@ -1566,7 +1566,7 @@ TEST_CASE("[TC-CHAR.047] Buy transaction gives a new item to the character", "[c
     REQUIRE(chr.has_equipment_item(itemId, 1));
     REQUIRE(mb[Defs::coin::gold_piece] < gpAmt);
 
-    OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply) = false;
+    OptionalRules::get_instance().set_option(Option::unlimited_store_supply, false);
 
     Market::get_instance().clear();
     REQUIRE(Market::get_instance().count() == 0);

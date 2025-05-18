@@ -14,7 +14,7 @@ TEST_CASE("[TC-SPLB.001] First level caster cannot learn higher level spells", "
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::fireball) == AddSpellResult::level_not_available);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::cone_of_cold) == AddSpellResult::level_not_available);
@@ -27,7 +27,7 @@ TEST_CASE("[TC-SPLB.002] Abjurers cannot learn spells of opposite schools (Alter
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::affect_normal_fires) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::burning_hands) == AddSpellResult::school_not_allowed);
@@ -41,7 +41,7 @@ TEST_CASE("[TC-SPLB.003] Conjurers cannot learn spells of opposite schools (Grea
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::alarm) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::school_not_allowed);
@@ -60,7 +60,7 @@ TEST_CASE("[TC-SPLB.004] Diviners cannot learn spells of opposite schools (Conju
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
     
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::shield) == AddSpellResult::school_not_allowed);
@@ -74,7 +74,7 @@ TEST_CASE("[TC-SPLB.005] Enchanters cannot learn spells of opposite schools (Inv
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
     
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::chill_touch) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_undead) == AddSpellResult::school_not_allowed);
@@ -88,7 +88,7 @@ TEST_CASE("[TC-SPLB.006] Illusionists cannot learn spells of opposite schools (N
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
     
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::chill_touch) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_undead) == AddSpellResult::school_not_allowed);
@@ -104,7 +104,7 @@ TEST_CASE("[TC-SPLB.007] Invokers cannot learn spells of opposite schools (Encha
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
     
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::armor) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::gaze_reflection) == AddSpellResult::school_not_allowed);
@@ -118,7 +118,7 @@ TEST_CASE("[TC-SPLB.008] Necromancers cannot learn spells of opposite schools (I
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
     
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::audible_glamer) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::phantasmal_force) == AddSpellResult::school_not_allowed);
@@ -132,7 +132,7 @@ TEST_CASE("[TC-SPLB.009] Transmuters cannot learn spells of opposite schools (Ab
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
     
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::chill_touch) == AddSpellResult::school_not_allowed);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_undead) == AddSpellResult::school_not_allowed);
@@ -146,7 +146,7 @@ TEST_CASE("[TC-SPLB.010] Conjurers can access Lesser Divination school", "[spell
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+    OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::identify) == AddSpellResult::success);
@@ -159,7 +159,7 @@ TEST_CASE("[TC-SPLB.011] Mages cannot exceed the maximum number of spells per le
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_undead) == AddSpellResult::success);
@@ -191,7 +191,7 @@ TEST_CASE("[TC-SPLB.012] Spells cannot be scribed multiple times", "[spells, spe
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book[Defs::wizard_spell::detect_magic] == 0);
@@ -205,7 +205,7 @@ TEST_CASE("[TC-SPLB.013] Spells deleted from the book, are no longer available",
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     auto spellId = Defs::wizard_spell::detect_magic;
     REQUIRE(book.scribe_scroll(spellId) == AddSpellResult::success);
@@ -220,7 +220,7 @@ TEST_CASE("[TC-SPLB.014] Deleted spells can be written again", "[spells, spell_b
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     auto spellId = Defs::wizard_spell::detect_magic;
     REQUIRE(book.scribe_scroll(spellId) == AddSpellResult::success);
@@ -238,7 +238,7 @@ TEST_CASE("[TC-SPLB.015] Casters can memorise as many spells as their level allo
     SpellBook book{cls, raceId};
     book.set_caster_level(5);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::success);
@@ -312,7 +312,7 @@ TEST_CASE("[TC-SPLB.016] Casters can remove spells and free up slots", "[spells,
     SpellBook book{cls, raceId};
     book.set_caster_level(5);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::success);
@@ -363,7 +363,7 @@ TEST_CASE("[TC-SPLB.017] Removed spells can no longer be memorised", "[spells, s
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::success);
@@ -385,7 +385,7 @@ TEST_CASE("[TC-SPLB.018] A deleted spell is also removed", "[spells, spell_book]
     SpellBook book{cls, raceId};
     book.set_caster_level(2);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::success);
@@ -415,7 +415,7 @@ TEST_CASE("[TC-SPLB.019] Deleted spells can no longer be memorised", "[spells, s
     auto raceId = Defs::race::human;
     SpellBook book{cls, raceId};
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::detect_magic) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::success);
@@ -452,7 +452,7 @@ TEST_CASE("[TC-SPLB.023] When caster's intelligence score decreases, maximum num
     SpellBook sb{Defs::character_class::mage, Defs::race::human};
     sb.set_caster_intelligence(18);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(sb.book_page_size() == 18);
     REQUIRE(sb.scribe_scroll(Defs::wizard_spell::affect_normal_fires));
@@ -484,7 +484,7 @@ TEST_CASE("[TC-SPLB.024] When caster's intelligence score decreases, spell level
     sb.set_caster_intelligence(15);
     sb.set_caster_level(12);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     REQUIRE(sb.total_slots(1) == 4);
     REQUIRE(sb.total_slots(2) == 4);
@@ -556,7 +556,7 @@ TEST_CASE("[TC-SPLB.025] When casters's level decreases unreachable spell levels
     sb.set_caster_level(9);
     sb.set_caster_intelligence(13);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     auto spellId = Defs::wizard_spell::magic_jar;
     REQUIRE(sb.scribe_scroll(spellId));
@@ -578,7 +578,7 @@ TEST_CASE("[TC-SPLB.026] Casters cannot scribe scrolls of higher levels (not acc
     SpellBook sb{Defs::character_class::mage, Defs::race::human};
     sb.set_caster_level(9);
 
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     auto spellId = Defs::wizard_spell::magic_jar;
     REQUIRE(sb.scribe_scroll(spellId) == AddSpellResult::level_not_available);
@@ -591,7 +591,7 @@ TEST_CASE("[TC-SPLB.026] Casters cannot scribe scrolls of higher levels (not acc
 TEST_CASE("[TC-SPLB.027] First level bards have no spells", "[spells, holy_symbol]" )
 {
     SpellBook sb{Defs::character_class::bard, Defs::race::human};
-    OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds) = true;
+     OptionalRules::get_instance().set_option(Option::scribe_scroll_always_succeeds, true);
 
     for (SpellLevel lvl=1; lvl<=Const::spell_book_limit; ++lvl)
     {

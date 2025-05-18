@@ -43,7 +43,7 @@ Adndtk::Character::Character(const std::string& name, const Defs::character_clas
     {
         this->on_change_xp(cls, chgType, prevXP, prevLvl, newXP, newLvl);
     };
-    auto sklGenMethod = static_cast<SkillGenerationMethod>(OptionalRules::get_instance().option<int>(Option::skills_generation_method));
+    auto sklGenMethod = OptionalRules::get_instance().get_option<Adndtk::SkillGenerationMethod>(Option::skills_generation_method);
     
     for (auto skl : {Defs::skill::strength, Defs::skill::dexterity, Defs::skill::constitution,
                     Defs::skill::intelligence, Defs::skill::wisdom, Defs::skill::charisma})
@@ -99,7 +99,7 @@ void Adndtk::Character::change_skill(const SkillValue& newValue)
         _holySymbol.set_caster_wisdom(newValue);
     }
 
-    if (!OptionalRules::get_instance().option<bool>(Option::enable_bonus_xp_for_high_prime_requisites))
+    if (!OptionalRules::get_instance().get_option<bool>(Option::enable_bonus_xp_for_high_prime_requisites))
     {
         return;
     }
@@ -422,7 +422,7 @@ bool Adndtk::Character::verify_moral_alignment() const
 
 bool Adndtk::Character::verify_worshipped_deity() const
 {
-    if (!OptionalRules::get_instance().option<bool>(Option::check_for_deity_selection))
+    if (!OptionalRules::get_instance().get_option<bool>(Option::check_for_deity_selection))
     {
         return true;
     }
@@ -456,7 +456,7 @@ void Adndtk::Character::buy_equipment(const std::string& storeName, const Defs::
     
     _money.subtract(price);
     store.add_money(price);
-    if (!OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply))
+    if (!OptionalRules::get_instance().get_option<bool>(Option::unlimited_store_supply))
     {
         store.remove(equipmentId, count);
     }
@@ -478,7 +478,7 @@ void Adndtk::Character::sell_equipment(const std::string& storeName, const Defs:
         throw std::runtime_error("Not enough money");
     }
     
-    if (!OptionalRules::get_instance().option<bool>(Option::unlimited_store_availability))
+    if (!OptionalRules::get_instance().get_option<bool>(Option::unlimited_store_availability))
     {
         store.subtract_money(price);
     }
@@ -489,7 +489,7 @@ void Adndtk::Character::sell_equipment(const std::string& storeName, const Defs:
 
 short Adndtk::Character::movement_factor() const
 {
-    if (!OptionalRules::get_instance().option<bool>(Option::apply_encumbrance))
+    if (!OptionalRules::get_instance().get_option<bool>(Option::apply_encumbrance))
     {
         return Encumbrance::get_instance().get_base_movement(_race);
     }

@@ -35,7 +35,7 @@ short Adndtk::Encumbrance::movement_factor(const SkillValue& strengthValue, cons
 {
     short baseMovFactor = base_movement(raceId);
 
-    if (!OptionalRules::get_instance().option<bool>(Option::encumbrance))
+    if (!OptionalRules::get_instance().get_option<bool>(Option::encumbrance))
     {
         return baseMovFactor;
     }

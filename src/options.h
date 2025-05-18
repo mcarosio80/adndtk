@@ -6,6 +6,7 @@
 #include <variant>
 #include <string>
 #include <cstdint>
+#include <type_traits>
 
 namespace Adndtk
 {
@@ -44,9 +45,45 @@ namespace Adndtk
         void operator=(OptionalRules const&) = delete;
 
         template<typename _T>
-        _T& option(const Option& opt)
+        _T get_option(const Option& opt)
         {
-            return std::get<_T>(_options[opt]);
+            if constexpr(std::is_enum_v<_T>)
+            {
+                using _UT = typename std::underlying_type<_T>::type;
+                auto underValue = std::get<_UT>(_options[opt]);
+                return static_cast<_T>(underValue);
+            }
+            else
+            {
+                return std::get<_T>(_options[opt]);
+            }
+        }
+
+        template<typename _T>
+        std::optional<_T> try_get_option(const Option& opt)
+        {
+            if constexpr(!std::holds_alternative<_T>(opt))
+            {
+                return std::nullopt;
+            }
+            else
+            {
+                return get_option<_T>(opt);
+            }
+        }
+
+        template<typename _T>
+        void set_option(const Option& opt, const _T& value)
+        {
+            if constexpr(std::is_enum_v<_T>)
+            {
+                using _UT = typename std::underlying_type_t<_T>;
+                _options[opt] = static_cast<_UT>(value);
+            }
+            else
+            {
+                _options[opt] = value;
+            }
         }
 
     private:

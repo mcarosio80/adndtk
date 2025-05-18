@@ -73,7 +73,7 @@ bool Adndtk::RacialStats::grow_old(const short& years)
 	_currentAge += years;
 	auto currAgeRange = get_age_range();
 
-	if (currAgeRange > prevAgeRange && OptionalRules::get_instance().option<bool>(Option::apply_aging_effect))
+	if (currAgeRange > prevAgeRange && OptionalRules::get_instance().get_option<bool>(Option::apply_aging_effect))
 	{
 		auto modifiers = get_skill_modifiers(prevAgeRange, currAgeRange);
 		for (auto& mod : modifiers)
@@ -101,7 +101,7 @@ bool Adndtk::RacialStats::rejuvenate(const short& years)
 	_currentAge -= years;
 	auto currAgeRange = get_age_range();
 
-	if (currAgeRange < prevAgeRange && OptionalRules::get_instance().option<bool>(Option::apply_aging_effect))
+	if (currAgeRange < prevAgeRange && OptionalRules::get_instance().get_option<bool>(Option::apply_aging_effect))
 	{
 		auto modifiers = get_skill_modifiers(currAgeRange, prevAgeRange);
 		for (auto& mod : modifiers)

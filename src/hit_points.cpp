@@ -235,7 +235,7 @@ Adndtk::HP Adndtk::HitPoints::generate_hp(const Adndtk::Defs::character_class& c
     {
         return _hpAfterTitle[cls];
     }
-    if (OptionalRules::get_instance().option<bool>(Option::max_score_for_hd))
+    if (OptionalRules::get_instance().get_option<bool>(Option::max_score_for_hd))
     {
         return static_cast<HP>(_hitDice[cls]);
     }

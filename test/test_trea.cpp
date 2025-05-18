@@ -194,7 +194,7 @@ TEST_CASE("[TC-TREA.005] Class A treasure always contains values if presence fla
     std::pair<uint32_t, uint32_t> objectsOfArtMinMax{2, 12};
     uint32_t magicalsCount{3};
     
-    OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = true;
+    OptionalRules::get_instance().set_option(Option::treasure_components_always_present, true);
     Treasure t{Defs::treasure_class::a};
 
     for (auto& c : coins)
@@ -230,7 +230,7 @@ TEST_CASE("[TC-TREA.005] Class A treasure always contains values if presence fla
     auto& magicals = t.magical_items();
     REQUIRE(magicals.size() == magicalsCount);
 
-    OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present) = false;
+    OptionalRules::get_instance().set_option(Option::treasure_components_always_present, false);
 }
 
 TEST_CASE("[TC-TREA.005] Treasures may contain appropriate values accorging to their class", "[treasure]" )

@@ -150,7 +150,7 @@ Adndtk::AddSpellResult Adndtk::SpellBook::scribe_scroll(const Defs::wizard_spell
         return AddSpellResult::no_capacity;
     }
 
-    bool scribeAlwaysSucceed = OptionalRules::get_instance().option<bool>(Option::scribe_scroll_always_succeeds);
+    bool scribeAlwaysSucceed = OptionalRules::get_instance().get_option<bool>(Option::scribe_scroll_always_succeeds);
     if (!try_scribe(spellId) && !scribeAlwaysSucceed)
     {
         return AddSpellResult::failure;

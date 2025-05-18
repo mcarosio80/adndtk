@@ -74,8 +74,8 @@ void demo_character()
     Defs::character_class chrClass{Defs::character_class::fighter_mage_thief};
     Defs::race chrRace{Defs::race::half_elf};
 
-    OptionalRules::get_instance().option<int>(Option::skills_generation_method) = static_cast<int>(SkillGenerationMethod::best_of_four);
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option<SkillGenerationMethod>(Option::skills_generation_method, SkillGenerationMethod::best_of_four);
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::true_neutral, Defs::sex::male};
 
@@ -368,7 +368,7 @@ void demo_hp()
 void demo_options()
 {
     std::cout << "Max score for HD = true" << std::endl;
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = true;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, true);
     HitPoints hp{Defs::character_class::fighter};
 
     hp.increase(Defs::character_class::fighter);
@@ -381,7 +381,7 @@ void demo_options()
     std::cout << hp.current() << std::endl;
 
     std::cout << "Max score for HD = false" << std::endl;
-    OptionalRules::get_instance().option<bool>(Option::max_score_for_hd) = false;
+    OptionalRules::get_instance().set_option(Option::max_score_for_hd, false);
 
     hp.increase(Defs::character_class::fighter);
     std::cout << hp.current() << std::endl;

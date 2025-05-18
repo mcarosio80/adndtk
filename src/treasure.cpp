@@ -787,7 +787,7 @@ double Adndtk::Treasure::total_value(const Defs::coin& currency) const
 bool Adndtk::Treasure::roll_for_component(const Die& d, const int probability) const
 {
 	//_options[Option::unlimited_store_availability] = false;
-	return OptionalRules::get_instance().option<bool>(Option::treasure_components_always_present)
+	return OptionalRules::get_instance().get_option<bool>(Option::treasure_components_always_present)
 		|| d.roll() <= probability;
 }
 

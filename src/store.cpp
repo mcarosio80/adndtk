@@ -25,16 +25,16 @@ Adndtk::Store::~Store()
 
 void Adndtk::Store::init()
 {
-    auto cpMin = OptionalRules::get_instance().option<uint32_t>(Option::store_min_cp_starting_amount);
-    auto cpMax = OptionalRules::get_instance().option<uint32_t>(Option::store_max_cp_starting_amount);
-    auto spMin = OptionalRules::get_instance().option<uint32_t>(Option::store_min_sp_starting_amount);
-    auto spMax = OptionalRules::get_instance().option<uint32_t>(Option::store_max_sp_starting_amount);
-    auto epMin = OptionalRules::get_instance().option<uint32_t>(Option::store_min_ep_starting_amount);
-    auto epMax = OptionalRules::get_instance().option<uint32_t>(Option::store_max_ep_starting_amount);
-    auto gpMin = OptionalRules::get_instance().option<uint32_t>(Option::store_min_gp_starting_amount);
-    auto gpMax = OptionalRules::get_instance().option<uint32_t>(Option::store_max_gp_starting_amount);
-    auto ppMin = OptionalRules::get_instance().option<uint32_t>(Option::store_min_pp_starting_amount);
-    auto ppMax = OptionalRules::get_instance().option<uint32_t>(Option::store_max_pp_starting_amount);
+    auto cpMin = OptionalRules::get_instance().get_option<uint32_t>(Option::store_min_cp_starting_amount);
+    auto cpMax = OptionalRules::get_instance().get_option<uint32_t>(Option::store_max_cp_starting_amount);
+    auto spMin = OptionalRules::get_instance().get_option<uint32_t>(Option::store_min_sp_starting_amount);
+    auto spMax = OptionalRules::get_instance().get_option<uint32_t>(Option::store_max_sp_starting_amount);
+    auto epMin = OptionalRules::get_instance().get_option<uint32_t>(Option::store_min_ep_starting_amount);
+    auto epMax = OptionalRules::get_instance().get_option<uint32_t>(Option::store_max_ep_starting_amount);
+    auto gpMin = OptionalRules::get_instance().get_option<uint32_t>(Option::store_min_gp_starting_amount);
+    auto gpMax = OptionalRules::get_instance().get_option<uint32_t>(Option::store_max_gp_starting_amount);
+    auto ppMin = OptionalRules::get_instance().get_option<uint32_t>(Option::store_min_pp_starting_amount);
+    auto ppMax = OptionalRules::get_instance().get_option<uint32_t>(Option::store_max_pp_starting_amount);
 
     _money.add(Defs::coin::copper_piece, Die::roll(cpMin, cpMax));
     _money.add(Defs::coin::silver_piece, Die::roll(spMin, spMax));
@@ -75,7 +75,7 @@ void Adndtk::Store::remove(const Defs::equipment& equipmentId, const short& coun
 
 bool Adndtk::Store::check_availability(const Defs::coin& currency, const uint32_t& amount, bool strictCheck/*=false*/) const
 {
-    if (OptionalRules::get_instance().option<bool>(Option::unlimited_store_availability))
+    if (OptionalRules::get_instance().get_option<bool>(Option::unlimited_store_availability))
     {
         return true;
     }
@@ -96,7 +96,7 @@ bool Adndtk::Store::check_availability(const Defs::coin& currency, const uint32_
 
 bool Adndtk::Store::check_supply(const Defs::equipment& goodsId, const int& count) const
 {
-    if (OptionalRules::get_instance().option<bool>(Option::unlimited_store_supply))
+    if (OptionalRules::get_instance().get_option<bool>(Option::unlimited_store_supply))
     {
         return true;
     }
@@ -156,7 +156,7 @@ Adndtk::Coin Adndtk::Store::get_price(const Defs::equipment& id)
 Adndtk::Coin Adndtk::Store::get_buy_price(const Defs::equipment& id, const short& count/*=1*/)
 {
     auto price = get_price(id);
-    auto profitPerc = OptionalRules::get_instance().option<double>(Option::store_profit_margin_percentage);
+    auto profitPerc = OptionalRules::get_instance().get_option<double>(Option::store_profit_margin_percentage);
     double profit = ceil(price.value() * profitPerc);
 
     auto [currency, minCost, maxCost] = get_price_min_max(id);
@@ -173,7 +173,7 @@ Adndtk::Coin Adndtk::Store::get_buy_price(const Defs::equipment& id, const short
 Adndtk::Coin Adndtk::Store::get_sell_price(const Defs::equipment& id, const short& count/*=1*/)
 {
     auto price = get_price(id);
-    auto profitPerc = OptionalRules::get_instance().option<double>(Option::store_profit_margin_percentage);
+    auto profitPerc = OptionalRules::get_instance().get_option<double>(Option::store_profit_margin_percentage);
     double profit = ceil(price.value() * profitPerc);
 
     auto [currency, minCost, maxCost] = get_price_min_max(id);

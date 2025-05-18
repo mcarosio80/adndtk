@@ -280,7 +280,7 @@ const Adndtk::ExperienceLevel& Adndtk::Experience::limit(const Adndtk::Defs::cha
 
 Adndtk::XP Adndtk::Experience::adjust_xp(const Adndtk::Defs::character_class& cls, const XP& pts) const
 {
-    if (OptionalRules::get_instance().option<bool>(Option::enable_bonus_xp_for_high_prime_requisites))
+    if (OptionalRules::get_instance().get_option<bool>(Option::enable_bonus_xp_for_high_prime_requisites))
     {
         return pts + static_cast<XP>(std::lround(pts * _xpBonus.at(cls)));
     }
