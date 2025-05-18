@@ -3,7 +3,11 @@
 #include <vector>
 #include <optional>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <store.h>
+#include <options.h>
+#include <query_result.h>
+#include <cyclopedia.h>
 
 using namespace Adndtk;
 

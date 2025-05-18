@@ -1,8 +1,10 @@
 //#define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 #include <string>
+#include <vector>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <cyclopedia.h>
 
 using namespace Adndtk;
 

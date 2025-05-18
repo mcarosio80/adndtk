@@ -2,7 +2,10 @@
 #include <catch2/catch_all.hpp>
 #include <string>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <options.h>
+#include <common_types.h>
+#include <hit_points.h>
 
 using namespace Adndtk;
 

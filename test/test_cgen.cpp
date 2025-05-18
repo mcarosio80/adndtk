@@ -4,7 +4,10 @@
 #include <optional>
 #include <algorithm>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <skills.h>
+#include <skill_creator.h>
+#include <character_generator.h>
 
 using namespace Adndtk;
 

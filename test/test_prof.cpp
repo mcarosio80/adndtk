@@ -2,7 +2,8 @@
 #include <catch2/catch_all.hpp>
 #include <vector>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <proficiencies.h>
 
 using namespace Adndtk;
 

@@ -1,8 +1,8 @@
 //#define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
-#include <string>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <turn_undead.h>
 
 using namespace Adndtk;
 

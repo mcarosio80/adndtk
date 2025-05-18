@@ -3,7 +3,9 @@
 #include <string>
 #include <sstream>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <data_validator.h>
+#include <common_types.h>
 
 using namespace Adndtk;
 

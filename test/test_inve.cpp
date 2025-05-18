@@ -3,7 +3,9 @@
 #include <string>
 #include <optional>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <inventory.h>
+#include <common_types.h>
 
 using namespace Adndtk;
 

@@ -1,9 +1,10 @@
 //#define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
-#include <string>
-#include <optional>
+#include <vector>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <thief_ability.h>
+#include <common_types.h>
 
 using namespace Adndtk;
 

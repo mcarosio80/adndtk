@@ -2,7 +2,9 @@
 #include <catch2/catch_all.hpp>
 #include <string>
 
-#include <adndtk.h>
+#include <defs.h>
+#include <options.h>
+#include <spell_book.h>
 
 using namespace Adndtk;
 
