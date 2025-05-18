@@ -17,7 +17,7 @@ namespace Adndtk
     class Monster : public Avatar
     {
     public:
-        Monster(const Defs::monster& monsterId);
+        Monster(const Defs::monster& monsterId, const std::string& instanceName = "");
 
         constexpr Avatar::Type get_avatar_type() const override
         {
@@ -26,8 +26,11 @@ namespace Adndtk
         const auto& get_id() const { return _id; }
         const auto& get_name() const { return _name; }
         const auto& get_full_name() const { return _fullName; }
+        const auto& get_instance_name() const { return _instanceName; }
         const auto& get_frequency() const { return _frequencyId; }
         const auto& get_intelligence() const { return _intelligence; }
+        
+        void set_instance_name(const std::string& newName) { _instanceName = newName; }
 
         const auto& get_climate_terrain() const { return _cliamteTerrain; }
         bool lives_in(const Defs::climate& climateId) const
@@ -89,6 +92,7 @@ namespace Adndtk
         Defs::monster                               _id;
         std::string                                 _name;
         std::string                                 _fullName;
+        std::string                                 _instanceName;
         std::optional<Defs::encounter_frequency>    _frequencyId;
         std::optional<SkillValue>                   _intelligence;
         std::set<std::pair<Defs::climate, Defs::terrain>>

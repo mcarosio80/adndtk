@@ -4,7 +4,7 @@
 #include <dice.h>
 #include <sstream>
 
-Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
+Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId, const std::string& instanceName/*=""*/)
     : _id{monsterId}, _name{}, _frequencyId{}, _intelligence{}, _cliamteTerrain{},
         _planes{}, _organisation{}, _turnedAs{}, _activityCycle{}, _diet{},
         _alignment{}, _element{}, _dragonType{}
@@ -19,6 +19,7 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
 
     _name = info.value().display_name.value_or(info.value().name);
     _fullName = info.value().name;
+    _instanceName = (!instanceName.empty()) ? instanceName : _name;
     _frequencyId = info.value().frequency_id;
     _intelligence = get_intelligence_score(info.value().intelligence_from, info.value().intelligence_to);
 
