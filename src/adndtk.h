@@ -40,6 +40,8 @@
 #include <character_generator.h>
 #include <data_validator.h>
 #include <proficiencies.h>
+#include <party.h>
+#include <battlefield.h>
 #include <battleground.h>
 
 #endif // ADNDTK_H
