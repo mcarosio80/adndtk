@@ -26,14 +26,46 @@ namespace Adndtk
             double& x() { return _coords[XComponent]; }
             double& y() { return _coords[YComponent]; }
 
+            auto begin() { return &(_coords[0]); }
+            auto end() { return &(_coords[0]) + size(); }
+            const auto begin() const { return &(_coords[0]); }
+            const auto end() const { return &(_coords[0]) + size(); }
+
+            size_t size() const { return _coords.size(); }
+
             bool operator==(const Point& lhs) const
             {
-                return x() == lhs.x() && y() == lhs.y();
+                return std::equal(begin(), end(), lhs.begin(), lhs.end());
             }
 
             bool operator<(const Point& lhs) const
             {
-                return x() < lhs.x() && y() < lhs.y();
+                for (auto idx=0; idx<size(); ++idx)
+                {
+                    if ((*this)[idx] >= lhs[idx])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            double& operator[](const int index)
+            {
+                if (index < 0 || index > _coords.size())
+                {
+                    throw std::runtime_error("Index out of bound");
+                }
+                return _coords[index];
+            }
+
+            const double& operator[](const int index) const
+            {
+                if (index < 0 || index > _coords.size())
+                {
+                    throw std::runtime_error("Index out of bound");
+                }
+                return _coords[index];
             }
 
             Point& move(const double xOffset, const double yOffset)
@@ -64,6 +96,42 @@ namespace Adndtk
             const double& y() const { return _offsets[YComponent]; }
             double& x() { return _offsets[XComponent]; }
             double& y() { return _offsets[YComponent]; }
+
+            auto begin() { return &(_offsets[0]); }
+            auto end() { return &(_offsets[0]) + size(); }
+            const auto begin() const { return &(_offsets[0]); }
+            const auto end() const { return &(_offsets[0]) + size(); }
+
+            size_t size() const { return _offsets.size(); }
+
+            bool operator==(const Direction& lhs) const
+            {
+                return std::equal(begin(), end(), lhs.begin(), lhs.end());
+            }
+
+            double& operator[](const int index)
+            {
+                if (index < 0 || index > _offsets.size())
+                {
+                    throw std::runtime_error("Index out of bound");
+                }
+                return _offsets[index];
+            }
+
+            const double& operator[](const int index) const
+            {
+                if (index < 0 || index > _offsets.size())
+                {
+                    throw std::runtime_error("Index out of bound");
+                }
+                return _offsets[index];
+            }
+            
+            void normalise()
+            {
+                double norm = Battlefield::normal(*this);
+                std::for_each(begin(), end(), [&norm](double& v) { v /= norm; });
+            }
 
         private:
             std::valarray<double>  _offsets;
@@ -162,7 +230,6 @@ namespace Adndtk
         size_t count_avatars(const std::string& partyName) const;
         size_t count_avatars(const std::string& partyName, const Adndtk::Avatar::Type& type) const;
 
-
         void clear();
         void step();
 
@@ -207,6 +274,8 @@ namespace Adndtk
         bool place_avatar(const Adndtk::AvatarId id, const Point& coord, 
                         const double radius, const Direction& direction);
 
+        static double inner_product(const Direction& dir1, const Direction& dir2);
+        static double normal(const Adndtk::Battlefield::Direction& dir);
         static double distance(const Point& pt1, const Point& pt2);
         static bool intersect(const Point& centre1, double radius1, const Point& centre2, double radius2);
         static Direction to_centre(const Point& coords);
