@@ -1,4 +1,6 @@
 #include <sstream>
+#include <cmath>
+#include <numeric>
 
 #include <battlefield.h>
 
@@ -166,7 +168,6 @@ bool Adndtk::Battlefield::detect_collision(const Point& coord, const double radi
 {
     for (const auto& c : _coordinates)
     {
-        //if (c.first == coord)
         if (Battlefield::intersect(c.first, c.second.avatarRadius, coord, radius))
         {
             return true;
@@ -189,9 +190,26 @@ bool Adndtk::Battlefield::place_avatar(const Adndtk::AvatarId id, const Point& c
     return true;
 }
 
+double Adndtk::Battlefield::inner_product(const Adndtk::Battlefield::Direction& dir1, const Adndtk::Battlefield::Direction& dir2)
+{
+    return std::inner_product(dir1.begin(), dir1.end(), dir2.begin(), 0);
+}
+
+double Adndtk::Battlefield::normal(const Adndtk::Battlefield::Direction& dir)
+{
+    auto pred = [] (const double sum, const double v) { return sum + std::pow(v, 2); };
+    const auto normSquare = std::accumulate(dir.begin(), dir.end(), 0, pred);
+    return std::sqrt(normSquare);
+}
+
 double Adndtk::Battlefield::distance(const Point& pt1, const Point& pt2)
 {
-    return sqrt((pt1.x() - pt2.x())*(pt1.x() - pt2.x()) + (pt1.y() - pt2.y())*(pt2.y() - pt2.y()));
+    double res{};
+    for (auto idx=0; idx<pt1.size(); ++idx)
+    {
+        res += std::pow(pt1[idx] - pt2[idx], 2);
+    }
+    return sqrt(res);
 }
 
 bool Adndtk::Battlefield::intersect(const Point& centre1, double radius1, const Point& centre2, double radius2)
@@ -229,5 +247,6 @@ bool Adndtk::Battlefield::intersect(const Point& centre1, double radius1, const 
 Adndtk::Battlefield::Direction Adndtk::Battlefield::to_centre(const Adndtk::Battlefield::Point& coords)
 {
     Battlefield::Direction direction{-coords.x(), -coords.y()};
+    direction.normalise();
     return direction;
 }
