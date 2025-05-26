@@ -196,3 +196,27 @@ TEST_CASE("[TC-MONS.013] Monsters with any moral alignment can have any value", 
         || nereid.moral_alignment() == Defs::moral_alignment::chaotic_neutral
         || nereid.moral_alignment() == Defs::moral_alignment::chaotic_evil));
 }
+
+TEST_CASE("[TC-MONS.014] Monsters with single AC value have no AC variants", "[monster]" )
+{
+    Monster m{Defs::monster::golem_gargoyle};
+
+    REQUIRE(m.ac_variants().size() == 1);
+    REQUIRE(m.ac().has_value());
+    REQUIRE(m.ac().value() == 0);
+}
+
+TEST_CASE("[TC-MONS.015] Monsters with multiple AC value have AC variants", "[monster]" )
+{
+    Monster m{Defs::monster::ankheg};
+
+    REQUIRE(m.ac_variants().size() == 2);
+    REQUIRE(m.ac("overall").has_value());
+    REQUIRE(m.ac("overall").value() == 2);
+    REQUIRE(m.ac("underside").has_value());
+    REQUIRE(m.ac("underside").value() == 4);
+
+    REQUIRE(m.ac().value() == 2);
+
+    REQUIRE_FALSE(m.ac("whatever else").has_value());
+}

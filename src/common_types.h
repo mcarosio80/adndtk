@@ -137,6 +137,8 @@ namespace Adndtk
         select_monster_treasure,
         select_monster_elemntal,
         select_monster_dragon,
+        select_monster_appearing,
+        select_monster_ac,
     };
 
     enum class XPChangeType
@@ -188,6 +190,7 @@ namespace Adndtk
         static constexpr short weapon_proficient_slots_num = 1;
         static constexpr short weapon_specialised_slots_num = 2;
         static constexpr short x_bows_specialised_slots_num = 3;
+        static constexpr AC max_ac_value = 20;
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,

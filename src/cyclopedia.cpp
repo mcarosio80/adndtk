@@ -209,7 +209,9 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'treasure_class_id', treasure_class_id, 'multiplier', multiplier, 'multiplier_dice_num', multiplier_dice_num, 'multiplier_die_faces', multiplier_die_faces, 'location_id', location_id, 'treasure_component_id', treasure_component_id from monster_treasure where monster_id = ?", Query::select_monster_treasure);
         prepare_statement("select 'element_id', element_id from monster_elemental where monster_id = ?", Query::select_monster_elemntal);
         prepare_statement("select 'type', type from monster_dragon where monster_id = ?", Query::select_monster_dragon);
-    
+        prepare_statement("select 'no_appearing_from', no_appearing_from, 'no_appearing_to', no_appearing_to, 'dice_number', dice_number, 'die_faces', die_faces, 'modifier', modifier, 'multiplier', multiplier, 'probability', probability, 'encounter_location_id', encounter_location_id from monster_appearing where monster_id = ?", Query::select_monster_appearing);
+        prepare_statement("select 'ac', ac, 'ac_variant', ac_variant from monster_ac where monster_id = ?", Query::select_monster_ac);
+
         load_advancement_table();
     }
     return ok;

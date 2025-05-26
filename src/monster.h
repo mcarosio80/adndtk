@@ -85,6 +85,10 @@ namespace Adndtk
         bool is_dragon() const { return _dragonType.has_value(); }
         std::optional<Defs::monster_dragon_type> dragon_type() const { return _dragonType; }
         
+        const std::map<AC, std::string>& ac_variants() const { return _acVariants; }
+        std::optional<AC> ac() const;
+        std::optional<AC> ac(const std::string& variant) const;
+        
     private:
         Defs::monster                               _id;
         std::string                                 _name;
@@ -101,6 +105,7 @@ namespace Adndtk
         std::optional<Defs::moral_alignment>        _alignment;
         std::optional<Defs::element>                _element;
         std::optional<Defs::monster_dragon_type>    _dragonType;
+        std::map<AC, std::string>                   _acVariants;
 
         template <typename _FeatureType>
         std::set<_FeatureType> set_multiple_feature(const Defs::monster& id, const Adndtk::Query& queryId, const std::string& label)

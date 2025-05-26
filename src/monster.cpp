@@ -1,8 +1,12 @@
+#include <sstream>
+#include <algorithm>
+#include <utility>
+
 #include <monster.h>
 #include <tables.h>
 #include <treasure.h>
 #include <dice.h>
-#include <sstream>
+#include <common_types.h>
 
 Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
     : _id{monsterId}, _name{}, _frequencyId{}, _intelligence{}, _cliamteTerrain{},
@@ -51,6 +55,17 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
         auto treasureComponent = r.try_as<Defs::treasure_component>("treasure_component_id");
         // _cliamteTerrain.emplace(std::make_pair(climate, terrain));
     }
+
+    auto rsAcVariants = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<Defs::monster>(Query::select_monster_ac, _id);
+    for (const auto& r : rsAcVariants)
+    {
+        auto acValue = r.try_as<AC>("ac");
+        auto acVariant = r.try_as<std::string>("ac_variant");
+        if (acValue)
+        {
+            _acVariants[acValue.value()] = acVariant.value_or("");
+        }
+    }
 }
 
 double Adndtk::Monster::get_treasure_multiplier(const std::optional<double>& multiplier, const std::optional<short>& diceNumber, const std::optional<Defs::die>& dieFaces)
@@ -80,4 +95,26 @@ std::optional<Adndtk::SkillValue> Adndtk::Monster::get_intelligence_score(const 
     
     auto score = Die::roll<short>(value_from.value(), value_to.value());
     return SkillValue(Defs::skill::intelligence, score);
+}
+
+std::optional<Adndtk::AC> Adndtk::Monster::ac() const
+{
+    auto minAC{Const::max_ac_value};
+    for (const auto& [ac, variant] : _acVariants)
+    {
+        minAC = std::min(ac, minAC);
+    }
+    return minAC;
+}
+
+std::optional<Adndtk::AC> Adndtk::Monster::ac(const std::string& variant) const
+{
+    for (const auto& var : _acVariants)
+    {
+        if (var.second == variant)
+        {
+            return var.first;
+        }
+    }
+    return std::nullopt;
 }
