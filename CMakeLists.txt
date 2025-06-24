@@ -29,7 +29,7 @@ find_package(SQLite3 REQUIRED)
 if(SQLite3_FOUND)
     find_path(SQLite3_EXECUTABLE sqlite3)
     message("SQLite3 " ${SQLite3_VERSION} " executable found in " ${SQLite3_EXECUTABLE})
-    message("SQLite3_INCLUDE_DIRS; " ${SQLite3_INCLUDE_DIRS})
+    message("SQLite3_INCLUDE_DIRS" " " ${SQLite3_INCLUDE_DIRS})
     message("SQLite3_LIBRARIES: " ${SQLite3_LIBRARIES})
 endif()
 
@@ -138,6 +138,12 @@ fill_db_data(${DB_FILE} ${DB_SPEL_FILE})
 
 # Filling Monsters data into SQLite database
 fill_db_data(${DB_FILE} ${DB_MONS_FILE})
+
+set(SQL_FILE_SUFFIXES "ac" "activity_cycle" "alignment" "appearing" "climate_terrain" "diet" "movement" "organisation" "treasure")
+foreach(SQL_FILE_SUFFIX ${SQL_FILE_SUFFIXES})
+    fill_db_data(${DB_FILE} ${SQL_DIR}/monsters_${SQL_FILE_SUFFIX}.sql)
+endforeach()
+
 
 # Filling Geography data into SQLite database
 fill_db_data(${DB_FILE} ${DB_GEOG_FILE})
@@ -311,10 +317,10 @@ if(RUN_CLANG_TIDY)
     if(CLANG_TIDY_EXE)
         message("Clang-tidy was found: module enabled")
         set(CLANG_TIDY_COMMAND
-            ${CLANG_TIDY_EXE};
-            --checks=*;
-            --header-filter=.;
-            --warnings-as-errors=*;
+            ${CLANG_TIDY_EXE}" "
+            --checks=*" "
+            --header-filter=." "
+            --warnings-as-errors=*" "
             --use-color
         )
         set_target_properties(${ADNDTK_LIB} PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
