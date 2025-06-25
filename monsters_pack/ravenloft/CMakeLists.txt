@@ -23,7 +23,7 @@ function(fill_db_data DB_FILE_PATH SQL_DATA_FILE)
     endif()
 endfunction()
 
-set(DB_MONS_FILE ${SQL_DIR}/${SETTING}/monsters.sql)
+set(DB_MONS_FILE ${MONSTERS_PACK_DIR}/${SETTING}/monsters.sql)
 # Filling Monsters data into SQLite database
 fill_db_data(${DB_FILE} ${DB_MONS_FILE})
 

@@ -96,9 +96,6 @@ foreach(SQL_FILE_SUFFIX ${SQL_FILE_SUFFIXES})
     fill_db_data(${DB_FILE} ${SQL_DIR}/monsters_${SQL_FILE_SUFFIX}.sql)
 endforeach()
 
-add_subdirectory(greyhawk)
-add_subdirectory(ravenloft)
-
 # Creating index on SQLite database
 message("Creating index on SQLite database")
 execute_process(COMMAND ${SQLite3_EXECUTABLE}/sqlite3 ${DB_FILE} ".read ${DB_IDX_FILE}"

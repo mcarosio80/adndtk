@@ -1,5 +1,5 @@
 .mode csv
 .separator "|"
-.import --skip 1 @SQL_DIR@/@SETTING@/monsters_data-2122.csv STAGING_DATA_MONSTER
-.import --skip 1 @SQL_DIR@/@SETTING@/monsters_data-2139.csv STAGING_DATA_MONSTER
-.import --skip 1 @SQL_DIR@/@SETTING@/monsters_data-2153.csv STAGING_DATA_MONSTER
+.import --skip 1 @MONSTERS_PACK_DIR@/@SETTING@/monsters_data-2122.csv STAGING_DATA_MONSTER
+.import --skip 1 @MONSTERS_PACK_DIR@/@SETTING@/monsters_data-2139.csv STAGING_DATA_MONSTER
+.import --skip 1 @MONSTERS_PACK_DIR@/@SETTING@/monsters_data-2153.csv STAGING_DATA_MONSTER
