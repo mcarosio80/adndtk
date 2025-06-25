@@ -83,7 +83,7 @@ namespace Adndtk
         bool is_elemental() const { return _element.has_value(); }
         std::optional<Defs::element> element() const { return _element; }
         bool is_dragon() const { return _dragonType.has_value(); }
-        std::optional<Defs::monster_dragon_type> dragon_type() const { return _dragonType; }
+        std::optional<Defs::dragon_type> dragon_type() const { return _dragonType; }
         
         const std::map<AC, std::string>& ac_variants() const { return _acVariants; }
         std::optional<AC> ac() const;
@@ -104,7 +104,7 @@ namespace Adndtk
         std::set<Defs::diet>                        _diet;
         std::optional<Defs::moral_alignment>        _alignment;
         std::optional<Defs::element>                _element;
-        std::optional<Defs::monster_dragon_type>    _dragonType;
+        std::optional<Defs::dragon_type>            _dragonType;
         std::map<AC, std::string>                   _acVariants;
 
         template <typename _FeatureType>

@@ -41,7 +41,7 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
     
     _alignment = set_optional_feature<Defs::moral_alignment>(_id, Query::select_monster_alignment, "alignment_id");
     _element = set_optional_feature<Defs::element>(_id, Query::select_monster_elemntal, "element_id");
-    _dragonType = set_optional_feature<Defs::monster_dragon_type>(_id, Query::select_monster_dragon, "type");
+    _dragonType = set_optional_feature<Defs::dragon_type>(_id, Query::select_monster_dragon, "type");
     _turnedAs = set_optional_feature<Defs::turnable>(_id, Query::select_monster_undead, "turned_as");
 
     auto rsTreasure = Adndtk::Cyclopedia::get_instance().exec_prepared_statement<Defs::monster>(Query::select_monster_treasure, _id);

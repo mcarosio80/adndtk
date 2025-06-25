@@ -345,7 +345,7 @@
         "value": "id"
     },
     {
-        "table" : "MONSTER_DRAGON_TYPE",
+        "table" : "DRAGON_TYPE",
         "key" : "name",
         "value": "id"
     },
