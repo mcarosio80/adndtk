@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18.4)
 set(ADNDTK_LIB adndtk)
 project(${ADNDTK_LIB}
     LANGUAGES CXX
-    VERSION 0.9.2501.1
+    VERSION 0.9.2506.1
     DESCRIPTION "AdndTK is an open C++ role playing games library. It aims to mimic the ruleset of Advanced Dungeons & Dragons 2nd Edition"
 )
 
@@ -50,28 +50,39 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config)
 set(DEPLOY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deploy)
 set(MONSTERS_PACK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/monsters_pack)
+set(DEMO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/demo)
+set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
+set(CLI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cli)
 
-# Setup SQLite files
+# Setup SQLite parameters
 set(DB_NAME adndtk.db)
 set(DB_FILE ${DB_DIR}/${DB_NAME})
+set(SQLITE_EXE ${SQLite3_EXECUTABLE}/sqlite3)
 
-add_subdirectory(${SQL_DIR})
-add_subdirectory(${MONSTERS_PACK_DIR})
-add_subdirectory(${PY_DIR})
+function(enter_directory DIR_PATH)
+    message("Enterging subdirectory ${DIR_PATH}")
+    add_subdirectory(${DIR_PATH})
+endfunction()
+
+enter_directory(${SQL_DIR})
+enter_directory(${MONSTERS_PACK_DIR})
+enter_directory(${PY_DIR})
 
 message("Configuring target for defs.h")
 add_custom_target(defs_h ALL DEPENDS ${SRC_DIR}/defs.h SOURCES ${DB_FILE})
 message("Configuring target for tables.h")
 add_custom_target(tables_h ALL DEPENDS ${SRC_DIR}/tables.h SOURCES ${DB_FILE})
-message("Configuring target for SQLite database")
+message("Configuring target for database")
 add_custom_target(adnd_db ALL DEPENDS ${DB_FILE} SOURCES ${DB_SCHEMA_FILE})
 
-#execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 --reverse OUTPUT_VARIABLE FIRST_COMMIT_DATE)
-execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 OUTPUT_VARIABLE LAST_COMMIT_DATE)
+execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%ad" --date=iso8601 OUTPUT_VARIABLE LAST_COMMIT_DATE
+                COMMAND_ECHO STDOUT)
 message("Last commit date: " ${LAST_COMMIT_DATE})
-execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%an" OUTPUT_VARIABLE LAST_COMMIT_AUTHOR_NAME)
+execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%an" OUTPUT_VARIABLE LAST_COMMIT_AUTHOR_NAME
+                COMMAND_ECHO STDOUT)
 message("Commit author name: " ${LAST_COMMIT_AUTHOR_NAME})
-execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%H" OUTPUT_VARIABLE LAST_COMMIT_HASH)
+execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:"%H" OUTPUT_VARIABLE LAST_COMMIT_HASH
+                COMMAND_ECHO STDOUT)
 message("Last commit hash: " ${LAST_COMMIT_HASH})
 
 #Setting database source
@@ -157,14 +168,10 @@ configure_file(${CFG_DIR}/LICENSE.md.in ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
 set(ADNDTK_DATABASE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${ADNDTK_LIB}/${CMAKE_PROJECT_VERSION}/data/${DB_NAME})
 configure_file(${CFG_DIR}/config.h.in ${DEPLOY_DIR}/config.h)
 
-message("Adding subdirectory src")
-add_subdirectory(src)
-message("Adding subdirectory demo")
-add_subdirectory(demo)
-message("Adding subdirectory test")
-add_subdirectory(test)
-message("Adding subdirectory cli")
-add_subdirectory(cli)
+enter_directory(${SRC_DIR})
+enter_directory(${DEMO_DIR})
+enter_directory(${TEST_DIR})
+enter_directory(${CLI_DIR})
 
 
 # Clang-tidy
