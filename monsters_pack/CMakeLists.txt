@@ -10,5 +10,6 @@ set(SPELLJAMMER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/spelljammer)
 
 enter_directory(${AL_QADIM_DIR})
 enter_directory(${DARK_SUN_DIR})
+enter_directory(${DRAGONLANCE_DIR})
 enter_directory(${GREYHAWK_DIR})
 enter_directory(${RAVENLOFT_DIR})
