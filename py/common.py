@@ -19,7 +19,7 @@ def connect_db(db_file):
 ################################
 def clean_string(token):
     t = token.lower()
-    return t.replace(' ', '_').replace('\'', '').replace('-', '_').replace('+', '_or_more').replace(',', '').replace(')', '').replace('(', '').replace('.', '').replace('/', '_').replace('*', '')
+    return t.replace(' ', '_').replace('\'', '').replace('-', '_').replace('+', '_or_more').replace(',', '').replace(')', '').replace('(', '').replace('.', '').replace('/', '_').replace('*', '').replace('<br>', '_')
 
 ################################
 def fetch_key_value_pairs(conn, key, value, table, sort = False):
