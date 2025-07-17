@@ -6,7 +6,7 @@ configure_file(${CFG_DIR}/load_monster_data_staging_${SETTING}.sqlite.in ${LOAD_
 
 set(DB_MONS_FILE ${MONSTERS_PACK_DIR}/${SETTING}/monsters.sql)
 # Filling Monsters data into database
-# fill_db_data(${DB_FILE} ${DB_MONS_FILE})
+fill_db_data(${DB_FILE} ${DB_MONS_FILE})
 
 # set(SQL_FILE_SUFFIXES "ac" "activity_cycle" "alignment" "appearing" "climate_terrain" "diet" "movement" "organisation" "treasure")
 # foreach(SQL_FILE_SUFFIX ${SQL_FILE_SUFFIXES})
