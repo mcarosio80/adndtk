@@ -2,6 +2,8 @@
 #include <cyclopedia.h>
 #include <dice.h>
 
+#include <cmath>
+
 Adndtk::Thaco::Thaco()
 {
 }
@@ -43,6 +45,17 @@ Adndtk::THAC0 Adndtk::Thaco::get(const Adndtk::ExperienceLevel& lvl) const
         }
     }
     return bestThaco;
+}
+
+Adndtk::THAC0 Adndtk::Thaco::get_value(const HitDice& diceNumber, const short& diceModifier/*=0*/)
+{
+    if (diceNumber < 1.0 || (diceNumber == 1.0 && diceModifier < 0))
+    {
+        return Const::base_thaco;
+    }
+
+    auto thacoModifier = std::ceil(diceNumber / 2.0) - 1;
+    return Const::base_thaco - 1 - (2 * thacoModifier);
 }
 
 std::pair<Adndtk::Defs::character_class_type, Adndtk::ExperienceLevel> Adndtk::Thaco::attack_as(const Adndtk::CharacterExperience& levels) const

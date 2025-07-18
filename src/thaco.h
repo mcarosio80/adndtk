@@ -17,6 +17,7 @@ namespace Adndtk
         ~Thaco();
 
         THAC0 get(const ExperienceLevel& lvl) const;
+        static THAC0 get_value(const HitDice& diceNumber, const short& diceModifier = 0);
         Defs::attack_result try_hit(const Adndtk::CharacterExperience& levels, const AC& ac, const short& bonusMalus = 0) const;
         std::pair<Defs::character_class_type, ExperienceLevel> attack_as(const CharacterExperience& levels) const;
         

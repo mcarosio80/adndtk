@@ -18,6 +18,7 @@ namespace Adndtk
     using AC = short;
     using SpellLevel = short;
     using ThievingScore = short;
+    using HitDice = double;
 
     enum class SkillGenerationMethod
     {

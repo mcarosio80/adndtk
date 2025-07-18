@@ -139,3 +139,25 @@ TEST_CASE("[TC-THAC.005] Best THAC0 will be chosen for multiclass characters", "
     REQUIRE(attackLvl.first == Defs::character_class_type::wizard);
     REQUIRE(attackLvl.second == 4);
 }
+
+TEST_CASE("[TC-THAC.006] Creatures with less than 1 HD have THAC0 20", "[THAC0]" )
+{
+    REQUIRE(Thaco::get_value(0.25) == Const::base_thaco);
+    REQUIRE(Thaco::get_value(0.25, 1) == Const::base_thaco);
+    REQUIRE(Thaco::get_value(0.5) == Const::base_thaco);
+    REQUIRE(Thaco::get_value(0.5, 1) == Const::base_thaco);
+    REQUIRE(Thaco::get_value(1, -1) == Const::base_thaco);
+}
+
+TEST_CASE("[TC-THAC.007] THAC0 for creatures with 1+ or more HD decreases accordingly", "[THAC0]" )
+{
+    short currentThaco{Const::base_thaco - 1};
+
+    for (HitDice hdValue{1}; hdValue < 20; hdValue += 2, currentThaco -= 2)
+    {
+        REQUIRE(Thaco::get_value(hdValue) == currentThaco);
+        REQUIRE(Thaco::get_value(hdValue, 1) == currentThaco);
+        REQUIRE(Thaco::get_value(hdValue + 1) == currentThaco);
+        REQUIRE(Thaco::get_value(hdValue + 1, 1) == currentThaco);
+    }
+}
