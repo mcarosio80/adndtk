@@ -37,18 +37,17 @@ void Adndtk::OptionalRules::set_default_options_values()
     _options[Option::apply_encumbrance] = true;
     _options[Option::unlimited_store_availability] = false;
     _options[Option::unlimited_store_supply] = false;
-    _options[Option::store_profit_margin_percentage] = 0.05;
-
-    _options[Option::store_min_cp_starting_amount] = static_cast<uint32_t>(1000);
-    _options[Option::store_max_cp_starting_amount] = static_cast<uint32_t>(10000);
-    _options[Option::store_min_sp_starting_amount] = static_cast<uint32_t>(1000);
-    _options[Option::store_max_sp_starting_amount] = static_cast<uint32_t>(5000);
-    _options[Option::store_min_ep_starting_amount] = static_cast<uint32_t>(1000);
-    _options[Option::store_max_ep_starting_amount] = static_cast<uint32_t>(2000);
-    _options[Option::store_min_gp_starting_amount] = static_cast<uint32_t>(100);
-    _options[Option::store_max_gp_starting_amount] = static_cast<uint32_t>(500);
-    _options[Option::store_min_pp_starting_amount] = static_cast<uint32_t>(100);
-    _options[Option::store_max_pp_starting_amount] = static_cast<uint32_t>(200);
+    _options[Option::store_profit_margin_percentage] = Const::store_profit_margin_percentage;
+    _options[Option::store_min_cp_starting_amount] = static_cast<uint32_t>(Const::store_min_value_cp);
+    _options[Option::store_max_cp_starting_amount] = static_cast<uint32_t>(Const::store_max_value_cp);
+    _options[Option::store_min_sp_starting_amount] = static_cast<uint32_t>(Const::store_min_value_sp);
+    _options[Option::store_max_sp_starting_amount] = static_cast<uint32_t>(Const::store_max_value_sp);
+    _options[Option::store_min_ep_starting_amount] = static_cast<uint32_t>(Const::store_min_value_ep);
+    _options[Option::store_max_ep_starting_amount] = static_cast<uint32_t>(Const::store_max_value_ep);
+    _options[Option::store_min_gp_starting_amount] = static_cast<uint32_t>(Const::store_min_value_gp);
+    _options[Option::store_max_gp_starting_amount] = static_cast<uint32_t>(Const::store_max_value_gp);
+    _options[Option::store_min_pp_starting_amount] = static_cast<uint32_t>(Const::store_min_value_pp);
+    _options[Option::store_max_pp_starting_amount] = static_cast<uint32_t>(Const::store_max_value_pp);
 
     _options[Option::treasure_components_always_present] = false;
 }

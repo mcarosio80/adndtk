@@ -41,8 +41,8 @@ namespace Adndtk
         std::random_device                      _rd;
         std::mt19937                            _generator;
         std::uniform_int_distribution<uint32_t> _uniformDistribution;
-        static const uint32_t                   _valuesFrom{1};
-        static const uint32_t                   _valuesTo{10000};
+        static const uint32_t                   _valuesFrom{Const::treasure_pool_min_value};
+        static const uint32_t                   _valuesTo{Const::treasure_pool_max_value};
 
         Defs::magical_item pick_potion();
         Defs::magical_item pick_scroll();

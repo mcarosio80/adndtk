@@ -192,6 +192,21 @@ namespace Adndtk
         static constexpr short weapon_specialised_slots_num = 2;
         static constexpr short x_bows_specialised_slots_num = 3;
         static constexpr AC max_ac_value = 20;
+        static constexpr ExperienceLevel max_character_level = 20;
+        static constexpr int spell_offset_level_1 = 1000;
+        static constexpr double store_profit_margin_percentage{0.05};
+        static constexpr uint32_t store_min_value_cp{1000};
+        static constexpr uint32_t store_max_value_cp{10000};
+        static constexpr uint32_t store_min_value_sp{1000};
+        static constexpr uint32_t store_max_value_sp{5000};
+        static constexpr uint32_t store_min_value_ep{1000};
+        static constexpr uint32_t store_max_value_ep{2000};
+        static constexpr uint32_t store_min_value_gp{100};
+        static constexpr uint32_t store_max_value_gp{500};
+        static constexpr uint32_t store_min_value_pp{100};
+        static constexpr uint32_t store_max_value_pp{200};
+        static constexpr uint32_t treasure_pool_min_value{1};
+        static constexpr uint32_t treasure_pool_max_value{10000};
     };
 
     using OnXPChange = std::function<void(const Defs::character_class &cls, const XPChangeType &chgType,

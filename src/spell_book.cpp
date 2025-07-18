@@ -57,7 +57,7 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
         auto rsSpells = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(Query::select_wizard_spells_by_level, 1);
         while (numSpells > 0)
         {
-            auto id = Die::roll<size_t>(0, rsSpells.size()-1) + 1000;
+            auto id = Die::roll<size_t>(0, rsSpells.size()-1) + Const::spell_offset_level_1;
             auto splId = static_cast<Defs::wizard_spell>(id);
             scribe_scroll(splId);
             --numSpells;
@@ -66,7 +66,7 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
     _casterLevel = newLevel;
     
     Query queryId = get_spell_progression_query();
-    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, Const::max_character_level);
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& spellProgr = rs[0];
 
@@ -299,7 +299,7 @@ bool Adndtk::SpellBook::is_level_available(const Defs::wizard_spell& spellId) co
     SpellLevel spellLevel = SpellBook::get_spell_level(spellId);
     auto stats = SkillStats::get_instance().get_intelligence_stats(_intelligenceScore);
 
-    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, Const::max_character_level);
     Query queryId = get_spell_progression_query();
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
@@ -330,7 +330,7 @@ bool Adndtk::SpellBook::try_scribe(const Defs::wizard_spell& spellId)
 
 short Adndtk::SpellBook::get_spells_available(const SpellLevel& spellLvl) const
 {
-    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, Const::max_character_level);
     Query queryId = get_spell_progression_query();
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];

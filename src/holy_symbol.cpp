@@ -78,7 +78,7 @@ bool Adndtk::HolySymbol::pray_for_spell(const Defs::priest_spell& spellId)
 
     SpellLevel spellLevel = HolySymbol::get_spell_level(spellId);
     
-    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, Const::max_character_level);
     Query queryId = get_spell_progression_query_id();
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];
@@ -150,7 +150,7 @@ bool Adndtk::HolySymbol::exists(const Defs::priest_spell& spellId)
 
 void Adndtk::HolySymbol::enable_levels() 
 {
-    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, Const::max_character_level);
 
     Query queryId = get_spell_progression_query_id();
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
@@ -237,7 +237,7 @@ short Adndtk::HolySymbol::get_bonus_spells(const SpellLevel& spellLevel) const
 
 short Adndtk::HolySymbol::total_slots(const SpellLevel& spellLevel) const
 {
-    auto lvl = std::min<ExperienceLevel>(_casterLevel, 20);
+    auto lvl = std::min<ExperienceLevel>(_casterLevel, Const::max_character_level);
     Query queryId = get_spell_progression_query_id();
     auto rs = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(queryId, lvl);
     auto& prog = rs[0];

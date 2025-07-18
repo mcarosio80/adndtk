@@ -456,7 +456,7 @@ TEST_CASE("[TC-TABI.014] Skills cannot exceed 95%", "[thief_ability]" )
     Defs::race r{Defs::race::human};
     ThiefAbility tAbil{r};
 
-    REQUIRE(tAbil.level_change(20) == 20);
+    REQUIRE(tAbil.level_change(Const::max_character_level) == Const::max_character_level);
     tAbil.improve_abilities(8,8,8,8,7,7,7,7);
     for (ExperienceLevel el=0; el<tAbil.level()-1; ++el)
     {
@@ -490,7 +490,7 @@ TEST_CASE("[TC-TABI.016] Bonus/malus is considered before cutting the score to 9
     ThiefAbility tAbil{r};
     tAbil.dexterity_change(13);
 
-    REQUIRE(tAbil.level_change(20) == 20);
+    REQUIRE(tAbil.level_change(Const::max_character_level) == Const::max_character_level);
     tAbil.improve_abilities(8,8,8,8,7,7,7,7);
     for (ExperienceLevel el=0; el<tAbil.level()-1; ++el)
     {
