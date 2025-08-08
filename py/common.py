@@ -108,6 +108,31 @@ def fetch_table_info(conn, tableName):
         info.append(t)
     return info
 
+################################
+def fetch_index_info(conn, tableName):
+    cur = conn.cursor()
+
+    stmt = f"""SELECT M.NAME AS TABLE_NAME,
+        TI.NAME AS FIELD_NAME,
+        TI.TYPE AS FIELD_TYPE,
+        TI.[NOTNULL] AS FIELD_NULL
+    FROM SQLITE_SCHEMA AS M,
+        PRAGMA_INDEX_LIST(M.NAME) AS IL,
+        PRAGMA_INDEX_INFO(IL.NAME) AS II,
+        PRAGMA_TABLE_INFO(M.NAME) AS TI
+    WHERE M.NAME='{tableName}' AND II.NAME = TI.NAME;"""
+
+    cur.execute(stmt)
+    rows = cur.fetchall()
+
+    info = list()
+    for row in rows:
+        dataType, identifier = to_ctype(row[1].lower(), row[2])
+        t = (tableName, row[0], identifier, dataType, row[3])
+        info.append(t)
+
+    return info
+
 
 def write_footer(outFile, headerFile):
     headerName = os.path.basename(headerFile)

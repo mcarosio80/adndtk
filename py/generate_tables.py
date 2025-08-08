@@ -39,7 +39,7 @@ def print_free_helpers(outFile, indentationLevel):
     outFile.write(f"""{common.indent(indentationLevel)}}} // namespace Helpers\n\n""")
 
 ################################
-def print_struct_methods(tableName, fields, outFile, indentationLevel):
+def print_struct_methods(tableName, fields, indexedFields, outFile, indentationLevel):
     # Generate function to_vector
     outFile.write(f"""
             /// Returns data from a given column in table '{tableName}' as a typed vector
@@ -117,6 +117,100 @@ def print_struct_methods(tableName, fields, outFile, indentationLevel):
                 const auto data = select(fieldName, fieldValue);
                 return (data.empty()) ? std::nullopt : std::make_optional(data.at(0));
             }}\n""")
+    
+    # Generate function select_index
+    fieldCount = len(indexedFields)
+    if fieldCount > 0:
+        outFile.write(f"""
+            /// Returns a subset of records from table '{tableName}' where indexed fields match parameters
+            template <""")
+        
+        for f in indexedFields:
+            fieldCount -= 1
+            paramName = f[2]
+            outFile.write(f"typename _{paramName}_t")
+            if fieldCount > 0:
+                outFile.write(", ")
+        outFile.write(">")
+
+        outFile.write(f"""
+            static std::vector<{tableName}> select_by(""")
+
+        fieldCount = len(indexedFields)
+        for f in indexedFields:
+            fieldCount -= 1
+            paramName = f[2]
+            #paramType = f[3]
+            outFile.write(f"const _{paramName}_t& {paramName}")
+            if fieldCount > 0:
+                outFile.write(", ")
+        
+        outFile.write(f""")
+            {{""");
+
+        for f in indexedFields:
+            fieldCount -= 1
+            paramName = f[2]
+            paramType = f[3]
+            outFile.write(f"""
+                {paramType} {paramName}_in{{}};
+                if constexpr(std::is_enum_v<_{paramName}_t>)
+                {{
+                    using _{paramName}_ut = typename std::underlying_type_t<_{paramName}_t>;
+                    {paramName}_in = static_cast<_{paramName}_ut>({paramName});
+                }}
+                else
+                {{
+                    {paramName}_in = {paramName};
+                }}
+            """)
+
+        outFile.write(f"""
+                std::vector<{tableName}> vec{{}};
+                std::stringstream stmt{{}};
+                stmt << "select json_group_array(json_object(""")
+        
+        count = len(fields)
+        for t in fields:
+            count -= 1
+            fieldName = t[0]
+            outFile.write(f"'{fieldName}', {fieldName}")
+            if count > 0:
+                outFile.write(", ")
+                
+        outFile.write(f")) from {tableName} where ")
+
+        fieldCount = len(indexedFields)
+        for f in indexedFields:
+            fieldCount -= 1
+            paramName = f[2]
+            paramType = f[3]
+            outFile.write(f"{paramName} = ")
+            if paramType == "std::string":
+                outFile.write("'")
+            outFile.write(f"\" << {paramName}_in")
+
+            if fieldCount > 0:
+                if paramType == "std::string":
+                    outFile.write(" << \"' and ")
+                else:
+                    outFile.write(" << \" and ")
+            else:
+                if paramType == "std::string":
+                    outFile.write(" << \"';\";\n")
+                else:
+                    outFile.write(" << \";\";\n")
+
+        outFile.write(f"""
+                auto results = Cyclopedia::get_instance().exec(stmt.str().c_str());
+                for (auto& r : results)
+                {{
+                    {tableName} stats = convert(r);
+                    vec.push_back(stats);
+                }}
+                return vec;
+            }}\n\n""")
+
 
     # Begins private block
     outFile.write(f"""{common.indent(indentationLevel)}private:""")
@@ -153,7 +247,7 @@ def print_struct_methods(tableName, fields, outFile, indentationLevel):
             }}\n""")
 
 ################################
-def print_struct(tableName, fields, outFile, indentationLevel):
+def print_struct(tableName, fields, indexedFields, outFile, indentationLevel):
      if len(fields) > 0:
         outFile.write(f"{common.indent(indentationLevel)}")
         outFile.write(f"struct {tableName}\n")
@@ -168,7 +262,7 @@ def print_struct(tableName, fields, outFile, indentationLevel):
             else:
                 outFile.write(f"std::optional<{field[1]}> {field[0]}{{}};\n")
         
-        print_struct_methods(tableName, fields, outFile, indentationLevel)
+        print_struct_methods(tableName, fields, indexedFields, outFile, indentationLevel)
 
         outFile.write(f"{common.indent(indentationLevel)}")
         outFile.write("};\n")
@@ -193,6 +287,7 @@ def generate_struct(dbPath, headerFile, namespaces, version, jsonConfig):
         outFile.write(f'#include <vector>\n')
         outFile.write(f'#include <set>\n')
         outFile.write(f'#include <algorithm>\n')
+        outFile.write(f'#include <sstream>\n')
         outFile.write(f'#include <defs.h>\n')
         outFile.write(f'#include <common_types.h>\n')
         outFile.write(f'#include <cyclopedia.h>\n')
@@ -206,6 +301,7 @@ def generate_struct(dbPath, headerFile, namespaces, version, jsonConfig):
         fields = list()
         for table in tables:
             info = common.fetch_table_info(conn, table)
+            indexedFields = common.fetch_index_info(conn, table.upper())
             tableName = info[0][0]
 
             for i in info:
@@ -227,8 +323,9 @@ def generate_struct(dbPath, headerFile, namespaces, version, jsonConfig):
             else:
                 outFile.write("\n")
 
-            print_struct(tableName, fields, outFile, indentation)
+            print_struct(tableName, fields, indexedFields, outFile, indentation)
             fields.clear()
+
 
         common.close_namespace(outFile, namespaces, indentation)
 
