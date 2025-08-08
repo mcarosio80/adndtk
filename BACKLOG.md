@@ -37,6 +37,9 @@ List of the new features, changes to existing features, bug fixes, infrastructur
   * CLI: add cli option to force no race modifiers to skills
   * Split tables.h into separate modules
   * Handle treasure for monsters groups
+  * Refactor python script to generate c++ code
+  * Separate code in libraries
+  * Add dice roll sequence generation feature
   
 ## Planned changes
 
