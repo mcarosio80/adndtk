@@ -349,7 +349,7 @@ int Adndtk::Cyclopedia::onSqliteDataRetrieved(void *data, int argc, char **argv,
         for (int i=0; i<argc; ++i)
         {
             auto v = from_json(argv[i]);
-            set += v;
+            (*set) += v;
         }
     }
     else if (Settings::query_type == QueryType::plain)
@@ -369,14 +369,9 @@ Adndtk::QueryResultSet Adndtk::Cyclopedia::exec(const char* stmt)
 {
     Adndtk::QueryResultSet set;
     char *error = nullptr;
-    int rc = SQLITE_OK;
-    
-    while (rc == SQLITE_OK)
-    {
-        rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::onSqliteDataRetrieved, (void*)&set, &error);
-    }
 
-    if (rc != SQLITE_DONE)
+    int rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::onSqliteDataRetrieved, (void*)&set, &error);
+    if (rc != SQLITE_OK)
     {
         std::string msg{error};
         sqlite3_free(error);
