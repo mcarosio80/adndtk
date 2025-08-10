@@ -38,22 +38,11 @@ def print_free_helpers(outFile, indentationLevel):
 
     outFile.write(f"""{common.indent(indentationLevel)}}} // namespace Helpers\n\n""")
 
-################################
-def print_struct_methods(tableName, fields, indexedFields, outFile, indentationLevel):
-    # Generate function to_vector
-    outFile.write(f"""
-            /// Returns data from a given column in table '{tableName}' as a typed vector
-            template<typename _T>
-			static std::vector<_T> to_vector(const std::string& fieldName)
-            {{
-                return Helpers::to_vector<_T>(fieldName, Query::select_all_{tableName});
-			}}\n""")
-
-    # Generate function to_map
+def generate_to_map(outFile, tableName):
     outFile.write(f"""
             /// Returns all records from table '{tableName}' indexed on 'fieldName'
             template<typename _KeyType>
-			static std::map<_KeyType, {tableName}> to_map(const std::string& fieldName)
+            static std::map<_KeyType, {tableName}> to_map(const std::string& fieldName)
             {{
                 std::map<_KeyType, {tableName}> data{{}};
                 auto results = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_all_{tableName});
@@ -63,9 +52,9 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
                     data[key] = convert(r);
                 }}
                 return data;
-			}}\n""")
+            }}\n""")
 
-    # Generate function to_set
+def generate_to_set(outFile, tableName):
     outFile.write(f"""
             /// Returns data from a given column in table '{tableName}' as a typed set
             template<typename _Type>
@@ -74,7 +63,7 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
                 return Helpers::to_set<_Type>(fieldName, Query::select_all_{tableName});
 			}}\n""")
 
-    # Generate function fetch_all
+def generate_fetch_all(outFile, tableName):
     outFile.write(f"""
             /// Returns all records from table '{tableName}'
             static std::vector<{tableName}> fetch_all()
@@ -88,8 +77,8 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
                 }}
                 return vec;
             }}\n""")
-
-    # Generate function select
+    
+def generate_select(outFile, tableName):
     outFile.write(f"""
             /// Returns all records from table '{tableName}' where fieldName matches fieldValue
             template<typename _FieldType>
@@ -108,7 +97,7 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
                 return vec;
             }}\n""")
 
-    # Generate function select_one
+def generate_select_one(outFile, tableName):
     outFile.write(f"""
             /// Returns the first record from table '{tableName}' where fieldName matches fieldValue
             template<typename _FieldType>
@@ -117,8 +106,9 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
                 const auto data = select(fieldName, fieldValue);
                 return (data.empty()) ? std::nullopt : std::make_optional(data.at(0));
             }}\n""")
-    
-    # Generate function select_index
+
+def generate_select_by(outFile, tableName, fields, indexedFields):
+    # Generate function select_by
     fieldCount = len(indexedFields)
     if fieldCount > 0:
         outFile.write(f"""
@@ -210,12 +200,8 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
                 }}
                 return vec;
             }}\n\n""")
-
-
-    # Begins private block
-    outFile.write(f"""{common.indent(indentationLevel)}private:""")
-
-    # Generate function convert
+        
+def generate_convert(outFile, fields, tableName, indentationLevel):
     outFile.write(f"""
             /// Converts a record from table '{tableName}' to plain data object
             static {tableName} convert(const QueryResult& r)
@@ -245,6 +231,41 @@ def print_struct_methods(tableName, fields, indexedFields, outFile, indentationL
     outFile.write(f"""
                 return stats;
             }}\n""")
+
+################################
+def print_struct_methods(tableName, fields, indexedFields, outFile, indentationLevel):
+    # Generate function to_vector
+    outFile.write(f"""
+            /// Returns data from a given column in table '{tableName}' as a typed vector
+            template<typename _T>
+			static std::vector<_T> to_vector(const std::string& fieldName)
+            {{
+                return Helpers::to_vector<_T>(fieldName, Query::select_all_{tableName});
+			}}\n""")
+
+    # Generate function to_map
+    generate_to_map(outFile, tableName)
+
+    # Generate function to_set
+    generate_to_set(outFile, tableName)
+
+    # Generate function fetch_all
+    generate_fetch_all(outFile, tableName)
+
+    # Generate function select
+    generate_select(outFile, tableName)
+
+    # Generate function select_one
+    generate_select_one(outFile, tableName)
+    
+    # Generate function select_by
+    generate_select_by(outFile, tableName, fields, indexedFields)
+
+    # Begins private block
+    outFile.write(f"""{common.indent(indentationLevel)}private:""")
+
+    # Generate function convert
+    generate_convert(outFile, fields, tableName, indentationLevel)
 
 ################################
 def print_struct(tableName, fields, indexedFields, outFile, indentationLevel):
