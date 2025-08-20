@@ -3,6 +3,7 @@
 
 #include <random>
 #include <iostream>
+#include <array>
 #include <regex>
 
 #include <defs.h>
@@ -18,7 +19,7 @@ namespace Adndtk
 
         friend std::ostream& operator<< (std::ostream& out, const Die& d)
         {
-            out << "d" << static_cast<short>(d.faces());
+            out << "d" << d.faces();
             return out;
         }
         operator int() const
@@ -69,6 +70,63 @@ namespace Adndtk
         ~DiceSet();
 
         std::map<Defs::die, Die> _dice;
+    };
+
+    template<Defs::die _dieFaces, short _numDice>
+    class DiceRoll
+    {
+    public:
+        DiceRoll()
+            : _rolls{}
+        {}
+
+        int roll()
+        {
+            for (int n{0}; n<_numDice; ++n) 
+            {
+                _rolls[n] = DiceSet::get_instance().roll(_dieFaces);
+            }
+            return total();
+        }
+
+        friend std::ostream& operator<< (std::ostream& out, const DiceRoll& d)
+        {
+            out << "(";
+            auto len = d._rolls.size();
+            for (const auto& r : d._rolls)
+            {
+                out << r;
+                if (len > 1) out << ", ";
+                --len;
+            }
+            out << ")";
+
+            return out;
+        }
+
+        int& operator[](int index)
+        {
+            return _rolls[index];
+        }
+
+        const int& operator[](int index) const
+        {
+            return _rolls.at(index);
+        }
+
+        int total() const
+        {
+            int total{};
+            for (const auto& r : _rolls)
+            {
+                total += r;
+            }
+
+            return total;
+        }
+
+    private:
+        std::array<int, _numDice> _rolls;
     };
 }
 

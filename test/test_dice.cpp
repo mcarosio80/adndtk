@@ -1,6 +1,8 @@
 //#define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 #include <string>
+#include <sstream>
+#include <regex>
 
 #include <defs.h>
 #include <dice.h>
@@ -141,5 +143,77 @@ TEST_CASE("[TC-DICE.012] DiceSet stores static set of dice", "[dice]")
         auto d100 = DiceSet::get_instance().roll(Defs::die::d100, n);
         REQUIRE(d100 >= 1 * n);
         REQUIRE(d100 <= 100 * n);
+    }
+}
+
+TEST_CASE("[TC-DICE.013] DiceRoll D6 performs the expected number of rolls", "[dice]")
+{
+    DiceRoll<Defs::die::d6, 3> dr{};
+    auto total = dr.roll();
+    REQUIRE(total >= 3);
+    REQUIRE(total <= 18);
+
+    std::stringstream ss{};
+    ss << dr;
+
+    std::regex pattern(R"(^\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)?$)",
+                std::regex_constants::ECMAScript | std::regex_constants::icase);
+
+    int result = 0;
+    std::smatch matches;
+    std::string expr{ss.str()};
+    REQUIRE(std::regex_search(expr, matches, pattern));
+    for (int i{1}; i<=3; ++i)
+    {
+        int d = std::stoi(matches[i]);
+        REQUIRE(d >= 1);
+        REQUIRE(d <= 6);
+    }
+}
+
+TEST_CASE("[TC-DICE.014] DiceRoll D8 performs the expected number of rolls", "[dice]")
+{
+    DiceRoll<Defs::die::d8, 3> dr{};
+    auto total = dr.roll();
+    REQUIRE(total >= 3);
+    REQUIRE(total <= 24);
+
+    std::stringstream ss{};
+    ss << dr;
+
+    std::regex pattern(R"(^\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)?$)",
+                std::regex_constants::ECMAScript | std::regex_constants::icase);
+
+    int result = 0;
+    std::smatch matches;
+    std::string expr{ss.str()};
+    REQUIRE(std::regex_search(expr, matches, pattern));
+    for (int i{1}; i<=3; ++i)
+    {
+        int d = std::stoi(matches[i]);
+        REQUIRE(d >= 1);
+        REQUIRE(d <= 8);
+    }
+}
+
+TEST_CASE("[TC-DICE.015] DiceRoll D6 figures match the rolled results", "[dice]")
+{
+    DiceRoll<Defs::die::d6, 3> dr{};
+    dr.roll();
+
+    std::stringstream ss{};
+    ss << dr;
+
+    std::regex pattern(R"(^\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)?$)",
+                std::regex_constants::ECMAScript | std::regex_constants::icase);
+
+    int result = 0;
+    std::smatch matches;
+    std::string expr{ss.str()};
+    REQUIRE(std::regex_search(expr, matches, pattern));
+    for (int i{1}; i<=3; ++i)
+    {
+        int d = std::stoi(matches[i]);
+        REQUIRE(d == dr[i-1]);
     }
 }
