@@ -13,5 +13,10 @@
         "table" : "DEITY",
         "key" : "name",
         "value": "id"
+    },
+    {
+        "table" : "MONSTER_VARIANT_TYPE",
+        "key" : "description",
+        "value": "id"
     }
 ]

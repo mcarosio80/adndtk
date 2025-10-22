@@ -69,7 +69,7 @@ TEST_CASE("[TC-MONS.003] Monsters with multiple climate/cerrain can be found as 
 TEST_CASE("[TC-MONS.004] Monsters with multiple organisation can be found as expected", "[monster]" )
 {
     auto monsterId{Defs::monster::elf_drow};
-    Monster m{monsterId};
+    Monster m{monsterId, Defs::monster_variant_type::priest};
 
     auto organisation = m.get_organisation();
     REQUIRE(organisation.size() == 2);
@@ -108,7 +108,7 @@ TEST_CASE("[TC-MONS.006] Monsters with no diet eats nothing", "[monster]" )
 TEST_CASE("[TC-MONS.007] Monsters with varied diet can eat many things", "[monster]" )
 {
     auto monsterId{Defs::monster::minotaur};
-    Monster m{monsterId};
+    Monster m{monsterId, Defs::monster_variant_type::common};
 
     auto diet = m.get_diet();
     REQUIRE(diet.size() == 2);
@@ -122,11 +122,11 @@ TEST_CASE("[TC-MONS.007] Monsters with varied diet can eat many things", "[monst
 
 TEST_CASE("[TC-MONS.008] Monsters with ratable intelligence have values between expected range", "[monster]" )
 {
-    Monster mindFlayer{Defs::monster::mind_flayer};
+    Monster mindFlayer{Defs::monster::mind_flayer, Defs::monster_variant_type::common};
     REQUIRE(mindFlayer.get_intelligence() >= 17);
     REQUIRE(mindFlayer.get_intelligence() <= 18);
 
-    Monster mimic{Defs::monster::mimic_killer_mimic};
+    Monster mimic{Defs::monster::mimic_killer_mimic, Defs::monster_variant_type::hd_10};
     REQUIRE(mimic.get_intelligence() >= 2);
     REQUIRE(mimic.get_intelligence() <= 4);
 
@@ -148,7 +148,7 @@ TEST_CASE("[TC-MONS.010] Monsters with moral alignment have value as expected", 
     Monster phantom{Defs::monster::phantom};
     REQUIRE(phantom.moral_alignment() == Defs::moral_alignment::true_neutral);
 
-    Monster sahuagin{Defs::monster::sahuagin};
+    Monster sahuagin{Defs::monster::sahuagin, Defs::monster_variant_type::common};
     REQUIRE(sahuagin.moral_alignment() == Defs::moral_alignment::lawful_evil);
 }
 
@@ -158,24 +158,24 @@ TEST_CASE("[TC-MONS.011] Monsters with multiple moral alignments have one of the
     REQUIRE((sylph.moral_alignment() == Defs::moral_alignment::true_neutral
             || sylph.moral_alignment() == Defs::moral_alignment::neutral_good));
     
-    Monster duergar{Defs::monster::dwarf_duergar};
+    Monster duergar{Defs::monster::dwarf_duergar, Defs::monster_variant_type::common};
     REQUIRE((duergar.moral_alignment() == Defs::moral_alignment::lawful_evil
             || duergar.moral_alignment() == Defs::moral_alignment::true_neutral));
     
-    Monster kuotoa{Defs::monster::kuo_toa};
+    Monster kuotoa{Defs::monster::kuo_toa, Defs::monster_variant_type::normal};
     REQUIRE((kuotoa.moral_alignment() == Defs::moral_alignment::neutral_evil
             || kuotoa.moral_alignment() == Defs::moral_alignment::chaotic_evil));
 }
 
 TEST_CASE("[TC-MONS.012] Monsters with no moral alignment have no expected value", "[monster]" )
 {
-    Monster sylph{Defs::monster::stirge};
-    REQUIRE_FALSE(sylph.moral_alignment().has_value());
+    Monster stirge{Defs::monster::stirge};
+    REQUIRE_FALSE(stirge.moral_alignment().has_value());
 }
 
 TEST_CASE("[TC-MONS.013] Monsters with any moral alignment can have any value", "[monster]" )
 {
-    Monster birdMaiden{Defs::monster::swanmay_bird_maiden};
+    Monster birdMaiden{Defs::monster::swanmay_bird_maiden, Defs::monster_variant_type::hd_2};
     REQUIRE((birdMaiden.moral_alignment() == Defs::moral_alignment::lawful_good
         || birdMaiden.moral_alignment() == Defs::moral_alignment::lawful_neutral
         || birdMaiden.moral_alignment() == Defs::moral_alignment::lawful_evil
@@ -208,7 +208,7 @@ TEST_CASE("[TC-MONS.014] Monsters with single AC value have no AC variants", "[m
 
 TEST_CASE("[TC-MONS.015] Monsters with multiple AC value have AC variants", "[monster]" )
 {
-    Monster m{Defs::monster::ankheg};
+    Monster m{Defs::monster::ankheg, Defs::monster_variant_type::hd_3};
 
     REQUIRE(m.ac_variants().size() == 2);
     REQUIRE(m.ac("overall").has_value());
@@ -219,4 +219,45 @@ TEST_CASE("[TC-MONS.015] Monsters with multiple AC value have AC variants", "[mo
     REQUIRE(m.ac().value() == 2);
 
     REQUIRE_FALSE(m.ac("whatever else").has_value());
+}
+
+TEST_CASE("[TC-MONS.016] Monsters have HP scores according to their variant type", "[monster]" )
+{
+    Monster ankhegHd3{Defs::monster::ankheg, Defs::monster_variant_type::hd_3};
+    REQUIRE(ankhegHd3.thac0() == 17);
+    REQUIRE(ankhegHd3.hp() >= 3);
+    REQUIRE(ankhegHd3.hp() <= 24);
+    REQUIRE(ankhegHd3.xp() == 175);
+    REQUIRE(ankhegHd3.variant() == Defs::monster_variant_type::hd_3);
+
+    Monster ankhegHd5{Defs::monster::ankheg, Defs::monster_variant_type::hd_5};
+    REQUIRE(ankhegHd5.thac0() == 15);
+    REQUIRE(ankhegHd5.hp() >= 5);
+    REQUIRE(ankhegHd5.hp() <= 40);
+    REQUIRE(ankhegHd5.xp() == 420);
+    REQUIRE(ankhegHd5.variant() == Defs::monster_variant_type::hd_5);
+
+    Monster ankhegHd7{Defs::monster::ankheg, Defs::monster_variant_type::hd_7};
+    REQUIRE(ankhegHd7.thac0() == 13);
+    REQUIRE(ankhegHd7.hp() >= 7);
+    REQUIRE(ankhegHd7.hp() <= 56);
+    REQUIRE(ankhegHd7.xp() == 975);
+    REQUIRE(ankhegHd7.variant() == Defs::monster_variant_type::hd_7);
+}
+
+TEST_CASE("[TC-MONS.017] Monsters with no variant specified are assigned the first variant available", "[monster]" )
+{
+    Monster mongrelman{Defs::monster::mongrelman};
+    REQUIRE(mongrelman.thac0() == 19);
+    REQUIRE(mongrelman.hp() >= 1);
+    REQUIRE(mongrelman.hp() <= 8);
+    REQUIRE(mongrelman.xp() == 35);
+    REQUIRE(mongrelman.variant() == Defs::monster_variant_type::hd_1);
+
+    Monster troglodyte{Defs::monster::troglodyte};
+    REQUIRE(troglodyte.thac0() == 19);
+    REQUIRE(troglodyte.hp() >= 2);
+    REQUIRE(troglodyte.hp() <= 16);
+    REQUIRE(troglodyte.xp() == 120);
+    REQUIRE(troglodyte.variant() == Defs::monster_variant_type::normal);
 }

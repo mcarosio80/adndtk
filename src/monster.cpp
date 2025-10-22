@@ -7,11 +7,13 @@
 #include <treasure.h>
 #include <dice.h>
 #include <common_types.h>
+#include <dictionary.h>
 
-Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
+Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
+    const std::optional<Defs::monster_variant_type>& monsterVariant)
     : _id{monsterId}, _name{}, _frequencyId{}, _intelligence{}, _cliamteTerrain{},
         _planes{}, _organisation{}, _turnedAs{}, _activityCycle{}, _diet{},
-        _alignment{}, _element{}, _dragonType{}
+        _alignment{}, _element{}, _dragonType{}, _monsterVariant{monsterVariant}
 {
     auto info = Tables::monster::select_one<Defs::monster>("id", _id);
     if (!info.has_value())
@@ -66,6 +68,43 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId)
             _acVariants[acValue.value()] = acVariant.value_or("");
         }
     }
+
+    QueryResultSet variantInfo;
+    if (_monsterVariant.has_value())
+    {
+        auto varQueryId{Query::select_monster_variant_type};
+        variantInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::monster, Defs::monster_variant_type>(varQueryId, _id, _monsterVariant.value());
+
+        if (variantInfo.size() == 0)
+        {
+            std::stringstream ss{};
+            ss << "Monster variant " << Dictionary::to_string(_monsterVariant.value()) << " is not valid";
+            throw std::runtime_error(ss.str());
+        }
+    }
+    else
+    {
+        auto varQueryId{Query::select_monster_variant_default};
+        variantInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::monster>(varQueryId, _id);
+
+        auto variantType = variantInfo[0].try_as<Defs::monster_variant_type>("monster_variant");
+        if (variantType)
+        {
+            _monsterVariant = variantType.value();
+        }
+    }
+
+    auto hd = variantInfo[0].try_as<Adndtk::HP>("hd");
+    auto die_faces = variantInfo[0].try_as<Defs::die>("die_faces");
+    auto die_modifier = variantInfo[0].try_as<short>("die_modifier");
+    auto hp = variantInfo[0].try_as<Adndtk::HP>("hp");
+    auto hp_to = variantInfo[0].try_as<Adndtk::HP>("hp_to");
+
+    _hpValueMax = get_hp_score(hd, die_faces, die_modifier, hp, hp_to);
+    _hpValueCurrent = _hpValueMax;
+
+    _thac0Value = variantInfo[0].try_as<THAC0>("thac0");
+    _xpValue = variantInfo[0].try_as<THAC0>("xp");
 }
 
 double Adndtk::Monster::get_treasure_multiplier(const std::optional<double>& multiplier, const std::optional<short>& diceNumber, const std::optional<Defs::die>& dieFaces)
@@ -97,6 +136,30 @@ std::optional<Adndtk::SkillValue> Adndtk::Monster::get_intelligence_score(const 
     return SkillValue(Defs::skill::intelligence, score);
 }
 
+Adndtk::HP Adndtk::Monster::get_hp_score(const std::optional<Adndtk::HP>& hd,
+    const std::optional<Adndtk::Defs::die>& die_faces,
+    const std::optional<short>& die_modifier,
+    const std::optional<Adndtk::HP>& hp,
+    const std::optional<Adndtk::HP>& hp_to)
+{
+    Adndtk::HP score{};
+    if (hd.has_value())
+    {
+        Defs::die faces = die_faces.value_or(Defs::die::d8);
+        score = Adndtk::DiceSet::get_instance().roll(faces, hd.value());
+        score += die_modifier.value_or(0);
+    }
+    else if (hp.has_value() && hp_to.has_value())
+    {
+        score = Adndtk::Die::roll(hp.value(), hp_to.value());
+    }
+    else if (hp.has_value())
+    {
+        score = hp.value();
+    }
+    return score;
+}
+
 std::optional<Adndtk::AC> Adndtk::Monster::ac() const
 {
     auto minAC{Const::max_ac_value};
@@ -117,4 +180,29 @@ std::optional<Adndtk::AC> Adndtk::Monster::ac(const std::string& variant) const
         }
     }
     return std::nullopt;
+}
+
+std::optional<Adndtk::Defs::monster_variant_type> Adndtk::Monster::variant() const
+{
+    return _monsterVariant;
+}
+
+Adndtk::HP Adndtk::Monster::hp() const
+{
+    return _hpValueCurrent;
+}
+
+Adndtk::HP Adndtk::Monster::hp_max() const
+{
+    return _hpValueMax;
+}
+
+std::optional<Adndtk::THAC0> Adndtk::Monster::thac0() const
+{
+    return _thac0Value;
+}
+
+std::optional<Adndtk::XP> Adndtk::Monster::xp() const
+{
+    return _xpValue;
 }

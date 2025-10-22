@@ -40,6 +40,7 @@ List of the new features, changes to existing features, bug fixes, infrastructur
   * Refactor python script to generate c++ code
   * Separate code in libraries
   * Add dice roll sequence generation feature
+  * Add Wari (bird) to monsters
   
 ## Planned changes
 

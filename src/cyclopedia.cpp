@@ -108,6 +108,7 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'id', id,'name', name from non_weapon_proficiency_group", Query::select_all_non_weapon_proficiency_group);
         prepare_statement("select 'id', id, 'description', description from weapon_proficiency_level", Query::select_all_weapon_proficiency_level);
         prepare_statement("select 'id', id, 'campaign_settings_id', campaign_settings_id, 'ext_key', ext_key, 'ext_subkey', ext_subkey, 'name', name, 'display_name', display_name, 'frequency_id', frequency_id, 'intelligence_from', intelligence_from, 'intelligence_to', intelligence_to from monster", Query::select_all_monster);
+        prepare_statement("select 'id', id, 'description', description from monster_variant_type", Query::select_all_monster_variant_type);
 
         prepare_statement("select 'id', id, 'base_score', base_score from thief_ability", Query::select_thief_ability_base_scores);
         prepare_statement("select 'thieving_skill', thieving_skill, 'modifier', modifier from thieving_skill_armour_adjustments where armour_id = ?", Query::select_thieving_skill_armour_adjustments);
@@ -211,6 +212,8 @@ bool Adndtk::Cyclopedia::init()
         prepare_statement("select 'type', type from monster_dragon where monster_id = ?", Query::select_monster_dragon);
         prepare_statement("select 'no_appearing_from', no_appearing_from, 'no_appearing_to', no_appearing_to, 'dice_number', dice_number, 'die_faces', die_faces, 'modifier', modifier, 'multiplier', multiplier, 'probability', probability, 'encounter_location_id', encounter_location_id from monster_appearing where monster_id = ?", Query::select_monster_appearing);
         prepare_statement("select 'ac', ac, 'ac_variant', ac_variant from monster_ac where monster_id = ?", Query::select_monster_ac);
+        prepare_statement("select 'monster_variant', monster_variant, 'hd', hd, 'die_faces', die_faces, 'die_modifier', die_modifier, 'hp', hp, 'hp_to', hp_to, 'thac0', thac0, 'size', size, 'xp', xp from monster_variant where monster_id = ? order by id limit 1", Query::select_monster_variant_default);
+        prepare_statement("select 'monster_variant', monster_variant, 'hd', hd, 'die_faces', die_faces, 'die_modifier', die_modifier, 'hp', hp, 'hp_to', hp_to, 'thac0', thac0, 'size', size, 'xp', xp from monster_variant where monster_id = ? and monster_variant = ?", Query::select_monster_variant_type);
 
         load_advancement_table();
     }

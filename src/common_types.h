@@ -127,6 +127,7 @@ namespace Adndtk
         select_all_non_weapon_proficiency,
         select_all_weapon_proficiency_level,
         select_all_monster,
+        select_all_monster_variant_type,
 
         select_monster_climate_terrain,
         select_monster_plane,
@@ -140,6 +141,8 @@ namespace Adndtk
         select_monster_dragon,
         select_monster_appearing,
         select_monster_ac,
+        select_monster_variant_default,
+        select_monster_variant_type,
     };
 
     enum class XPChangeType

@@ -84,7 +84,7 @@ fill_db_data(${DB_FILE} ${DB_ROLL_FILE})
 # Filling Monsters data into database
 fill_db_data(${DB_FILE} ${DB_MONS_FILE})
 
-set(SQL_FILE_SUFFIXES "ac" "activity_cycle" "alignment" "appearing" "climate_terrain" "diet" "movement" "organisation" "treasure")
+set(SQL_FILE_SUFFIXES "ac" "activity_cycle" "alignment" "appearing" "climate_terrain" "diet" "movement" "organisation" "treasure" "variant")
 foreach(SQL_FILE_SUFFIX ${SQL_FILE_SUFFIXES})
     fill_db_data(${DB_FILE} ${SQL_DIR}/monsters_${SQL_FILE_SUFFIX}.sql)
 endforeach()

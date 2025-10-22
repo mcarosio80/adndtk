@@ -17,7 +17,7 @@ namespace Adndtk
     class Monster : public Avatar
     {
     public:
-        Monster(const Defs::monster& monsterId);
+        Monster(const Defs::monster& monsterId, const std::optional<Defs::monster_variant_type>& monsterVariant = std::nullopt);
 
         constexpr Avatar::Type get_avatar_type() const override
         {
@@ -88,6 +88,12 @@ namespace Adndtk
         const std::map<AC, std::string>& ac_variants() const { return _acVariants; }
         std::optional<AC> ac() const;
         std::optional<AC> ac(const std::string& variant) const;
+
+        std::optional<Defs::monster_variant_type> variant() const;
+        Adndtk::HP hp() const;
+        Adndtk::HP hp_max() const;
+        std::optional<THAC0> thac0() const;
+        std::optional<XP> xp() const;
         
     private:
         Defs::monster                               _id;
@@ -106,6 +112,11 @@ namespace Adndtk
         std::optional<Defs::element>                _element;
         std::optional<Defs::dragon_type>            _dragonType;
         std::map<AC, std::string>                   _acVariants;
+        std::optional<Defs::monster_variant_type>   _monsterVariant;
+        HP                                          _hpValueMax;
+        HP                                          _hpValueCurrent;
+        std::optional<THAC0>                        _thac0Value;
+        std::optional<XP>                           _xpValue;
 
         template <typename _FeatureType>
         std::set<_FeatureType> set_multiple_feature(const Defs::monster& id, const Adndtk::Query& queryId, const std::string& label)
@@ -142,6 +153,9 @@ namespace Adndtk
 
         static double get_treasure_multiplier(const std::optional<double>& multiplier, const std::optional<short>& diceNumber, const std::optional<Defs::die>& dieFaces);
         static std::optional<SkillValue> get_intelligence_score(const std::optional<short>& value_from, const std::optional<short>& value_to);
+
+        static Adndtk::HP get_hp_score(const std::optional<HP>& hd, const std::optional<Defs::die>& die_faces,
+                    const std::optional<short>& die_modifier, const std::optional<HP>& hp, const std::optional<HP>& hp_to);
     };
 }
 

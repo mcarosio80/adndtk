@@ -335,6 +335,11 @@
         "value": "id"
     },
     {
+        "table" : "MONSTER_VARIANT_TYPE",
+        "key" : "description",
+        "value": "id"
+    },
+    {
         "table" : "ACTIVITY_CYCLE",
         "key" : "description",
         "value": "id"
