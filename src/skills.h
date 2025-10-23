@@ -52,13 +52,37 @@ namespace Adndtk
         SkillValue& operator=(const short& val);
         SkillValue& operator+=(const short& val);
         SkillValue& operator-=(const short& val);
+        
         bool operator==(const SkillValue& val) const;
-        bool operator<(const SkillValue& val) const;
+        std::partial_ordering operator<=>(const SkillValue& val) const
+        {
+            if (_skillType != val._skillType)
+                return std::partial_ordering::unordered;
 
-        bool operator<=(const SkillValue& val) const { return (*this) < val || (*this) == val; }
-        bool operator>(const SkillValue& val) const { return !((*this) <= val); }
-        bool operator>=(const SkillValue& val) const { return !((*this) < val); }
-        bool operator!=(const SkillValue& val) const { return !((*this) == val); }
+            if (_skillType == Defs::skill::strength && _skillValue == 18 && val._skillValue == 18)
+            {
+                if (_exceptionalValue < val._exceptionalValue)
+                {
+                    return std::partial_ordering::less;
+                }
+                else if (_exceptionalValue > val._exceptionalValue)
+                {
+                    return std::partial_ordering::greater;
+                }
+            }
+            else
+            {
+                if (_skillValue < val._skillValue)
+                {
+                    return std::partial_ordering::less;
+                }
+                else if (_skillValue > val._skillValue)
+                {
+                    return std::partial_ordering::greater;
+                }
+            }
+            return std::partial_ordering::equivalent;
+        }
 
     private:
         Defs::skill             _skillType;

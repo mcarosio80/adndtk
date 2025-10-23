@@ -5,6 +5,7 @@
 #include <coin_exchange.h>
 
 #include <cstdint>
+#include <compare>
 
 namespace Adndtk
 {
@@ -19,29 +20,17 @@ namespace Adndtk
         Coin& operator+= (const uint32_t amount);
         Coin& operator-= (const uint32_t amount);
 
+        std::strong_ordering operator<=>(const uint32_t& amount) const;
         bool operator== (const uint32_t& amount) const;
-        bool operator< (const uint32_t& amount) const;
-        bool operator<= (const uint32_t& amount) const;
-        bool operator>= (const uint32_t& amount) const;
-        bool operator> (const uint32_t& amount) const;
-        bool operator!= (const uint32_t& amount) const;
 
         Coin& operator= (const Coin& amount);
         Coin& operator+= (const Coin& amount);
         Coin& operator-= (const Coin& amount);
 
         bool operator== (const Coin& amount) const;
-        bool operator< (const Coin& amount) const;
-        bool operator<= (const Coin& amount) const;
-        bool operator>= (const Coin& amount) const;
-        bool operator> (const Coin& amount) const;
-        bool operator!= (const Coin& amount) const;
+        std::weak_ordering operator<=>(const Coin& amount) const;
 
         const Defs::coin& currency() const;
-        // operator uint32_t() const
-        // {
-        //     return _amount;
-        // }
         uint32_t value() const;
 
         template<Defs::coin t>

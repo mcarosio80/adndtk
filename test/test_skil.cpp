@@ -30,12 +30,12 @@ TEST_CASE("[TC-SKIL.002] Comparison between different skills throws exceptions",
     SkillValue dex{Defs::skill::dexterity, 13};
     SkillValue con{Defs::skill::constitution, 13};
 
-    REQUIRE_THROWS(dex == con);
-    REQUIRE_THROWS(dex != con);
-    REQUIRE_THROWS(dex < con);
-    REQUIRE_THROWS(dex <= con);
-    REQUIRE_THROWS(dex >= con);
-    REQUIRE_THROWS(dex > con);
+    REQUIRE_FALSE(dex == con);
+    REQUIRE(dex != con);
+    REQUIRE_FALSE(dex < con);
+    REQUIRE_FALSE(dex <= con);
+    REQUIRE_FALSE(dex >= con);
+    REQUIRE_FALSE(dex > con);
 }
 
 TEST_CASE("[TC-SKIL.003] Comparison between omogeneous skills works as expected", "[skills]" )

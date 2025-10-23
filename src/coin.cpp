@@ -48,39 +48,24 @@ Adndtk::Coin& Adndtk::Coin::operator-= (const uint32_t amount)
 }
 
 // Amount is assumed to be expressed in the same currency as the left-side operand
+std::strong_ordering Adndtk::Coin::operator<=>(const uint32_t& amount) const
+{
+	if (_amount < amount)
+	{
+		return std::strong_ordering::less;
+	}
+	else if (_amount > amount)
+	{
+		return std::strong_ordering::greater;
+	}
+	
+	return std::strong_ordering::equivalent;
+}
+
+// Amount is assumed to be expressed in the same currency as the left-side operand
 bool Adndtk::Coin::operator== (const uint32_t& amount) const
 {
 	return _amount == amount;
-}
-
-// Amount is assumed to be expressed in the same currency as the left-side operand
-bool Adndtk::Coin::operator< (const uint32_t& amount) const
-{
-	return _amount < amount;
-}
-
-// Amount is assumed to be expressed in the same currency as the left-side operand
-bool Adndtk::Coin::operator<= (const uint32_t& amount) const
-{
-	return _amount <= amount;
-}
-
-// Amount is assumed to be expressed in the same currency as the left-side operand
-bool Adndtk::Coin::operator>= (const uint32_t& amount) const
-{
-	return _amount >= amount;
-}
-
-// Amount is assumed to be expressed in the same currency as the left-side operand
-bool Adndtk::Coin::operator> (const uint32_t& amount) const
-{
-	return _amount > amount;
-}
-
-// Amount is assumed to be expressed in the same currency as the left-side operand
-bool Adndtk::Coin::operator!= (const uint32_t& amount) const
-{
-	return _amount != amount;
 }
 
 // If expressed in a different currency, amount is adjusted accordingly
@@ -143,51 +128,21 @@ bool Adndtk::Coin::operator== (const Coin& amount) const
 /**	If expressed in a different currency, amount is adjusted accordingly
   *	Comparison occurs in the least segnificant currency so as an integer conversion is always possible
   */
-bool Adndtk::Coin::operator< (const Coin& amount) const
+std::weak_ordering Adndtk::Coin::operator<=>(const Coin& amount) const
 {
-    auto c1 = convert<Defs::coin::copper_piece>(*this);
+	auto c1 = convert<Defs::coin::copper_piece>(*this);
 	auto c2 = convert<Defs::coin::copper_piece>(amount);
-	return c1.value() < c2.value();
-}
-
-/**	If expressed in a different currency, amount is adjusted accordingly
-  *	Comparison occurs in the least segnificant currency so as an integer conversion is always possible
-  */
-bool Adndtk::Coin::operator<= (const Coin& amount) const
-{
-    auto c1 = convert<Defs::coin::copper_piece>(*this);
-	auto c2 = convert<Defs::coin::copper_piece>(amount);
-	return c1.value() <= c2.value();
-}
-
-/**	If expressed in a different currency, amount is adjusted accordingly
-  *	Comparison occurs in the least segnificant currency so as an integer conversion is always possible
-  */
-bool Adndtk::Coin::operator>= (const Coin& amount) const
-{
-    auto c1 = convert<Defs::coin::copper_piece>(*this);
-	auto c2 = convert<Defs::coin::copper_piece>(amount);
-	return c1.value() >= c2.value();
-}
-
-/**	If expressed in a different currency, amount is adjusted accordingly
-  *	Comparison occurs in the least segnificant currency so as an integer conversion is always possible
-  */
-bool Adndtk::Coin::operator> (const Coin& amount) const
-{
-    auto c1 = convert<Defs::coin::copper_piece>(*this);
-	auto c2 = convert<Defs::coin::copper_piece>(amount);
-	return c1.value() > c2.value();
-}
-
-/**	If expressed in a different currency, amount is adjusted accordingly
-  *	Comparison occurs in the least segnificant currency so as an integer conversion is always possible
-  */
-bool Adndtk::Coin::operator!= (const Coin& amount) const
-{
-    auto c1 = convert<Defs::coin::copper_piece>(*this);
-	auto c2 = convert<Defs::coin::copper_piece>(amount);
-	return c1.value() != c2.value();
+	
+	if (c1.value() < c2.value())
+	{
+		return std::weak_ordering::less;
+	}
+	else if (c1.value() > c2.value())
+	{
+		return std::weak_ordering::greater;
+	}
+	
+	return std::weak_ordering::equivalent;
 }
 
 uint32_t Adndtk::Coin::value() const
