@@ -261,3 +261,13 @@ TEST_CASE("[TC-MONS.017] Monsters with no variant specified are assigned the fir
     REQUIRE(troglodyte.xp() == 120);
     REQUIRE(troglodyte.variant() == Defs::monster_variant_type::normal);
 }
+
+TEST_CASE("[TC-MONS.018] Monsters can have unique names", "[monster]" )
+{
+    Monster lich{Defs::monster::lich};
+    REQUIRE(lich.get_unique_name() == "");
+
+    const char * lich_name{"Vecna"};
+    Monster vecna{Defs::monster::lich, lich_name};
+    REQUIRE(lich.get_unique_name().compare(lich_name) == 0);
+}

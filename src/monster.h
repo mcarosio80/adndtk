@@ -17,7 +17,10 @@ namespace Adndtk
     class Monster : public Avatar
     {
     public:
-        Monster(const Defs::monster& monsterId, const std::optional<Defs::monster_variant_type>& monsterVariant = std::nullopt);
+        Monster(const Defs::monster& monsterId, std::string_view uniqueName,
+                const std::optional<Defs::monster_variant_type>& monsterVariant = std::nullopt);
+        Monster(const Defs::monster& monsterId,
+                const std::optional<Defs::monster_variant_type>& monsterVariant = std::nullopt);
 
         constexpr Avatar::Type get_avatar_type() const override
         {
@@ -26,6 +29,7 @@ namespace Adndtk
         const auto& get_id() const { return _id; }
         const auto& get_name() const { return _name; }
         const auto& get_full_name() const { return _fullName; }
+        const auto& get_unique_name() const { return _uniqueName; }
         const auto& get_frequency() const { return _frequencyId; }
         const auto& get_intelligence() const { return _intelligence; }
 
@@ -117,6 +121,7 @@ namespace Adndtk
         HP                                          _hpValueCurrent;
         std::optional<THAC0>                        _thac0Value;
         std::optional<XP>                           _xpValue;
+        std::string                                 _uniqueName;
 
         template <typename _FeatureType>
         std::set<_FeatureType> set_multiple_feature(const Defs::monster& id, const Adndtk::Query& queryId, const std::string& label)

@@ -10,10 +10,10 @@
 #include <dictionary.h>
 
 Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
-    const std::optional<Defs::monster_variant_type>& monsterVariant)
+    std::string_view uniqueName, const std::optional<Defs::monster_variant_type>& monsterVariant)
     : _id{monsterId}, _name{}, _frequencyId{}, _intelligence{}, _cliamteTerrain{},
         _planes{}, _organisation{}, _turnedAs{}, _activityCycle{}, _diet{},
-        _alignment{}, _element{}, _dragonType{}, _monsterVariant{monsterVariant}
+        _alignment{}, _element{}, _dragonType{}, _monsterVariant{monsterVariant}, _uniqueName{uniqueName}
 {
     auto info = Tables::monster::select_one<Defs::monster>("id", _id);
     if (!info.has_value())
@@ -105,6 +105,12 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
 
     _thac0Value = variantInfo[0].try_as<THAC0>("thac0");
     _xpValue = variantInfo[0].try_as<THAC0>("xp");
+}
+
+Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
+    const std::optional<Defs::monster_variant_type>& monsterVariant)
+    : Monster{monsterId, "", monsterVariant}
+{
 }
 
 double Adndtk::Monster::get_treasure_multiplier(const std::optional<double>& multiplier, const std::optional<short>& diceNumber, const std::optional<Defs::die>& dieFaces)
