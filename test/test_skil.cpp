@@ -25,7 +25,7 @@ TEST_CASE("[TC-SKIL.001] Skills manually assigned reflect the expected values", 
     REQUIRE_FALSE(skl > 13);
 }
 
-TEST_CASE("[TC-SKIL.002] Comparison between different skills throws exceptions", "[skills]" )
+TEST_CASE("[TC-SKIL.002] Comparison between different skills do not throws exceptions", "[skills]" )
 {
     SkillValue dex{Defs::skill::dexterity, 13};
     SkillValue con{Defs::skill::constitution, 13};
