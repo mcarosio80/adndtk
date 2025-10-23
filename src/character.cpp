@@ -8,7 +8,7 @@
 #include <algorithm>
 
 
-Adndtk::Character::Character(const std::string& name, const Defs::character_class& cls,
+Adndtk::Character::Character(std::string_view name, const Defs::character_class& cls,
                 const Defs::race& raceId, const Defs::moral_alignment& align, const Defs::sex& sexId,
                 const std::optional<Defs::deity>& deityId/*=std::nullopt*/)
     : _name{name}, _cls{cls}, _race{raceId}, _align{align}, _sex{sexId}, _deity{deityId},

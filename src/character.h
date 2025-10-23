@@ -7,6 +7,7 @@
 #include <optional>
 #include <vector>
 #include <set>
+#include <string_view>
 
 #include <defs.h>
 #include <common_types.h>
@@ -31,7 +32,7 @@ namespace Adndtk
     class Character : public Avatar
     {
     public:
-        Character(const std::string& name, const Defs::character_class& cls, const Defs::race& raceId,
+        Character(std::string_view name, const Defs::character_class& cls, const Defs::race& raceId,
             const Defs::moral_alignment& align, const Defs::sex& sexId,
             const std::optional<Defs::deity>& deityId = std::nullopt);
         

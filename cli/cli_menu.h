@@ -5,6 +5,7 @@
 #include <map>
 #include <functional>
 #include <string>
+#include <string_view>
 
 namespace CliTools
 {
@@ -46,7 +47,7 @@ namespace CliTools
     class CliMenu
     {
     public:
-        CliMenu(const std::string& caption, const std::vector<_TableName>& data)
+        CliMenu(std::string_view caption, const std::vector<_TableName>& data)
             : _menuCaption{caption}, _menuData{data},
             _menuLineFormatter{[](const _TableName& menuValue, std::map<_MenuKeyType, _TableName>& menu)->void{}}
         {
