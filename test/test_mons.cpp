@@ -269,5 +269,5 @@ TEST_CASE("[TC-MONS.018] Monsters can have unique names", "[monster]" )
 
     const char * lich_name{"Vecna"};
     Monster vecna{Defs::monster::lich, lich_name};
-    REQUIRE(lich.get_unique_name().compare(lich_name) == 0);
+    REQUIRE(vecna.get_unique_name().compare(lich_name) == 0);
 }
