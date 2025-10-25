@@ -88,13 +88,13 @@ Adndtk::Defs::attack_result Adndtk::Thaco::try_hit(const Adndtk::CharacterExperi
     auto roll = DiceSet::get_instance().roll(1, Defs::die::d20);
     auto thaco = get(selectet.first, selectet.second) - ac;
 
-    if (roll == Const::critical_miss)
+    if (roll == Const::fumble)
     {
-        res = Defs::attack_result::critical_miss;
+        res = Defs::attack_result::fumble;
     }
-    else if (roll == Const::critical_hit)
+    else if (roll == Const::critical)
     {
-        res = Defs::attack_result::critical_hit;
+        res = Defs::attack_result::critical;
     }
     else if (roll + bonusMalus >= thaco)
     {

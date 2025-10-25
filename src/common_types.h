@@ -182,8 +182,8 @@ namespace Adndtk
         static constexpr double xp_bonus_none = 0.0;
         static constexpr SavingScore base_saving_throw = 20;
         static constexpr THAC0 base_thaco = 20;
-        static constexpr THAC0 critical_hit = 20;
-        static constexpr THAC0 critical_miss = 1;
+        static constexpr THAC0 critical = 20;
+        static constexpr THAC0 fumble = 1;
         static constexpr double clothes_weight = 2.5;
         static constexpr short high_people_base_movement_factor = 12;
         static constexpr short short_people_base_movement_factor = 6;
