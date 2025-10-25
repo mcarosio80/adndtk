@@ -52,8 +52,7 @@ Adndtk::Coin Adndtk::TreasurePool::generate_value(const std::optional<Defs::coin
 
 Adndtk::Defs::gem Adndtk::TreasurePool::pick_gem()
 {
-	auto d = Die{Defs::die::d100};
-	auto prob = d.roll();
+	auto prob = DiceSet::get_instance().roll(1, Defs::die::d100);
 
     auto getTypeInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_gem_type, prob);
     auto gemType = getTypeInfo[0].as<Defs::gem_type>("id");
@@ -66,8 +65,7 @@ Adndtk::Defs::gem Adndtk::TreasurePool::pick_gem()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_magical()
 {
-	auto d = Die{Defs::die::d20};
-	auto prob = d.roll();
+	auto prob = DiceSet::get_instance().roll(1, Defs::die::d20);
 
     auto info = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_magical_item_type_by_probability, prob);
     auto magicalItemType = info[0].as<Defs::magical_item_type>("id");
@@ -152,8 +150,7 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_magical()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_potion()
 {
-	auto d6 = Die{Defs::die::d6};
-	auto subtableIndex = d6.roll();
+	auto subtableIndex = DiceSet::get_instance().roll(1, Defs::die::d6);
 	auto itemIndex = Die::roll(1, 19);
     auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
 		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::potions_and_oils, subtableIndex, itemIndex
@@ -163,9 +160,8 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_potion()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_scroll()
 {
-	auto d6 = Die{Defs::die::d6};
-	auto subtableIndex = d6.roll();
-	auto itemIndex = (subtableIndex >= 5) ? Die::roll(2, 19) : Die::roll(1, 100);
+	auto subtableIndex = DiceSet::get_instance().roll(1, Defs::die::d6);
+	auto itemIndex = (subtableIndex >= 5) ? Die::roll(2, 19) : DiceSet::get_instance().roll(1, Defs::die::d100);
     auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
 		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::scrolls, subtableIndex, itemIndex
 	);
@@ -174,8 +170,7 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_scroll()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_ring()
 {
-	auto d6 = Die{Defs::die::d6};
-	auto subtableIndex = d6.roll();
+	auto subtableIndex = DiceSet::get_instance().roll(1, Defs::die::d6);
 	auto itemIndex = Die::roll(1, 19);
     auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
 		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::rings, subtableIndex, itemIndex
@@ -225,8 +220,7 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_book()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_jewel()
 {
-	auto d6 = Die{Defs::die::d6};
-	auto subtableIndex = d6.roll();
+	auto subtableIndex = DiceSet::get_instance().roll(1, Defs::die::d6);
 	auto itemIndex = Die::roll(1, 19);
     auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
 		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::jewels_and_jewelry, subtableIndex, itemIndex
@@ -306,8 +300,7 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_musical()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_wierd()
 {
-	auto d6 = Die{Defs::die::d6};
-	auto subtableIndex = d6.roll();
+	auto subtableIndex = DiceSet::get_instance().roll(1, Defs::die::d6);
 	auto itemIndex = Die::roll(1, 19);
     auto info = Cyclopedia::get_instance().exec_prepared_statement<Defs::magical_item_type, int, int>(
 		Query::select_magical_item_by_type_and_probability, Defs::magical_item_type::the_wierd_stuff, subtableIndex, itemIndex
@@ -317,13 +310,12 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_wierd()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_armour()
 {
-	auto d20 = Die{Defs::die::d20};
-	auto itemIndex = d20.roll();
+	auto itemIndex = DiceSet::get_instance().roll(1, Defs::die::d20);
 	auto subtableIndex = 1;
 	
 	if (itemIndex == 20)
 	{
-		itemIndex = d20.roll();
+		itemIndex = DiceSet::get_instance().roll(1, Defs::die::d20);
 		subtableIndex = 2;
 	}
 
@@ -335,10 +327,8 @@ Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_armour()
 
 Adndtk::Defs::magical_item Adndtk::TreasurePool::pick_weapon()
 {
-	auto d6 = Die{Defs::die::d6};
-	auto subtableIndex = d6.roll();
-	auto d20 = Die{Defs::die::d20};
-	auto itemIndex = d20.roll();
+	auto subtableIndex = DiceSet::get_instance().roll(1, Defs::die::d6);
+	auto itemIndex = DiceSet::get_instance().roll(1, Defs::die::d20);
 
 	if (itemIndex == 20)
 	{
@@ -393,8 +383,7 @@ Adndtk::ObjectOfArt::ObjectOfArt(const std::optional<std::string> name/*=std::nu
 		_name = ss.str();
 	}
 
-	auto d = Die{Defs::die::d100};
-	auto prob = d.roll();
+	auto prob = DiceSet::get_instance().roll(1, Defs::die::d100);
     auto objInfo = Cyclopedia::get_instance().exec_prepared_statement<int>(Query::select_object_of_art_by_probability, prob);
 
 	auto& i = objInfo[0];
@@ -500,10 +489,7 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
       _magicalItems{}
 {
     auto components = Cyclopedia::get_instance().exec_prepared_statement<>(Query::select_treasure_components);
-
 	auto compIds = components.to_vector<short>("id");
-
-	Die d100{Defs::die::d100};
     std::vector<TreasureInfo> treasureInfo;
 
 	for (auto& compId : compIds)
@@ -522,7 +508,7 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 			auto additionalNature = t.try_as<Defs::treasure_nature>("additional_nature");
 			auto additionalCount = t.try_as<int>("additional_count");
 
-    		if (roll_for_component(d100, probability))
+    		if (roll_for_component(probability))
 			{
 				auto info = std::make_tuple(compId, countFrom, countTo, nature);
 				treasureInfo.push_back(info);
@@ -560,7 +546,8 @@ Adndtk::Treasure::Treasure(const Defs::treasure_class& cls)
 		}
 		else if (tc == Defs::treasure_component::platinum_or_electrum)
 		{
-			auto coin = (d100.roll() % 2 == 0) ? Defs::coin::platinum_piece : Defs::coin::electrum_piece;
+			auto val = DiceSet::get_instance().roll(1, Defs::die::d100);
+			auto coin = (val % 2 == 0) ? Defs::coin::platinum_piece : Defs::coin::electrum_piece;
 			add_coins(coin, countFrom, countTo);
 		}
 		else if (tc == Defs::treasure_component::gems)
@@ -784,11 +771,10 @@ double Adndtk::Treasure::total_value(const Defs::coin& currency) const
 	return treasureValue;
 }
 
-bool Adndtk::Treasure::roll_for_component(const Die& d, const int probability) const
+bool Adndtk::Treasure::roll_for_component(const int probability) const
 {
-	//_options[Option::unlimited_store_availability] = false;
 	return OptionalRules::get_instance().get_option<bool>(Option::treasure_components_always_present)
-		|| d.roll() <= probability;
+		|| DiceSet::get_instance().roll(1, Defs::die::d100) <= probability;
 }
 
 // const adnd::treasure::treasure& adnd::treasure::treasure_pool::create(const defs::treasure::treasure_class& cls)

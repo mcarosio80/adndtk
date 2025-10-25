@@ -66,8 +66,7 @@ const Adndtk::SavingScore& Adndtk::SavingThrows::get_score(const Defs::character
         
 bool Adndtk::SavingThrows::roll(const Defs::character_class_type& type, const ExperienceLevel& lvl, const Defs::saving_throw& sav, const short& bonusMalus/*=0*/) const
 {
-    Die d20{Defs::die::d20};
-    auto roll = d20;
+    auto roll = DiceSet::get_instance().roll(1, Defs::die::d20);
     auto target = get_score(type, lvl, sav);
 
     return roll + bonusMalus >= target;

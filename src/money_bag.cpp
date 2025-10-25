@@ -27,17 +27,18 @@ Adndtk::MoneyBag::MoneyBag(const Defs::character_class_type& clsType)
 	auto& startingMoney = rs[0];
 
 	auto number = startingMoney.as<int>("die_number");
-	auto faces = startingMoney.as<int>("die_faces");
+	auto faces = startingMoney.as<Defs::die>("die_faces");
 	auto base = startingMoney.as<int>("die_base");
 	auto mult = startingMoney.as<int>("multiplier");
 
 	if (OptionalRules::get_instance().get_option<bool>(Option::max_starting_money))
 	{
-		_money[Defs::coin::gold_piece] = (number * faces + base) * mult;
+		_money[Defs::coin::gold_piece] = (number * to_int(faces) + base) * mult;
 	}
 	else
 	{
-		_money[Defs::coin::gold_piece] = Die::roll(number, faces, base) * mult;
+		auto score = DiceSet::get_instance().roll(number, faces, base);
+		_money[Defs::coin::gold_piece] = score * mult;
 	}
 }
 

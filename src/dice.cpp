@@ -102,7 +102,7 @@ Adndtk::DiceSet& Adndtk::DiceSet::get_instance()
     return _instance;
 }
 
-int Adndtk::DiceSet::roll(const Defs::die& dieType, const short diceNumber/*=1*/) const
+int Adndtk::DiceSet::roll(const short diceNumber, const Defs::die& dieType, const short base) const
 {
-    return _dice.at(dieType).roll(diceNumber);
+    return _dice.at(dieType).roll(diceNumber) + base; 
 }

@@ -20,39 +20,45 @@ Adndtk::RacialStats::RacialStats(const Defs::race& race, const Defs::sex& sex)
 	auto baseHeightMale = stats.as<short>("height_base_male");
 	auto baseHeightFemale = stats.as<short>("height_base_female");
 	auto baseHeightDiceNum1 = stats.as<short>("height_dice_number");
-	auto baseHeightDiceFaces1 = stats.as<short>("height_dice_faces");
+	auto baseHeightDiceFaces1 = stats.as<Defs::die>("height_dice_faces");
 	auto baseHeightDiceNum2 = stats.try_as<short>("height_dice_number_2");
 	auto baseHeightDiceFaces2 = stats.try_as<short>("height_dice_faces_2");
-	_height = Die::roll(baseHeightDiceNum1, baseHeightDiceFaces1, 0);
+	_height = DiceSet::get_instance().roll(baseHeightDiceNum1, baseHeightDiceFaces1, 0);
 	_height += (_sex == Defs::sex::male) ? baseHeightMale : baseHeightFemale;
 	if (baseHeightDiceNum2.has_value())
 	{
-		_height += Die::roll(baseHeightDiceNum2.value(), baseHeightDiceFaces2.value(), 0);
+		for (short n{0}; n < baseHeightDiceNum2.value(); ++n)
+		{
+			_height += Die::roll<short>(1, baseHeightDiceFaces2.value());
+		}
 	}
 
 	auto baseWeightMale = stats.as<short>("weight_base_male");
 	auto baseWeightFemale = stats.as<short>("weight_base_female");
 	auto baseWeightDiceNum1 = stats.as<short>("weight_dice_number");
-	auto baseWeightDiceFaces1 = stats.as<short>("weight_dice_faces");
+	auto baseWeightDiceFaces1 = stats.as<Defs::die>("weight_dice_faces");
 	auto baseWeightDiceNum2 = stats.try_as<short>("weight_dice_number_2");
 	auto baseWeightDiceFaces2 = stats.try_as<short>("weight_dice_faces_2");
-	_weight = Die::roll(baseWeightDiceNum1, baseWeightDiceFaces1, 0);
+	_weight = DiceSet::get_instance().roll(baseWeightDiceNum1, baseWeightDiceFaces1, 0);
 	_weight += (_sex == Defs::sex::male) ? baseWeightMale : baseWeightFemale;
 	if (baseWeightDiceNum2.has_value())
 	{
-		_weight += Die::roll(baseWeightDiceNum2.value(), baseWeightDiceFaces2.value(), 0);
+		for (short n{0}; n < baseWeightDiceNum2.value(); ++n)
+		{
+			_weight += Die::roll<short>(1, baseWeightDiceFaces2.value());
+		}
 	}
 
 	auto startingAge = stats.as<int>("age_starting");
 	auto startingAgeDiceNum = stats.as<int>("age_dice_number");
-	auto startingAgeDiceFaces = stats.as<int>("age_dice_faces");
-	_startingAge = Die::roll(startingAgeDiceNum, startingAgeDiceFaces, startingAge);
+	auto startingAgeDiceFaces = stats.as<Defs::die>("age_dice_faces");
+	_startingAge = DiceSet::get_instance().roll(startingAgeDiceNum, startingAgeDiceFaces, startingAge);
 	_currentAge = _startingAge;
 
 	auto maxAge = stats.as<int>("age_maximum");
 	auto maxAgeDiceNum = stats.as<int>("age_maximum_dice_number");
-	auto maxAgeDiceFaces = stats.as<int>("age_maximum_dice_faces");
-	_maxAge = Die::roll(maxAgeDiceNum, maxAgeDiceFaces, maxAge);
+	auto maxAgeDiceFaces = stats.as<Defs::die>("age_maximum_dice_faces");
+	_maxAge = DiceSet::get_instance().roll(maxAgeDiceNum, maxAgeDiceFaces, maxAge);
 
 	_middleAge = stats.as<short>("middle_age");
 	_oldAge = stats.as<short>("old_age");

@@ -185,8 +185,7 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Defs::skill &skillType, co
     if (cls.has_value() && race.has_value()
         && Cyclopedia::get_instance().can_have_exceptional_strength(cls.value(), race.value(), skillType, val))
     {
-        Adndtk::Die d{Defs::die::d100};
-        excValue = d.roll();
+        excValue = DiceSet::get_instance().roll(1, Defs::die::d100);
     }
 
     SkillValue skillValue{skillType, val, excValue};
@@ -200,20 +199,19 @@ Adndtk::SkillValue Adndtk::SkillCreator::create(const Adndtk::Defs::skill& skill
 
 short Adndtk::SkillCreator::generate_value(const Adndtk::SkillGenerationMethod& method/* = SkillGenerationMethod::standard*/)
 {
-    Die d{Defs::die::d6};
     short skillValue = 0;
 
     switch (method)
     {
     case SkillGenerationMethod::standard:
     {
-        skillValue = d.roll(3);
+        skillValue = DiceSet::get_instance().roll(3, Defs::die::d6);
         break;
     }
     case SkillGenerationMethod::best_of_each:
     {
-        short r1 = d.roll(3);
-        short r2 = d.roll(3);
+        short r1 = DiceSet::get_instance().roll(3, Defs::die::d6);
+        short r2 = DiceSet::get_instance().roll(3, Defs::die::d6);
         skillValue = std::max<short>(r1, r2);
         break;
     }
@@ -223,7 +221,7 @@ short Adndtk::SkillCreator::generate_value(const Adndtk::SkillGenerationMethod& 
         int minValue = 19;
         for (int i=0; i<4; ++i)
         {
-            auto v = d.roll();
+            auto v = DiceSet::get_instance().roll(1, Defs::die::d6);
             if (v < minValue)
             {
                 minValue = v;

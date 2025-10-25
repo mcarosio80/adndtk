@@ -121,8 +121,7 @@ double Adndtk::Monster::get_treasure_multiplier(const std::optional<double>& mul
     }
     if (diceNumber.has_value() && dieFaces.has_value())
     {
-        Die d{dieFaces.value()};
-        return d.roll(diceNumber.value());
+        return DiceSet::get_instance().roll(diceNumber.value(), dieFaces.value());
     }
     return 1;
 }
@@ -152,7 +151,7 @@ Adndtk::HP Adndtk::Monster::get_hp_score(const std::optional<Adndtk::HP>& hd,
     if (hd.has_value())
     {
         Defs::die faces = die_faces.value_or(Defs::die::d8);
-        score = Adndtk::DiceSet::get_instance().roll(faces, hd.value());
+        score = Adndtk::DiceSet::get_instance().roll(hd.value(), faces);
         score += die_modifier.value_or(0);
     }
     else if (hp.has_value() && hp_to.has_value())

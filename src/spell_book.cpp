@@ -53,7 +53,7 @@ void Adndtk::SpellBook::set_caster_level(const ExperienceLevel& newLevel)
     if (_casterClass == Defs::character_class::bard
         && _casterLevel == 1 && newLevel == 2)
     {
-        auto numSpells = Die::roll(1, 4);
+        auto numSpells = DiceSet::get_instance().roll(1, Defs::die::d4);
         auto rsSpells = Cyclopedia::get_instance().exec_prepared_statement<ExperienceLevel>(Query::select_wizard_spells_by_level, 1);
         while (numSpells > 0)
         {
@@ -324,8 +324,7 @@ bool Adndtk::SpellBook::try_scribe(const Defs::wizard_spell& spellId)
     SpellLevel spellLevel = SpellBook::get_spell_level(spellId);
     auto stats = SkillStats::get_instance().get_intelligence_stats(_intelligenceScore);
 
-    Die d{Defs::die::d100};
-    return stats.chance_to_learn_spell > d;
+    return stats.chance_to_learn_spell > DiceSet::get_instance().roll(1, Defs::die::d100);
 }
 
 short Adndtk::SpellBook::get_spells_available(const SpellLevel& spellLvl) const

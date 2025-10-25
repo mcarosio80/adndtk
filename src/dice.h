@@ -63,7 +63,7 @@ namespace Adndtk
         DiceSet(DiceSet const&) = delete;
         void operator=(DiceSet const&) = delete;
 
-        int roll(const Defs::die& dieType, const short diceNumber = 1) const;
+        int roll(const short diceNumber, const Defs::die& dieType, const short base = 0) const;
 
     private:
         DiceSet();
@@ -84,7 +84,7 @@ namespace Adndtk
         {
             for (int n{0}; n<_numDice; ++n) 
             {
-                _rolls[n] = DiceSet::get_instance().roll(_dieFaces);
+                _rolls[n] = DiceSet::get_instance().roll(1, _dieFaces);
             }
             return total();
         }

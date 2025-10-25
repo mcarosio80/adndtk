@@ -239,8 +239,7 @@ Adndtk::HP Adndtk::HitPoints::generate_hp(const Adndtk::Defs::character_class& c
     {
         return static_cast<HP>(_hitDice[cls]);
     }
-    Die d{_hitDice[cls]};
-    return d;
+    return DiceSet::get_instance().roll(1, _hitDice[cls]);
 }
 
 Adndtk::HP Adndtk::HitPoints::constitution_bonus() const

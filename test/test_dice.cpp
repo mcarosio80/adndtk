@@ -11,12 +11,11 @@ using namespace Adndtk;
 
 TEST_CASE("[TC-DICE.001] Rolling 3d8 results in (3 - 24)", "[dice]" )
 {
-    Die d{Defs::die::d6};
     int numRoll = 3;
     
     for (int i=0; i<6; ++i)
     {
-        int result = d.roll(numRoll);
+        int result = DiceSet::get_instance().roll(numRoll, Defs::die::d8);
         REQUIRE(3 <= result);
         REQUIRE(result <= 24);
     }
@@ -70,7 +69,7 @@ TEST_CASE("[TC-DICE.006] Non standard die type in dice expression is handled cor
 
 TEST_CASE("[TC-DICE.007] Dice creation defaults to d6 when not specified", "[dice]" )
 {
-    Die dd;
+    Die dd{};
     REQUIRE(dd.faces() == Defs::die::d6);
 }
 
@@ -122,25 +121,25 @@ TEST_CASE("[TC-DICE.012] DiceSet stores static set of dice", "[dice]")
 {
     for (short n = 1; n <= 3; ++n)
     {
-        auto d4 = DiceSet::get_instance().roll(Defs::die::d4, n);
+        auto d4 = DiceSet::get_instance().roll(n, Defs::die::d4);
         REQUIRE(d4 >= 1 * n);
         REQUIRE(d4 <= 4 * n);
-        auto d6 = DiceSet::get_instance().roll(Defs::die::d6, n);
+        auto d6 = DiceSet::get_instance().roll(n, Defs::die::d6);
         REQUIRE(d6 >= 1 * n);
         REQUIRE(d6 <= 6 * n);
-        auto d8 = DiceSet::get_instance().roll(Defs::die::d8, n);
+        auto d8 = DiceSet::get_instance().roll(n, Defs::die::d8);
         REQUIRE(d8 >= 1 * n);
         REQUIRE(d8 <= 8 * n);
-        auto d10 = DiceSet::get_instance().roll(Defs::die::d10, n);
+        auto d10 = DiceSet::get_instance().roll(n, Defs::die::d10);
         REQUIRE(d10 >= 1 * n);
         REQUIRE(d10 <= 10 * n);
-        auto d12 = DiceSet::get_instance().roll(Defs::die::d12, n);
+        auto d12 = DiceSet::get_instance().roll(n, Defs::die::d12);
         REQUIRE(d12 >= 1 * n);
         REQUIRE(d12 <= 12 * n);
-        auto d20 = DiceSet::get_instance().roll(Defs::die::d20, n);
+        auto d20 = DiceSet::get_instance().roll(n, Defs::die::d20);
         REQUIRE(d20 >= 1 * n);
         REQUIRE(d20 <= 20 * n);
-        auto d100 = DiceSet::get_instance().roll(Defs::die::d100, n);
+        auto d100 = DiceSet::get_instance().roll(n, Defs::die::d100);
         REQUIRE(d100 >= 1 * n);
         REQUIRE(d100 <= 100 * n);
     }

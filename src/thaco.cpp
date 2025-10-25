@@ -85,8 +85,7 @@ Adndtk::Defs::attack_result Adndtk::Thaco::try_hit(const Adndtk::CharacterExperi
     Defs::attack_result res{Defs::attack_result::miss};
     auto selectet = attack_as(levels);
 
-    Die d20{Defs::die::d20};
-    auto roll = d20;
+    auto roll = DiceSet::get_instance().roll(1, Defs::die::d20);
     auto thaco = get(selectet.first, selectet.second) - ac;
 
     if (roll == Const::critical_miss)

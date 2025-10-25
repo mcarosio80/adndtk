@@ -75,8 +75,7 @@ std::pair<Adndtk::Defs::turn_effect, bool> Adndtk::TurnUndead::try_turn(const Ex
             res = {effect, false};
         else
         {
-            Die d20{Defs::die::d20};
-            auto roll = d20;
+            auto roll = DiceSet::get_instance().roll(1, Defs::die::d20);
             bool turnResult = score.value() <= roll + bonusMalus;
             res = {effect, turnResult};
         }
