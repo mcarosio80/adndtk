@@ -6,6 +6,27 @@ from sys import argv
 import common
 
 ################################
+def print_enum_output_operator(enumName, outFile, indentationLevel):
+    outFile.write("\n\n")
+
+    outFile.write(f"{common.indent(indentationLevel)}")
+    outFile.write(f"inline std::ostream& operator<<(std::ostream& out, const {enumName}& data)\n")
+    outFile.write(f"{common.indent(indentationLevel)}{{\n")
+    outFile.write(f"{common.indent(indentationLevel+1)}out << static_cast<std::underlying_type<{enumName}>::type>(data);\n")
+    outFile.write(f"{common.indent(indentationLevel+1)}return out;\n")
+    outFile.write(f"{common.indent(indentationLevel)}}}\n")
+
+################################
+def print_enum_to_integer_converter(enumName, outFile, indentationLevel):
+    outFile.write("\n")
+
+    outFile.write(f"{common.indent(indentationLevel)}")
+    outFile.write(f"inline std::underlying_type<{enumName}>::type to_int(const {enumName}& data)\n")
+    outFile.write(f"{common.indent(indentationLevel)}{{\n")
+    outFile.write(f"{common.indent(indentationLevel+1)}return static_cast<std::underlying_type<{enumName}>::type>(data);\n")
+    outFile.write(f"{common.indent(indentationLevel)}}}\n")
+
+################################
 def print_enum(lines, enumName, outFile, indentationLevel, isClass = True):
     numLines = len(lines)
     countEnums = 1
@@ -28,14 +49,10 @@ def print_enum(lines, enumName, outFile, indentationLevel, isClass = True):
             countEnums += 1
 
         outFile.write(f"{common.indent(indentationLevel)}")
-        outFile.write("};\n\n")
+        outFile.write("};")
 
-        outFile.write(f"{common.indent(indentationLevel)}")
-        outFile.write(f"inline std::ostream& operator<<(std::ostream& out, const {enumName}& data)\n")
-        outFile.write(f"{common.indent(indentationLevel)}{{\n")
-        outFile.write(f"{common.indent(indentationLevel+1)}out << static_cast<std::underlying_type<{enumName}>::type>(data);\n")
-        outFile.write(f"{common.indent(indentationLevel+1)}return out;\n")
-        outFile.write(f"{common.indent(indentationLevel)}}}\n")
+        print_enum_output_operator(enumName, outFile, indentationLevel)
+        print_enum_to_integer_converter(enumName, outFile, indentationLevel)
 
 ################################
 def generate_enum(dbPath, headerFile, namespaces, version, jsonConfig):
