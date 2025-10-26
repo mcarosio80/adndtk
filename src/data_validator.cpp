@@ -66,7 +66,7 @@ auto Adndtk::DataValidator::validate_skill_value(const std::string& stringValue,
     return skillValue;
 }
 
-auto Adndtk::DataValidator::validate_generation_method(const std::string& stringValue) const -> std::optional<SkillGenerationMethod>
+auto Adndtk::DataValidator::validate_generation_method(std::string_view stringValue) const -> std::optional<SkillGenerationMethod>
 {
     if (stringValue == "standard")
     {
@@ -131,7 +131,7 @@ auto Adndtk::DataValidator::validate_skills_list(const std::string& value) const
     return skillVals;
 }
 
-auto Adndtk::DataValidator::validate_class(const std::string& value) const -> std::optional<Defs::character_class>
+auto Adndtk::DataValidator::validate_class(std::string_view value) const -> std::optional<Defs::character_class>
 {
     auto classes = Adndtk::Tables::character_class::fetch_all();
     for (auto& c : classes)

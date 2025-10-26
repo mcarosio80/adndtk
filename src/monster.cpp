@@ -175,7 +175,7 @@ std::optional<Adndtk::AC> Adndtk::Monster::ac() const
     return minAC;
 }
 
-std::optional<Adndtk::AC> Adndtk::Monster::ac(const std::string& variant) const
+std::optional<Adndtk::AC> Adndtk::Monster::ac(std::string_view variant) const
 {
     for (const auto& var : _acVariants)
     {

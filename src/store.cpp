@@ -13,7 +13,7 @@ Adndtk::Store::Store()
     init();
 }
 
-Adndtk::Store::Store(const std::string& name)
+Adndtk::Store::Store(std::string_view name)
     : _name{name}
 {
     init();

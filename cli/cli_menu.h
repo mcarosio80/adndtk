@@ -10,7 +10,7 @@
 namespace CliTools
 {
     template<typename _RetType = std::string>
-    static _RetType prompt(const std::string& prompt)
+    static _RetType prompt(std::string_view prompt)
     {
         bool continuePrompt{false};
         _RetType ret{};

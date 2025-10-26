@@ -2,6 +2,7 @@
 #define STORE_H
 
 #include <string>
+#include <string_view>
 #include <map>
 #include <optional>
 
@@ -15,7 +16,7 @@ namespace Adndtk
     {
     public:
         Store();
-        Store(const std::string& name);
+        Store(std::string_view name);
         ~Store();
 
         inline const std::string& store_name() { return _name; }

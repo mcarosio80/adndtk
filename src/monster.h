@@ -4,6 +4,7 @@
 #include <string>
 #include <optional>
 #include <set>
+#include <string_view>
 
 #include <common_types.h>
 #include <defs.h>
@@ -91,7 +92,7 @@ namespace Adndtk
         
         const std::map<AC, std::string>& ac_variants() const { return _acVariants; }
         std::optional<AC> ac() const;
-        std::optional<AC> ac(const std::string& variant) const;
+        std::optional<AC> ac(std::string_view variant) const;
 
         std::optional<Defs::monster_variant_type> variant() const;
         Adndtk::HP hp() const;
