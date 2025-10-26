@@ -87,24 +87,32 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
         auto varQueryId{Query::select_monster_variant_default};
         variantInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::monster>(varQueryId, _id);
 
-        auto variantType = variantInfo[0].try_as<Defs::monster_variant_type>("monster_variant");
-        if (variantType)
+        std::optional<Defs::monster_variant_type> variantType{std::nullopt};
+        
+        if (variantInfo.size() > 0)
         {
-            _monsterVariant = variantType.value();
+            variantType = variantInfo[0].try_as<Defs::monster_variant_type>("monster_variant");
+            if (variantType)
+            {
+                _monsterVariant = variantType.value();
+            }
         }
     }
 
-    auto hd = variantInfo[0].try_as<Adndtk::HP>("hd");
-    auto die_faces = variantInfo[0].try_as<Defs::die>("die_faces");
-    auto die_modifier = variantInfo[0].try_as<short>("die_modifier");
-    auto hp = variantInfo[0].try_as<Adndtk::HP>("hp");
-    auto hp_to = variantInfo[0].try_as<Adndtk::HP>("hp_to");
+    if (variantInfo.size() > 0)
+    {
+        auto hd = variantInfo[0].try_as<Adndtk::HP>("hd");
+        auto die_faces = variantInfo[0].try_as<Defs::die>("die_faces");
+        auto die_modifier = variantInfo[0].try_as<short>("die_modifier");
+        auto hp = variantInfo[0].try_as<Adndtk::HP>("hp");
+        auto hp_to = variantInfo[0].try_as<Adndtk::HP>("hp_to");
 
-    _hpValueMax = get_hp_score(hd, die_faces, die_modifier, hp, hp_to);
-    _hpValueCurrent = _hpValueMax;
+        _hpValueMax = get_hp_score(hd, die_faces, die_modifier, hp, hp_to);
+        _hpValueCurrent = _hpValueMax;
 
-    _thac0Value = variantInfo[0].try_as<THAC0>("thac0");
-    _xpValue = variantInfo[0].try_as<THAC0>("xp");
+        _thac0Value = variantInfo[0].try_as<THAC0>("thac0");
+        _xpValue = variantInfo[0].try_as<THAC0>("xp");
+    }
 }
 
 Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
