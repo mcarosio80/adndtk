@@ -25,7 +25,6 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
 
     _name = info.value().display_name.value_or(info.value().name);
     _fullName = info.value().name;
-    _instanceName = (!instanceName.empty()) ? instanceName : _name;
     _frequencyId = info.value().frequency_id;
     _intelligence = get_intelligence_score(info.value().intelligence_from, info.value().intelligence_to);
 

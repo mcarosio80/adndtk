@@ -147,14 +147,14 @@ TEST_CASE("[TC-BATL.010] Filtered elements are writable references to the object
     {
         auto allMonsters1 = bf.select<Monster>(filterAll);
         auto& m1 = allMonsters1[0];
-        REQUIRE(m1.avatar.get().get_instance_name() == noName);
-        m1.avatar.get().set_instance_name(nightKingName);
+        REQUIRE(m1.avatar.get().get_unique_name() == noName);
+        m1.avatar.get().set_unique_name(nightKingName);
     }
 
     {
         auto allMonsters2 = bf.select<Monster>(filterAll);
         auto& m2 = allMonsters2[0];
-        REQUIRE(m2.avatar.get().get_instance_name() == nightKingName);
+        REQUIRE(m2.avatar.get().get_unique_name() == nightKingName);
     }
 
     Battleground::get_instance().clear();

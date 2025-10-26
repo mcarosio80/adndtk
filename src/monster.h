@@ -35,7 +35,7 @@ namespace Adndtk
         const auto& get_frequency() const { return _frequencyId; }
         const auto& get_intelligence() const { return _intelligence; }
         
-        void set_instance_name(const std::string& newName) { _instanceName = newName; }
+        void set_unique_name(const std::string& uniqueName) { _uniqueName = uniqueName; }
 
         const auto& get_climate_terrain() const { return _cliamteTerrain; }
         bool lives_in(const Defs::climate& climateId) const
@@ -107,7 +107,6 @@ namespace Adndtk
         Defs::monster                               _id;
         std::string                                 _name;
         std::string                                 _fullName;
-        std::string                                 _instanceName;
         std::optional<Defs::encounter_frequency>    _frequencyId;
         std::optional<SkillValue>                   _intelligence;
         std::set<std::pair<Defs::climate, Defs::terrain>>
