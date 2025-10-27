@@ -7,7 +7,7 @@
 Adndtk::Battlefield::Point Adndtk::Battlefield::origin = {0.0, 0.0};
 double Adndtk::Battlefield::defaultRadius = 0.5;
 
-Adndtk::Battlefield::Battlefield(const std::string& key)
+Adndtk::Battlefield::Battlefield(std::string_view key)
     : _name{key}
 {
 }
@@ -142,6 +142,27 @@ void Adndtk::Battlefield::clear()
 
 void Adndtk::Battlefield::step()
 {
+    _battleTurn.clear();
+    auto monsters = select<Monster>([](const Monster& m){ return true; });
+    auto characters = select<Character>([](const Character& c){ return true; });
+
+    std::map<short, BattleTurnList> reactOrder{};
+
+    for (const auto& c : characters)
+    {
+        auto initiative = c.avatar.get().roll_initiative();
+        reactOrder[initiative].push_back(std::make_pair(initiative, c.avatar));
+    }
+    for (const auto& m : monsters)
+    {
+        auto initiative = m.avatar.get().roll_initiative();
+        reactOrder[initiative].push_back(std::make_pair(initiative, m.avatar));
+    }
+
+    for (const auto r : reactOrder)
+    {
+        _battleTurn.insert(_battleTurn.end(), r.second.begin(), r.second.end());
+    }
 }
 
 Adndtk::PartyList Adndtk::Battlefield::select() const

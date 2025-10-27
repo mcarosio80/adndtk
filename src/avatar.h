@@ -13,7 +13,9 @@ namespace Adndtk
             Monster
         };
 
-        virtual Type get_avatar_type() const = 0;
+        virtual const std::string& name() const = 0;
+        virtual Type avatar_type() const = 0;
+        virtual short roll_initiative() const = 0;
         virtual ~Avatar() {}
         
     private:

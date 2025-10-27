@@ -10,7 +10,7 @@ TEST_CASE("[TC-MONS.001] Monsters have their relevant avatar type", "[monster]" 
 {
     auto monsterId{Defs::monster::aarakocra};
     Monster m{monsterId};
-    REQUIRE(m.get_avatar_type() == Avatar::Type::Monster);
+    REQUIRE(m.avatar_type() == Avatar::Type::Monster);
 }
 
 TEST_CASE("[TC-MONS.002] Monsters basic features are retrieved as expected", "[monster]" )
@@ -19,7 +19,7 @@ TEST_CASE("[TC-MONS.002] Monsters basic features are retrieved as expected", "[m
     Monster m{monsterId};
     
     REQUIRE(m.get_id() == monsterId);
-    REQUIRE(m.get_name() == "Aarakocra");
+    REQUIRE(m.name() == "Aarakocra");
     REQUIRE(m.get_full_name() == "Aarakocra");
 
     REQUIRE(m.lives_in(Defs::climate::tropical));

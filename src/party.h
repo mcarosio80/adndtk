@@ -6,6 +6,7 @@
 #include <string>
 #include <optional>
 #include <functional>
+#include <string_view>
 
 #include <defs.h>
 #include <avatar.h>
@@ -33,15 +34,15 @@ namespace Adndtk
     {
     public:
         Party() = default;
-        explicit Party(const std::string& partyName);
+        explicit Party(std::string_view partyName);
 
         const std::string& get_name() const { return _name; }
 
-        AvatarId add_character(const std::string& name, const Defs::character_class& cls,
+        AvatarId add_character(std::string_view name, const Defs::character_class& cls,
             const Defs::race& raceId, const Defs::moral_alignment& align, const Defs::sex& sexId,
             const std::optional<Defs::deity>& deityId);
 
-        AvatarId add_monster(const Defs::monster& monsterId, const std::string& monsterName = "");
+        AvatarId add_monster(const Defs::monster& monsterId, std::string_view monsterName = "");
 
         template <unsigned short _count>
         void add_monsters(const Defs::monster& monsterId)

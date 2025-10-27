@@ -222,3 +222,108 @@ TEST_CASE("[TC-BATL.013] Parties selection returns expected results", "[battlegr
 
     Battleground::get_instance().clear();
 }
+
+TEST_CASE("[TC-BATL.014] Each avatar takes part in the turn according to initiative roll", "[battleground]" )
+{
+    auto bf = Battleground::get_instance().get_battlefield(battleFieldName);
+
+    auto& ww = bf.get_party(whiteWalkers);
+    auto& nw = bf.get_party(nightWatch);
+
+    bf.add_monsters<3>(Defs::monster::ghost, whiteWalkers, {{{1.0,-1.0}, {1.0,-2.0}, {1.0,-3.0}}},
+                    {{0.5,0.5,0.5}});
+
+    bf.add_character("Jon Snow", Defs::character_class::ranger, Defs::race::human,
+            Defs::moral_alignment::neutral_good, Defs::sex::male, Defs::deity::chauntea, {2.0,-2.0}, 0.5);
+    bf.add_character("Samwell Tarly", Defs::character_class::bard, Defs::race::human,
+            Defs::moral_alignment::lawful_neutral, Defs::sex::male, std::nullopt, {2.0,-4.0}, 0.5);
+    bf.add_character("Tyrion Lannister", Defs::character_class::fighter, Defs::race::dwarf,
+            Defs::moral_alignment::chaotic_good, Defs::sex::male, std::nullopt, {2.0,-6.0}, 0.5);
+            
+    bf.step();
+    auto& turn = bf.battle_turn();
+
+    REQUIRE(turn.size() == 6);
+    for (size_t i{1}; i<turn.size(); ++i)
+    {
+        REQUIRE(turn[i-1].first <= turn[i].first);
+    }
+}
+
+TEST_CASE("[TC-BATL.015] Each avatar takes part in the turn only once", "[battleground]" )
+{
+    auto bf = Battleground::get_instance().get_battlefield(battleFieldName);
+
+    auto& ww = bf.get_party(whiteWalkers);
+    auto& nw = bf.get_party(nightWatch);
+
+    bf.add_monsters<3>(Defs::monster::ghost, whiteWalkers, {{{1.0,-1.0}, {1.0,-2.0}, {1.0,-3.0}}},
+                    {{0.5,0.5,0.5}});
+
+    bf.add_character("Jon Snow", Defs::character_class::ranger, Defs::race::human,
+            Defs::moral_alignment::neutral_good, Defs::sex::male, Defs::deity::chauntea, {2.0,-2.0}, 0.5);
+    bf.add_character("Samwell Tarly", Defs::character_class::bard, Defs::race::human,
+            Defs::moral_alignment::lawful_neutral, Defs::sex::male, std::nullopt, {2.0,-4.0}, 0.5);
+    bf.add_character("Tyrion Lannister", Defs::character_class::fighter, Defs::race::dwarf,
+            Defs::moral_alignment::chaotic_good, Defs::sex::male, std::nullopt, {2.0,-6.0}, 0.5);
+            
+    bf.step();
+    auto& turn = bf.battle_turn();
+
+    short ghosts{0};
+    short jon{0};
+    short samwell{0};
+    short tyrion{0};
+
+    std::for_each(turn.begin(), turn.end(), [&](const Battlefield::BattleTurn& t) {
+        if (t.second.get().avatar_type() == Avatar::Type::Monster) ++ghosts;
+        else if (t.second.get().name() == "Jon Snow") ++jon;
+        else if (t.second.get().name() == "Samwell Tarly") ++samwell;
+        else if (t.second.get().name() == "Tyrion Lannister") ++tyrion;
+    });
+
+    REQUIRE(ghosts == 3);
+    REQUIRE(jon == 1);
+    REQUIRE(samwell == 1);
+    REQUIRE(tyrion == 1);
+}
+
+TEST_CASE("[TC-BATL.016] Moving one step forward may change the turn list", "[battleground]" )
+{
+    auto bf = Battleground::get_instance().get_battlefield(battleFieldName);
+
+    auto& ww = bf.get_party(whiteWalkers);
+    auto& nw = bf.get_party(nightWatch);
+
+    bf.add_monster(Defs::monster::ghost, {1.0, -1.0}, 0.5, std::nullopt, "Ghost 1");
+    bf.add_monster(Defs::monster::ghost, {1.0, -2.0}, 0.5, std::nullopt, "Ghost 2"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -3.0}, 0.5, std::nullopt, "Ghost 3"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -4.0}, 0.5, std::nullopt, "Ghost 4"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -5.0}, 0.5, std::nullopt, "Ghost 5"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -6.0}, 0.5, std::nullopt, "Ghost 6"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -7.0}, 0.5, std::nullopt, "Ghost 7"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -8.0}, 0.5, std::nullopt, "Ghost 8"); 
+    bf.add_monster(Defs::monster::ghost, {1.0, -9.0}, 0.5, std::nullopt, "Ghost 9"); 
+    bf.add_monster(Defs::monster::ghost, {1.0,-10.0}, 0.5, std::nullopt, "Ghost 10"); 
+
+    bf.add_character("Jon Snow", Defs::character_class::ranger, Defs::race::human,
+            Defs::moral_alignment::neutral_good, Defs::sex::male, Defs::deity::chauntea, {2.0,-2.0}, 0.5);
+    bf.add_character("Samwell Tarly", Defs::character_class::bard, Defs::race::human,
+            Defs::moral_alignment::lawful_neutral, Defs::sex::male, std::nullopt, {2.0,-4.0}, 0.5);
+            
+    bf.step();
+    auto turn1 = bf.battle_turn();
+    REQUIRE(turn1.size() == 12);
+       
+    bf.step();
+    auto turn2 = bf.battle_turn();
+    REQUIRE(turn2.size() == 12);
+
+    auto fEquals = [](const Battlefield::BattleTurn& t1, const Battlefield::BattleTurn& t2)
+    {
+        return t1.first == t2.first
+                && t1.second.get().avatar_type() == t2.second.get().avatar_type()
+                && t1.second.get().name() == t2.second.get().name();
+    };
+    REQUIRE_FALSE(std::equal(turn1.begin(), turn1.end(), turn2.begin(), fEquals));
+}

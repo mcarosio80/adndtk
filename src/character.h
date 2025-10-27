@@ -36,12 +36,14 @@ namespace Adndtk
             const Defs::moral_alignment& align, const Defs::sex& sexId,
             const std::optional<Defs::deity>& deityId = std::nullopt);
         
-        Avatar::Type get_avatar_type() const override
+        // Implement Avatar interface
+        Avatar::Type avatar_type() const override
         {
             return Avatar::Type::PlayerCharacter;
         };
+        short roll_initiative() const override;
 
-        const std::string& name() const { return _name; };
+        const std::string& name() const override { return _name; };
         inline const Defs::character_class& get_class() const { return _cls; };
         std::vector<Defs::character_class> get_classes() const;
 
