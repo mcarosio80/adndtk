@@ -121,6 +121,11 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
 {
 }
 
+short Adndtk::Monster::roll_initiative() const
+{
+    return DiceSet::get_instance().roll(1, Defs::die::d10);
+}
+
 double Adndtk::Monster::get_treasure_multiplier(const std::optional<double>& multiplier, const std::optional<short>& diceNumber, const std::optional<Defs::die>& dieFaces)
 {
     if (multiplier.has_value())

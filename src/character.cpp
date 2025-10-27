@@ -4,6 +4,7 @@
 #include <options.h>
 #include <encumbrance.h>
 #include <character_generator.h>
+#include <dice.h>
 
 #include <algorithm>
 
@@ -69,6 +70,11 @@ Adndtk::Character::Character(std::string_view name, const Defs::character_class&
         change_skill(skillVal);
     };
     _racialStats += onAgingCbk;
+}
+
+short Adndtk::Character::roll_initiative() const
+{
+    return DiceSet::get_instance().roll(1, Defs::die::d10);
 }
 
 std::vector<Adndtk::Defs::character_class> Adndtk::Character::get_classes() const

@@ -6,6 +6,8 @@
 #include <string>
 #include <optional>
 #include <valarray>
+#include <vector>
+#include <utility>
 
 #include <defs.h>
 #include <party.h>
@@ -145,8 +147,11 @@ namespace Adndtk
             double avatarRadius;
         };
 
+        using BattleTurn = std::pair<short, std::reference_wrapper<Avatar>>;
+        using BattleTurnList = std::vector<BattleTurn>;
+
         Battlefield() = default;
-        explicit Battlefield(const std::string& key);
+        explicit Battlefield(std::string_view key);
 
         const std::string& get_name() const { return _name; }
         Party& get_party(const std::string& partyName);
@@ -232,6 +237,9 @@ namespace Adndtk
 
         void clear();
         void step();
+        const BattleTurnList& battle_turn() const { return _battleTurn; }
+        auto begin() { return _battleTurn.begin(); }
+        auto end() { return _battleTurn.end(); }
 
         template <class _ElementType>
         AvatarList<_ElementType> select(const AvatarFilter<_ElementType>& cbk) const
@@ -260,6 +268,8 @@ namespace Adndtk
         PartyList select() const;
         PartyList select(const PartyFilter& cbk) const;
 
+
+
         static Point origin;
         static double defaultRadius;
 
@@ -269,6 +279,7 @@ namespace Adndtk
         std::string                                     _name;
         std::map<std::string, Party>                    _parties;
         std::map<Point, Place>                          _coordinates;
+        BattleTurnList                                  _battleTurn;
 
         bool detect_collision(const Point& coord, const double radius) const;
         bool place_avatar(const Adndtk::AvatarId id, const Point& coord, 

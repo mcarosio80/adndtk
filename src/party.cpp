@@ -5,12 +5,12 @@
 Adndtk::AvatarId Adndtk::Party::_monsterKeyOffset = 0;
 Adndtk::AvatarId Adndtk::Party::_characterKeyOffset = std::numeric_limits<Adndtk::AvatarId>::max() / 2;
 
-Adndtk::Party::Party(const std::string& name)
+Adndtk::Party::Party(std::string_view name)
     : _name{name}
 {
 }
 
-Adndtk::AvatarId Adndtk::Party::add_character(const std::string& name, const Adndtk::Defs::character_class& cls,
+Adndtk::AvatarId Adndtk::Party::add_character(std::string_view name, const Adndtk::Defs::character_class& cls,
     const Adndtk::Defs::race& raceId, const Adndtk::Defs::moral_alignment& align, const Adndtk::Defs::sex& sexId,
     const std::optional<Adndtk::Defs::deity>& deityId)
 {
@@ -22,7 +22,7 @@ Adndtk::AvatarId Adndtk::Party::add_character(const std::string& name, const Adn
     return nextKey;
 }
 
-Adndtk::AvatarId Adndtk::Party::add_monster(const Adndtk::Defs::monster& monsterId, const std::string& monsterName/*=""*/)
+Adndtk::AvatarId Adndtk::Party::add_monster(const Adndtk::Defs::monster& monsterId, std::string_view monsterName/*=""*/)
 {
     auto nextKey = _monsters.size() + _monsterKeyOffset;
     _monsters.emplace(

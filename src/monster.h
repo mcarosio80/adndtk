@@ -24,12 +24,15 @@ namespace Adndtk
         Monster(const Defs::monster& monsterId,
                 const std::optional<Defs::monster_variant_type>& monsterVariant = std::nullopt);
 
-        constexpr Avatar::Type get_avatar_type() const override
+        // Implement Avatar interface
+        constexpr Avatar::Type avatar_type() const override
         {
             return Avatar::Type::Monster;
         };
+        short roll_initiative() const override;
+        const std::string& name() const override { return _name; }
+
         const auto& get_id() const { return _id; }
-        const auto& get_name() const { return _name; }
         const auto& get_full_name() const { return _fullName; }
         const auto& get_unique_name() const { return _uniqueName; }
         const auto& get_frequency() const { return _frequencyId; }
