@@ -1,5 +1,5 @@
-#ifndef INVENTORY_H
-#define INVENTORY_H
+#ifndef __ADNDTK__SRC__INVENTORY_H
+#define __ADNDTK__SRC__INVENTORY_H
 
 #include <map>
 #include <optional>
@@ -32,4 +32,4 @@ namespace Adndtk
     };
 }
 
-#endif // INVENTORY_H
+#endif // __ADNDTK__SRC__INVENTORY_H

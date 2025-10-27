@@ -1,5 +1,5 @@
-#ifndef MONEY_BAG_H
-#define MONEY_BAG_H
+#ifndef __ADNDTK__SRC__MONEY_BAG_H
+#define __ADNDTK__SRC__MONEY_BAG_H
 
 #include <map>
 
@@ -37,4 +37,4 @@ namespace Adndtk
     };
 }
 
-#endif // MONEY_BAG_H
+#endif // __ADNDTK__SRC__MONEY_BAG_H

@@ -1,5 +1,5 @@
-#ifndef MONSTER_H
-#define MONSTER_H
+#ifndef __ADNDTK__SRC__MONSTER_H
+#define __ADNDTK__SRC__MONSTER_H
 
 #include <string>
 #include <optional>
@@ -165,4 +165,4 @@ namespace Adndtk
     };
 }
 
-#endif // AVATAR_H
+#endif // __ADNDTK__SRC__AVATAR_H

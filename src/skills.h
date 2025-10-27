@@ -1,5 +1,5 @@
-#ifndef SKILLS_H
-#define SKILLS_H
+#ifndef __ADNDTK__SRC__SKILLS_H
+#define __ADNDTK__SRC__SKILLS_H
 
 #include <iostream>
 #include <iomanip>
@@ -91,4 +91,4 @@ namespace Adndtk
     };
 }
 
-#endif // SKILLS_H
+#endif // __ADNDTK__SRC__SKILLS_H

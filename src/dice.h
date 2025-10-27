@@ -1,5 +1,5 @@
-#ifndef DICE_H
-#define DICE_H
+#ifndef __ADNDTK__SRC__DICE_H
+#define __ADNDTK__SRC__DICE_H
 
 #include <random>
 #include <iostream>
@@ -130,4 +130,4 @@ namespace Adndtk
     };
 }
 
-#endif // DICE_H
+#endif // __ADNDTK__SRC__DICE_H

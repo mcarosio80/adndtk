@@ -1,5 +1,5 @@
-#ifndef QUERY_RESULT_H
-#define QUERY_RESULT_H
+#ifndef __ADNDTK__SRC__QUERY_RESULT_H
+#define __ADNDTK__SRC__QUERY_RESULT_H
 
 #include <optional>
 #include <string>
@@ -197,4 +197,4 @@ namespace Adndtk
     };
 }
 
-#endif // QUERY_RESULT_H
+#endif // __ADNDTK__SRC__QUERY_RESULT_H

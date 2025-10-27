@@ -1,5 +1,5 @@
-#ifndef TREASURE_H
-#define TREASURE_H
+#ifndef __ADNDTK__SRC__TREASURE_H
+#define __ADNDTK__SRC__TREASURE_H
 
 #include <defs.h>
 #include <coin.h>
@@ -188,4 +188,4 @@ namespace Adndtk
     };
 }
 
-#endif // TREASURE_H
+#endif // __ADNDTK__SRC__TREASURE_H

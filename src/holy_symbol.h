@@ -1,5 +1,5 @@
-#ifndef HOLY_SYMBOL_H
-#define HOLY_SYMBOL_H
+#ifndef __ADNDTK__SRC__HOLY_SYMBOL_H
+#define __ADNDTK__SRC__HOLY_SYMBOL_H
 
 #include <defs.h>
 #include <common_types.h>
@@ -53,4 +53,4 @@ namespace Adndtk
     };
 }
 
-#endif // HOLY_SYMBOL_H
+#endif // __ADNDTK__SRC__HOLY_SYMBOL_H

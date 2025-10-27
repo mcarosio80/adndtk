@@ -1,5 +1,5 @@
-#ifndef ENCUMBRANCE_H
-#define ENCUMBRANCE_H
+#ifndef __ADNDTK__SRC__ENCUMBRANCE_H
+#define __ADNDTK__SRC__ENCUMBRANCE_H
 
 #include <defs.h>
 #include <skills.h>
@@ -36,4 +36,4 @@ namespace Adndtk
     };
 }
 
-#endif // ENCUMBRANCE_H
+#endif // __ADNDTK__SRC__ENCUMBRANCE_H

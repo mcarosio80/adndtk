@@ -1,5 +1,5 @@
-#ifndef ADVANCEMENT_TABLE_H
-#define ADVANCEMENT_TABLE_H
+#ifndef __ADNDTK__SRC__ADVANCEMENT_TABLE_H
+#define __ADNDTK__SRC__ADVANCEMENT_TABLE_H
 
 
 #include <defs.h>
@@ -30,4 +30,4 @@ namespace Adndtk
     };
 }
 
-#endif // ADVANCEMENT_TABLE_H
+#endif // __ADNDTK__SRC__ADVANCEMENT_TABLE_H

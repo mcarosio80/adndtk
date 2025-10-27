@@ -1,5 +1,5 @@
-#ifndef AVATAR_H
-#define AVATAR_H
+#ifndef __ADNDTK__SRC__AVATAR_H
+#define __ADNDTK__SRC__AVATAR_H
 
 namespace Adndtk
 {
@@ -20,4 +20,4 @@ namespace Adndtk
     };
 }
 
-#endif // AVATAR_H
+#endif // __ADNDTK__SRC__AVATAR_H

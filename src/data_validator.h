@@ -1,5 +1,5 @@
-#ifndef DATA_VALIDATOR_H
-#define DATA_VALIDATOR_H
+#ifndef __ADNDTK__SRC__DATA_VALIDATOR_H
+#define __ADNDTK__SRC__DATA_VALIDATOR_H
 
 #include <optional>
 #include <string>
@@ -28,4 +28,4 @@ namespace Adndtk
     };
 } // namespace Adndtk
 
-#endif //DATA_VALIDATOR_H
+#endif // __ADNDTK__SRC__DATA_VALIDATOR_H

@@ -1,5 +1,5 @@
-#ifndef COIN_H
-#define COIN_H
+#ifndef __ADNDTK__SRC__COIN_H
+#define __ADNDTK__SRC__COIN_H
 
 #include <defs.h>
 #include <coin_exchange.h>
@@ -56,4 +56,4 @@ namespace Adndtk
     };
 }
 
-#endif // COIN_H
+#endif // __ADNDTK__SRC__COIN_H

@@ -1,5 +1,5 @@
-#ifndef COMMON_TYPES_H
-#define COMMON_TYPES_H
+#ifndef __ADNDTK__SRC__COMMON_TYPES_H
+#define __ADNDTK__SRC__COMMON_TYPES_H
 
 #include <map>
 
@@ -245,4 +245,4 @@ namespace Adndtk
     };
 }
 
-#endif // COMMON_TYPES_H
+#endif // __ADNDTK__SRC__COMMON_TYPES_H

@@ -1,5 +1,5 @@
-#ifndef CYCLOPEDIA_H
-#define CYCLOPEDIA_H
+#ifndef __ADNDTK__SRC__CYCLOPEDIA_H
+#define __ADNDTK__SRC__CYCLOPEDIA_H
 
 #include <defs.h>
 #include <config.h>
@@ -219,4 +219,4 @@ namespace Adndtk
     };
 }
 
-#endif // CYCLOPEDIA_H
+#endif // __ADNDTK__SRC__CYCLOPEDIA_H

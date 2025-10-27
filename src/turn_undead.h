@@ -1,5 +1,5 @@
-#ifndef TURN_UNDEAD_H
-#define TURN_UNDEAD_H
+#ifndef __ADNDTK__SRC__TURN_UNDEAD_H
+#define __ADNDTK__SRC__TURN_UNDEAD_H
 
 #include <defs.h>
 #include <common_types.h>
@@ -32,4 +32,4 @@ namespace Adndtk
     };
 }
 
-#endif // TURN_UNDEAD_H
+#endif // __ADNDTK__SRC__TURN_UNDEAD_H

@@ -1,5 +1,5 @@
-#ifndef MARKET_H
-#define MARKET_H
+#ifndef __ADNDTK__SRC__MARKET_H
+#define __ADNDTK__SRC__MARKET_H
 
 #include <map>
 #include <string>
@@ -34,4 +34,4 @@ namespace Adndtk
     };
 }
 
-#endif // MARKET_H
+#endif // __ADNDTK__SRC__MARKET_H

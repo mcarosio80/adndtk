@@ -1,5 +1,5 @@
-#ifndef CHARACTER_GENERATOR_H
-#define CHARACTER_GENERATOR_H
+#ifndef __ADNDTK__SRC__CHARACTER_GENERATOR_H
+#define __ADNDTK__SRC__CHARACTER_GENERATOR_H
 
 #include <defs.h>
 #include <tables.h>
@@ -32,4 +32,4 @@ namespace Adndtk
     };
 }
 
-#endif // CHARACTER_GENERATOR_H
+#endif // __ADNDTK__SRC__CHARACTER_GENERATOR_H

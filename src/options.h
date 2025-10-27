@@ -1,5 +1,5 @@
-#ifndef OPTIONS_H
-#define OPTIONS_H
+#ifndef __ADNDTK__SRC__OPTIONS_H
+#define __ADNDTK__SRC__OPTIONS_H
 
 #include <optional>
 #include <map>
@@ -98,4 +98,4 @@ namespace Adndtk
     };
 }
 
-#endif // OPTIONS_H
+#endif // __ADNDTK__SRC__OPTIONS_H

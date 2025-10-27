@@ -1,5 +1,5 @@
-#ifndef PROFICIENCIES_H
-#define PROFICIENCIES_H
+#ifndef __ADNDTK__SRC__PROFICIENCIES_H
+#define __ADNDTK__SRC__PROFICIENCIES_H
 
 #include <defs.h>
 #include <common_types.h>
@@ -53,4 +53,4 @@ namespace Adndtk
     };
 }
 
-#endif // PROFICIENCIES_H
+#endif // __ADNDTK__SRC__PROFICIENCIES_H

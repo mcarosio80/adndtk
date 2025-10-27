@@ -1,5 +1,5 @@
-#ifndef HIT_POINTS_H
-#define HIT_POINTS_H
+#ifndef __ADNDTK__SRC__HIT_POINTS_H
+#define __ADNDTK__SRC__HIT_POINTS_H
 
 #include <iostream>
 #include <map>
@@ -63,4 +63,4 @@ namespace Adndtk
     };
 }
 
-#endif // HIT_POINTS_H
+#endif // __ADNDTK__SRC__HIT_POINTS_H

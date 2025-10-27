@@ -1,5 +1,5 @@
-#ifndef CHARACTER_H
-#define CHARACTER_H
+#ifndef __ADNDTK__SRC__CHARACTER_H
+#define __ADNDTK__SRC__CHARACTER_H
 
 #include <iostream>
 #include <map>
@@ -158,4 +158,4 @@ namespace Adndtk
     };
 }
 
-#endif // CHARACTER_H
+#endif // __ADNDTK__SRC__CHARACTER_H

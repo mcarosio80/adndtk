@@ -1,5 +1,5 @@
-#ifndef SKILL_STATS_H
-#define SKILL_STATS_H
+#ifndef __ADNDTK__SRC__SKILL_STATS_H
+#define __ADNDTK__SRC__SKILL_STATS_H
 
 #include <defs.h>
 #include <tables.h>

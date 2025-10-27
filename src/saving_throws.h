@@ -1,5 +1,5 @@
-#ifndef SAVING_THROWS_H
-#define SAVING_THROWS_H
+#ifndef __ADNDTK__SRC__SAVING_THROWS_H
+#define __ADNDTK__SRC__SAVING_THROWS_H
 
 #include <defs.h>
 #include <common_types.h>
@@ -36,4 +36,4 @@ namespace Adndtk
     };
 }
 
-#endif // SAVING_THROWS_H
+#endif // __ADNDTK__SRC__SAVING_THROWS_H

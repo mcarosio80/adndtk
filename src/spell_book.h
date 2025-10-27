@@ -1,5 +1,5 @@
-#ifndef SPELL_BOOK_H
-#define SPELL_BOOK_H
+#ifndef __ADNDTK__SRC__SPELL_BOOK_H
+#define __ADNDTK__SRC__SPELL_BOOK_H
 
 #include <defs.h>
 #include <common_types.h>
@@ -51,4 +51,4 @@ namespace Adndtk
     };
 }
 
-#endif // SPELL_BOOK_H
+#endif // __ADNDTK__SRC__SPELL_BOOK_H

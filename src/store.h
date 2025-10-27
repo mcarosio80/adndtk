@@ -1,5 +1,5 @@
-#ifndef STORE_H
-#define STORE_H
+#ifndef __ADNDTK__SRC__STORE_H
+#define __ADNDTK__SRC__STORE_H
 
 #include <string>
 #include <string_view>
@@ -59,4 +59,4 @@ namespace Adndtk
     };
 }
 
-#endif // STORE_H
+#endif // __ADNDTK__SRC__STORE_H

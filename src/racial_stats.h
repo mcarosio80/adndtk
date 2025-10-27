@@ -1,5 +1,5 @@
-#ifndef RACIAL_STATS_H
-#define RACIAL_STATS_H
+#ifndef __ADNDTK__SRC__RACIAL_STATS_H
+#define __ADNDTK__SRC__RACIAL_STATS_H
 
 #include <defs.h>
 #include <tuple>
@@ -51,4 +51,4 @@ namespace Adndtk
     };
 }
 
-#endif // RACIAL_STATS_H
+#endif // __ADNDTK__SRC__RACIAL_STATS_H

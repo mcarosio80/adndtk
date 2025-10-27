@@ -1,5 +1,5 @@
-#ifndef THACO_H
-#define THACO_H
+#ifndef __ADNDTK__SRC__THACO_H
+#define __ADNDTK__SRC__THACO_H
 
 #include <defs.h>
 #include <common_types.h>
@@ -30,4 +30,4 @@ namespace Adndtk
     };
 }
 
-#endif // THACO_H
+#endif // __ADNDTK__SRC__THACO_H

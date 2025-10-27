@@ -1,5 +1,5 @@
-#ifndef CALENDAR_H
-#define CALENDAR_H
+#ifndef __ADNDTK__SRC__CALENDAR_H
+#define __ADNDTK__SRC__CALENDAR_H
 
 #include <defs.h>
 
@@ -78,4 +78,4 @@ namespace Adndtk
     };
 }
 
-#endif // CALENDAR_H
+#endif // __ADNDTK__SRC__CALENDAR_H
