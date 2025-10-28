@@ -42,7 +42,10 @@ namespace Adndtk
             const Defs::race& raceId, const Defs::moral_alignment& align, const Defs::sex& sexId,
             const std::optional<Defs::deity>& deityId);
 
+        AvatarId add_character(Character&& chr);
+
         AvatarId add_monster(const Defs::monster& monsterId, std::string_view monsterName = "");
+        AvatarId add_monster(Monster&& monster);
 
         template <unsigned short _count>
         void add_monsters(const Defs::monster& monsterId)

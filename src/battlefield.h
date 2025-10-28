@@ -166,9 +166,28 @@ namespace Adndtk
             const Battlefield::Point& coords,
             const std::optional<double>& radius = std::nullopt,
             const std::optional<Battlefield::Direction>& direction = std::nullopt);
+
+        AvatarId add_character(const std::string& name, const Defs::character_class& cls,
+            const Defs::race& raceId, const Defs::moral_alignment& align, const Defs::sex& sexId,
+            const std::optional<Defs::deity>& deityId,
+            const std::string& partyName,
+            const Battlefield::Point& coords,
+            const std::optional<double>& radius = std::nullopt,
+            const std::optional<Battlefield::Direction>& direction = std::nullopt);
+            
+        AvatarId add_character(Character&& chr, const Battlefield::Point& coords,
+            const std::optional<double>& radius = std::nullopt,
+            const std::optional<Battlefield::Direction>& direction = std::nullopt);
+            
+        AvatarId add_character(Character&& chr, const std::string& partyName, const Battlefield::Point& coords,
+            const std::optional<double>& radius = std::nullopt,
+            const std::optional<Battlefield::Direction>& direction = std::nullopt);
         
         AvatarId add_monster(const Defs::monster& monsterId, const std::string& partyName, const Point& coords, const std::optional<double>& radius=std::nullopt, const std::optional<Battlefield::Direction>& direction = std::nullopt, const std::string& uniqueMonsterName = "");
         AvatarId add_monster(const Defs::monster& monsterId, const Point& coords, const std::optional<double>& radius=std::nullopt, const std::optional<Battlefield::Direction>& direction=std::nullopt, const std::string& uniqueMonsterName="");
+        
+        AvatarId add_monster(Monster&& monster, const std::string& partyName, const Point& coords, const std::optional<double>& radius=std::nullopt, const std::optional<Battlefield::Direction>& direction = std::nullopt);
+        AvatarId add_monster(Monster&& monster, const Point& coords, const std::optional<double>& radius=std::nullopt, const std::optional<Battlefield::Direction>& direction=std::nullopt);
         
         template <unsigned short _count>
         void add_monsters(const Defs::monster& monsterId, const std::string& partyName, const std::array<Point, _count>& coords,
@@ -267,8 +286,6 @@ namespace Adndtk
 
         PartyList select() const;
         PartyList select(const PartyFilter& cbk) const;
-
-
 
         static Point origin;
         static double defaultRadius;
