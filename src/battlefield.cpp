@@ -47,6 +47,17 @@ Adndtk::AvatarId Adndtk::Battlefield::add_character(const std::string& name, con
     const std::optional<double>& radius/*=std::nullopt*/,
     const std::optional<Battlefield::Direction>& direction/*=std::nullopt*/)
 {
+    return add_character(name, cls, raceId, align, sexId, deityId, name + " party", coords, radius, direction);
+}
+
+Adndtk::AvatarId Adndtk::Battlefield::add_character(const std::string& name, const Defs::character_class& cls,
+    const Defs::race& raceId, const Defs::moral_alignment& align, const Defs::sex& sexId,
+    const std::optional<Defs::deity>& deityId,
+    const std::string& partyName,
+    const Battlefield::Point& coords,
+    const std::optional<double>& radius/*=std::nullopt*/,
+    const std::optional<Battlefield::Direction>& direction/*=std::nullopt*/)
+{
     const auto avatarRadius = radius.value_or(Battlefield::defaultRadius);
     const auto avatarDirection = direction.value_or(Battlefield::to_centre(coords));
 
@@ -56,8 +67,35 @@ Adndtk::AvatarId Adndtk::Battlefield::add_character(const std::string& name, con
         ss << "Coordinates " << coords.x() << "," << coords.y() << " are currently held";
         throw std::runtime_error(ss.str());
     }
-    auto& p = get_party(name + " party");
+    auto& p = get_party(partyName);
     auto id = p.add_character(name, cls, raceId, align, sexId, deityId);
+
+    place_avatar(id, coords, avatarRadius, avatarDirection);
+    return id;
+}
+            
+Adndtk::AvatarId Adndtk::Battlefield::add_character(Character&& chr, const Battlefield::Point& coords,
+    const std::optional<double>& radius/*=std::nullopt*/,
+    const std::optional<Battlefield::Direction>& direction/*=std::nullopt*/)
+{
+    return add_character(std::move(chr), chr.name() + " party", coords, radius, direction);
+}
+            
+Adndtk::AvatarId Adndtk::Battlefield::add_character(Character&& chr, const std::string& partyName, const Battlefield::Point& coords,
+    const std::optional<double>& radius/*=std::nullopt*/,
+    const std::optional<Battlefield::Direction>& direction/*=std::nullopt*/)
+{
+    const auto avatarRadius = radius.value_or(Battlefield::defaultRadius);
+    const auto avatarDirection = direction.value_or(Battlefield::to_centre(coords));
+
+    if (detect_collision(coords, avatarRadius))
+    {
+        std::stringstream ss{};
+        ss << "Coordinates " << coords.x() << "," << coords.y() << " are currently held";
+        throw std::runtime_error(ss.str());
+    }
+    auto& p = get_party(partyName);
+    auto id = p.add_character(std::move(chr));
 
     place_avatar(id, coords, avatarRadius, avatarDirection);
     return id;
@@ -88,6 +126,32 @@ Adndtk::AvatarId Adndtk::Battlefield::add_monster(const Defs::monster& monsterId
     const auto partyName = uniqueMonsterName + " party";
     return add_monster(monsterId, partyName, coords, radius, direction, uniqueMonsterName);
 }
+
+
+Adndtk::AvatarId Adndtk::Battlefield::add_monster(Monster&& monster, const std::string& partyName, const Point& coords, const std::optional<double>& radius/*=std::nullopt*/, const std::optional<Battlefield::Direction>& direction/*=std::nullopt*/)
+{
+    const auto avatarRadius = radius.value_or(Battlefield::defaultRadius);
+    const auto avatarDirection = direction.value_or(Battlefield::to_centre(coords));
+
+    if (detect_collision(coords, avatarRadius))
+    {
+        std::stringstream ss{};
+        ss << "Coordinates " << coords.x() << "," << coords.y() << " are currently held";
+        throw std::runtime_error(ss.str());
+    }
+
+    auto& p = get_party(partyName);
+    auto id = p.add_monster(std::move(monster));
+
+    place_avatar(id, coords, avatarRadius, avatarDirection);
+    return id;
+}
+
+Adndtk::AvatarId Adndtk::Battlefield::add_monster(Monster&& monster, const Point& coords, const std::optional<double>& radius/*=std::nullopt*/, const std::optional<Battlefield::Direction>& direction/*=std::nullopt*/)
+{
+    const auto partyName = monster.get_unique_name() + " party";
+    return add_monster(std::move(monster), partyName, coords, radius, direction);
+}        
 
 size_t Adndtk::Battlefield::count_avatars() const
 {
@@ -138,6 +202,8 @@ void Adndtk::Battlefield::clear()
         p.second.clear();
     }
     _parties.clear();
+    _coordinates.clear();
+    _battleTurn.clear();
 }
 
 void Adndtk::Battlefield::step()
