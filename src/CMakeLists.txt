@@ -40,7 +40,6 @@ install(TARGETS ${ADNDTK_LIB}
 # Overwrite deployable header files with license banners
 file (GLOB ADNDTK_LIB_DEPLOYABLE_SOURCES
   "${DEPLOY_DIR}/*.h"
-  "${DEPLOY_DIR}/*.cpp"
 )
 
 install(
