@@ -42,6 +42,11 @@ file (GLOB ADNDTK_LIB_DEPLOYABLE_SOURCES
   "${DEPLOY_DIR}/*.h"
 )
 
+
+set(ADNDTK_DATABASE_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${ADNDTK_LIB}/${CMAKE_PROJECT_VERSION}/data/${DB_NAME})
+message("Deploy database dir : " ${ADNDTK_DATABASE_PATH})
+configure_file(${CFG_DIR}/config.h.in ${DEPLOY_DIR}/config.h)
+
 install(
     FILES
         ${ADNDTK_LIB_DEPLOYABLE_SOURCES}
