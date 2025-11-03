@@ -7,6 +7,7 @@
 #include <string_view>
 
 #include <common_types.h>
+#include <queries.h>
 #include <defs.h>
 #include <skills.h>
 #include <avatar.h>

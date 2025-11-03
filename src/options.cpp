@@ -1,5 +1,6 @@
 #include <options.h>
 #include <skill_creator.h>
+#include <common_types.h>
 
 bool Adndtk::OptionalRules::_initialised = false;
 

@@ -312,7 +312,8 @@ def generate_struct(dbPath, headerFile, namespaces, version, jsonConfig):
         outFile.write(f'#include <defs.h>\n')
         outFile.write(f'#include <common_types.h>\n')
         outFile.write(f'#include <cyclopedia.h>\n')
-        outFile.write(f'#include <query_result.h>\n\n')
+        outFile.write(f'#include <query_result.h>\n')
+        outFile.write(f'#include <queries.h>\n\n')
     
         indentation = common.open_namespace(outFile, namespaces)
 

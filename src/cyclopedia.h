@@ -5,6 +5,7 @@
 #include <config.h>
 #include <query_result.h>
 #include <advancement_table.h>
+#include <queries.h>
 
 #include <sqlite3.h>
 

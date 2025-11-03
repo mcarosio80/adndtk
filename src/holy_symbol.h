@@ -4,6 +4,8 @@
 #include <defs.h>
 #include <common_types.h>
 #include <skills.h>
+#include <queries.h>
+
 #include <map>
 #include <optional>
 

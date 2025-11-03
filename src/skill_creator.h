@@ -9,6 +9,7 @@
 
 #include <skills.h>
 #include <common_types.h>
+#include <queries.h>
 
 namespace Adndtk
 {

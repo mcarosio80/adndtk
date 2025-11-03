@@ -3,6 +3,7 @@
 
 #include <defs.h>
 #include <common_types.h>
+#include <queries.h>
 #include <skills.h>
 #include <map>
 

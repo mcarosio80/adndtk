@@ -6,6 +6,7 @@
 #include <dictionary.h>
 
 #include <common_types.h>
+#include <queries.h>
 #include <options.h>
 #include <cyclopedia.h>
 #include <tables.h>
