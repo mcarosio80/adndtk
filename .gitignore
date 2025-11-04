@@ -41,6 +41,7 @@ src/defs.h
 src/tables.h
 src/config.h
 src/dictionary.h
+src/queries.h
 deploy/*
 db/*
 
