@@ -6,6 +6,8 @@
 #include <query_result.h>
 #include <advancement_table.h>
 #include <queries.h>
+#include <holy_symbol.h>
+#include <spell_book.h>
 
 #include <sqlite3.h>
 
@@ -145,6 +147,21 @@ namespace Adndtk
         const AdvancementTable& advancement_table() { return _advTable; }
         Defs::character_class_type get_class_type(const Defs::character_class& cls);
         std::vector<Defs::character_class_type> get_class_types(const Defs::character_class& cls);
+
+        template <typename _SpellType>
+        SpellLevel get_spell_level(const _SpellType& id)
+        {
+            SpellLevel level{};
+            if constexpr(std::is_same_v<_SpellType, Defs::wizard_spell)
+            {
+                level = SpellBook::get_spell_level(id);
+            }
+            else
+            {
+                level = HolySymbol::get_spell_level(id);
+            }
+            return level;
+        }
 
     private:
         Cyclopedia();
