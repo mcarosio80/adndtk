@@ -18,5 +18,15 @@
         "table" : "MONSTER_VARIANT_TYPE",
         "key" : "description",
         "value": "id"
+    },
+    {
+        "table" : "CHARACTER_CLASS",
+        "key" : "long_name",
+        "value": "id"
+    },
+    {
+        "table" : "CHARACTER_CLASS_TYPE",
+        "key" : "description",
+        "value": "id"
     }
 ]
