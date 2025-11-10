@@ -27,6 +27,16 @@ def print_enum_to_integer_converter(enumName, outFile, indentationLevel):
     outFile.write(f"{common.indent(indentationLevel)}}}\n")
 
 ################################
+def print_enum_to_string_converter(enumName, outFile, indentationLevel):
+    outFile.write("\n")
+
+    outFile.write(f"{common.indent(indentationLevel)}")
+    outFile.write(f"inline std::string as_string(const {enumName}& data)\n")
+    outFile.write(f"{common.indent(indentationLevel)}{{\n")
+    outFile.write(f"{common.indent(indentationLevel+1)}return std::to_string(to_int(data));\n")
+    outFile.write(f"{common.indent(indentationLevel)}}}\n")
+
+################################
 def print_enum(lines, enumName, outFile, indentationLevel, isClass = True):
     numLines = len(lines)
     countEnums = 1
@@ -53,6 +63,7 @@ def print_enum(lines, enumName, outFile, indentationLevel, isClass = True):
 
         print_enum_output_operator(enumName, outFile, indentationLevel)
         print_enum_to_integer_converter(enumName, outFile, indentationLevel)
+        print_enum_to_string_converter(enumName, outFile, indentationLevel)
 
 ################################
 def generate_enum(dbPath, headerFile, namespaces, version, jsonConfig):
@@ -68,6 +79,7 @@ def generate_enum(dbPath, headerFile, namespaces, version, jsonConfig):
         common.write_heading(outFile, headerFile, version)
 
         outFile.write(f'#include <iostream>\n')
+        outFile.write(f'#include <string>\n')
         outFile.write(f'#include <type_traits>\n\n')
     
         indentation = common.open_namespace(outFile, namespaces)
