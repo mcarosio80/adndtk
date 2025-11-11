@@ -31,6 +31,8 @@ namespace Adndtk
         const ExperienceLevel& caster_level() { return _casterLevel; }
         const Defs::character_class& caster_class() { return _casterClass; }
         const SkillValue& wisdom() { return _wisdomScore; }
+
+        static Adndtk::SpellLevel get_spell_level(const Defs::priest_spell& spellId);
         
     private:
         ExperienceLevel                                                 _casterLevel;
@@ -39,8 +41,6 @@ namespace Adndtk
         SkillValue                                                      _wisdomScore;
         std::map<SpellLevel, std::map<Defs::priest_spell, short>>       _spells;
         std::optional<Defs::deity>                                      _deityId;
-
-        static Adndtk::SpellLevel get_spell_level(const Defs::priest_spell& spellId);
 
         bool is_sphere_allowed(const Defs::priest_spell& spellId);
         //bool is_level_available(const Defs::priest_spell& spellId);

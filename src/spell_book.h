@@ -31,6 +31,8 @@ namespace Adndtk
         const ExperienceLevel& caster_level() { return _casterLevel; }
         const Defs::character_class& caster_class() { return _casterClass; }
         const SkillValue& intelligence() { return _intelligenceScore; }
+
+        static Adndtk::SpellLevel get_spell_level(const Defs::wizard_spell& spellId);
         
     private:
         ExperienceLevel                                                 _casterLevel;
@@ -38,8 +40,6 @@ namespace Adndtk
         Defs::race                                                      _casterRace;
         SkillValue                                                      _intelligenceScore;
         std::map<SpellLevel, std::map<Defs::wizard_spell, short>>       _spells;
-
-        static Adndtk::SpellLevel get_spell_level(const Defs::wizard_spell& spellId);
 
         bool has_capacity(const Defs::wizard_spell& spellId) const;
         bool is_school_allowed(const Defs::wizard_spell& spellId) const;

@@ -152,7 +152,7 @@ namespace Adndtk
         SpellLevel get_spell_level(const _SpellType& id)
         {
             SpellLevel level{};
-            if constexpr(std::is_same_v<_SpellType, Defs::wizard_spell)
+            if constexpr(std::is_same_v<_SpellType, Defs::wizard_spell>)
             {
                 level = SpellBook::get_spell_level(id);
             }
