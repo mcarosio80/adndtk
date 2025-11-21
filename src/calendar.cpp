@@ -1,6 +1,7 @@
 #include <calendar.h>
 #include <cyclopedia.h>
 #include <tables.h>
+#include <adnd_errors.h>
 
 #include <algorithm>
 
@@ -242,7 +243,7 @@ std::string Adndtk::Calendar::to_string(const uint16_t& dayOfTheYear, const uint
         auto dmy = convert_date(dayOfTheYear, year);
         if (!dmy.has_value())
         {
-            throw std::runtime_error("Invaid day of the year");
+            ErrorManager::get_instance().error<CalendarDayException>(dayOfTheYear, year);
         }
         ss << std::get<0>(dmy.value()) << " "
             << get_month_name(std::get<1>(dmy.value())) << ", "

@@ -6,6 +6,7 @@
 
 #include <defs.h>
 #include <dice.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -45,19 +46,19 @@ TEST_CASE("[TC-DICE.003] Non canonical dice expression parses correctly (3 D12 -
 
 TEST_CASE("[TC-DICE.004] Malformed dice expression throws runtime error", "[dice][dice_regex]" )
 {
-    REQUIRE_THROWS_AS(Die::roll("-3d4-"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("-5d4"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("3d6-"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("3d6+"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("5e4+1"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("5e4+f"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("5e4-s"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("d6"), std::runtime_error);
+    REQUIRE_THROWS_AS(Die::roll("-3d4-"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("-5d4"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("3d6-"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("3d6+"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("5e4+1"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("5e4+f"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("5e4-s"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("d6"), DiceException);
 }
 
 TEST_CASE("[TC-DICE.005] Empty dice expression throws runtime error", "[dice][dice_regex]" )
 {
-    REQUIRE_THROWS_AS(Die::roll(""), std::runtime_error);
+    REQUIRE_THROWS_AS(Die::roll(""), DiceException);
 }
 
 TEST_CASE("[TC-DICE.006] Non standard die type in dice expression is handled correctly", "[dice]" )
@@ -107,14 +108,14 @@ TEST_CASE("[TC-DICE.010] Result of a range expression (4  -  10) between (4-10)"
 
 TEST_CASE("[TC-DICE.011] Malformed range expression throws runtime error", "[dice][range_regex]" )
 {
-    REQUIRE_THROWS_AS(Die::roll("- 4"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("5-"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("-"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("r-7"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("5-u+1"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("5-10+3"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("fhetuw"), std::runtime_error);
-    REQUIRE_THROWS_AS(Die::roll("a-b"), std::runtime_error);
+    REQUIRE_THROWS_AS(Die::roll("- 4"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("5-"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("-"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("r-7"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("5-u+1"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("5-10+3"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("fhetuw"), DiceException);
+    REQUIRE_THROWS_AS(Die::roll("a-b"), DiceException);
 }
 
 TEST_CASE("[TC-DICE.012] DiceSet stores static set of dice", "[dice]")

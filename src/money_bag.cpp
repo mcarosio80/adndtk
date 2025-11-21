@@ -4,6 +4,7 @@
 #include <cyclopedia.h>
 #include <dice.h>
 #include <options.h>
+#include <adnd_errors.h>
 
 #include <cstdint>
 
@@ -89,7 +90,7 @@ Adndtk::MoneyBag& Adndtk::MoneyBag::subtract(const Defs::coin& coinType, const u
     uint32_t amount = value;
 	if (!check_availability(coinType, amount))
     {
-        ErrorManager::get_instance().error("Not enough money");
+        throw MoneyException("Not enough money");
     }
 
 	if (_money[coinType] >= amount)

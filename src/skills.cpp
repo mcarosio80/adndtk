@@ -1,5 +1,6 @@
 #include <skills.h>
 #include <config.h>
+#include <adnd_errors.h>
 
 Adndtk::SkillValue::SkillValue()
     : _skillType{Defs::skill::strength}, _skillValue{9}, _exceptionalValue{std::nullopt}
@@ -13,11 +14,11 @@ Adndtk::SkillValue::SkillValue(const Defs::skill& type, const short& value, cons
     {
         if (type != Defs::skill::strength || value != 18)
         {
-            ErrorManager::get_instance().error("Exceptional strength not allowed");
+            throw SkillException("Exceptional strength not allowed", type, value);
         }
         if (type == Defs::skill::strength && (excValue.value() < 1 || excValue.value() > 100))
         {
-            ErrorManager::get_instance().error("Invalid value for exceptional strength");
+            throw SkillException("Exceptional strength not allowed", type, excValue.value());
         }
     }
 }
@@ -51,7 +52,7 @@ std::optional<short> Adndtk::SkillValue::exceptionalStrength() const
 Adndtk::SkillValue& Adndtk::SkillValue::operator=(const short& val)
 {
     if (val < 0 || val > 25)
-        ErrorManager::get_instance().error("Invalid skill value");
+        throw SkillException("Invalid skill value", _skillType, val);
 
     _skillValue = val;
     _exceptionalValue = std::nullopt;
@@ -72,10 +73,9 @@ Adndtk::SkillValue& Adndtk::SkillValue::operator+=(const short& val)
 {
     short newValue = this->_skillValue + val;
     if (newValue < 0 || newValue > 25)
-        ErrorManager::get_instance().error("Unable to modifiy skill value");
+        throw SkillException("Unable to modifiy skill value", _skillType, newValue);
 
     _skillValue = newValue;
-    //_exceptionalValue = std::nullopt;
 
     return (*this);
 }

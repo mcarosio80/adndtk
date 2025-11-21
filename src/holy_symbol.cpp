@@ -1,6 +1,7 @@
 #include <holy_symbol.h>
 #include <cyclopedia.h>
 #include <skill_stats.h>
+#include <adnd_errors.h>
 
 Adndtk::HolySymbol::HolySymbol(const Defs::character_class& cls, std::optional<Defs::deity> deityId/*=std::nullptr*/)
     : _casterLevel{1}, _wisdomScore{Defs::skill::wisdom, 9}, _casterClass{cls}, _deityId{deityId},
@@ -22,11 +23,11 @@ const short& Adndtk::HolySymbol::operator[] (Defs::priest_spell spellId) const
 
     if (_spells.find(spellLevel) == _spells.end())
     {
-        throw std::runtime_error("Level not available");
+        throw SpellException<Defs::priest_spell>("Level not available", spellId);
     }
     if (_spells.at(spellLevel).find(spellId) == _spells.at(spellLevel).end())
     {
-        throw std::runtime_error("Spell not available");
+        throw SpellException<Defs::priest_spell>("Spell not available", spellId);
     }
     return _spells.at(spellLevel).at(spellId);
 }

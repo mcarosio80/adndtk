@@ -1,5 +1,6 @@
 #include <common_types.h>
 #include <cyclopedia.h>
+#include <adnd_errors.h>
 
 Adndtk::CharacterExperience::CharacterExperience(const Defs::character_class& cls)
 {
@@ -14,7 +15,7 @@ void Adndtk::CharacterExperience::set(const Defs::character_class& cls, const Ex
 {
     if (_xps.find(cls) == _xps.end())
     {
-        throw std::runtime_error("Invalid class specified");
+        throw InvalidClassException(cls);
     }
     _xps[cls] = std::make_pair(lvl, pts);
 }

@@ -6,6 +6,7 @@
 #include <character.h>
 #include <options.h>
 #include <character_generator.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -800,7 +801,7 @@ TEST_CASE("[TC-CHAR.020] Non-magic users do not have spell book", "[character]" 
     Defs::race chrRace{Defs::race::human};
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_good, Defs::sex::male, Defs::deity::tyr}; 
-    REQUIRE_THROWS_AS(chr.spell_book(), std::runtime_error);
+    REQUIRE_THROWS_AS(chr.spell_book(), CharacterException);
 }
 
 TEST_CASE("[TC-CHAR.021] Non-magic users do not have holy symbol", "[character]" )
@@ -810,7 +811,7 @@ TEST_CASE("[TC-CHAR.021] Non-magic users do not have holy symbol", "[character]"
     Defs::race chrRace{Defs::race::human};
 
     Character chr{chrName, chrClass, chrRace, Defs::moral_alignment::lawful_evil, Defs::sex::male}; 
-    REQUIRE_THROWS_AS(chr.holy_symbol(), std::runtime_error);
+    REQUIRE_THROWS_AS(chr.holy_symbol(), CharacterException);
 }
 
 TEST_CASE("[TC-CHAR.022] Characters can be queried for their ability to cast spells", "[character]" )
@@ -872,11 +873,11 @@ TEST_CASE("[TC-CHAR.023] Only magic user characters can use the spell book", "[c
     auto spellId = Defs::wizard_spell::magic_missile;
     for (auto& chr : chars)
     {
-        REQUIRE_THROWS_AS(chr.learn_spell(spellId), std::runtime_error);
-        REQUIRE_THROWS_AS(chr.memorise_spell(spellId), std::runtime_error);
-        REQUIRE_THROWS_AS(chr.remove_spell(spellId), std::runtime_error);
-        REQUIRE_THROWS_AS(chr.erase_spell(spellId), std::runtime_error);
-        REQUIRE_THROWS_AS(chr.cast_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.learn_spell(spellId), SpellException<Defs::wizard_spell>);
+        REQUIRE_THROWS_AS(chr.memorise_spell(spellId), SpellException<Defs::wizard_spell>);
+        REQUIRE_THROWS_AS(chr.remove_spell(spellId), SpellException<Defs::wizard_spell>);
+        REQUIRE_THROWS_AS(chr.erase_spell(spellId), SpellException<Defs::wizard_spell>);
+        REQUIRE_THROWS_AS(chr.cast_spell(spellId), SpellException<Defs::wizard_spell>);
     }
 }
 
@@ -898,9 +899,9 @@ TEST_CASE("[TC-CHAR.024] Only paladins, rangers, clerics and druids can use the 
     auto spellId = Defs::priest_spell::cure_light_wounds;
     for (auto& chr : chars)
     {
-        REQUIRE_THROWS_AS(chr.memorise_spell(spellId), std::runtime_error);
-        REQUIRE_THROWS_AS(chr.remove_spell(spellId), std::runtime_error);
-        REQUIRE_THROWS_AS(chr.cast_spell(spellId), std::runtime_error);
+        REQUIRE_THROWS_AS(chr.memorise_spell(spellId), SpellException<Defs::priest_spell>);
+        REQUIRE_THROWS_AS(chr.remove_spell(spellId), SpellException<Defs::priest_spell>);
+        REQUIRE_THROWS_AS(chr.cast_spell(spellId), SpellException<Defs::priest_spell>);
     }
 }
 
@@ -1173,19 +1174,19 @@ TEST_CASE("[TC-CHAR.036] Deity selection is mandatory for priest spells casters"
     auto sex = Defs::sex::male;
 
     REQUIRE_NOTHROW(Character("PSM", Defs::character_class::preist_of_specific_mythos, race, align, sex, Defs::deity::tyr));
-    REQUIRE_THROWS_AS(Character("PSM", Defs::character_class::preist_of_specific_mythos, race, align, sex), std::runtime_error);
+    REQUIRE_THROWS_AS(Character("PSM", Defs::character_class::preist_of_specific_mythos, race, align, sex), CharacterException);
     
     REQUIRE_NOTHROW(Character("C", Defs::character_class::cleric, race, align, sex, Defs::deity::tyr));
-    REQUIRE_THROWS_AS(Character("C", Defs::character_class::cleric, race, align, sex), std::runtime_error);
+    REQUIRE_THROWS_AS(Character("C", Defs::character_class::cleric, race, align, sex), CharacterException);
     
     REQUIRE_NOTHROW(Character("D", Defs::character_class::druid, race, Defs::moral_alignment::true_neutral, sex, Defs::deity::selune));
-    REQUIRE_THROWS_AS(Character("D", Defs::character_class::druid, race, Defs::moral_alignment::true_neutral, sex), std::runtime_error);
+    REQUIRE_THROWS_AS(Character("D", Defs::character_class::druid, race, Defs::moral_alignment::true_neutral, sex), CharacterException);
     
     REQUIRE_NOTHROW(Character("P", Defs::character_class::paladin, race, align, sex, Defs::deity::tyr));
-    REQUIRE_THROWS_AS(Character("P", Defs::character_class::paladin, race, align, sex), std::runtime_error);
+    REQUIRE_THROWS_AS(Character("P", Defs::character_class::paladin, race, align, sex), CharacterException);
     
     REQUIRE_NOTHROW(Character("R", Defs::character_class::ranger, race, align, sex, Defs::deity::tyr));
-    REQUIRE_THROWS_AS(Character("R", Defs::character_class::ranger, race, align, sex), std::runtime_error);
+    REQUIRE_THROWS_AS(Character("R", Defs::character_class::ranger, race, align, sex), CharacterException);
 }
 
 TEST_CASE("[TC-CHAR.037] Deity selection for Priests of specific mythos must agree with the character's moral alignment", "[character]" )
@@ -1196,7 +1197,7 @@ TEST_CASE("[TC-CHAR.037] Deity selection for Priests of specific mythos must agr
     auto sex = Defs::sex::male;
 
     REQUIRE_NOTHROW(Character("PSM", cls, race, align, sex, Defs::deity::tyr));
-    REQUIRE_THROWS_AS(Character("PSM", cls, race, align, sex, Defs::deity::bane), std::runtime_error);
+    REQUIRE_THROWS_AS(Character("PSM", cls, race, align, sex, Defs::deity::bane), CharacterException);
 }
 
 TEST_CASE("[TC-CHAR.038] Aging affect skill values", "[character]" )

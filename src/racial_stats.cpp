@@ -2,7 +2,7 @@
 #include <cyclopedia.h>
 #include <dice.h>
 #include <options.h>
-
+#include <adnd_errors.h>
 
 Adndtk::RacialStats::RacialStats()
 	: _race{Defs::race::human}, _currentAge{0},
@@ -131,7 +131,7 @@ Adndtk::Defs::aging_effects Adndtk::RacialStats::get_age_range() const
 
 	if (_currentAge > _maxAge)
 	{
-		throw std::runtime_error("Current age cannot be greater than maximum age");
+		throw RaceException("Maximum age limit exceeded", _race, _currentAge, _maxAge);
 	}
 	else if (_currentAge >= _venerableAge)
 	{
@@ -151,7 +151,7 @@ Adndtk::Defs::aging_effects Adndtk::RacialStats::get_age_range() const
 	}
 	else
 	{
-		throw std::runtime_error("Current age cannot be smaller than starting age");
+		throw RaceException("Minimum age limit exceeded", _race, _currentAge, _startingAge);
 	}
 	return ageRange;
 }

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <config.h>
 #include <cyclopedia.h>
+#include <adnd_errors.h>
 
 #include <options.h>
 
@@ -24,7 +25,7 @@ Adndtk::SpellBook::SpellBook(const Defs::character_class& cls, Defs::race raceId
         }
         if (races.size() == 0 || !raceEnabled)
         {
-            ErrorManager::get_instance().error("Class not available for specified race");
+            throw SpellException<Defs::wizard_spell>("Class not available for specified race", cls, raceId);
         }
     }
 }
@@ -39,11 +40,11 @@ const short& Adndtk::SpellBook::operator[] (Defs::wizard_spell spellId) const
 
     if (_spells.find(spellLevel) == _spells.end())
     {
-        throw std::runtime_error("No spell available at specified level");
+        throw SpellException<Defs::wizard_spell>("No spell available at specified level", spellId);
     }
     if (_spells.at(spellLevel).find(spellId) == _spells.at(spellLevel).end())
     {
-        throw std::runtime_error("Spell not scribed");
+        throw SpellException<Defs::wizard_spell>("Spell not scribed", spellId);
     }
     return _spells.at(spellLevel).at(spellId);
 }

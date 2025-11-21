@@ -4,6 +4,7 @@
 
 #include <defs.h>
 #include <holy_symbol.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -11,7 +12,7 @@ TEST_CASE("[TC-HOLS.001] Low level caster cannot access higher level spells", "[
 {
     HolySymbol hs{Defs::character_class::cleric};
 
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::cure_serious_wounds], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::cure_serious_wounds], SpellException<Defs::priest_spell>);
 }
 
 TEST_CASE("[TC-HOLS.002] Clerics gain spells automatically with new levels", "[spells, holy_symbol]" )
@@ -43,34 +44,34 @@ TEST_CASE("[TC-HOLS.002] Clerics gain spells automatically with new levels", "[s
 	REQUIRE(hs[Defs::priest_spell::sanctuary] == 0);
 	REQUIRE(hs[Defs::priest_spell::shillelagh] == 0);
 
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::aid], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::augury], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::barkskin], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::chant], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::charm_person_or_mammal], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::detect_charm], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::dust_devil], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::enthrall], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::find_traps], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::fire_trap], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::flame_blade], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::goodberry], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::heat_metal], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::hold_person], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::know_alignment], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::messenger], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::obscurement], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::produce_flame], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::resist_fire_resist_cold], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::silence_15_radius], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::slow_poison], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::snake_charm ], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::speak_with_animals], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::spiritual_hammer], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::trip], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::warp_wood], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::withdraw], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::wyvern_watch], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::aid], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::augury], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::barkskin], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::chant], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::charm_person_or_mammal], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::detect_charm], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::dust_devil], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::enthrall], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::find_traps], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::fire_trap], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::flame_blade], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::goodberry], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::heat_metal], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::hold_person], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::know_alignment], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::messenger], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::obscurement], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::produce_flame], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::resist_fire_resist_cold], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::silence_15_radius], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::slow_poison], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::snake_charm ], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::speak_with_animals], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::spiritual_hammer], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::trip], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::warp_wood], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::withdraw], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::wyvern_watch], SpellException<Defs::priest_spell>);
 
     hs.set_caster_level(3);
     REQUIRE(hs[Defs::priest_spell::aid] == 0);
@@ -111,8 +112,8 @@ TEST_CASE("[TC-HOLS.003] Priests of specific mythos gain spells according to the
 
     REQUIRE(hs[Defs::priest_spell::flame_blade] == 0);
     REQUIRE(hs[Defs::priest_spell::goodberry] == 0);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::messenger], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::resist_fire_resist_cold], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::messenger], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::resist_fire_resist_cold], SpellException<Defs::priest_spell>);
 }
 
 TEST_CASE("[TC-HOLS.004] Clerics gain all spells available regardless to the spheres of influence", "[spells, holy_symbol]" )
@@ -147,14 +148,14 @@ TEST_CASE("[TC-HOLS.005] Druids gain all spells available to their spheres of in
     REQUIRE(hs[Defs::priest_spell::purify_food_and_drink] == 0);
     REQUIRE(hs[Defs::priest_spell::shillelagh] == 0);
 
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::command], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::endure_heat_endure_cold], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::invisibility_to_undead], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::light], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::magical_stone], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::protection_from_evil], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::remove_fear], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::sanctuary], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::command], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::endure_heat_endure_cold], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::invisibility_to_undead], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::light], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::magical_stone], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::protection_from_evil], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::remove_fear], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::sanctuary], SpellException<Defs::priest_spell>);
 }
 
 TEST_CASE("[TC-HOLS.006] Paladins cast spells like a priest when reach 9th level", "[spells, holy_symbol]" )
@@ -163,7 +164,7 @@ TEST_CASE("[TC-HOLS.006] Paladins cast spells like a priest when reach 9th level
 
     auto spellId = Defs::priest_spell::cure_light_wounds;
     hs.set_caster_level(8);
-    REQUIRE_THROWS_AS(hs[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[spellId], SpellException<Defs::priest_spell>);
 
     hs.set_caster_level(9);
     REQUIRE(hs[spellId] == 0);
@@ -204,10 +205,10 @@ TEST_CASE("[TC-HOLS.007] Paladins cast spells available to their spheres of infl
     REQUIRE(hs[Defs::priest_spell::sanctuary] == 0);
     REQUIRE(hs[Defs::priest_spell::shillelagh] == 0);
     
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::entangle], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::light], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::pass_without_trace], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::remove_fear], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::entangle], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::light], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::pass_without_trace], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::remove_fear], SpellException<Defs::priest_spell>);
 }
 
 TEST_CASE("[TC-HOLS.008] Paladins have no bonus spells for higher wisdom score", "[spells, holy_symbol]" )
@@ -227,7 +228,7 @@ TEST_CASE("[TC-HOLS.009] Rangers cast spells like a priest when reach 8th level"
 
     auto spellId = Defs::priest_spell::detect_evil;
     hs.set_caster_level(7);
-    REQUIRE_THROWS_AS(hs[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[spellId], SpellException<Defs::priest_spell>);
 
     hs.set_caster_level(8);
     REQUIRE(hs[spellId] == 0);
@@ -265,12 +266,12 @@ TEST_CASE("[TC-HOLS.010] Rangers cast spells available to their spheres of influ
     REQUIRE(hs[Defs::priest_spell::purify_food_and_drink] == 0);
     REQUIRE(hs[Defs::priest_spell::shillelagh] == 0);
     
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::command], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::create_water], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::detect_poison], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::invisibility_to_undead], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::remove_fear], std::runtime_error);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::sanctuary], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::command], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::create_water], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::detect_poison], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::invisibility_to_undead], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::remove_fear], SpellException<Defs::priest_spell>);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::sanctuary], SpellException<Defs::priest_spell>);
 }
 
 TEST_CASE("[TC-HOLS.011] Rangers have no bonus spells for higher wisdom score", "[spells, holy_symbol]" )
@@ -427,7 +428,7 @@ TEST_CASE("[TC-HOLS.016] Reducing the caster level disable access to higher leve
     REQUIRE(hs.free_slots(2) == 0);
 
     hs.set_caster_level(2);
-    REQUIRE_THROWS_AS(hs[Defs::priest_spell::flame_blade], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[Defs::priest_spell::flame_blade], SpellException<Defs::priest_spell>);
     REQUIRE(hs.total_slots(1) == 2);
     REQUIRE(hs.used_slots(1) == 0);
     REQUIRE(hs.free_slots(1) == 2);
@@ -640,7 +641,7 @@ TEST_CASE("[TC-HOLS.020] When casters's level decreases unreachable spell levels
     REQUIRE(hs.used_slots(5) == 1);
 
     hs.set_caster_level(8);
-    REQUIRE_THROWS_AS(hs[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(hs[spellId], SpellException<Defs::priest_spell>);
     REQUIRE(hs.total_slots(5) == 0);
     REQUIRE(hs.free_slots(5) == 0);
     REQUIRE(hs.used_slots(5) == 0);

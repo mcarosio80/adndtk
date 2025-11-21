@@ -667,5 +667,20 @@
         "select" : [ "monster_variant", "hd", "die_faces", "die_modifier", "hp", "hp_to", "thac0", "size", "xp" ],
         "from" : [ "monster_variant" ],
         "where" : [ "monster_id = ?", "monster_variant = ?" ]
+    },
+    {
+        "id" : "select_all_wizard_spell",
+        "select" : [ "id", "name", "level" ],
+        "from" : [ "wizard_spell" ]
+    },
+    {
+        "id" : "select_all_priest_spell",
+        "select" : [ "id", "name", "level" ],
+        "from" : [ "priest_spell" ]
+    },
+    {
+        "id" : "select_all_equipment_type",
+        "select" : [ "id", "name" ],
+        "from" : [ "equipment_type" ]
     }
 ]

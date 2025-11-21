@@ -3,6 +3,7 @@
 #include <options.h>
 #include <cyclopedia.h>
 #include <tables.h>
+#include <adnd_errors.h>
 
 #include <cmath>
 #include <optional>
@@ -68,7 +69,7 @@ void Adndtk::Store::remove(const Defs::equipment& equipmentId, const short& coun
 {
     if (!check_supply(equipmentId, count))
     {
-        throw std::runtime_error("The specified quantity is not available");
+        throw EquipmentException("The specified quantity is not available", equipmentId);
     }
     _goods[equipmentId] -= count;
 }

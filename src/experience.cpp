@@ -1,6 +1,7 @@
 #include <experience.h>
 #include <cyclopedia.h>
 #include <options.h>
+#include <adnd_errors.h>
 
 #include <cmath>
 
@@ -196,8 +197,7 @@ Adndtk::Experience& Adndtk::Experience::set_xp(const Adndtk::Defs::character_cla
 {
     if (_xps.find(cls) == _xps.end())
     {
-        ErrorManager::get_instance().error("Invalid class specified");
-        return *this;
+        throw CharacterException("Invalid class specified", cls);
     }
 
     if (xp == 0)
@@ -249,7 +249,7 @@ const Adndtk::XP& Adndtk::Experience::xp(const Adndtk::Defs::character_class& cl
 {
     if (_xps.find(cls) == _xps.end())
     {
-        ErrorManager::get_instance().error("Invalid class specified");
+        throw CharacterException("Invalid class specified", cls);
     }
     return _xps.at(cls);
 }
@@ -258,7 +258,7 @@ const Adndtk::ExperienceLevel& Adndtk::Experience::level(const Adndtk::Defs::cha
 {
     if (_xps.find(cls) == _xps.end())
     {
-        ErrorManager::get_instance().error("Invalid class specified");
+        throw CharacterException("Invalid class specified", cls);
     }
     return _levels.at(cls);
 }

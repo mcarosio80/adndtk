@@ -4,6 +4,7 @@
 #include <options.h>
 #include <encumbrance.h>
 #include <character_generator.h>
+#include <adnd_errors.h>
 
 #include <algorithm>
 
@@ -19,11 +20,11 @@ Adndtk::Character::Character(std::string_view name, const Defs::character_class&
 {
     if (!verify_moral_alignment())
     {
-        throw std::runtime_error("Moral alignment is not compatible with the character class chosen");
+        ErrorManager::get_instance().error<CharacterException>("Moral alignment not compatible", cls, align);
     }
     if (!verify_worshipped_deity())
     {
-        throw std::runtime_error("Worshipped deity is not compatible with the character class chosen");
+        ErrorManager::get_instance().error<CharacterException>("Deity not compatible", cls, deityId.value());
     }
 
     _hp += [&] (const HPChangeType &chgType, const HP &prevHP, const XP &newHP) -> void
@@ -294,7 +295,7 @@ const Adndtk::SpellBook& Adndtk::Character::spell_book() const
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
     {
-        throw std::runtime_error("Spell book not available");
+        ErrorManager::get_instance().error<CharacterException>("Spell book not available", _cls);
     }
     return _spellBook;
 }
@@ -303,7 +304,7 @@ const Adndtk::HolySymbol& Adndtk::Character::holy_symbol() const
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
     {
-        throw std::runtime_error("Spell book not available");
+        ErrorManager::get_instance().error<CharacterException>("Holy symbol not available", _cls);
     }
     return _holySymbol;
 }
@@ -318,7 +319,8 @@ bool Adndtk::Character::cast_spell(const Defs::wizard_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
     {
-        throw std::runtime_error("Unable to cast wizard spells");
+        ErrorManager::get_instance().error<SpellException<Defs::wizard_spell>>("Unable to cast wizard spells", spellId);
+
     }
     return false;
 }
@@ -327,7 +329,7 @@ bool Adndtk::Character::learn_spell(const Defs::wizard_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
     {
-        throw std::runtime_error("Unable to learn wizard spells");
+        ErrorManager::get_instance().error<SpellException<Defs::wizard_spell>>("Unable to learn wizard spells", spellId);
     }
     return false;
 }
@@ -336,7 +338,7 @@ bool Adndtk::Character::memorise_spell(const Defs::wizard_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
     {
-        throw std::runtime_error("The character is not a magic-user");
+        ErrorManager::get_instance().error<SpellException<Defs::wizard_spell>>("The character is not a magic-user", spellId);
     }
     return false;
 }
@@ -345,7 +347,7 @@ bool Adndtk::Character::remove_spell(const Defs::wizard_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
     {
-        throw std::runtime_error("The character is not a magic-user");
+        ErrorManager::get_instance().error<SpellException<Defs::wizard_spell>>("The character is not a magic-user", spellId);
     }
     return false;
 }
@@ -354,7 +356,7 @@ bool Adndtk::Character::erase_spell(const Defs::wizard_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
     {
-        throw std::runtime_error("The character is not a magic-user");
+        ErrorManager::get_instance().error<SpellException<Defs::wizard_spell>>("The character is not a magic-user", spellId);
     }
     return false;
 }
@@ -363,7 +365,7 @@ bool Adndtk::Character::cast_spell(const Defs::priest_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
     {
-        throw std::runtime_error("Unable to cast priest spells");
+        ErrorManager::get_instance().error<SpellException<Defs::priest_spell>>("Unable to cast priest spells", spellId);
     }
     return false;
 }
@@ -372,7 +374,7 @@ bool Adndtk::Character::memorise_spell(const Defs::priest_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
     {
-        throw std::runtime_error("The character is not a magic-user");
+        ErrorManager::get_instance().error<SpellException<Defs::priest_spell>>("The character is not a magic-use", spellId);
     }
     return false;
 }
@@ -381,7 +383,7 @@ bool Adndtk::Character::remove_spell(const Defs::priest_spell& spellId)
 {
     if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
     {
-        throw std::runtime_error("The character is not a magic-user");
+        ErrorManager::get_instance().error<SpellException<Defs::priest_spell>>("The character is not a magic-use", spellId);
     }
     return false;
 }
@@ -431,7 +433,7 @@ bool Adndtk::Character::verify_worshipped_deity() const
     {
         if (!_deity.has_value())
         {
-            throw std::runtime_error("This character must worship a deity");
+            ErrorManager::get_instance().error<CharacterException>("Deity is mandatory", _cls);
         }
         auto deities = CharacterGenerator::available_deity_ids(_align);
         return std::find(deities.begin(), deities.end(), _deity.value()) != deities.end();
@@ -445,13 +447,13 @@ void Adndtk::Character::buy_equipment(const std::string& storeName, const Defs::
 
     if (!store.check_supply(equipmentId, count))
     {
-        throw std::runtime_error("The specified quantity is not available");
+        ErrorManager::get_instance().error<MarketException>("The specified quantity is not available", storeName, equipmentId);
     }
 
     auto price = store.get_sell_price(equipmentId, count);
     if (!_money.check_availability(price))
     {
-        throw std::runtime_error("Not enough money");
+        ErrorManager::get_instance().error<EquipmentException>("Not enough money", equipmentId, price);
     }
     
     _money.subtract(price);
@@ -469,13 +471,13 @@ void Adndtk::Character::sell_equipment(const std::string& storeName, const Defs:
 
     if (!has_equipment_item(equipmentId, count))
     {
-        throw std::runtime_error("The specified quantity is not available");
+        ErrorManager::get_instance().error<EquipmentException>("The specified quantity is not available", equipmentId);
     }
 
     auto price = store.get_buy_price(equipmentId, count);
     if (!store.check_availability(price))
     {
-        throw std::runtime_error("Not enough money");
+        ErrorManager::get_instance().error<EquipmentException>("Not enough money", equipmentId, price);
     }
     
     if (!OptionalRules::get_instance().get_option<bool>(Option::unlimited_store_availability))

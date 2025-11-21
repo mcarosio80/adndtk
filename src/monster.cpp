@@ -8,6 +8,7 @@
 #include <dice.h>
 #include <common_types.h>
 #include <dictionary.h>
+#include <adnd_errors.h>
 
 Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
     std::string_view uniqueName, const std::optional<Defs::monster_variant_type>& monsterVariant)
@@ -18,9 +19,7 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
     auto info = Tables::monster::select_one<Defs::monster>("id", _id);
     if (!info.has_value())
     {
-        std::stringstream ss{};
-        ss << "Monster ID " << _id << " does not exists";
-        throw std::runtime_error(ss.str());
+        throw MonsterException("Monster does not exists", _id);
     }
 
     _name = info.value().display_name.value_or(info.value().name);
@@ -79,7 +78,7 @@ Adndtk::Monster::Monster(const Adndtk::Defs::monster& monsterId,
         {
             std::stringstream ss{};
             ss << "Monster variant " << Dictionary::to_string(_monsterVariant.value()) << " is not valid";
-            throw std::runtime_error(ss.str());
+            throw MonsterException(ss.str(), _id);
         }
     }
     else

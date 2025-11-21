@@ -1,6 +1,8 @@
 #include <dice.h>
 #include <typeinfo>
 
+#include <adnd_errors.h>
+
 Adndtk::Die::Die()
     : m_numFaces{Adndtk::Defs::die::d6}
 {
@@ -70,7 +72,7 @@ int Adndtk::Die::roll(const char *diceExpression)
     }
     else
     {
-        throw std::runtime_error("Invalid expression");
+        throw DiceException("Invalid expression", diceExpression);
     }
     
     return result;

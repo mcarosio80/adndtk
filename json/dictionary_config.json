@@ -28,5 +28,40 @@
         "table" : "CHARACTER_CLASS_TYPE",
         "key" : "description",
         "value": "id"
+    },
+    {
+        "table" : "MORAL_ALIGNMENT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "EQUIPMENT",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "COIN",
+        "key" : "acronym",
+        "value": "id"
+    },
+    {
+        "table" : "WIZARD_SPELL",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "PRIEST_SPELL",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "EQUIPMENT_TYPE",
+        "key" : "name",
+        "value": "id"
+    },
+    {
+        "table" : "SKILL",
+        "key" : "name",
+        "value": "id"
     }
 ]

@@ -33,11 +33,7 @@ namespace Adndtk
         QueryResultSet exec_prepared_statement(const Query& queryId, _T... values)
 		{
             QueryResultSet resultSet;
-            if (_statements.find(queryId) == _statements.end())
-            {
-                ErrorManager::get_instance().error("Unable to find prepared statement for query ID");
-                return resultSet;
-            }
+            check_query(queryId);
             auto stmt = _statements[queryId];
             
             std::tuple<_T...> params{values...};
@@ -167,6 +163,7 @@ namespace Adndtk
         Cyclopedia();
         ~Cyclopedia();
 
+        void check_query(const Query& queryId);
         bool init();
         bool check_state(int return_code);
         void prepare_statement(const char *stmt, const Query& queryId, const QueryType& queryType = Settings::query_type);

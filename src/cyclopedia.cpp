@@ -2,6 +2,7 @@
 #include <common_types.h>
 #include <skills.h>
 #include <skill_creator.h>
+#include <adnd_errors.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -44,6 +45,14 @@ Adndtk::QueryResultSet Adndtk::Cyclopedia::from_json(const char *jsonText)
         set += result;
     }
     return set;
+}
+
+void Adndtk::Cyclopedia::check_query(const Adndtk::Query& queryId)
+{
+    if (_statements.find(queryId) == _statements.end())
+    {
+        throw DataException("Unable to find prepared statement for query ID", queryId);
+    }
 }
 
 bool Adndtk::Cyclopedia::init()
@@ -119,8 +128,8 @@ bool Adndtk::Cyclopedia::check_state(int return_code)
         std::stringstream ss;
         ss << sqlite3_errstr(return_code) << ": " << sqlite3_errmsg(_dbConn);
         sqlite3_close_v2(_dbConn);
-        ErrorManager::get_instance().error(ss.str().c_str());
-        return false;
+        
+        throw DataException(ss.str());
     }
     return true;
 }
@@ -219,9 +228,8 @@ Adndtk::QueryResultSet Adndtk::Cyclopedia::exec(const char* stmt)
     int rc = sqlite3_exec(_dbConn, stmt, Cyclopedia::onSqliteDataRetrieved, (void*)&set, &error);
     if (rc != SQLITE_OK)
     {
-        std::string msg{error};
         sqlite3_free(error);
-        ErrorManager::get_instance().error(msg.c_str());
+        throw DataException(error);
     }
     return set;
 }

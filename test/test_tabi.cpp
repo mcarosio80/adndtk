@@ -5,6 +5,7 @@
 #include <defs.h>
 #include <thief_ability.h>
 #include <common_types.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -346,7 +347,7 @@ TEST_CASE("[TC-TABI.007] Using more then 60 points at 1st level to upgrade skill
     REQUIRE(tAbil.available_ability_slots() == 1);
     REQUIRE(tAbil.level_change(3) == 3);
     REQUIRE(tAbil.available_ability_slots() == 3);
-    REQUIRE_THROWS_AS(tAbil.improve_abilities(8,8,8,8,7,7,7,8), std::runtime_error);
+    REQUIRE_THROWS_AS(tAbil.improve_abilities(8,8,8,8,7,7,7,8), SkillException);
     REQUIRE(tAbil.available_ability_slots() == 3);
 }
 
@@ -358,7 +359,7 @@ TEST_CASE("[TC-TABI.008] Skills cannt be assigned more then 30 points at 1st lev
     REQUIRE(tAbil.available_ability_slots() == 1);
     REQUIRE(tAbil.level_change(3) == 3);
     REQUIRE(tAbil.available_ability_slots() == 3);
-    REQUIRE_THROWS_AS(tAbil.improve_abilities(32,4,4,4,4,4,4,4), std::runtime_error);
+    REQUIRE_THROWS_AS(tAbil.improve_abilities(32,4,4,4,4,4,4,4), SkillException);
     REQUIRE(tAbil.available_ability_slots() == 3);
 }
 
@@ -372,7 +373,7 @@ TEST_CASE("[TC-TABI.009] Using more then 30 points at 2st level to upgrade skill
     REQUIRE(tAbil.available_ability_slots() == 3);
     tAbil.improve_abilities(8,8,8,8,7,7,7,7);
     REQUIRE(tAbil.available_ability_slots() == 2);
-    REQUIRE_THROWS_AS(tAbil.improve_abilities(4,4,4,4,4,4,4,4), std::runtime_error);
+    REQUIRE_THROWS_AS(tAbil.improve_abilities(4,4,4,4,4,4,4,4), SkillException);
     REQUIRE(tAbil.available_ability_slots() == 2);
 }
 
@@ -386,7 +387,7 @@ TEST_CASE("[TC-TABI.010] Skills cannot be assigned more then 15 points at 1st le
     REQUIRE(tAbil.available_ability_slots() == 3);
     tAbil.improve_abilities(8,8,8,8,7,7,7,7);
     REQUIRE(tAbil.available_ability_slots() == 2);
-    REQUIRE_THROWS_AS(tAbil.improve_abilities(16,3,2,2,2,2,2,2), std::runtime_error);
+    REQUIRE_THROWS_AS(tAbil.improve_abilities(16,3,2,2,2,2,2,2), SkillException);
     REQUIRE(tAbil.available_ability_slots() == 2);
 }
 
@@ -398,7 +399,7 @@ TEST_CASE("[TC-TABI.011] Thieves cannot improve abilities beyond the given slots
     REQUIRE(tAbil.available_ability_slots() == 1);
     tAbil.improve_abilities(8,8,8,8,7,7,7,7);
     REQUIRE(tAbil.available_ability_slots() == 0);
-    REQUIRE_THROWS_AS(tAbil.improve_abilities(4,4,4,4,4,4,3,3), std::runtime_error);
+    REQUIRE_THROWS_AS(tAbil.improve_abilities(4,4,4,4,4,4,3,3), SkillException);
     REQUIRE(tAbil.available_ability_slots() == 0);
 }
 
@@ -448,7 +449,7 @@ TEST_CASE("[TC-TABI.013] When level is regained, skills are restored, no further
     REQUIRE(tAbil.available_ability_slots() == 0);
     tAbil.level_change(2);
     REQUIRE(tAbil.available_ability_slots() == 0);
-    REQUIRE_THROWS_AS(tAbil.improve_abilities(4,4,4,4,4,4,3,3), std::runtime_error);
+    REQUIRE_THROWS_AS(tAbil.improve_abilities(4,4,4,4,4,4,3,3), SkillException);
 }
 
 TEST_CASE("[TC-TABI.014] Skills cannot exceed 95%", "[thief_ability]" )

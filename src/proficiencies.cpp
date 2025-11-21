@@ -1,5 +1,6 @@
 #include <proficiencies.h>
 #include <cyclopedia.h>
+#include <adnd_errors.h>
 
 #include <cstdlib>
 
@@ -116,11 +117,11 @@ Adndtk::Defs::weapon_proficiency_level Adndtk::ProficiencySlots::add_weapon_prof
     auto itWpn = weapons.find(equipId);
     if (itWpn == weapons.end())
     {
-        throw std::runtime_error("Specified equipment does not exist");
+        throw EquipmentException("Specified equipment does not exist");
     }
     if (itWpn->second.type != Defs::equipment_type::weapons)
     {
-        throw std::runtime_error("Specified equipment is not a weapon");
+        throw EquipmentException("Specified equipment is not a weapon", itWpn->second.type);
     }
 
     const auto numSlotsForSpecialised = get_slots_for_specialisation(equipId);
@@ -134,7 +135,7 @@ Adndtk::Defs::weapon_proficiency_level Adndtk::ProficiencySlots::add_weapon_prof
     }
     else
     {
-        throw std::runtime_error("Unable to further specialise");
+        throw AdndException("Unable to further specialise");
     }
 
     return get_proficiency_level(equipId);

@@ -77,19 +77,21 @@ namespace Adndtk
         ErrorManager(ErrorManager const&) = delete;
         void operator=(ErrorManager const&) = delete;
 
-        void error(const char *mesg)
+        template <typename _ExcType, typename... _ExcParams>
+        void error(_ExcParams... params)
         {
+            _ExcType ex{_ExcParams};
             if (Settings::error_handler == Adndtk::ErrorHandler::standard_output)
             {
-                std::cout << mesg << std::endl;
+                std::cout << ex.what() << std::endl;
             }
             else if (Settings::error_handler == Adndtk::ErrorHandler::last_error)
             {
-                _lastError = mesg;
+                _lastError = ex.what();
             }
             else if (Settings::error_handler == Adndtk::ErrorHandler::exception)
             {
-                throw std::runtime_error(mesg);
+                throw _ExcType(params);
             }
         }
         const std::string& last_error() { return _lastError; }

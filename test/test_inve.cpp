@@ -6,6 +6,7 @@
 #include <defs.h>
 #include <inventory.h>
 #include <common_types.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -51,8 +52,8 @@ TEST_CASE("[TC-INVE.004] Arrows/quarrels require a quiver", "[inventory]" )
     auto heavyQuarrelId = Defs::equipment::heavy_quarrel;
     auto quiverId = Defs::equipment::quiver;
 
-    REQUIRE_THROWS_AS(inv.add(sheafArrowId, 20), std::runtime_error);
-    REQUIRE_THROWS_AS(inv.add(heavyQuarrelId, 20), std::runtime_error);
+    REQUIRE_THROWS_AS(inv.add(sheafArrowId, 20), EquipmentException);
+    REQUIRE_THROWS_AS(inv.add(heavyQuarrelId, 20), EquipmentException);
     
     REQUIRE(inv.add(Defs::equipment::backpack));
     REQUIRE(inv.add(quiverId));
@@ -66,7 +67,7 @@ TEST_CASE("[TC-INVE.005] Items that cannot be carried on hands, like food ration
     auto dryRationId = Defs::equipment::dry_ration_per_week;
     auto packpackId = Defs::equipment::backpack;
     
-    REQUIRE_THROWS_AS(inv.add(dryRationId), std::runtime_error);
+    REQUIRE_THROWS_AS(inv.add(dryRationId), EquipmentException);
     REQUIRE_FALSE(inv.has_item(dryRationId));
 
     REQUIRE(inv.add(packpackId));
@@ -131,7 +132,7 @@ TEST_CASE("[TC-INVE.010] Items with no body slot assigned go nowhere if backpack
     Inventory inv;
     auto twoHandedSwordId = Defs::equipment::two_handed_sword;
 
-    REQUIRE_THROWS_AS(inv.add(twoHandedSwordId), std::runtime_error);
+    REQUIRE_THROWS_AS(inv.add(twoHandedSwordId), EquipmentException);
     REQUIRE_FALSE(inv.find(twoHandedSwordId).has_value());
 }
 
@@ -156,10 +157,10 @@ TEST_CASE("[TC-INVE.012] Arrows/quarrels go nowhere if quiver/backpack are not a
     auto sheafArrowId = Defs::equipment::sheaf_arrow;
     auto heavyQuarrelID = Defs::equipment::heavy_quarrel;
 
-    REQUIRE_THROWS_AS(inv.add(sheafArrowId), std::runtime_error);
+    REQUIRE_THROWS_AS(inv.add(sheafArrowId), EquipmentException);
     REQUIRE_FALSE(inv.find(sheafArrowId).has_value());
 
-    REQUIRE_THROWS_AS(inv.add(heavyQuarrelID), std::runtime_error);
+    REQUIRE_THROWS_AS(inv.add(heavyQuarrelID), EquipmentException);
     REQUIRE_FALSE(inv.find(heavyQuarrelID).has_value());
 }
 

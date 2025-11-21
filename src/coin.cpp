@@ -1,6 +1,6 @@
 #include <coin.h>
-
 #include <config.h>
+#include <adnd_errors.h>
 
 #include <cmath>
 #include <vector>
@@ -39,8 +39,7 @@ Adndtk::Coin& Adndtk::Coin::operator-= (const uint32_t amount)
 {
 	if (_amount - amount < 0)
     {
-		ErrorManager::get_instance().error("Amount not available");
-	    return (*this);
+		throw MoneyException("Amount not available");
     }
 
 	_amount -= amount;
@@ -107,8 +106,7 @@ Adndtk::Coin& Adndtk::Coin::operator-= (const Coin& amount)
 	}
 	if (_amount - val < 0)
     {
-		ErrorManager::get_instance().error("Amount not available");
-	    return (*this);
+		throw MoneyException("Amount not available");
     }
 
 	_amount -= val;
@@ -189,7 +187,7 @@ std::map<Adndtk::Defs::coin, uint32_t> Adndtk::Coin::split(const Defs::coin& cur
 
 	if (currencyValue > 0.0)
 	{
-        ErrorManager::get_instance().error("Split failed");
+		throw MoneyException("Split failed");
 	}
 
 	return result;
@@ -212,8 +210,8 @@ Adndtk::Coin Adndtk::Coin::normalise_fractional(const Defs::coin& currency, cons
 			}
 		}
 	}
-	ErrorManager::get_instance().error("Unable to normalise");
-	return Coin{currency, static_cast<uint32_t>(value)};
+	throw MoneyException("Unable to normalise");
+	// return Coin{currency, static_cast<uint32_t>(value)};
 }
 
 std::vector<Adndtk::Coin> Adndtk::Coin::normalise(const Defs::coin& currency, const uint32_t& value)

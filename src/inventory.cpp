@@ -1,5 +1,6 @@
 #include <inventory.h>
 #include <cyclopedia.h>
+#include <adnd_errors.h>
 
 Adndtk::Inventory::Inventory()
     : _totalWeight{0.0}
@@ -27,8 +28,7 @@ bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
 
     if (id != Defs::equipment::quiver && bodySlot == Defs::body_slot::quiver && !has_item(Defs::equipment::quiver) && !has_item(Defs::equipment::backpack))
     {
-        ErrorManager::get_instance().error("Quiver or backpack required");
-        return false;
+        throw EquipmentException("Quiver or backpack required", id);
     }
     else if (id != Defs::equipment::quiver && bodySlot == Defs::body_slot::quiver && !has_item(Defs::equipment::quiver) && has_item(Defs::equipment::backpack))
     {
@@ -37,8 +37,7 @@ bool Adndtk::Inventory::add(const Defs::equipment& id, const short& count/*=1*/)
 
     if (id != Defs::equipment::backpack && bodySlot == Defs::body_slot::backpack && !has_item(Defs::equipment::backpack))
     {
-        ErrorManager::get_instance().error("Backpack required");
-        return false;
+        throw EquipmentException("Backpack required", id);
     }
 
     if (!has_capacity(res, id, count))
@@ -68,8 +67,7 @@ bool Adndtk::Inventory::remove(const Defs::equipment& id, const short& count/*=1
     short num = _items[bodySlot.value()][id];
     if (num < count)
     {
-        ErrorManager::get_instance().error("Not enough items");
-        return false;
+        throw InventoryException("Not enough items");
     }
     _items[bodySlot.value()][id] -= count;
 
@@ -146,8 +144,7 @@ bool Adndtk::Inventory::has_capacity(const Adndtk::QueryResult& res, const Defs:
 
     if (count_items(id) + count > capacityLimit.value())
     {
-        ErrorManager::get_instance().error("Capacity limit exceeded");
-        return false;
+        throw InventoryException("Capacity limit exceeded");
     }
     return true;
 }

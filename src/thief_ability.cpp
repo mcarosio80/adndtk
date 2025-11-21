@@ -1,6 +1,7 @@
 #include <thief_ability.h>
 #include <cyclopedia.h>
 #include <config.h>
+#include <adnd_errors.h>
 
 #include <numeric>
 #include <algorithm>
@@ -167,8 +168,7 @@ void Adndtk::ThiefAbility::improve_abilities(const std::vector<ThievingScore>& s
 {
     if (_improvementsAvailable <= 0)
     {
-        ErrorManager::get_instance().error("Unable to improve skills");
-        return;
+        throw SkillException("Unable to improve skills");
     }
 
     increase_abilities(scores);
@@ -205,15 +205,13 @@ void Adndtk::ThiefAbility::increase_abilities(const std::vector<ThievingScore>& 
     ThievingScore totalScore = std::accumulate(scores.begin(), scores.end(), 0);
     if (totalScore > maxTotal)
     {
-        ErrorManager::get_instance().error("Maximum improvement exceeded");
-        return;
+        throw SkillException("Maximum improvement exceeded");
     }
     
     ThievingScore maxScore = *std::max_element(scores.begin(), scores.end());
     if (maxScore > maxSingle)
     {
-        ErrorManager::get_instance().error("Single value limit exceeded");
-        return;
+        throw SkillException("Single value limit exceeded");
     }
 
     _improvementsAvailable--;

@@ -3,6 +3,7 @@
 #include <options.h>
 #include <dice.h>
 #include <skill_stats.h>
+#include <adnd_errors.h>
 
 Adndtk::HitPoints::HitPoints()
     : _cls{}, _currentHP{}, _constitutionAdjustment{std::nullopt}
@@ -147,7 +148,7 @@ Adndtk::HitPoints& Adndtk::HitPoints::shrink(const Defs::character_class& cls, c
 {
     if (_levels.find(cls) == _levels.end())
     {
-        ErrorManager::get_instance().error("Invalid class specified");
+        throw InvalidClassException(cls);
     }
 
     HP prevTotal = total();
@@ -177,13 +178,11 @@ Adndtk::HitPoints& Adndtk::HitPoints::increase(const Defs::character_class& cls,
 {
     if (_hitDice.find(cls) == _hitDice.end())
     {
-        ErrorManager::get_instance().error("Invalid class specified");
-        return (*this);
+        throw InvalidClassException(cls);
     }
     if (_levels[cls] == 0)
     {
-        ErrorManager::get_instance().error("Unable to advance from level 0");
-        return (*this);
+        throw CharacterException("Unable to advance from level 0", cls);
     }
 
     HP prevTotal = total();

@@ -1,5 +1,5 @@
 #include <market.h>
-#include <stdexcept>
+#include <adnd_errors.h>
 #include <functional>
 
 
@@ -21,7 +21,7 @@ Adndtk::Store& Adndtk::Market::operator[] (const std::string& storeName)
 {
     if (_stores.find(storeName) == _stores.end())
     {
-        throw std::runtime_error("Unknown store");
+        throw MarketException("Unknown store", storeName);
     }
     return _stores.at(storeName);
 }
@@ -30,11 +30,11 @@ Adndtk::Store& Adndtk::Market::add(const std::string& storeName)
 {
     if (storeName.empty())
     {
-        throw std::runtime_error("Store name cannot be empty");
+        throw MarketException("Store name cannot be empty", storeName);
     }
     if (_stores.find(storeName) != _stores.end())
     {
-        throw std::runtime_error("Store already exists");
+        throw MarketException("Store already exists", storeName);
     }
 
     Store s(storeName);

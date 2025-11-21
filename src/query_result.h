@@ -25,14 +25,7 @@ namespace Adndtk
         QueryResult();
         ~QueryResult();
 
-        const std::optional<std::string>& operator[](const std::string& key) const
-        {
-            if (_values.find(key) == _values.end())
-            {
-                ErrorManager::get_instance().error("Invalid key specified");
-            }
-            return _values.at(key);
-        }
+        const std::optional<std::string>& operator[](const std::string& key) const;
 
         friend std::ostream& operator<< (std::ostream& out, const QueryResult& res)
         {
@@ -113,27 +106,13 @@ namespace Adndtk
             return out;
         }
 
-        const QueryResult& operator[](const size_t& index) const
-        {
-            if (index < 0 || index > _records.size())
-            {
-                ErrorManager::get_instance().error("Index out of bound");
-            }
-            return _records.at(index);
-        }
+        const QueryResult& operator[](const size_t& index) const;
 
         operator bool()
         {
             return _records.size() > 0;
         }
-        operator QueryResult()
-        {
-            if (_records.size() == 0)
-            {
-                ErrorManager::get_instance().error("QueryResultSet is empty");
-            }
-            return _records[0];
-        }
+        operator QueryResult();
         
         QueryResultSet& operator+=(QueryResult res)
         {
@@ -141,11 +120,7 @@ namespace Adndtk
             return *this;
         }
         
-        QueryResultSet& operator+=(QueryResultSet res)
-        {
-            _records.insert(_records.end(), res._records.begin(), res._records.end());
-            return *this;
-        }
+        QueryResultSet& operator+=(QueryResultSet res);
 
         size_t size() const { return _records.size(); }
 

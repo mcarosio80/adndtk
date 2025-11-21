@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <market.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -17,12 +18,12 @@ TEST_CASE("[TC-MRKT.002] Retrieving a stores which was not previously created ra
     const char* winthropStore = "Winthrop's store";
     
     REQUIRE(Market::get_instance().count() == 0);
-    REQUIRE_THROWS_AS(Market::get_instance()[friendlyArmStore], std::runtime_error);
-    REQUIRE_THROWS_AS(Market::get_instance()[winthropStore], std::runtime_error);
+    REQUIRE_THROWS_AS(Market::get_instance()[friendlyArmStore], MarketException);
+    REQUIRE_THROWS_AS(Market::get_instance()[winthropStore], MarketException);
 
     REQUIRE(Market::get_instance().add(winthropStore).store_name() == winthropStore);
     REQUIRE(Market::get_instance().count() == 1);
-    REQUIRE_THROWS_AS(Market::get_instance()[friendlyArmStore], std::runtime_error);
+    REQUIRE_THROWS_AS(Market::get_instance()[friendlyArmStore], MarketException);
 
     Market::get_instance().clear();
     REQUIRE(Market::get_instance().count() == 0);

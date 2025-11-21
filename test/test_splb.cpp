@@ -5,6 +5,7 @@
 #include <defs.h>
 #include <options.h>
 #include <spell_book.h>
+#include <adnd_errors.h>
 
 using namespace Adndtk;
 
@@ -175,14 +176,14 @@ TEST_CASE("[TC-SPLB.011] Mages cannot exceed the maximum number of spells per le
     REQUIRE(book[Defs::wizard_spell::feather_fall] == 0);
     REQUIRE(book[Defs::wizard_spell::find_familiar] == 0);
     REQUIRE(book[Defs::wizard_spell::friends] == 0);
-    REQUIRE_THROWS_AS(book[Defs::wizard_spell::gaze_reflection], std::runtime_error);
+    REQUIRE_THROWS_AS(book[Defs::wizard_spell::gaze_reflection], SpellException<Defs::wizard_spell>);
 
     book.set_caster_intelligence(10);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::gaze_reflection) == AddSpellResult::success);
     REQUIRE(book.scribe_scroll(Defs::wizard_spell::magic_missile) == AddSpellResult::no_capacity);
 
     REQUIRE(book[Defs::wizard_spell::gaze_reflection] == 0);
-    REQUIRE_THROWS_AS(book[Defs::wizard_spell::magic_missile], std::runtime_error);
+    REQUIRE_THROWS_AS(book[Defs::wizard_spell::magic_missile], SpellException<Defs::wizard_spell>);
 }
 
 TEST_CASE("[TC-SPLB.012] Spells cannot be scribed multiple times", "[spells, spell_book]" )
@@ -211,7 +212,7 @@ TEST_CASE("[TC-SPLB.013] Spells deleted from the book, are no longer available",
     REQUIRE(book.scribe_scroll(spellId) == AddSpellResult::success);
     REQUIRE(book[spellId] == 0);
     REQUIRE(book.delete_from_book(spellId));
-    REQUIRE_THROWS_AS(book[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(book[spellId], SpellException<Defs::wizard_spell>);
 }
 
 TEST_CASE("[TC-SPLB.014] Deleted spells can be written again", "[spells, spell_book]" )
@@ -226,7 +227,7 @@ TEST_CASE("[TC-SPLB.014] Deleted spells can be written again", "[spells, spell_b
     REQUIRE(book.scribe_scroll(spellId) == AddSpellResult::success);
     REQUIRE(book[spellId] == 0);
     REQUIRE(book.delete_from_book(spellId));
-    REQUIRE_THROWS_AS(book[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(book[spellId], SpellException<Defs::wizard_spell>);
     REQUIRE(book.scribe_scroll(spellId) == AddSpellResult::success);
     REQUIRE(book[spellId] == 0);
 }
@@ -404,7 +405,7 @@ TEST_CASE("[TC-SPLB.018] A deleted spell is also removed", "[spells, spell_book]
     REQUIRE(book.used_slots(1) == 1);
 
     REQUIRE(book.delete_from_book(spellId));
-    REQUIRE_THROWS_AS(book[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(book[spellId], SpellException<Defs::wizard_spell>);
     REQUIRE(book.free_slots(1) == 2);
     REQUIRE(book.used_slots(1) == 0);
 }
@@ -437,14 +438,14 @@ TEST_CASE("[TC-SPLB.021] Half-elves cannot be Necromancers", "[spells, spell_boo
 {
     Defs::character_class cls = Defs::character_class::necromancer;
     auto raceId = Defs::race::half_elf;
-    REQUIRE_THROWS_AS(SpellBook(cls, raceId), std::runtime_error);
+    REQUIRE_THROWS_AS(SpellBook(cls, raceId), SpellException<Defs::wizard_spell>);
 }
 
 TEST_CASE("[TC-SPLB.022] Elves cannot be Invokers", "[spells, spell_book]" )
 {
     Defs::character_class cls = Defs::character_class::invoker;
     auto raceId = Defs::race::elf;
-    REQUIRE_THROWS_AS(SpellBook(cls, raceId), std::runtime_error);
+    REQUIRE_THROWS_AS(SpellBook(cls, raceId), SpellException<Defs::wizard_spell>);
 }
 
 TEST_CASE("[TC-SPLB.023] When caster's intelligence score decreases, maximum number of spell/level is adjusted accordingly", "[spells, spell_book]" )
@@ -567,7 +568,7 @@ TEST_CASE("[TC-SPLB.025] When casters's level decreases unreachable spell levels
     REQUIRE(sb.used_slots(5) == 1);
 
     sb.set_caster_level(8);
-    REQUIRE_THROWS_AS(sb[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(sb[spellId], SpellException<Defs::wizard_spell>);
     REQUIRE(sb.total_slots(5) == 0);
     REQUIRE(sb.free_slots(5) == 0);
     REQUIRE(sb.used_slots(5) == 0);
@@ -582,7 +583,7 @@ TEST_CASE("[TC-SPLB.026] Casters cannot scribe scrolls of higher levels (not acc
 
     auto spellId = Defs::wizard_spell::magic_jar;
     REQUIRE(sb.scribe_scroll(spellId) == AddSpellResult::level_not_available);
-    REQUIRE_THROWS_AS(sb[spellId], std::runtime_error);
+    REQUIRE_THROWS_AS(sb[spellId], SpellException<Defs::wizard_spell>);
     REQUIRE(sb.total_slots(5) == 0);
     REQUIRE(sb.free_slots(5) == 0);
     REQUIRE(sb.used_slots(5) == 0);
