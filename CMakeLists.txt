@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.25.1)
 
 set(ADNDTK_LIB adndtk)
 project(${ADNDTK_LIB}
     LANGUAGES CXX
-    VERSION 0.9.2508.1
+    VERSION 0.9.2511.1
     DESCRIPTION "AdndTK is an open C++ role playing games library. It aims to mimic the ruleset of Advanced Dungeons & Dragons 2nd Edition"
 )
 
