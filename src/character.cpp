@@ -88,12 +88,12 @@ void Adndtk::Character::change_skill(const SkillValue& newValue)
     _skills[newValue.type()] = newValue;
     notify_all(oldValue, newValue);
  
-    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls)
+    if (Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard)
         && newValue.type() == Defs::skill::intelligence)
     {
         _spellBook.set_caster_intelligence(newValue);
     }
-    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls)
+    if (Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest)
         && newValue.type() == Defs::skill::wisdom)
     {
         _holySymbol.set_caster_wisdom(newValue);
@@ -202,11 +202,11 @@ void Adndtk::Character::on_change_xp(const Defs::character_class &cls, const XPC
         case XPChangeType::level_down:
             _hp.shrink(cls, prevLvl - newLvl);
 
-            if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(cls))
+            if (Cyclopedia::get_instance().can_cast_as(cls, Defs::character_class_type::wizard))
             {
                 _spellBook.set_caster_level(newLvl);
             }
-            if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(cls))
+            if (Cyclopedia::get_instance().can_cast_as(cls, Defs::character_class_type::priest))
             {
                 _holySymbol.set_caster_level(newLvl);
             }
@@ -215,11 +215,11 @@ void Adndtk::Character::on_change_xp(const Defs::character_class &cls, const XPC
         case XPChangeType::level_up:
             _hp.increase(cls, newLvl - prevLvl);
             
-            if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(cls))
+            if (Cyclopedia::get_instance().can_cast_as(cls, Defs::character_class_type::wizard))
             {
                 _spellBook.set_caster_level(newLvl);
             }
-            if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(cls))
+            if (Cyclopedia::get_instance().can_cast_as(cls, Defs::character_class_type::priest))
             {
                 _holySymbol.set_caster_level(newLvl);
             }
@@ -292,7 +292,7 @@ Adndtk::HPChangeType Adndtk::Character::restore()
 
 const Adndtk::SpellBook& Adndtk::Character::spell_book() const
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard))
     {
         throw std::runtime_error("Spell book not available");
     }
@@ -301,7 +301,7 @@ const Adndtk::SpellBook& Adndtk::Character::spell_book() const
 
 const Adndtk::HolySymbol& Adndtk::Character::holy_symbol() const
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest))
     {
         throw std::runtime_error("Spell book not available");
     }
@@ -310,13 +310,13 @@ const Adndtk::HolySymbol& Adndtk::Character::holy_symbol() const
 
 bool Adndtk::Character::is_spell_caster() const
 {
-    return Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls)
-        || Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls);
+    return Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard)
+        || Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest);
 }
 
 bool Adndtk::Character::cast_spell(const Defs::wizard_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard))
     {
         throw std::runtime_error("Unable to cast wizard spells");
     }
@@ -325,7 +325,7 @@ bool Adndtk::Character::cast_spell(const Defs::wizard_spell& spellId)
 
 bool Adndtk::Character::learn_spell(const Defs::wizard_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard))
     {
         throw std::runtime_error("Unable to learn wizard spells");
     }
@@ -334,7 +334,7 @@ bool Adndtk::Character::learn_spell(const Defs::wizard_spell& spellId)
 
 bool Adndtk::Character::memorise_spell(const Defs::wizard_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard))
     {
         throw std::runtime_error("The character is not a magic-user");
     }
@@ -343,7 +343,7 @@ bool Adndtk::Character::memorise_spell(const Defs::wizard_spell& spellId)
 
 bool Adndtk::Character::remove_spell(const Defs::wizard_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard))
     {
         throw std::runtime_error("The character is not a magic-user");
     }
@@ -352,7 +352,7 @@ bool Adndtk::Character::remove_spell(const Defs::wizard_spell& spellId)
 
 bool Adndtk::Character::erase_spell(const Defs::wizard_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::wizard))
     {
         throw std::runtime_error("The character is not a magic-user");
     }
@@ -361,7 +361,7 @@ bool Adndtk::Character::erase_spell(const Defs::wizard_spell& spellId)
 
 bool Adndtk::Character::cast_spell(const Defs::priest_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest))
     {
         throw std::runtime_error("Unable to cast priest spells");
     }
@@ -370,7 +370,7 @@ bool Adndtk::Character::cast_spell(const Defs::priest_spell& spellId)
 
 bool Adndtk::Character::memorise_spell(const Defs::priest_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest))
     {
         throw std::runtime_error("The character is not a magic-user");
     }
@@ -379,7 +379,7 @@ bool Adndtk::Character::memorise_spell(const Defs::priest_spell& spellId)
 
 bool Adndtk::Character::remove_spell(const Defs::priest_spell& spellId)
 {
-    if (!Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
+    if (!Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest))
     {
         throw std::runtime_error("The character is not a magic-user");
     }
@@ -427,7 +427,7 @@ bool Adndtk::Character::verify_worshipped_deity() const
         return true;
     }
     
-    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::priest>(_cls))
+    if (Cyclopedia::get_instance().can_cast_as(_cls, Defs::character_class_type::priest))
     {
         if (!_deity.has_value())
         {

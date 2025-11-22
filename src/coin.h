@@ -33,18 +33,8 @@ namespace Adndtk
         const Defs::coin& currency() const;
         uint32_t value() const;
 
-        template<Defs::coin t>
-        static Coin convert(const Coin& c)
-        {
-            return convert<t>(c.currency(), c.value());
-        }
-        
-        template<Defs::coin t>
-        static Coin convert(const Defs::coin& currency, const uint32_t& amount)
-        {
-            double ratio = CoinExchange::get_instance().get_conversion_ratio(currency, t);
-            return Coin(t, ratio * amount);
-        }
+        static Coin convert(const Coin& c, const Defs::coin& currency_to);
+        static Coin convert(const Defs::coin& currency_from, const Defs::coin& currency_to, const uint32_t& amount);
 
         static std::map<Defs::coin, uint32_t> split(const Defs::coin& currency, const double& value);
         static Coin normalise_fractional(const Defs::coin& currency, const double& value);

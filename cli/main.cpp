@@ -233,7 +233,7 @@ Adndtk::Tables::sex choose_sex()
 
 std::optional<Adndtk::Tables::deity> choose_deity(const Adndtk::Defs::character_class& clsId, const Adndtk::Defs::moral_alignment& alignId)
 {
-    auto isPriest = Adndtk::Cyclopedia::get_instance().is_type_of<Adndtk::Defs::character_class_type::priest>(clsId);
+    auto isPriest = Adndtk::Cyclopedia::get_instance().is_type_of(clsId, Adndtk::Defs::character_class_type::priest);
 
     if (!isPriest)
     {

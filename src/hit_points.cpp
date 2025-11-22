@@ -53,7 +53,7 @@ void Adndtk::HitPoints::update_constitution(const SkillValue& oldVal, const Skil
     int oldHpAdj{0};
     int newHpAdj{0};
 
-    if (Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(_cls))
+    if (Cyclopedia::get_instance().is_type_of(_cls, Defs::character_class_type::warrior))
     {
         oldHpAdj = oldStats.hit_point_adjustment_warriors.value_or(oldStats.hit_point_adjustment);
         newHpAdj = newStats.hit_point_adjustment_warriors.value_or(newStats.hit_point_adjustment);

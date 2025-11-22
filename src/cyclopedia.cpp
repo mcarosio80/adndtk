@@ -74,16 +74,72 @@ Adndtk::Cyclopedia::~Cyclopedia()
     check_state(ret);
 }
 
+bool Adndtk::Cyclopedia::is_type_of(const Defs::character_class_type& clsType, const Defs::character_class_type& probeType)
+{
+    bool found = false;
+    auto types = split<Defs::character_class_type>(clsType);
+    for (auto& t : types)
+    {
+        if (t == probeType)
+            found = true;
+    }
+    return found;
+}
+
+bool Adndtk::Cyclopedia::is_type_of(const Defs::character_class& cls, const Defs::character_class_type& probeType)
+{
+    Adndtk::Query query = Adndtk::Query::select_character_class;
+    auto classInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
+    auto clsType = classInfo[0].as<Defs::character_class_type>("class_type_id");
+
+    return is_type_of(clsType, probeType);
+}
+
 bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const Defs::skill& skillId, const short& skillValue) const
 {
     return skillValue == 18 && skillId == Defs::skill::strength
-        && Cyclopedia::get_instance().is_type_of<Defs::character_class_type::warrior>(cls)
+        && Cyclopedia::get_instance().is_type_of(cls, Defs::character_class_type::warrior)
         && race != Defs::race::halfling;
 }
 
 bool Adndtk::Cyclopedia::can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const
 {
     return can_have_exceptional_strength(cls, race, skillVal.type(), skillVal);
+}
+
+bool Adndtk::Cyclopedia::is_class_of(const Defs::character_class& cls, const Defs::character_class& probeClass)
+{
+    bool found = false;
+    auto classes = split<Defs::character_class>(cls);
+    for (auto& c : classes)
+    {
+        if (c == probeClass)
+            found = true;
+    }
+    return found;
+}
+
+bool Adndtk::Cyclopedia::can_cast_as(const Defs::character_class& cls, const Defs::character_class_type& probeType)
+{
+    if (probeType == Defs::character_class_type::priest
+        && (is_class_of(cls, Defs::character_class::paladin)
+            || is_class_of(cls, Defs::character_class::ranger)
+            || is_class_of(cls, Defs::character_class::druid)
+            || is_class_of(cls, Defs::character_class::cleric)
+            || is_class_of(cls, Defs::character_class::preist_of_specific_mythos))
+    )
+    {
+        return true;
+    }
+
+    if (probeType == Defs::character_class_type::wizard
+        && (is_type_of(cls, Defs::character_class_type::wizard)
+            || is_class_of(cls, Defs::character_class::bard))
+    )
+    {
+        return true;
+    }
+    return false;
 }
 
 bool Adndtk::Cyclopedia::is_multiclass(const Defs::character_class& cls)

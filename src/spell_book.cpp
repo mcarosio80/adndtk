@@ -10,7 +10,7 @@
 Adndtk::SpellBook::SpellBook(const Defs::character_class& cls, Defs::race raceId)
     : _casterLevel{1}, _intelligenceScore{Defs::skill::intelligence, 9}, _casterClass{cls}, _casterRace{raceId}
 {
-    if (Cyclopedia::get_instance().can_cast_as<Defs::character_class_type::wizard>(cls))
+    if (Cyclopedia::get_instance().can_cast_as(cls, Defs::character_class_type::wizard))
     {
         auto races = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class, Defs::race>(
             Query::select_school_of_magic_per_race, _casterClass, _casterRace

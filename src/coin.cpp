@@ -120,8 +120,8 @@ Adndtk::Coin& Adndtk::Coin::operator-= (const Coin& amount)
   */
 bool Adndtk::Coin::operator== (const Coin& amount) const
 {
-    auto c1 = convert<Defs::coin::copper_piece>(*this);
-	auto c2 = convert<Defs::coin::copper_piece>(amount);
+    auto c1 = convert(*this, Defs::coin::copper_piece);
+	auto c2 = convert(amount, Defs::coin::copper_piece);
 	return c1.value() == c2.value();
 }
 
@@ -130,8 +130,8 @@ bool Adndtk::Coin::operator== (const Coin& amount) const
   */
 std::weak_ordering Adndtk::Coin::operator<=>(const Coin& amount) const
 {
-	auto c1 = convert<Defs::coin::copper_piece>(*this);
-	auto c2 = convert<Defs::coin::copper_piece>(amount);
+	auto c1 = convert(*this, Defs::coin::copper_piece);
+	auto c2 = convert(amount, Defs::coin::copper_piece);
 	
 	if (c1.value() < c2.value())
 	{
@@ -149,6 +149,18 @@ uint32_t Adndtk::Coin::value() const
 {
 	return _amount;
 }
+
+Adndtk::Coin Adndtk::Coin::convert(const Coin& c, const Defs::coin& currency_to)
+{
+	return convert(c.currency(), currency_to, c.value());
+}
+
+Adndtk::Coin Adndtk::Coin::convert(const Defs::coin& currency_from, const Defs::coin& currency_to, const uint32_t& amount)
+{
+	double ratio = CoinExchange::get_instance().get_conversion_ratio(currency_from, currency_to);
+	return Coin(currency_to, ratio * amount);
+}
+
 
 const Adndtk::Defs::coin& Adndtk::Coin::currency() const
 {

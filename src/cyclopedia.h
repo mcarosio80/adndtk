@@ -78,68 +78,16 @@ namespace Adndtk
             return result;
         }
 
-        template <Defs::character_class_type probeType>
-        bool is_type_of(const Defs::character_class_type& clsType)
-        {
-            bool found = false;
-            auto types = split<Defs::character_class_type>(clsType);
-            for (auto& t : types)
-            {
-                if (t == probeType)
-                    found = true;
-            }
-            return found;
-        }
+        bool is_type_of(const Defs::character_class_type& clsType, const Defs::character_class_type& probeType);
+        bool is_type_of(const Defs::character_class& cls, const Defs::character_class_type& probeType);
 
         bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const Defs::skill& skillId, const short& skillValue) const;
-        bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const;
+        bool can_have_exceptional_strength(const Defs::character_class& cls, const Defs::race& race, const SkillValue& skillVal) const;        
+
+        bool is_class_of(const Defs::character_class& cls, const Defs::character_class& probeClass);
+
+        bool can_cast_as(const Defs::character_class& cls, const Defs::character_class_type& probeType);
         
-        template <Defs::character_class_type probeType>
-        bool is_type_of(const Defs::character_class& cls)
-        {
-            Adndtk::Query query = Adndtk::Query::select_character_class;
-            auto classInfo = Cyclopedia::get_instance().exec_prepared_statement<Defs::character_class>(query, cls);
-            auto clsType = classInfo[0].as<Defs::character_class_type>("class_type_id");
-
-            return is_type_of<probeType>(clsType);
-        }
-
-        template <Defs::character_class probeClass>
-        bool is_class_of(const Defs::character_class& cls)
-        {
-            bool found = false;
-            auto classes = split<Defs::character_class>(cls);
-            for (auto& c : classes)
-            {
-                if (c == probeClass)
-                    found = true;
-            }
-            return found;
-        }
-
-        template <Defs::character_class_type probeType>
-        bool can_cast_as(const Defs::character_class& cls)
-        {
-            if (probeType == Defs::character_class_type::priest
-                && (is_class_of<Defs::character_class::paladin>(cls)
-                    || is_class_of<Defs::character_class::ranger>(cls)
-                    || is_class_of<Defs::character_class::druid>(cls)
-                    || is_class_of<Defs::character_class::cleric>(cls)
-                    || is_class_of<Defs::character_class::preist_of_specific_mythos>(cls))
-            )
-            {
-                return true;
-            }
-
-            if (probeType == Defs::character_class_type::wizard
-                && (is_type_of<Defs::character_class_type::wizard>(cls)
-                    || is_class_of<Defs::character_class::bard>(cls))
-            )
-            {
-                return true;
-            }
-            return false;
-        }
         bool is_multiclass(const Defs::character_class& cls);
         std::optional<Adndtk::Defs::school_of_magic> get_school_of_magic(const Defs::character_class& cls);
         bool is_specialist_wizard(const Defs::character_class& cls);

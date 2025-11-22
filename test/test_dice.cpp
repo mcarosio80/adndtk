@@ -147,8 +147,8 @@ TEST_CASE("[TC-DICE.012] DiceSet stores static set of dice", "[dice]")
 
 TEST_CASE("[TC-DICE.013] DiceRoll D6 performs the expected number of rolls", "[dice]")
 {
-    DiceRoll<Defs::die::d6, 3> dr{};
-    auto total = dr.roll();
+    DiceRoll dr{};
+    auto total = dr.roll(3, Defs::die::d6);
     REQUIRE(total >= 3);
     REQUIRE(total <= 18);
 
@@ -172,8 +172,8 @@ TEST_CASE("[TC-DICE.013] DiceRoll D6 performs the expected number of rolls", "[d
 
 TEST_CASE("[TC-DICE.014] DiceRoll D8 performs the expected number of rolls", "[dice]")
 {
-    DiceRoll<Defs::die::d8, 3> dr{};
-    auto total = dr.roll();
+    DiceRoll dr{};
+    auto total = dr.roll(3, Defs::die::d8);
     REQUIRE(total >= 3);
     REQUIRE(total <= 24);
 
@@ -197,8 +197,8 @@ TEST_CASE("[TC-DICE.014] DiceRoll D8 performs the expected number of rolls", "[d
 
 TEST_CASE("[TC-DICE.015] DiceRoll D6 figures match the rolled results", "[dice]")
 {
-    DiceRoll<Defs::die::d6, 3> dr{};
-    dr.roll();
+    DiceRoll dr{};
+    dr.roll(3, Defs::die::d6);
 
     std::stringstream ss{};
     ss << dr;

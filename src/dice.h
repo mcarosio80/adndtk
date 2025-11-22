@@ -72,7 +72,6 @@ namespace Adndtk
         std::map<Defs::die, Die> _dice;
     };
 
-    template<Defs::die _dieFaces, short _numDice>
     class DiceRoll
     {
     public:
@@ -80,11 +79,12 @@ namespace Adndtk
             : _rolls{}
         {}
 
-        int roll()
+        int roll(const short& numDice, const Defs::die& dieFaces)
         {
-            for (int n{0}; n<_numDice; ++n) 
+            _rolls.resize(numDice);
+            for (short n{0}; n<numDice; ++n) 
             {
-                _rolls[n] = DiceSet::get_instance().roll(1, _dieFaces);
+                _rolls[n] = DiceSet::get_instance().roll(1, dieFaces);
             }
             return total();
         }
@@ -104,19 +104,19 @@ namespace Adndtk
             return out;
         }
 
-        int& operator[](int index)
+        short& operator[](int index)
         {
             return _rolls[index];
         }
 
-        const int& operator[](int index) const
+        const short& operator[](int index) const
         {
             return _rolls.at(index);
         }
 
-        int total() const
+        short total() const
         {
-            int total{};
+            short total{};
             for (const auto& r : _rolls)
             {
                 total += r;
@@ -126,7 +126,7 @@ namespace Adndtk
         }
 
     private:
-        std::array<int, _numDice> _rolls;
+        std::vector<short>      _rolls;
     };
 }
 
