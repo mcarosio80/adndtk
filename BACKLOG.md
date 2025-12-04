@@ -30,7 +30,7 @@ List of the new features, changes to existing features, bug fixes, infrastructur
   * Check test failure [TC-SKIL.077]
   * Check: no attacks may cause less than 1 damage (pag 13 PHB)
   * Check: n. of resurrection attemps equals initial Constitution score
-  * Check: after resurrection Constitution score decreases
+  * Check: after resurrection Constitution score decreases by 1 point
   * Check: Halflings and Dwarves have separate bonus vs magic/poison
   * CLI: add saving scores for groups
   * CLI: add cli option to add experience
@@ -41,6 +41,13 @@ List of the new features, changes to existing features, bug fixes, infrastructur
   * Separate code in libraries
   * Add dice roll sequence generation feature
   * Add Wari (bird) to monsters
+  * Check: Dex defensive_adjustment to modify player characters' AC base score
+  * Check: Dex defensive_adjustment to modify saving rolls on missile spells
+  * Check: Regardless of the Con modifier, no HP roll can yield less than 1
+  * Check: no HP bonus for Con is granted over the title level (9th for Warriors and Priests, 10th for the others)
+  * Check: roll for resurrection_survival when a Character is resurrected
+  * Check: Apply poison_save to saving rolls on poison for humans, gnomes, elves and half-elves
+  * Implement regeneration for non fire/acid based attacks
   
 ## Planned changes
 
